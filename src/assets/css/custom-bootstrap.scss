@@ -1,0 +1,15 @@
+/*overide bootstrap variable*/
+/*
+$grid-breakpoints: (
+  xs: 0,
+  sm: 480px,
+  md: 640px,
+  lg: 992px,
+  xl: 1300px
+);
+$enable-rounded: false;
+*/
+
+$blue: #145da0;
+
+@import '../../node_modules/bootstrap/scss/bootstrap.scss';
