@@ -2,61 +2,135 @@ import { murmurHash128 } from 'murmurhash-native'
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Trắc nghiệm Online, Ngân hàng câu hỏi, đề thi mới nhất cập nhật 24h/7',
+    title:
+      'Trắc nghiệm Online, Ngân hàng câu hỏi, đề thi mới nhất cập nhật 24h/7',
     htmlAttrs: {
-      lang: 'vi'
+      lang: 'vi',
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { name: 'keywords', content: 'Trắc nghiệm, Online, trac nghiem online, ngan hang de thi, ngan hang cau hoi, thi truc tuyen' },
-      { name: 'description', content: 'Thi trắc nghiệm online với hàng ngàn đề thi, ngân hàng câu hỏi phong phú đa dạng trên nhiều lĩnh vực' },
-      { property: "og:image", content: 'https://tracnghiem.vn/images/logo-shared.png' },
-      { property: "og:image:width", content: '400' },
-      { property: "og:image:height", content: '400' },
+      {
+        name: 'keywords',
+        content:
+          'Trắc nghiệm, Online, trac nghiem online, ngan hang de thi, ngan hang cau hoi, thi truc tuyen',
+      },
+      {
+        name: 'description',
+        content:
+          'Thi trắc nghiệm online với hàng ngàn đề thi, ngân hàng câu hỏi phong phú đa dạng trên nhiều lĩnh vực',
+      },
+      {
+        property: 'og:image',
+        content: 'https://tracnghiem.vn/images/logo-shared.png',
+      },
+      { property: 'og:image:width', content: '400' },
+      { property: 'og:image:height', content: '400' },
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'msapplication-TileColor', content: '#ffffff' },
-      { name: 'msapplication-TileImage', content: '/favicon/ms-icon-144x144.png' },
-      { name: 'theme-color', content: '#ffffff' }
+      {
+        name: 'msapplication-TileImage',
+        content: '/favicon/ms-icon-144x144.png',
+      },
+      { name: 'theme-color', content: '#ffffff' },
     ],
     link: [
-      { rel: 'apple-touch-icon', sizes: '57x57', href: '/favicon/apple-icon-57x57.png' },
-      { rel: 'apple-touch-icon', sizes: '60x60', href: '/favicon/apple-icon-60x60.png' },
-      { rel: 'apple-touch-icon', sizes: '72x72', href: '/favicon/apple-icon-72x72.png' },
-      { rel: 'apple-touch-icon', sizes: '76x76', href: '/favicon/apple-icon-76x76.png' },
-      { rel: 'apple-touch-icon', sizes: '114x114', href: '/favicon/apple-icon-114x114.png' },
-      { rel: 'apple-touch-icon', sizes: '120x120', href: '/favicon/apple-icon-120x120.png' },
-      { rel: 'apple-touch-icon', sizes: '144x144', href: '/favicon/apple-icon-144x144.png' },
-      { rel: 'apple-touch-icon', sizes: '152x152', href: '/favicon/apple-icon-152x152.png' },
-      { rel: 'apple-touch-icon', sizes: '180x180', href: '/favicon/apple-icon-180x180.png' },
-      { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/favicon/android-icon-192x192.png' },
-      { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon/favicon-32x32.png' },
-      { rel: 'icon', type: 'image/png', sizes: '96x96', href: '/favicon/favicon-96x96.png' },
-      { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon/favicon-16x16.png' },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '57x57',
+        href: '/favicon/apple-icon-57x57.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '60x60',
+        href: '/favicon/apple-icon-60x60.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '72x72',
+        href: '/favicon/apple-icon-72x72.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '76x76',
+        href: '/favicon/apple-icon-76x76.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '114x114',
+        href: '/favicon/apple-icon-114x114.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '120x120',
+        href: '/favicon/apple-icon-120x120.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '144x144',
+        href: '/favicon/apple-icon-144x144.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '152x152',
+        href: '/favicon/apple-icon-152x152.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '180x180',
+        href: '/favicon/apple-icon-180x180.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '192x192',
+        href: '/favicon/android-icon-192x192.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        href: '/favicon/favicon-32x32.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '96x96',
+        href: '/favicon/favicon-96x96.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        href: '/favicon/favicon-16x16.png',
+      },
       { rel: 'manifest', href: '/favicon/manifest.json' },
     ],
     script: [
       {
-        "@context": "https://schema.org/",
-        "@type": "WebSite",
-        "name": "TracNghiem",
-        "alternateName": "Trắc nghiệm Online, Ngân hàng câu hỏi, đề thi mới nhất cập nhật 24h/7",
-        "url": "https://tracnghiem.vn",
-        "potentialAction": { "@type": "SearchAction", "target": "https://tracnghiem.vn/tim-kiem/?q={search_term_string}", "query-input": "required name=search_term_string" },
-        "author": {
-          "@type": "Team",
-          "name": "TracNghiemTeam"
+        '@context': 'https://schema.org/',
+        '@type': 'WebSite',
+        name: 'TracNghiem',
+        alternateName:
+          'Trắc nghiệm Online, Ngân hàng câu hỏi, đề thi mới nhất cập nhật 24h/7',
+        url: 'https://tracnghiem.vn',
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: 'https://tracnghiem.vn/tim-kiem/?q={search_term_string}',
+          'query-input': 'required name=search_term_string',
         },
-        "description": "Thi trắc nghiệm online với hàng ngàn đề thi, ngân hàng câu hỏi phong phú đa dạng trên nhiều lĩnh vực"
-      }
-    ]
+        author: {
+          '@type': 'Team',
+          name: 'TracNghiemTeam',
+        },
+        description:
+          'Thi trắc nghiệm online với hàng ngàn đề thi, ngân hàng câu hỏi phong phú đa dạng trên nhiều lĩnh vực',
+      },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-    '@/assets/css/custom-bootstrap.scss',
-    '@/assets/css/style.scss'
-  ],
+  css: ['@/assets/css/custom-bootstrap.scss', '@/assets/css/style.scss'],
 
   render: {
     etag: {
@@ -67,9 +141,9 @@ export default {
   serverMiddleware: ['@/middleware/cache.js'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [        
-    {src:'@/plugins/bootstrapPlugin.js', ssr: false},
-    {src:'@/plugins/polyfills.client.js', ssr: false},
+  plugins: [
+    { src: '@/plugins/bootstrapPlugin.js', ssr: false },
+    { src: '@/plugins/polyfills.client.js', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -85,11 +159,12 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    '@nuxtjs/google-gtag'
+    '@nuxtjs/google-gtag',
+    '@nuxtjs/auth-next',
   ],
-  //https://github.com/nuxt-community/google-gtag-module
+  // https://github.com/nuxt-community/google-gtag-module
   'google-gtag': {
-    id: 'G-4RQGST5TRG'    
+    id: 'G-4RQGST5TRG',
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -104,8 +179,48 @@ export default {
       routes.push({
         name: 'custom',
         path: '',
-        component: resolve(__dirname, 'pages/home')
+        component: resolve(__dirname, 'pages/home'),
       })
-    }
-  }
+    },
+    middleware: ['auth'],
+  },
+  auth: {
+    strategies: {
+      local: false,
+      keycloak: {
+        scheme: 'oauth2',
+        endpoints: {
+          authorization:
+            'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/auth',
+          userInfo:
+            'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/userinfo',
+          token:
+            'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/token',
+          logout:
+            'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/logout?redirect_uri=' +
+            encodeURIComponent(String('/home')),
+        },
+        token: {
+          property: 'access_token',
+          type: 'Bearer',
+          name: 'Authorization',
+          maxAge: 300, // Can be dynamic ?
+        },
+        refreshToken: {
+          property: 'refresh_token',
+          maxAge: 60 * 60 * 24 * 30, // Can be dynamic ?
+        },
+        responseType: 'code',
+        grantType: 'authorization_code',
+        clientId: 'app-nuxt',
+        scope: ['openid', 'profile', 'email'],
+        codeChallengeMethod: 'S256',
+      },
+    },
+    redirect: {
+      login: '/login',
+      logout: '/',
+      home: '/',
+    },
+  },
 }
