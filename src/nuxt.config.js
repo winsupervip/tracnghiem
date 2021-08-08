@@ -1,7 +1,9 @@
+/* eslint-disable prettier/prettier */
 import { murmurHash128 } from 'murmurhash-native'
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
-  head: {
+  "head": {
     title:
       'Trắc nghiệm Online, Ngân hàng câu hỏi, đề thi mới nhất cập nhật 24h/7',
     htmlAttrs: {
@@ -108,20 +110,18 @@ export default {
     ],
     script: [
       {
-        '@context': 'https://schema.org/',
-        '@type': 'WebSite',
         name: 'TracNghiem',
         alternateName:
           'Trắc nghiệm Online, Ngân hàng câu hỏi, đề thi mới nhất cập nhật 24h/7',
         url: 'https://tracnghiem.vn',
         potentialAction: {
           '@type': 'SearchAction',
-          target: 'https://tracnghiem.vn/tim-kiem/?q={search_term_string}',
+          "target": 'https://tracnghiem.vn/tim-kiem/?q={search_term_string}',
           'query-input': 'required name=search_term_string',
         },
         author: {
           '@type': 'Team',
-          name: 'TracNghiemTeam',
+          "name": 'TracNghiemTeam',
         },
         description:
           'Thi trắc nghiệm online với hàng ngàn đề thi, ngân hàng câu hỏi phong phú đa dạng trên nhiều lĩnh vực',
@@ -130,37 +130,39 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['@/assets/css/custom-bootstrap.scss', '@/assets/css/style.scss'],
+  "css": ['@/assets/css/custom-bootstrap.scss', '@/assets/css/style.scss'],
 
-  render: {
+  "render": {
     etag: {
       hash: (html) => murmurHash128(html),
     },
   },
 
-  serverMiddleware: ['@/middleware/cache.js'],
+  "serverMiddleware": ['@/middleware/cache.js'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
+  "plugins": [
     { src: '@/plugins/bootstrapPlugin.js', ssr: false },
     { src: '@/plugins/polyfills.client.js', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
+  "components": true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
+  "buildModules": [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
+    '@nuxtjs/composition-api/module',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
+  "modules": [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/google-gtag',
     '@nuxtjs/auth-next',
+    'bootstrap-vue/nuxt'
   ],
   // https://github.com/nuxt-community/google-gtag-module
   'google-gtag': {
@@ -168,13 +170,48 @@ export default {
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  "axios": {
+    baseURL: 'https://train-api.tracnghiem.vn',
+    proxyHeaders: false,
+    credentials: false
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
+  "build": {
     extractCSS: true,
+
+    babel: {
+      cacheDirectory: true,
+      compact: true,
+      presets({ envName }) {
+        const envTargets = {
+          client: { browsers: ['last 2 versions'], ie: 11 },
+          server: { node: 'current' },
+        }
+
+        return [
+          [
+            '@nuxt/babel-preset-app',
+            {
+              targets: envTargets[envName],
+              corejs: { version: 3 },
+              polyfills: [
+                'es.array.iterator',
+                'es.promise',
+                'es.object.assign',
+                'es.promise.finally',
+                'es.weak-map',
+              ],
+              useBuiltIns: 'usage',
+            },
+          ],
+        ]
+      },
+    },
+
+    transpile: [/@nuxtjs[\\/]composition-api/],
   },
-  router: {
+  "router": {
     extendRoutes(routes, resolve) {
       routes.push({
         name: 'custom',
@@ -184,7 +221,7 @@ export default {
     },
     middleware: ['auth'],
   },
-  auth: {
+  "auth": {
     strategies: {
       local: false,
       keycloak: {

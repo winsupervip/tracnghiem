@@ -1,24 +1,31 @@
 <script src="./home.js"></script>
+
 <script src="./home.scss"></script>
+
 <template>
   <div>
     <div id="custom-cards" class="container px-4 py-5">
       <div class="row">
         <div class="col-12 col-md-8 order-0">
           <h1 class="pb-2 border-bottom">
-            Trắc nghiệm Online, Ngân hàng câu hỏi, đề thi mới nhất cập nhật 24h/7
+            Trắc nghiệm Online, Ngân hàng câu hỏi, đề thi mới nhất cập nhật
+            24h/7
           </h1>
-        <p>
-          Thi trắc nghiệm online với hàng ngàn đề thi, ngân hàng câu hỏi phong phú
-          đa dạng trên nhiều lĩnh vực
-        </p>
+          <p>
+            Thi trắc nghiệm online với hàng ngàn đề thi, ngân hàng câu hỏi phong
+            phú đa dạng trên nhiều lĩnh vực
+          </p>
         </div>
         <div class="col-12 col-md-4 order-1">
           <div class="logo text-end">
-            <img src="/images/logo-tracnghiemvn.png" alt="Logo Trắc nghiệm Online" class="img-fluid">
-          </div>          
+            <img
+              src="/images/logo-tracnghiemvn.png"
+              alt="Logo Trắc nghiệm Online"
+              class="img-fluid"
+            />
+          </div>
         </div>
-      </div>            
+      </div>
       <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
         <div class="col">
           <div
@@ -312,10 +319,10 @@
         </div>
       </div>
     </div>
-    <div class="b-example-divider"></div>
+    <div class="b-example-divider" />
     <div class="container px-4 py-5">
       <div class="row">
-        <div class="col-12 col-md-8 offset-md-2">         
+        <div class="col-12 col-md-8 offset-md-2">
           <div class="mt-8 bg-white overflow-hidden shadow sm:rounded-lg p-3">
             <h2 class="text-2xl leading-7 font-semibold">
               Chào mừng bạn đã đến với TrắcNghiệm.VN
@@ -341,3 +348,12 @@
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api'
+
+export default defineComponent({
+  auth: false,
+  setup() {},
+})
+</script>
