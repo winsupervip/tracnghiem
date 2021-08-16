@@ -144,6 +144,8 @@ export default {
   "plugins": [
     { src: '@/plugins/bootstrapPlugin.js', ssr: false },
     { src: '@/plugins/polyfills.client.js', ssr: false },
+    { src: '@/plugins/http.js', ssr: true },
+    { src: '@/logger/vue-logger.js', ssr: true },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -162,7 +164,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/google-gtag',
     '@nuxtjs/auth-next',
-    'bootstrap-vue/nuxt'
+    'bootstrap-vue/nuxt',
   ],
   // https://github.com/nuxt-community/google-gtag-module
   'google-gtag': {

@@ -27,16 +27,14 @@ import {
   reactive,
   toRefs,
   useFetch,
-  useContext,
   useRoute,
   useMeta,
 } from '@nuxtjs/composition-api'
-import productAPI from '@/api/demo'
+import productAPI from '../../../api/demo'
 
 export default defineComponent({
   auth: false,
   setup() {
-    const { $axios } = useContext()
     const route = useRoute()
     const data = reactive({
       productId: route.value?.params?.id,
@@ -46,10 +44,7 @@ export default defineComponent({
     const { title } = useMeta()
 
     useFetch(async () => {
-      const { data: result } = await productAPI.detailProduct(
-        $axios,
-        data.productId
-      )
+      const { data: result } = await productAPI.detailProduct(data.productId)
 
       data.detailProduct = result.object
       title.value = data.detailProduct.productName

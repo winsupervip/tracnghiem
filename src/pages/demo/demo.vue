@@ -16,13 +16,14 @@ import {
   defineComponent,
   reactive,
   toRefs,
-  useContext,
   useFetch,
   useMeta,
   useRoute,
   watch,
+  useContext,
 } from '@nuxtjs/composition-api'
-import productAPI from '@/api/demo.js'
+
+import productAPI from '../../api/demo'
 import ListProductComponent from './component/products.vue'
 
 export default defineComponent({
@@ -31,7 +32,7 @@ export default defineComponent({
     'products-component': ListProductComponent,
   },
   setup() {
-    const { $axios } = useContext()
+    const { $logger } = useContext()
     const route = useRoute()
     const queryPage = route?.value?.query?.page || 1
     const data = reactive({
@@ -42,12 +43,13 @@ export default defineComponent({
     })
 
     const { fetch } = useFetch(async () => {
-      const { data: result } = await productAPI.products($axios, {
+      const { data: result } = await productAPI.products({
         page: data.currentPage,
         pageSize: data.pageSize,
       })
       data.listProducts = result.object?.items
       data.total = result.object?.total
+      $logger.info('trung log nek hehe 1')
     })
 
     // const listProductsAsyncData = useAsync(async () => {

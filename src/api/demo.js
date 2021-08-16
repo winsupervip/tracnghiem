@@ -1,4 +1,4 @@
 export default {
-  products: (axios, params) => axios.get('/Catalog/list-products', { params }),
-  detailProduct: (axios, id) => axios.get('/Catalog/get-product-by-id/' + id),
+  products: (params) => global.$http.get('/Catalog/list-products', { params }),
+  detailProduct: (id) => global.$http.get('/Catalog/get-product-by-id/' + id),
 }
