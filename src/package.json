@@ -24,7 +24,7 @@
     "focus-visible": "^5.2.0",
     "murmurhash-native": "^3.5.0",
     "nuxt": "^2.15.7",
-    "vue-logger-plugin": "^2.1.3",
+    "vue-logger-plugin": "^2.1.3"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.14.7",
