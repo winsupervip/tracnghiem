@@ -32,7 +32,7 @@ export default defineComponent({
     'products-component': ListProductComponent,
   },
   setup() {
-    const { $logger } = useContext()
+    const { $logger, $loader } = useContext()
     const route = useRoute()
     const queryPage = route?.value?.query?.page || 1
     const data = reactive({
@@ -43,6 +43,7 @@ export default defineComponent({
     })
 
     const { fetch } = useFetch(async () => {
+      $loader()
       const { data: result } = await productAPI.products({
         page: data.currentPage,
         pageSize: data.pageSize,
@@ -50,6 +51,7 @@ export default defineComponent({
       data.listProducts = result.object?.items
       data.total = result.object?.total
       $logger.info('trung log nek hehe 1')
+      $loader().close()
     })
 
     // const listProductsAsyncData = useAsync(async () => {

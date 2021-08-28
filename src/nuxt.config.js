@@ -1,6 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { murmurHash128 } from 'murmurhash-native'
 
+require('dotenv').config({ path: 'environments/.env.' + process.env.NODE_ENV })
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   "head": {
@@ -144,8 +146,8 @@ export default {
   "plugins": [
     { src: '@/plugins/bootstrapPlugin.js', ssr: false },
     { src: '@/plugins/polyfills.client.js', ssr: false },
-    { src: '@/plugins/http.js', ssr: true },
     { src: '@/logger/vue-logger.js', ssr: true },
+    { src: '@/plugins/loading.js', ssr: true },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -156,6 +158,7 @@ export default {
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     '@nuxtjs/composition-api/module',
+    '@nuxtjs/dotenv',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -173,7 +176,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   "axios": {
-    baseURL: 'https://train-api.tracnghiem.vn',
+    baseURL: process.env.apiURI,
     proxyHeaders: false,
     credentials: false
   },
@@ -224,6 +227,9 @@ export default {
     middleware: ['auth'],
   },
   "auth": {
+    plugins: [ 
+      { src: '@/plugins/http.js', ssr: true },
+    ],
     strategies: {
       local: false,
       keycloak: {
