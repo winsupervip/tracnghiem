@@ -148,6 +148,7 @@ export default {
     { src: '@/plugins/polyfills.client.js', ssr: false },
     { src: '@/logger/vue-logger.js', ssr: true },
     { src: '@/plugins/loading.js', ssr: true },
+    { src: '@/plugins/filters.js', ssr: true },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
