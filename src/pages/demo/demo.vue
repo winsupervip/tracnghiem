@@ -8,6 +8,18 @@
       :link-gen="linkGen"
       :number-of-pages="10"
     />
+
+    <vue2-tinymce-editor
+      v-model="content"
+      :options="options"
+    ></vue2-tinymce-editor>
+
+    <treeselect
+      v-model="treeValue"
+      :multiple="true"
+      :options="treeData"
+      placeholder="Select your favourite(s)..."
+    />
   </div>
 </template>
 
@@ -40,6 +52,63 @@ export default defineComponent({
       listProducts: [],
       total: 0,
       currentPage: queryPage,
+      options: {
+        convert_urls: false,
+        entity_encoding: 'raw',
+      },
+      content: '',
+      treeData: [
+        {
+          id: 'fruits',
+          label: 'Fruits',
+          children: [
+            {
+              id: 'apple',
+              label: 'Apple 🍎',
+              isNew: true,
+            },
+            {
+              id: 'grapes',
+              label: 'Grapes 🍇',
+            },
+            {
+              id: 'pear',
+              label: 'Pear 🍐',
+            },
+            {
+              id: 'strawberry',
+              label: 'Strawberry 🍓',
+            },
+            {
+              id: 'watermelon',
+              label: 'Watermelon 🍉',
+            },
+          ],
+        },
+        {
+          id: 'vegetables',
+          label: 'Vegetables',
+          children: [
+            {
+              id: 'corn',
+              label: 'Corn 🌽',
+            },
+            {
+              id: 'carrot',
+              label: 'Carrot 🥕',
+            },
+            {
+              id: 'eggplant',
+              label: 'Eggplant 🍆',
+            },
+            {
+              id: 'tomato',
+              label: 'Tomato 🍅',
+            },
+          ],
+        },
+      ],
+      treeValue: [],
     })
 
     const { fetch } = useFetch(async () => {
