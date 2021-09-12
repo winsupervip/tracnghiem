@@ -11,18 +11,23 @@ $enable-rounded: false;
 */
 
 $blue: #1C3988;
+$primary: #1C3988;
+$secondary: #6E8AE9;
 $green: #27AE60;
 $red: #FF645A;
 $yellow: #FEBB02;
 $orange: #FC9302;
 $text: #222222;
 $border: #dddddd;
+$white: #ffffff;
+$textGray: #909090;
+$footerBg: #242426;
 
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
 
 /***Font***/
 .font-sm{
-  font-size: 0.75rem !important;
+  font-size: 0.8125rem !important;
 }
 .font-smd{
   font-size: 0.875rem;
@@ -48,13 +53,34 @@ $border: #dddddd;
 }
 /***!Font***/
 
+a {
+  text-decoration: none;
+}
 .text-black {
   color: $text;
+}
+.text-primary {
+  color: $primary;
+}
+.text-green {
+  color: $green;
+}
+.text-gray {
+  color: $textGray;
+}
+.text-yellow {
+  color: $yellow;
 }
 
 .btn {
   font-weight: 600;
   border-radius: 0.25rem;
+  border-width: 2px;
+  padding: 0.375rem 1.5rem;
+}
+
+.btn-secondary {
+  color: $white;
 }
 
 .btn-lg {
@@ -64,7 +90,9 @@ $border: #dddddd;
 }
 
 .container {
-  max-width: 1170px;
+  @media screen and (min-width:1200px) {
+    max-width: 1170px;
+  }
 }
 
 .form-control {
