@@ -1,5 +1,5 @@
 <template>
-  <section class="section section-search">
+  <section class="section-search">
     <b-container>
       <div class="search-box">
         <div class="search-box-text">

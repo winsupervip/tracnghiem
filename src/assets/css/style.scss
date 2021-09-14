@@ -46,11 +46,14 @@ img {
 }
 
 .btn-transparent {
-  background-color: transparent;
-  border: none;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
   &:hover {
-    background-color: transparent;
-    border: none;
+    background-color: transparent !important;
+    border: none !important;
+    color: $red;
   }
 }
 
@@ -274,6 +277,9 @@ img {
     top: 10px;
     right: 10px;
     font-size: 1.375rem;
+    &.favorited {
+      color: $red;
+    }
   }
   .card-exam-teacher {
     padding: 1rem 1rem 0 1rem;
@@ -299,6 +305,13 @@ img {
     .exam-title {
       color: $text;
       text-decoration: none;
+      h4 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        word-break: break-word;
+      }
       &:hover {
         color: $primary;
       }
@@ -336,6 +349,9 @@ img {
       i {
         font-size: 1.5rem;
         margin-right: 0.25rem;
+        @media screen and (max-width: $md){
+          font-size: 1.25rem;
+        }
       }
     }
   }
@@ -383,6 +399,9 @@ img {
       -webkit-animation-name: fadeInUp;
       animation-name: fadeInUp;
     }
+    @media screen and (max-width: $sm - 1){
+      display: none;
+    }
   }
 }
 
@@ -417,28 +436,65 @@ img {
     justify-content: space-between;
     font-size: 1.25rem;
     margin: 2rem 0;
+    @media screen and (max-width: $md){
+      font-size: 1rem;
+      margin: 0 0 1.5rem 0;
+    }
     p {
       width: calc(100% - 40px);
       margin-bottom: 0;
     }
     i {
-      margin-top: 8px;
+      margin-top: 5px;
+    }
+    @media screen and (max-width: $sm - 1){
+      i {
+        display: none;
+      }
+      p {
+        width: 100%;
+      }
     }
   }
   .advantage-left {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    @media screen and (max-width: $lg){
+      justify-content: space-between;
+    }
+    @media screen and (max-width: $md){
+      order: 1;
+      padding-right: 2rem;
+    }
+    @media screen and (max-width: $sm - 1){
+      padding-right: 0.75rem;
+    }
   }
   .advantage-center {
     text-align: center;
     img {
+      width: 100%;
       max-width: 320px;
+    }
+    @media screen and (max-width: $md){
+      order: 3;
+      margin-top: 2rem;
     }
   }
   .advantage-right {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    @media screen and (max-width: $lg){
+      justify-content: space-between;
+    }
+    @media screen and (max-width: $md){
+      order: 2;
+      padding-left: 2rem;
+    }
+    @media screen and (max-width: $sm - 1){
+      padding-left: 0.75rem;
+    }
   }
 }
