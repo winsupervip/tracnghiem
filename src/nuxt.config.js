@@ -185,7 +185,7 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   "build": {
     extractCSS: true,
-
+    publicPath: '/public/',
     babel: {
       cacheDirectory: true,
       compact: true,

@@ -24,7 +24,6 @@
     "eslint-plugin-import": "^2.24.0",
     "focus-visible": "^5.2.0",
     "moment": "^2.29.1",
-    "murmurhash-native": "^3.5.0",
     "nuxt": "^2.15.7",
     "vee-validate": "^3.4.12",
     "vue-logger-plugin": "^2.1.3",

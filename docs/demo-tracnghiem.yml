@@ -1,0 +1,19 @@
+version: "3.4"
+
+services:
+  demo_tracnghiemvn:
+    image: "registry.gitlab.com/tracnghiemvn/frontend:latest"
+    container_name: "demo_tracnghiemvn"
+    hostname: "demo_tracnghiemvn"
+    restart: always
+    ports:
+      - "5001:5000"
+    network_mode: bridge
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 256M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
