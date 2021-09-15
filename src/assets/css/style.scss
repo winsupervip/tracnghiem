@@ -9,6 +9,11 @@ body{
   padding-top: $headerHeight;
   min-height: 100vh;
   font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+  @media screen and (max-width: $sm){
+    font-size: 15px;
+  }
 }
 
 .layout-default {
@@ -74,6 +79,12 @@ img {
 }
 .section {
   padding: 55px 0;
+  @media screen and (max-width: $sm){
+    padding: 45px 0;
+  }
+  @media screen and (max-width: $xs){
+    padding: 35px 0;
+  }
 }
 
 .section-heading {
@@ -82,10 +93,27 @@ img {
     font-size: 2rem;
     font-weight: bold;
     color: $blueDark;
+    line-height: 1.5;
   }
   .section-subtitle {
     font-size: 1.125rem;
     color: $blueDark;
+  }
+  @media screen and (max-width: $sm){
+    .section-title {
+      font-size: 1.75rem;
+    }
+    .section-subtitle {
+      font-size: 1rem;
+    }
+  }
+  @media screen and (max-width: $xs){
+    .section-title {
+      font-size: 1.5rem;
+    }
+    .section-subtitle {
+      font-size: 0.875rem;
+    }
   }
   &.text-white {
     .section-title {
@@ -120,6 +148,16 @@ img {
     .view-all {
       position: relative;
       top: -70px;
+    }
+    @media screen and (max-width: $sm){
+      .divider {
+        order: 2;
+      }
+      .view-all {
+        position: relative;
+        top: 0;
+        order: 1;
+      }
     }
   }
   .feature-topic-slider {
@@ -224,6 +262,9 @@ img {
   overflow: hidden;
   border: none;
   margin-bottom: 1.5rem;
+  @media screen and (max-width: $sm - 1){
+    margin-bottom: 1rem;
+  }
   .card-exam-thumb {
     position: relative;
     padding-top: 30%;
@@ -386,7 +427,14 @@ img {
   align-items: center;
   position: relative;
   overflow: hidden;
+  @media screen and (max-width: $sm){
+    padding: 80px 0;
+    min-height: 350px;
+  }
   .contribute-left {
+    @media screen and (max-width: $sm - 1){
+      text-align: center;
+    }
     .section-heading .section-title {
       margin-bottom: 1.5rem;
     }
@@ -430,6 +478,12 @@ img {
 
 .section-advantage {
   padding: 80px 0;
+  @media screen and (max-width: $md){
+    padding: 60px 0;
+  }
+  @media screen and (max-width: $sm){
+    padding: 50px 0;
+  }
   .advantage-item {
     display: flex;
     align-items: flex-start;
@@ -438,7 +492,7 @@ img {
     margin: 2rem 0;
     @media screen and (max-width: $md){
       font-size: 1rem;
-      margin: 0 0 1.5rem 0;
+      margin: 0 0 1rem 0;
     }
     p {
       width: calc(100% - 40px);
@@ -476,6 +530,9 @@ img {
     img {
       width: 100%;
       max-width: 320px;
+      @media screen and (max-width: $xs){
+        max-width: 250px;
+      }
     }
     @media screen and (max-width: $md){
       order: 3;

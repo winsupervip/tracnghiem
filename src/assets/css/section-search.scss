@@ -5,6 +5,13 @@
   display: flex;
   align-items: center;
   overflow: hidden;
+  @media screen and (max-width: $sm){
+    padding: 50px 0;
+    min-height: 420px;
+  }
+  @media screen and (max-width: $xs){
+    min-height: 350px;
+  }
   .container {
     position: relative;
     .search-box {
@@ -15,24 +22,49 @@
       .search-box-text {
         max-width: 550px;
         margin-bottom: 2rem;
+        @media screen and (max-width: $sm){
+          width: 70%;
+        }
+        @media screen and (max-width: $xs){
+          width: 90%;
+        }
       }
       .search-title {
         font-family: 'Merriweather', serif;
         font-size: 2.5rem;
         font-weight: bold;
         color: $blueDark;
+        line-height: 1.5;
         text-shadow: 2px 2px 1px #ffffff;
+        @media screen and (max-width: $sm){
+          font-size: 1.75rem;
+          text-shadow: 1px 1px 0 #ffffff;
+        }
+        @media screen and (max-width: $xs){
+          font-size: 1.25rem;
+        }
       }
       .search-subtitle {
         font-size: 1rem;
         color: $blueDark;
         line-height: 1.8;
         text-shadow: 1px 0 1px #ffffff;
+        @media screen and (max-width: $sm){
+          font-size: 0.875rem;
+        }
       }
       .form-search {
         padding: 1.5rem;
         background-color: #f3f3fa;
         border-radius: 0.25rem;
+        @media screen and (max-width: $sm){
+          padding: 1rem;
+        }
+        @media screen and (max-width: $xs){
+          padding: 0;
+          background-color: transparent;
+          border-radius: 0;
+        }
         form {
           display: flex;
           align-items: center;
@@ -84,13 +116,57 @@
               display: flex;
               align-items: center;
               justify-content: center;
+              span {
+                display: flex;
+                align-items: center;
+              }
+              .spinner-grow {
+                width: 20px;
+                height: 20px;
+                margin-right: 0.5rem;
+              }
               i {
+                width: 20px;
+                height: 20px;
                 margin-right: 0.5rem;
                 font-size: 1.25rem;
               }
             }
           }
+          @media screen and (max-width: $sm){
+            flex-wrap: wrap;
+            justify-content: space-between;
+            .input-keyword {
+              width: calc(50% - 5px);
+              margin: 0;
+              order: 3;
+              .form-control {
+                padding-left: 35px;
+              }
+              .input-group-prepend {
+                .input-group-text {
+                  i {
+                    font-size: 1rem;
+                  }
+                }
+              }
+            }
+            .input-select {
+              width: calc(50% - 5px);
+              margin: 0 0 10px 0;
+              order: 1;
+            }
+            .search-button {
+              width: calc(50% - 5px);
+              margin: 0;
+              order: 4;
+              .btn {
+                width: 100%;
+              }
+            }
+          }
         }
+
       }
     }
     .search-img-right {
@@ -101,6 +177,11 @@
       top: 45%;
       transform: translateY(-50%);
       text-align: right;
+      @media screen and (max-width: $sm){
+        width: 40%;
+        top: 0;
+        transform: none;
+      }
       .search-img {
         position: relative;
         z-index: 1;

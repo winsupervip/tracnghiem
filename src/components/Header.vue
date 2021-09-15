@@ -30,14 +30,11 @@
             <b-button
               variant="outline-primary"
               size="lg"
-              @click.native="collapseMenuMb"
-              >Đăng ký</b-button
+              @click="collapseMenuMb"
             >
-            <b-button
-              variant="primary"
-              size="lg"
-              @click.native="collapseMenuMb"
-            >
+              Đăng ký
+            </b-button>
+            <b-button variant="primary" size="lg" @click="collapseMenuMb">
               Đăng nhập
             </b-button>
           </div>

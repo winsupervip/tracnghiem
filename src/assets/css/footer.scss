@@ -4,6 +4,9 @@
   font-size: 0.875rem;
   .footer-top {
     padding: 60px 0;
+    @media screen and (max-width: $sm - 1){
+      padding: 40px 0;
+    }
   }
   .site-description {
     padding-right: 1rem;
