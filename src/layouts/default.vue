@@ -2,6 +2,8 @@
   <div class="layout-default">
     <Header />
     <Nuxt />
+    <SectionContribute />
+    <SectionAdvantage />
     <Footer />
   </div>
 </template>
@@ -13,12 +15,18 @@ import Header from '../components/Header'
 // eslint-disable-next-line import/no-unresolved
 import Footer from '../components/Footer'
 // eslint-disable-next-line import/no-unresolved
+import SectionContribute from '../components/SectionContribute'
+// eslint-disable-next-line import/no-unresolved
+import SectionAdvantage from '../components/SectionAdvantage'
+// eslint-disable-next-line import/no-unresolved
 import document from '@/utils/constants/document'
 export default defineComponent({
   name: 'Layout',
   components: {
     Header,
     Footer,
+    SectionContribute,
+    SectionAdvantage,
   },
   data() {
     return {

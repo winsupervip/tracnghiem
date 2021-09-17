@@ -246,68 +246,6 @@
         </div>
       </b-container>
     </section>
-    <section class="section section-contribute">
-      <b-container>
-        <b-row>
-          <b-col cols="12" sm="12" md="8" lg="7">
-            <div class="contribute-left">
-              <Heading
-                white
-                title="Bạn có ngân hàng đề thi trắc nghiệm?"
-                sub-title="Hàng ngàn người dùng đã tham gia xây dựng ngân hàng đề thi trắc nghiệm online tại tracnghiem.vn. Chúng tôi cung cấp công cụ và môi trường để bạn chia sẻ với hàng ngàn người khác."
-                class="mb-4"
-              ></Heading>
-              <nuxt-link
-                to="/dong-gop-cau-hoi"
-                class="btn btn-secondary font-smd"
-              >
-                ĐÓNG GÓP NGAY
-              </nuxt-link>
-            </div>
-          </b-col>
-          <b-col cols="12" sm="12" md="4" lg="5">
-            <div class="contribute-right">
-              <img
-                class="animate__animated"
-                src="/images/contribute-girl.png"
-                alt="Đóng góp câu hỏi ngay"
-              />
-            </div>
-          </b-col>
-        </b-row>
-      </b-container>
-    </section>
-    <section class="section section-advantage bg-white">
-      <b-container>
-        <b-row>
-          <b-col cols="12" sm="12" md="6" lg="4" class="advantage-left">
-            <div class="advantage-item">
-              <p>Tìm kiếm đề thi, bài kiểm tra trắc nghiệm online</p>
-              <i class="icon-left-down text-green"></i>
-            </div>
-            <div class="advantage-item">
-              <p>Làm bài và lưu kết quả</p>
-              <i class="icon-left-down text-green"></i>
-            </div>
-          </b-col>
-          <b-col cols="12" sm="12" md="12" lg="4" class="advantage-center">
-            <div class="px-4">
-              <img src="/images/co-gai.png" alt="co-gai" />
-            </div>
-          </b-col>
-          <b-col cols="12" sm="12" md="6" lg="4" class="advantage-right">
-            <div class="advantage-item">
-              <i class="icon-right-down text-green"></i>
-              <p>Nhận đề thi mới nhất và tiếp tục lộ trình học tập của mình</p>
-            </div>
-            <div class="advantage-item">
-              <i class="icon-right-down text-green"></i>
-              <p>Xem lịch sử làm bài</p>
-            </div>
-          </b-col>
-        </b-row>
-      </b-container>
-    </section>
   </div>
 </template>
 
