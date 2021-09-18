@@ -1,123 +1,134 @@
 <template>
-  <div class="card-filter">
-    <div class="card-filter-header d-flex justify-content-between">
-      <strong>Tìm kiếm</strong>
-      <b-btn class="button-link font-sm" @click="clearFilter">Xóa bộ lọc</b-btn>
-    </div>
-    <div class="card-filter-body">
-      <b-input placeholder="Nhập từ khóa cần tìm"></b-input>
-      <hr class="line-divide" />
-      <div class="filter-group">
-        <strong
-          :class="
-            showFilterGroup1
-              ? 'filter-group-header'
-              : 'filter-group-header collapsed'
-          "
-          @click="showFilterGroup1 = !showFilterGroup1"
-        >
-          Danh mục
-          <i class="icon-caret-down"></i>
-        </strong>
-        <b-collapse v-model="showFilterGroup1" class="filter-group-body">
-          <b-form-checkbox-group
-            v-model="selectedOptions1"
-            :options="options1"
-            value-field="value"
-            text-field="text"
-          ></b-form-checkbox-group>
-        </b-collapse>
+  <div class="card-filter-wrapper">
+    <b-btn class="sp btn-filter-mb" variant="primary" @click="openFilter">
+      <i class="icon-filter"></i>
+      Bộ lọc
+    </b-btn>
+    <div :class="visibleFilter ? 'card-filter open' : 'card-filter'">
+      <div class="card-filter-header d-flex justify-content-between">
+        <strong>Tìm kiếm</strong>
+        <b-btn class="button-link font-sm" @click="clearFilter">
+          Xóa bộ lọc
+        </b-btn>
       </div>
-      <hr class="line-divide" />
-      <div class="filter-group">
-        <strong
-          :class="
-            showFilterGroup2
-              ? 'filter-group-header'
-              : 'filter-group-header collapsed'
-          "
-          @click="showFilterGroup2 = !showFilterGroup2"
-        >
-          Mức độ
-          <i class="icon-caret-down"></i>
-        </strong>
-        <b-collapse v-model="showFilterGroup2" class="filter-group-body">
-          <b-form-checkbox-group
-            v-model="selectedOptions2"
-            :options="options2"
-            value-field="value"
-            text-field="text"
-          ></b-form-checkbox-group>
-        </b-collapse>
+      <div class="card-filter-body">
+        <b-input placeholder="Nhập từ khóa cần tìm"></b-input>
+        <hr class="line-divide" />
+        <div class="filter-group">
+          <strong
+            :class="
+              showFilterGroup1
+                ? 'filter-group-header'
+                : 'filter-group-header collapsed'
+            "
+            @click="showFilterGroup1 = !showFilterGroup1"
+          >
+            Danh mục
+            <i class="icon-caret-down"></i>
+          </strong>
+          <b-collapse v-model="showFilterGroup1" class="filter-group-body">
+            <b-form-checkbox-group
+              v-model="selectedOptions1"
+              :options="options1"
+              value-field="value"
+              text-field="text"
+            ></b-form-checkbox-group>
+          </b-collapse>
+        </div>
+        <hr class="line-divide" />
+        <div class="filter-group">
+          <strong
+            :class="
+              showFilterGroup2
+                ? 'filter-group-header'
+                : 'filter-group-header collapsed'
+            "
+            @click="showFilterGroup2 = !showFilterGroup2"
+          >
+            Mức độ
+            <i class="icon-caret-down"></i>
+          </strong>
+          <b-collapse v-model="showFilterGroup2" class="filter-group-body">
+            <b-form-checkbox-group
+              v-model="selectedOptions2"
+              :options="options2"
+              value-field="value"
+              text-field="text"
+            ></b-form-checkbox-group>
+          </b-collapse>
+        </div>
+        <hr class="line-divide" />
+        <div class="filter-group filter-ranking">
+          <strong
+            :class="
+              showFilterGroup3
+                ? 'filter-group-header'
+                : 'filter-group-header collapsed'
+            "
+            @click="showFilterGroup3 = !showFilterGroup3"
+          >
+            Đánh giá
+            <i class="icon-caret-down"></i>
+          </strong>
+          <b-collapse v-model="showFilterGroup3" class="filter-group-body">
+            <b-form-checkbox-group v-model="selectedOptions3">
+              <b-form-checkbox
+                v-for="item in options3"
+                :key="item.value"
+                :value="item.value"
+              >
+                <span class="text-yellow font-md" v-html="item.text"></span>
+              </b-form-checkbox>
+            </b-form-checkbox-group>
+          </b-collapse>
+        </div>
+        <hr class="line-divide" />
+        <div class="filter-group">
+          <strong
+            :class="
+              showFilterGroup4
+                ? 'filter-group-header'
+                : 'filter-group-header collapsed'
+            "
+            @click="showFilterGroup4 = !showFilterGroup4"
+          >
+            Số lượng câu hỏi
+            <i class="icon-caret-down"></i>
+          </strong>
+          <b-collapse v-model="showFilterGroup4" class="filter-group-body">
+            <b-form-checkbox-group
+              v-model="selectedOptions4"
+              :options="options4"
+              value-field="value"
+              text-field="text"
+            ></b-form-checkbox-group>
+          </b-collapse>
+        </div>
+        <hr class="line-divide" />
+        <div class="filter-group">
+          <strong
+            :class="
+              showFilterGroup5
+                ? 'filter-group-header'
+                : 'filter-group-header collapsed'
+            "
+            @click="showFilterGroup5 = !showFilterGroup5"
+          >
+            Thời gian làm bài
+            <i class="icon-caret-down"></i>
+          </strong>
+          <b-collapse v-model="showFilterGroup5" class="filter-group-body">
+            <b-form-checkbox-group
+              v-model="selectedOptions5"
+              :options="options5"
+              value-field="value"
+              text-field="text"
+            ></b-form-checkbox-group>
+          </b-collapse>
+        </div>
       </div>
-      <hr class="line-divide" />
-      <div class="filter-group filter-ranking">
-        <strong
-          :class="
-            showFilterGroup3
-              ? 'filter-group-header'
-              : 'filter-group-header collapsed'
-          "
-          @click="showFilterGroup3 = !showFilterGroup3"
-        >
-          Đánh giá
-          <i class="icon-caret-down"></i>
-        </strong>
-        <b-collapse v-model="showFilterGroup3" class="filter-group-body">
-          <b-form-checkbox-group v-model="selectedOptions3">
-            <b-form-checkbox
-              v-for="item in options3"
-              :key="item.value"
-              :value="item.value"
-            >
-              <span class="text-yellow font-md" v-html="item.text"></span>
-            </b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-collapse>
-      </div>
-      <hr class="line-divide" />
-      <div class="filter-group">
-        <strong
-          :class="
-            showFilterGroup4
-              ? 'filter-group-header'
-              : 'filter-group-header collapsed'
-          "
-          @click="showFilterGroup4 = !showFilterGroup4"
-        >
-          Số lượng câu hỏi
-          <i class="icon-caret-down"></i>
-        </strong>
-        <b-collapse v-model="showFilterGroup4" class="filter-group-body">
-          <b-form-checkbox-group
-            v-model="selectedOptions4"
-            :options="options4"
-            value-field="value"
-            text-field="text"
-          ></b-form-checkbox-group>
-        </b-collapse>
-      </div>
-      <hr class="line-divide" />
-      <div class="filter-group">
-        <strong
-          :class="
-            showFilterGroup5
-              ? 'filter-group-header'
-              : 'filter-group-header collapsed'
-          "
-          @click="showFilterGroup5 = !showFilterGroup5"
-        >
-          Thời gian làm bài
-          <i class="icon-caret-down"></i>
-        </strong>
-        <b-collapse v-model="showFilterGroup5" class="filter-group-body">
-          <b-form-checkbox-group
-            v-model="selectedOptions5"
-            :options="options5"
-            value-field="value"
-            text-field="text"
-          ></b-form-checkbox-group>
-        </b-collapse>
+      <div class="text-center sp mt-5 mb-4">
+        <b-btn variant="primary" @click="closeFilter">Áp dụng bộ lọc</b-btn>
       </div>
     </div>
   </div>
@@ -128,6 +139,7 @@ export default {
   name: 'SidebarExam',
   data() {
     return {
+      visibleFilter: false,
       showFilterGroup1: true,
       selectedOptions1: [],
       options1: [
@@ -197,6 +209,12 @@ export default {
       this.selectedOptions3 = []
       this.selectedOptions4 = []
       this.selectedOptions5 = []
+    },
+    openFilter() {
+      this.visibleFilter = true
+    },
+    closeFilter() {
+      this.visibleFilter = false
     },
   },
 }

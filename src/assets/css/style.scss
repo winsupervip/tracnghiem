@@ -17,6 +17,18 @@ body{
   }
 }
 
+.pc {
+  @media screen and (max-width: $sp){
+    display: none;
+  }
+}
+
+.sp {
+  @media screen and (min-width: $sm){
+    display: none;
+  }
+}
+
 .layout-default {
   min-height: calc(100vh - #{$headerHeight});
   display: flex;
@@ -271,7 +283,7 @@ img {
   overflow: hidden;
   border: none;
   margin-bottom: 1.5rem;
-  @media screen and (max-width: $sm - 1){
+  @media screen and (max-width: $sp){
     margin-bottom: 1rem;
   }
   .card-exam-thumb {
@@ -445,7 +457,7 @@ img {
     min-height: 350px;
   }
   .contribute-left {
-    @media screen and (max-width: $sm - 1){
+    @media screen and (max-width: $sp){
       text-align: center;
     }
     .section-heading .section-title {
@@ -460,7 +472,7 @@ img {
       -webkit-animation-name: fadeInUp;
       animation-name: fadeInUp;
     }
-    @media screen and (max-width: $sm - 1){
+    @media screen and (max-width: $sp){
       display: none;
     }
   }
@@ -514,7 +526,7 @@ img {
     i {
       margin-top: 5px;
     }
-    @media screen and (max-width: $sm - 1){
+    @media screen and (max-width: $sp){
       i {
         display: none;
       }
@@ -534,7 +546,7 @@ img {
       order: 1;
       padding-right: 2rem;
     }
-    @media screen and (max-width: $sm - 1){
+    @media screen and (max-width: $sp){
       padding-right: 0.75rem;
     }
   }
@@ -563,7 +575,7 @@ img {
       order: 2;
       padding-left: 2rem;
     }
-    @media screen and (max-width: $sm - 1){
+    @media screen and (max-width: $sp){
       padding-left: 0.75rem;
     }
   }
@@ -578,9 +590,15 @@ img {
     .page-title {
       font-size: 2rem;
       font-weight: bold;
+      @media screen and (max-width: $sp){
+        font-size: 1.5rem;;
+      }
     }
     .breadcrumb {
       margin-bottom: 0;
+      @media screen and (max-width: $sp){
+        font-size: 0.875rem;;
+      }
       .breadcrumb-item {
         font-weight: 400;
         a {
@@ -600,16 +618,45 @@ img {
 
 .exam-page-container {
   padding: 2rem 0;
-  @media screen and (max-width: $sm - 1){
+  @media screen and (max-width: $sp){
     padding: 1rem 0;
   }
 }
 
+.card-filter-wrapper {
+  .btn-filter-mb {
+    position: fixed;
+    z-index: 99;
+    width: 100%;
+    border-radius: 0;
+    left: 0;
+    bottom: 0;
+    padding: 0.5rem 1rem;
+    i {
+      margin-right: 8px;
+    }
+  }
+}
 .card-filter {
   background-color: $white;
   border-radius: 8px;
   box-shadow: 0 1px 4px rgba(#000000, 0.15);
   padding: 1rem;
+  @media screen and (max-width: $sp){
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    left: -100%;
+    top: 0;
+    height: 100%;
+    overflow: auto;
+    border-radius: 0;
+    transition: all 0.2s;
+    &.open {
+      left: 0;
+      transition: all 0.2s;
+    }
+  }
   .card-filter-header {
     display: flex;
     width: 100%;
@@ -678,7 +725,7 @@ img {
       font-weight: bold;
       @media screen and (max-width: $sp_max){
         font-size: 0.875rem;
-        padding: 0.5rem 1.5rem;
+        padding: 0.5rem 1rem;
       }
       &.active {
         border-bottom-color: $primary;
@@ -697,12 +744,19 @@ img {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  .count-result-left {
+    white-space: nowrap;
+  }
   .count-result-right {
     display: flex;
     align-items: center;
     span {
       white-space: nowrap;
       margin-right: 5px;
+      @media screen and (max-width: $sp){
+        display: none;
+      }
     }
     .custom-select {
       min-height: 30px;

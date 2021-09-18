@@ -13,10 +13,10 @@
                 <div class="count-result mb-4">
                   <div class="count-result-left">
                     <strong>1909</strong>
-                    <span>kết quả phù hợp</span>
+                    <span>kết quả</span>
                   </div>
                   <div class="count-result-right">
-                    <span>Sắp xếp theo:</span>
+                    <span>Sắp xếp:</span>
                     <b-form-select
                       v-model="selectedSort"
                       :options="optionsSort"
@@ -43,10 +43,10 @@
                 <div class="count-result mb-4">
                   <div class="count-result-left">
                     <strong>19</strong>
-                    <span>kết quả phù hợp</span>
+                    <span>kết quả</span>
                   </div>
                   <div class="count-result-right">
-                    <span>Sắp xếp theo:</span>
+                    <span>Sắp xếp:</span>
                     <b-form-select
                       v-model="selectedSort"
                       :options="optionsSort"

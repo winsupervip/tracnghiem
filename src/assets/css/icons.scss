@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-filter:before {
+  content: "\e92b";
+}
 .icon-dislike-fill:before {
   content: "\e929";
 }
