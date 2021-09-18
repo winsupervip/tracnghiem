@@ -12,7 +12,27 @@
         </b-btn>
       </div>
       <div class="card-filter-body">
-        <b-input placeholder="Nhập từ khóa cần tìm"></b-input>
+        <div class="filter-input">
+          <b-input
+            v-model="inputKeyword"
+            placeholder="Nhập từ khóa cần tìm"
+            @focus="visibleSuggestions = true"
+            @blur="visibleSuggestions = false"
+          ></b-input>
+          <div :class="visibleSuggestions ? 'suggestions open' : 'suggestions'">
+            <div class="list-suggestions">
+              <span
+                v-for="item in listSuggestions"
+                :key="item.value"
+                class="suggestion-item"
+                @click="selectSuggestion(item.text)"
+              >
+                {{ item.text }}
+                <i class="icon-close"></i>
+              </span>
+            </div>
+          </div>
+        </div>
         <hr class="line-divide" />
         <div class="filter-group">
           <strong
@@ -139,6 +159,26 @@ export default {
   name: 'SidebarExam',
   data() {
     return {
+      inputKeyword: '',
+      visibleSuggestions: false,
+      listSuggestions: [
+        {
+          text: 'Tiếng Anh',
+          value: 'Tiếng Anh',
+        },
+        {
+          text: 'Vật Lý 12',
+          value: 'Vật Lý 12',
+        },
+        {
+          text: 'Thi tốt nghiệp',
+          value: 'Thi tốt nghiệp',
+        },
+        {
+          text: 'Thi Toeic',
+          value: 'Thi Toeic',
+        },
+      ],
       visibleFilter: false,
       showFilterGroup1: true,
       selectedOptions1: [],
@@ -215,6 +255,10 @@ export default {
     },
     closeFilter() {
       this.visibleFilter = false
+    },
+    selectSuggestion(value) {
+      this.inputKeyword = value
+      console.log(value)
     },
   },
 }

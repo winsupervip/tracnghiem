@@ -12,7 +12,7 @@ $enable-rounded: false;
 
 $blue: #1C3988;
 $primary: #1C3988;
-$link: #003CFF;
+$link: #0D6EFD;
 $secondary: #6E8AE9;
 $green: #27AE60;
 $red: #FF645A;
@@ -173,6 +173,10 @@ a {
   }
   &::placeholder {
     color: $placeholder;
+  }
+  &:focus {
+    border-color: $link;
+    box-shadow: 0 0 0 0.24rem rgba($link, 0.25);
   }
 }
 
