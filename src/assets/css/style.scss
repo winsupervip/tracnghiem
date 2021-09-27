@@ -8,7 +8,7 @@ body{
   font-family: 'Open Sans', sans-serif;
   padding-top: $headerHeight;
   min-height: 100vh;
-  font-weight: 500;
+  font-weight: normal;
   font-size: 16px;
   line-height: 1.5;
   background-color: $bodyBg;
@@ -594,6 +594,15 @@ img {
         font-size: 1.5rem;;
       }
     }
+    .page-heading-title {
+      .page-title {
+        display: contents;
+      }
+      .exam-level {
+        margin-left: 0.75rem;
+        margin-bottom: 0.25rem;
+      }
+    }
     .breadcrumb {
       margin-bottom: 0;
       @media screen and (max-width: $sp){
@@ -612,6 +621,11 @@ img {
       .breadcrumb-item + .breadcrumb-item::before {
         color: $white;
       }
+    }
+  }
+  &.exam-page-heading {
+    .page-heading-inner {
+      background-image: url("/images/header-exam-bg.png");
     }
   }
 }
@@ -831,4 +845,9 @@ img {
       background-image: url("/images/icons/caret-down.svg");
     }
   }
+}
+
+// breadcrumb
+.breadcrumb {
+  font-size: 0.875rem;
 }

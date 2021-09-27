@@ -13,7 +13,7 @@
       <i class="icon-heart"></i>
     </b-btn>
     <div class="card-exam-teacher">
-      <nuxt-link :to="`teacher/${data.teacherId}`">
+      <nuxt-link :to="`/giao-vien/${data.teacherId}`">
         <img
           class="avatar avatar-lg"
           :src="data.teacherAvatar"
@@ -23,13 +23,13 @@
       </nuxt-link>
     </div>
     <div class="card-body">
-      <nuxt-link :to="`exam/${data.id}`" class="exam-title">
+      <nuxt-link :to="`/de-thi/${data.id}`" class="exam-title">
         <h4 class="font-md font-bold">
           {{ data.name }}
         </h4>
       </nuxt-link>
       <div class="exam-tag">
-        <nuxt-link v-for="tag in data.tags" :to="`tag/${tag.id}`" :key="tag.id">
+        <nuxt-link v-for="tag in data.tags" :key="tag.id" :to="`tag/${tag.id}`">
           #{{ tag.name }}
         </nuxt-link>
       </div>

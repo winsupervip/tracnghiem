@@ -121,6 +121,22 @@ a {
   color: $yellow;
 }
 
+.bg-black {
+  background-color: $text;
+}
+.bg-primary {
+  background-color: $primary;
+}
+.bg-green {
+  background-color: $green;
+}
+.bg-gray {
+  background-color: $textGray;
+}
+.bg-yellow {
+  background-color: $yellow;
+}
+
 .btn {
   font-weight: 600;
   border-radius: 0.25rem;
@@ -295,4 +311,12 @@ a {
     opacity: 1;
     transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
   }
+}
+
+.badge {
+  font-weight: normal;
+}
+
+.rounded-full {
+  border-radius: 50px;
 }
