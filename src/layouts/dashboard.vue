@@ -13,139 +13,6 @@
       </nuxt-link>
     </header>
     <div ref="dashboard" class="l-dashboard">
-      <!-- <div class="l-dashboard__nav">
-        <div class="l-dashboard__nav__global">
-          <div class="l-dashboard__nav__global__inner">
-            <div class="p-nav__icons">
-              <div class="p-navItem--logo">
-                <nuxt-link to="#">
-                  <img src="~/assets/img/dashboard/logo.svg" alt="logo" />
-                </nuxt-link>
-              </div>
-              <div class="p-navItem">
-                <nuxt-link to="#">
-                  <img src="~/assets/img/dashboard/icon_plus.png" alt="plus" />
-                </nuxt-link>
-              </div>
-              <div class="p-navItem">
-                <nuxt-link to="#">
-                  <img
-                    src="~/assets/img/dashboard/icon_search.png"
-                    alt="icon_search"
-                  />
-                </nuxt-link>
-              </div>
-              <div class="p-navItem">
-                <nuxt-link to="#">
-                  <img src="~/assets/img/dashboard/icon_tag.png" alt="icon_tag" />
-                </nuxt-link>
-              </div>
-            </div>
-            <div class="p-nav__icons">
-              <div class="p-navItem">
-                <nuxt-link to="#">
-                  <img
-                    src="~/assets/img/dashboard/icon_question.png"
-                    alt="icon_question"
-                  />
-                </nuxt-link>
-              </div>
-              <div class="p-navItem">
-                <nuxt-link to="#">
-                  <img
-                    src="~/assets/img/dashboard/user.jpg"
-                    alt="user.jpg"
-                    class="img-circle"
-                  />
-                </nuxt-link>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="l-dashboard__nav__menu">
-          <div class="p-navMenu__logo">
-            <img
-              src="~/assets/img/dashboard/logo tracnghiemvn.svg"
-              alt="logo tracnghiemvn.svg"
-            />
-          </div>
-          <div class="p-navMenu__child">
-            <ul>
-              <li>
-                <nuxt-link to="#" class="active">
-                  <div>
-                    <img
-                      src="~/assets/img/dashboard/icon_lslambai.png"
-                      alt="icon_lslambai.png"
-                    />
-                  </div>
-                  <span>Lịch sử làm bài</span>
-                </nuxt-link>
-              </li>
-              <li>
-                <nuxt-link to="#">
-                  <div>
-                    <img
-                      src="~/assets/img/dashboard/icon_dethi.png"
-                      alt="icon_dethi.png"
-                    />
-                  </div>
-                  <span>Đề thi của bạn</span>
-                </nuxt-link>
-              </li>
-              <li>
-                <nuxt-link to="#">
-                  <div>
-                    <img
-                      src="~/assets/img/dashboard/icon_nhch.png"
-                      alt="icon_nhch.png"
-                    />
-                  </div>
-                  <span>Ngân hàng câu hỏi</span>
-                </nuxt-link>
-              </li>
-            </ul>
-          </div>
-          <div class="p-navMenu__child">
-            <h2>Công cụ chung</h2>
-            <ul>
-              <li>
-                <nuxt-link to="#" class="active">
-                  <div>
-                    <img
-                      src="~/assets/img/dashboard/bx_bx-network-chart.png"
-                      alt="bx_bx-network-chart.png"
-                    />
-                  </div>
-                  <span>Affiliate</span>
-                </nuxt-link>
-              </li>
-              <li>
-                <nuxt-link to="#">
-                  <div>
-                    <img
-                      src="~/assets/img/dashboard/carbon_notification.png"
-                      alt="carbon_notification.png"
-                    />
-                  </div>
-                  <span>Thông báo</span>
-                </nuxt-link>
-              </li>
-              <li>
-                <nuxt-link to="#">
-                  <div>
-                    <img
-                      src="~/assets/img/dashboard/ant-design_dollar-outlined.png"
-                      alt="ant-design_dollar-outlined.png"
-                    />
-                  </div>
-                  <span>Lịch sử thanh toán</span>
-                </nuxt-link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div> -->
       <b-sidebar
         id="sidebar-1"
         ref="bSidebar"
@@ -242,7 +109,10 @@
                         />
                       </nuxt-link>
                     </div>
-                    <div class="p-navItem--dropdown__inner__menu account">
+                    <div
+                      class="p-navItem--dropdown__inner__menu account"
+                      data-bottom="10"
+                    >
                       <div class="p-navItem--dropdown__inner__menu__child">
                         <div class="item item__heading">Recent workspaces</div>
                         <nuxt-link class="item item__link" to="">
@@ -283,86 +153,88 @@
                 alt="logo tracnghiemvn.svg"
               />
             </div>
-            <div
-              v-if="isDisplayMenu || isDisplayMenuSp"
-              class="p-navMenu__child"
-            >
-              <ul>
-                <li>
-                  <nuxt-link to="" class="active">
-                    <div>
-                      <img
-                        src="~/assets/img/dashboard/icon_lslambai.png"
-                        alt="icon_lslambai.png"
-                      />
-                    </div>
-                    <span>Lịch sử làm bài</span>
-                  </nuxt-link>
-                </li>
-                <li>
-                  <nuxt-link to="">
-                    <div>
-                      <img
-                        src="~/assets/img/dashboard/icon_dethi.png"
-                        alt="icon_dethi.png"
-                      />
-                    </div>
-                    <span>Đề thi của bạn</span>
-                  </nuxt-link>
-                </li>
-                <li>
-                  <nuxt-link to="">
-                    <div>
-                      <img
-                        src="~/assets/img/dashboard/icon_nhch.png"
-                        alt="icon_nhch.png"
-                      />
-                    </div>
-                    <span>Ngân hàng câu hỏi</span>
-                  </nuxt-link>
-                </li>
-              </ul>
-            </div>
-            <div
-              v-if="isDisplayMenu || isDisplayMenuSp"
-              class="p-navMenu__child"
-            >
-              <h2 class="one-line">Công cụ chung</h2>
-              <ul>
-                <li>
-                  <nuxt-link to="" class="active">
-                    <div>
-                      <img
-                        src="~/assets/img/dashboard/bx_bx-network-chart.png"
-                        alt="bx_bx-network-chart.png"
-                      />
-                    </div>
-                    <span>Affiliate</span>
-                  </nuxt-link>
-                </li>
-                <li>
-                  <nuxt-link to="">
-                    <div>
-                      <img
-                        src="~/assets/img/dashboard/carbon_notification.png"
-                        alt="carbon_notification.png"
-                      />
-                    </div>
-                    <span>Thông báo</span>
-                  </nuxt-link>
-                </li>
-                <li>
-                  <nuxt-link to="">
-                    <div>
-                      <img
-                        src="~/assets/img/dashboard/ant-design_dollar-outlined.png"
-                        alt="ant-design_dollar-outlined.png"
-                      />
-                    </div>
-                    <span>Lịch sử thanh toán</span>
-                  </nuxt-link>
-                </li>
-              </ul>
+            <div class="p-navMenuList">
+              <div
+                v-if="isDisplayMenu || isDisplayMenuSp"
+                class="p-navMenu__child"
+              >
+                <ul>
+                  <li>
+                    <nuxt-link to="" class="active">
+                      <div>
+                        <img
+                          src="~/assets/img/dashboard/icon_lslambai.png"
+                          alt="icon_lslambai.png"
+                        />
+                      </div>
+                      <span>Lịch sử làm bài</span>
+                    </nuxt-link>
+                  </li>
+                  <li>
+                    <nuxt-link to="">
+                      <div>
+                        <img
+                          src="~/assets/img/dashboard/icon_dethi.png"
+                          alt="icon_dethi.png"
+                        />
+                      </div>
+                      <span>Đề thi của bạn</span>
+                    </nuxt-link>
+                  </li>
+                  <li>
+                    <nuxt-link to="">
+                      <div>
+                        <img
+                          src="~/assets/img/dashboard/icon_nhch.png"
+                          alt="icon_nhch.png"
+                        />
+                      </div>
+                      <span>Ngân hàng câu hỏi</span>
+                    </nuxt-link>
+                  </li>
+                </ul>
+              </div>
+              <div
+                v-if="isDisplayMenu || isDisplayMenuSp"
+                class="p-navMenu__child"
+              >
+                <h2 class="one-line">Công cụ chung</h2>
+                <ul>
+                  <li>
+                    <nuxt-link to="" class="active">
+                      <div>
+                        <img
+                          src="~/assets/img/dashboard/bx_bx-network-chart.png"
+                          alt="bx_bx-network-chart.png"
+                        />
+                      </div>
+                      <span>Affiliate</span>
+                    </nuxt-link>
+                  </li>
+                  <li>
+                    <nuxt-link to="">
+                      <div>
+                        <img
+                          src="~/assets/img/dashboard/carbon_notification.png"
+                          alt="carbon_notification.png"
+                        />
+                      </div>
+                      <span>Thông báo</span>
+                    </nuxt-link>
+                  </li>
+                  <li>
+                    <nuxt-link to="">
+                      <div>
+                        <img
+                          src="~/assets/img/dashboard/ant-design_dollar-outlined.png"
+                          alt="ant-design_dollar-outlined.png"
+                        />
+                      </div>
+                      <span>Lịch sử thanh toán</span>
+                    </nuxt-link>
+                  </li>
+                </ul>
+              </div>
             </div>
             <a
               ref="btnToggle"
@@ -393,15 +265,6 @@ import _ from 'lodash'
 export default defineComponent({
   name: 'Dashboard',
   layout: 'dashboard',
-  setup() {
-    // eslint-disable-next-line no-unused-expressions
-    // onbeforeMounted(() => {
-    //   document.body.className = 'dashboard'
-    // })
-    // onBeforeUnmount(() => {
-    //   window.removeEventListener('resize', this.handleWindowResize)
-    // })
-  },
   data() {
     return {
       backdrop: false,
@@ -426,50 +289,7 @@ export default defineComponent({
     console.log('mounted')
     this.handleWindowResize()
     document.body.classList.add('dashboard')
-    // window.addEventListener('resize', this.handleWindowResize)
-    $('.p-navItem--dropdown__inner__icon').click(function () {
-      const menu = $(this.closest('.p-navItem--dropdown__inner')).find(
-        '.p-navItem--dropdown__inner__menu'
-      )
-
-      _.forEach($('.p-navItem--dropdown__inner__menu'), function (x) {
-        $(x).css('display', 'none')
-        $(x).removeClass('block')
-        $(x).closest('.p-navItem--dropdown__inner').removeClass('block')
-      })
-
-      if (menu[0].style.display === 'flex') {
-        $(menu).css('display', 'none')
-        $(menu).removeClass('block')
-        $(menu).closest('.p-navItem--dropdown__inner').removeClass('block')
-      } else {
-        $(menu).css('display', 'flex')
-        $(menu).addClass('block')
-        $(menu).closest('.p-navItem--dropdown__inner').addClass('block')
-      }
-    })
-    // --- BEGIN Close menu when click outside
-    $(document).on('click', function (event) {
-      const $trigger = $('.p-navItem--dropdown__inner.block')
-
-      if ($trigger !== event.target && !$trigger.has(event.target).length) {
-        $('.p-navItem--dropdown__inner__menu.block').css('display', 'none')
-        $('.p-navItem--dropdown__inner__menu.block')
-          .closest('.p-navItem--dropdown__inner')
-          .removeClass('block')
-        $('.p-navItem--dropdown__inner__menu.block').removeClass('block')
-      }
-    })
-    // --- END Close menu when click outside
-    // $(document).ready(function () {
-    //   $('.l-dashboard.toggle--close .l-dashboard__nav__menu').hover(function (
-    //     e
-    //   ) {
-    //     console.log('mouseover')
-    //     this.$refs.dashboard.classList.remove('toggle--close')
-    //     this.isDisplayMenu = true
-    //   })
-    // })
+    this.toggleItemMenu()
   },
   destroyed() {
     document.body.classList.remove('dashboard')
@@ -498,6 +318,44 @@ export default defineComponent({
         this.variant = 'transparent'
         this.isDisplayMenuSp = false
       }
+    },
+    toggleItemMenu() {
+      // window.addEventListener('resize', this.handleWindowResize)
+      $('.p-navItem--dropdown__inner__icon').click(function () {
+        const menu = $(this.closest('.p-navItem--dropdown__inner')).find(
+          '.p-navItem--dropdown__inner__menu'
+        )
+
+        _.forEach($('.p-navItem--dropdown__inner__menu'), function (x) {
+          $(x).css('display', 'none')
+          $(x).removeClass('block')
+          $(x).closest('.p-navItem--dropdown__inner').removeClass('block')
+        })
+
+        if (menu[0].style.display === 'flex') {
+          $(menu).css('display', 'none')
+          $(menu).removeClass('block')
+          $(menu).closest('.p-navItem--dropdown__inner').removeClass('block')
+        } else {
+          $(menu).css('display', 'flex')
+          $(menu).addClass('block')
+          // eslint-disable-next-line no-undef
+          $(menu).css('top', 'calc(100% - ' + $('.account').offsetHeight + ')')
+          $(menu).closest('.p-navItem--dropdown__inner').addClass('block')
+        }
+      })
+      // --- BEGIN Close menu when click outside
+      $(document).on('click', function (event) {
+        const $trigger = $('.p-navItem--dropdown__inner.block')
+
+        if ($trigger !== event.target && !$trigger.has(event.target).length) {
+          $('.p-navItem--dropdown__inner__menu.block').css('display', 'none')
+          $('.p-navItem--dropdown__inner__menu.block')
+            .closest('.p-navItem--dropdown__inner')
+            .removeClass('block')
+          $('.p-navItem--dropdown__inner__menu.block').removeClass('block')
+        }
+      })
     },
   },
 })
