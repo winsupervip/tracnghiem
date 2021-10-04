@@ -386,7 +386,7 @@
 </template>
 
 <script>
-import $ from 'jquery'
+import $ from 'jquery/dist/jquery.slim'
 import { defineComponent } from '@vue/composition-api'
 import _ from 'lodash'
 
