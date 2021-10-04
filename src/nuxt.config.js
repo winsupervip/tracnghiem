@@ -132,7 +132,7 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  "css": ['@/assets/css/custom-bootstrap.scss', '@/assets/css/style.scss'],
+  "css": ['@/assets/css/custom-bootstrap.scss', '@/assets/css/style.scss', '@/assets/css/dashboard.scss'],
 
   "render": {
     etag: {
@@ -149,6 +149,7 @@ export default {
     { src: '@/logger/vue-logger.js', ssr: true },
     { src: '@/plugins/loading.js', ssr: true },
     { src: '@/plugins/filters.js', ssr: true },
+    { src: '@/plugins/vue2-scrollspy', ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -216,6 +217,11 @@ export default {
     },
 
     transpile: [/@nuxtjs[\\/]composition-api/],
+    extend(config, ctx) {
+      if (ctx.isDev) {
+        config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
+      }
+    }
   },
   "router": {
     extendRoutes(routes, resolve) {
@@ -228,7 +234,7 @@ export default {
     middleware: ['auth'],
   },
   "auth": {
-    plugins: [ 
+    plugins: [
       { src: '@/plugins/http.js', ssr: true },
     ],
     strategies: {

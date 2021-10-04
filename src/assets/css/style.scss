@@ -6,7 +6,7 @@
 @import "section-search";
 body{
   font-family: 'Open Sans', sans-serif;
-  padding-top: $headerHeight;
+  // padding-top: $headerHeight;
   min-height: 100vh;
   font-weight: normal;
   font-size: 16px;
@@ -30,6 +30,7 @@ body{
 }
 
 .layout-default {
+  margin-top: 75px;
   min-height: calc(100vh - #{$headerHeight});
   display: flex;
   flex-direction: column;
