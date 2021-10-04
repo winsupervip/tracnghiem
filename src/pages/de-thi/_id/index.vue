@@ -40,7 +40,11 @@
                 </b-col>
                 <b-col col="12" sm="12" md="4">
                   <div class="d-flex">
-                    <b-form-rating v-model="dataExam.rating" readonly />
+                    <b-form-rating
+                      v-model="dataExam.rating"
+                      class="custom-rating"
+                      readonly
+                    />
                     <strong>{{ dataExam.rating }}</strong>
                     <span>({{ dataExam.ratingCount }})</span>
                   </div>
