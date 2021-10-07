@@ -146,10 +146,12 @@ export default {
   "plugins": [
     { src: '@/plugins/bootstrapPlugin.js', ssr: false },
     { src: '@/plugins/polyfills.client.js', ssr: false },
+    { src: '@/plugins/editor.js', ssr: false },
     { src: '@/logger/vue-logger.js', ssr: true },
     { src: '@/plugins/loading.js', ssr: true },
     { src: '@/plugins/filters.js', ssr: true },
-    { src: '@/plugins/vue2-scrollspy', ssr: false }
+    { src: '@/plugins/vue2-scrollspy', ssr: false },
+    { src: '@/plugins/treeselect.js', ssr: true }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
