@@ -78,7 +78,7 @@
           </b-collapse>
         </div>
         <hr class="line-divide" />
-        <div class="filter-group filter-ranking">
+        <div class="filter-group">
           <strong
             :class="
               showFilterGroup3
