@@ -19,7 +19,7 @@
       >
         <vue2-tinymce-editor
           v-if="doShow"
-          v-model="content"
+          v-model="answerItem"
           :options="options"
         ></vue2-tinymce-editor>
       </b-modal>
@@ -51,7 +51,6 @@ export default defineComponent({
         menubar: false,
       },
       doShow: false,
-      content: '',
     })
     const getQuestion = (value) => {
       data.question = value
