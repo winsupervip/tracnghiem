@@ -10,9 +10,16 @@
         <b-button v-b-modal.modal-1>Thêm câu Trả lời</b-button>
       </div>
 
-      <b-modal id="modal-1" title="BootstrapVue">
+      <b-modal
+        id="modal-1"
+        size="xl"
+        title="BootstrapVue"
+        @shown="shown"
+        @hide="hide"
+      >
         <vue2-tinymce-editor
-          v-model="answerItem"
+          v-if="doShow"
+          v-model="content"
           :options="options"
         ></vue2-tinymce-editor>
       </b-modal>
@@ -43,6 +50,8 @@ export default defineComponent({
       options: {
         menubar: false,
       },
+      doShow: false,
+      content: '',
     })
     const getQuestion = (value) => {
       data.question = value
@@ -52,6 +61,14 @@ export default defineComponent({
       ...toRefs(data),
       getQuestion,
     }
+  },
+  methods: {
+    shown() {
+      this.doShow = true
+    },
+    hide() {
+      this.doShow = false
+    },
   },
 })
 </script>
