@@ -9,12 +9,12 @@
         <p>Câu Trả lời(*)</p>
         <b-button v-b-modal.modal-1>Thêm câu Trả lời</b-button>
       </div>
-
-      <b-modal id="modal-1" title="BootstrapVue">
-        <vue2-tinymce-editor
-          v-model="answerItem"
-          :options="options"
-        ></vue2-tinymce-editor>
+      <b-modal id="modal-1" title="Add Answer" size="xl">
+        <div>
+          <client-only>
+            <editor v-model="editorModel" />
+          </client-only>
+        </div>
       </b-modal>
     </div>
   </div>
@@ -43,6 +43,7 @@ export default defineComponent({
       options: {
         menubar: false,
       },
+      editorModel: 'hello the world',
     })
     const getQuestion = (value) => {
       data.question = value

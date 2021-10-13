@@ -4,10 +4,7 @@
     <p>Tiêu Đề (*)</p>
     <p>Gắn Thẻ câu hỏi của bạn. Tối Đa 5 thẻ(*)</p>
     <div>
-      <vue2-tinymce-editor
-        v-model="content"
-        :options="options"
-      ></vue2-tinymce-editor>
+      <editor v-model="content" />
     </div>
   </div>
 </template>

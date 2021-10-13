@@ -228,7 +228,7 @@ export default {
   "router": {
     extendRoutes(routes, resolve) {
       routes.push({
-        name: 'custom',
+        name: 'custom1',
         path: '',
         component: resolve(__dirname, 'pages/home'),
       })
