@@ -50,7 +50,7 @@
         :options="options"
         placeholder="Trạng thái"
       />
-      <treeselect :multiple="true" :options="options" placeholder="Mức độ" />
+      <treeselect :multiple="true" :option="options" placeholder="Mức độ" />
       <treeselect :multiple="true" :options="options" placeholder="Sắp xếp" />
     </div>
     <SingleQuestion v-show="showSingleQuestion" />
@@ -59,7 +59,15 @@
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api'
+import {
+  defineComponent,
+  useContext,
+  useRoute,
+  useFetch,
+  watch,
+  reactive,
+} from '@nuxtjs/composition-api'
+import QuestionApi from '../../../../src/api/question-list-page'
 import SingleListPage from './components/SingleListPage.vue'
 import MultipleListPage from './components/MultipleListPage.vue'
 export default defineComponent({
@@ -69,6 +77,28 @@ export default defineComponent({
   },
   layout: 'dashboard',
   auth: false,
+  setup() {
+    const { $loader } = useContext()
+    const route = useRoute()
+    const queryPage = route?.value?.query?.page || 1
+    const data = reactive({
+      currentPage: queryPage,
+      total: 0,
+    })
+    const { fetch } = useFetch(async () => {
+      $loader()
+      const { data: result } = await QuestionApi.getListStatus({
+        page: data.currentPage,
+      })
+      data.total = result.object?.total
+    })
+    watch(
+      () => data.currentPage,
+      () => {
+        fetch()
+      }
+    )
+  },
   data: () => ({
     showSingleQuestion: true,
     showMultipleQuestion: false,
