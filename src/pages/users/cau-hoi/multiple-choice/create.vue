@@ -1,7 +1,12 @@
 <template>
   <div class="layout">
     <div class="layout_left">
-      <Header :question-type="questionType" :get-question="getQuestion" />
+      <Header
+        :question-type="questionType"
+        :get-question="getQuestion"
+        :add-or-update-answer="addOrUpdateAnswer"
+      />
+      <ListAnswer :list-answers="listAnswers" type-question="multiple-choice" />
     </div>
     <div class="layout_right">
       <CategoryForm :get-category-form="getCategoryForm" />
@@ -10,6 +15,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import {
   defineComponent,
@@ -21,55 +27,92 @@ import CategoryForm from '../components/CategoryForm.vue'
 import LevelForm from '../components/LevelForm.vue'
 import ChoiceForm from '../components/ChoideForm.vue'
 import Header from '../components/Header.vue'
+import ListAnswer from '../components/ListAnswers.vue'
 export default defineComponent({
-  auth: false,
-  components: { LevelForm, CategoryForm, ChoiceForm, Header },
+  components: {
+    Header,
+    CategoryForm,
+    LevelForm,
+    ChoiceForm,
+    ListAnswer,
+  },
   layout: 'dashboard',
+  auth: false,
   setup() {
     const { $logger } = useContext()
     const data = reactive({
+      questionType: 'Thêm câu hỏi 1 lựa chọn',
       question: '',
-      formCheckbox: null,
-      levelForm: null,
-      categoryForm: null,
-      questionType: 'Thêm câu hỏi nhiều lựa chọn',
+      answerContent: '',
       options: {
         convert_urls: false,
         entity_encoding: 'raw',
       },
-      doShow: false,
+      isRightAnswer: false,
+      isRandom: false,
+      listAnswers: [],
+      isUpdate: -1,
     })
     const getQuestion = (value) => {
       data.question = value
-      $logger.info(data.question)
-    }
-    const getFormCheckbox = (value) => {
-      data.formCheckbox = value
-      $logger.info(data.formCheckbox)
-    }
-    const getLevelForm = (value) => {
-      data.levelForm = value
       $logger.info(value)
     }
-    const getCategoryForm = (value) => {
-      data.categoryForm = value
-      $logger.info(value)
-    }
+
     return {
       ...toRefs(data),
       getQuestion,
-      getFormCheckbox,
-      getLevelForm,
-      getCategoryForm,
     }
   },
   methods: {
-    shown() {
-      this.doShow = true
+    getFormCheckbox(value) {
+      this.formCheckbox = value
     },
-    hide() {
-      this.doShow = false
+    getLevelForm(value) {
+      this.levelForm = value
+    },
+    getCategoryForm(value) {
+      this.categoryForm = value
+    },
+    addOrUpdateAnswer(data) {
+      if (this.isUpdate === -1) {
+        this.listAnswers.push({
+          answerContent: data.answerContent,
+          isRandom: data.isRandom,
+          isRightAnswer: data.isRightAnswer,
+        })
+      } else {
+        // this.answers[index] = {
+        //   answer: this.answerContent,
+        //   isRandom: this.isRandom,
+        //   isRightAnswer: this.isRightAnswer,
+        // }
+        this.isUpdate = -1
+      }
+      console.log(data)
+      alert('Thêm câu trả lời thanh công')
     },
   },
 })
 </script>
+<style module>
+.addQuestionTitle {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+.checkBox {
+  display: flex;
+  margin: 2rem;
+}
+.checkBoxView {
+  display: flex;
+}
+.checkBoxInput {
+  align-self: center;
+  margin-right: 1rem;
+}
+.checkBoxTitle {
+  align-self: center;
+  margin: 0 auto;
+}
+</style>
