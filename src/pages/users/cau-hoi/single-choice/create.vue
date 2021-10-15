@@ -21,7 +21,7 @@ import {
 import CategoryForm from '../components/CategoryForm.vue'
 import LevelForm from '../components/LevelForm.vue'
 import ChoiceForm from '../components/ChoideForm.vue'
-import Header from '../components/Header.vue'
+import Header from '../components/header.vue'
 export default defineComponent({
   components: {
     Header,
