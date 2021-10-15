@@ -65,6 +65,7 @@ import {
   watch,
 } from '@nuxtjs/composition-api'
 export default defineComponent({
+  name: 'Header',
   props: {
     questionType: {
       type: String,

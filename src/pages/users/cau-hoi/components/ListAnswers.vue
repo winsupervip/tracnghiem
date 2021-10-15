@@ -13,7 +13,11 @@
         :value="answer"
         ><div :class="$style.choose">
           <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
-          <p v-html="answer.answerContent"></p></div
+          <p v-html="answer.answerContent"></p>
+          <img
+            src="~/assets/img/dashboard/icon_plus.png"
+            alt="icon_plus"
+          /></div
       ></b-form-radio>
     </b-form-group>
 
@@ -32,10 +36,22 @@
           :key="index"
           :class="$style.choose"
           :value="answer"
-          ><div :class="$style.choose">
+          ><div :class="$style.choose1">
             <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
-            <p v-html="answer.answerContent"></p></div
-        ></b-form-checkbox>
+            <p v-html="answer.answerContent"></p>
+            <div :class="$style.choose_right">
+              <img
+                src="~/assets/img/dashboard/icon_shuffle.png"
+                alt="icon_shuffle"
+              />
+              <img src="~/assets/img/dashboard/icon_edit.png" alt="icon_edit" />
+              <img
+                src="~/assets/img/dashboard/icon_delete.png"
+                alt="icon_delete"
+              />
+            </div>
+          </div>
+        </b-form-checkbox>
       </b-form-checkbox-group>
     </b-form-group>
   </div>
@@ -79,7 +95,10 @@ export default defineComponent({
 })
 </script>
 <style module>
-.choose {
+.choose1 {
   display: flex;
+  position: relative;
+}
+.choose_right {
 }
 </style>
