@@ -6,6 +6,7 @@
       <treeselect
         v-model="treeValue"
         :multiple="true"
+        :always-open="alwaysOpen"
         :options="treeData"
         placeholder="Select your favourite(s)..."
       />
@@ -35,6 +36,7 @@ export default defineComponent({
       listFormCheck: [],
       treeValue: [],
       treeData: [],
+      alwaysOpen: true,
     })
     const { fetch } = useFetch(async () => {
       $loader()
