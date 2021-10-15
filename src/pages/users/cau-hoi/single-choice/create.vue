@@ -1,7 +1,12 @@
 <template>
   <div class="layout">
     <div class="layout_left">
-      <Header :question-type="questionType" :get-question="getQuestion" />
+      <Header
+        :question-type="questionType"
+        :get-question="getQuestion"
+        :add-or-update-answer="addOrUpdateAnswer"
+      />
+      <ListAnswer :list-answers="listAnswers" type-question="single-choice" />
     </div>
     <div class="layout_right">
       <CategoryForm :get-category-form="getCategoryForm" />
@@ -22,12 +27,14 @@ import CategoryForm from '../components/CategoryForm.vue'
 import LevelForm from '../components/LevelForm.vue'
 import ChoiceForm from '../components/ChoideForm.vue'
 import Header from '../components/Header.vue'
+import ListAnswer from '../components/ListAnswers.vue'
 export default defineComponent({
   components: {
     Header,
     CategoryForm,
     LevelForm,
     ChoiceForm,
+    ListAnswer,
   },
   layout: 'dashboard',
   auth: false,
@@ -38,11 +45,12 @@ export default defineComponent({
       question: '',
       answerContent: '',
       options: {
-        menubar: false,
+        convert_urls: false,
+        entity_encoding: 'raw',
       },
       isRightAnswer: false,
       isRandom: false,
-      answers: [],
+      listAnswers: [],
       isUpdate: -1,
     })
     const getQuestion = (value) => {
@@ -65,24 +73,23 @@ export default defineComponent({
     getCategoryForm(value) {
       this.categoryForm = value
     },
-    addOrUpdateAnswer(index) {
-      if (index === -1) {
-        this.answers.push({
-          answer: this.answerContent,
-          isRandom: this.isRandom,
-          isRightAnswer: this.isRightAnswer,
+    addOrUpdateAnswer(data) {
+      if (this.isUpdate === -1) {
+        this.listAnswers.push({
+          answerContent: data.answerContent,
+          isRandom: data.isRandom,
+          isRightAnswer: data.isRightAnswer,
         })
       } else {
-        this.answers[index] = {
-          answer: this.answerContent,
-          isRandom: this.isRandom,
-          isRightAnswer: this.isRightAnswer,
-        }
+        // this.answers[index] = {
+        //   answer: this.answerContent,
+        //   isRandom: this.isRandom,
+        //   isRightAnswer: this.isRightAnswer,
+        // }
         this.isUpdate = -1
       }
-      this.isRightAnswer = false
-      this.isRandom = false
-      this.answerContent = ''
+      console.log(data)
+      alert('Thêm câu trả lời thanh công')
     },
   },
 })

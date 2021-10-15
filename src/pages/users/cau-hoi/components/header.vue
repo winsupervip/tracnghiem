@@ -5,7 +5,7 @@
       <p class="form-control">Tiêu Đề (*)</p>
       <p class="form-control">Gắn Thẻ câu hỏi của bạn. Tối Đa 5 thẻ(*)</p>
       <div>
-        <editor v-model="content" />
+        <editor v-model="questionContent" />
       </div>
     </div>
     <div>
@@ -48,7 +48,7 @@
                 <p :class="$style.checkBoxTitle">Câu trả lời đúng</p>
               </div>
             </div>
-            <b-button variant="outline-primary">{{
+            <b-button variant="outline-primary" @click="handleAnswer">{{
               isUpdate != -1 ? 'Cập nhập câu trả lời' : 'Thêm câu trả lời'
             }}</b-button>
           </div>
@@ -74,13 +74,19 @@ export default defineComponent({
       type: Function,
       required: true,
     },
+    addOrUpdateAnswer: {
+      type: Function,
+      required: true,
+    },
   },
   setup(props) {
     const data = reactive({
       options: {
-        menubar: false,
+        convert_urls: false,
+        entity_encoding: 'raw',
       },
-      content: '',
+      questionContent: '',
+      answerContent: '',
       isRightAnswer: false,
       isRandom: false,
       isUpdate: -1,
@@ -103,6 +109,21 @@ export default defineComponent({
     },
     hide() {
       this.doShow = false
+    },
+    handleAnswer() {
+      if (this.answerContent === '') {
+        alert('Câu trả lời không được bỏ trống')
+        return 0
+      }
+      const data = {
+        isRightAnswer: this.isRightAnswer,
+        isRandom: this.isRandom,
+        answerContent: this.answerContent,
+      }
+      this.isRightAnswer = false
+      this.isRandom = false
+      this.answerContent = ''
+      this.addOrUpdateAnswer(data)
     },
   },
 })
