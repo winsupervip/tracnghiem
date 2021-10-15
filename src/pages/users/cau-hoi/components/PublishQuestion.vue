@@ -10,13 +10,11 @@
     <p class="border_title"><strong>Xuất bản câu hỏi (*)</strong></p>
     <ul class="container">
       Hiện thị:
-      <li v-for="option in listCategoryRadio" :key="option.id">
+      <li v-for="option in listStatus" :key="option.id">
         <label
-          ><input
-            v-model="categoryForm"
-            type="radio"
-            :value="listCategoryRadio[option.id - 1]"
-          />{{ option.name }}</label
+          ><input v-model="status" type="radio" :value="option.id" />{{
+            option.label
+          }}</label
         >
       </li>
     </ul>
@@ -31,40 +29,31 @@ import {
   reactive,
   toRefs,
   watch,
+  useFetch,
 } from '@nuxtjs/composition-api'
+import CauHoiApi from '../../../../api/cauHoi'
 export default defineComponent({
   name: 'CategoryForm',
   props: {
-    getCategoryForm: {
+    getPublishQuestion: {
       type: Function,
       required: true,
     },
   },
   setup(props) {
     const data = reactive({
-      categoryForm: [],
-      listCategoryRadio: [
-        {
-          id: 1,
-          value: false,
-          name: 'Công khai',
-        },
-        {
-          id: 2,
-          value: false,
-          name: 'Không công khai',
-        },
-        {
-          id: 3,
-          value: false,
-          name: 'Bản nháp',
-        },
-      ],
+      listStatus: [],
+      status: -1,
     })
+    const { fetch } = useFetch(async () => {
+      const { data: result } = await CauHoiApi.getListStatus()
+      data.listStatus = result.object?.items
+    })
+    fetch()
     watch(
-      () => data.categoryForm,
+      () => data.status,
       () => {
-        props.getCategoryForm(data.categoryForm)
+        props.getPublishQuestion(data.status)
       }
     )
     return {

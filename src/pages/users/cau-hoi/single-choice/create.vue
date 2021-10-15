@@ -9,8 +9,8 @@
       <ListAnswer :list-answers="listAnswers" type-question="single-choice" />
     </div>
     <div class="layout_right">
-      <CategoryForm :get-category-form="getCategoryForm" />
-      <ChoiceForm :get-form-checkbox="getFormCheckbox" />
+      <PublishQuestion :get-publish-question="getPublishQuestion" />
+      <Category :get-categories="getCategories" />
       <LevelForm :get-level-form="getLevelForm" />
     </div>
   </div>
@@ -23,17 +23,17 @@ import {
   toRefs,
   useContext,
 } from '@nuxtjs/composition-api'
-import CategoryForm from '../components/CategoryForm.vue'
+import PublishQuestion from '../components/PublishQuestion.vue'
 import LevelForm from '../components/LevelForm.vue'
-import ChoiceForm from '../components/ChoideForm.vue'
+import Category from '../components/Category.vue'
 import Header from '../components/Header.vue'
 import ListAnswer from '../components/ListAnswers.vue'
 export default defineComponent({
   components: {
     Header,
-    CategoryForm,
+    PublishQuestion,
     LevelForm,
-    ChoiceForm,
+    Category,
     ListAnswer,
   },
   layout: 'dashboard',
@@ -42,7 +42,7 @@ export default defineComponent({
     const { $logger } = useContext()
     const data = reactive({
       questionType: 'Thêm câu hỏi 1 lựa chọn',
-      question: '',
+      questionContent: '',
       answerContent: '',
       options: {
         convert_urls: false,
@@ -52,9 +52,13 @@ export default defineComponent({
       isRandom: false,
       listAnswers: [],
       isUpdate: -1,
+      categories: [],
+      levelForm: false,
+      statusId: false,
+      levelId: false,
     })
     const getQuestion = (value) => {
-      data.question = value
+      data.questionContent = value
       $logger.info(value)
     }
 
@@ -64,21 +68,27 @@ export default defineComponent({
     }
   },
   methods: {
-    getFormCheckbox(value) {
-      this.formCheckbox = value
+    getCategories(value) {
+      this.categories = value
+      console.log(value)
     },
     getLevelForm(value) {
-      this.levelForm = value
+      this.levelId = value
+      console.log(value)
     },
-    getCategoryForm(value) {
-      this.categoryForm = value
+    getPublishQuestion(value) {
+      this.statusId = value
+      console.log(value)
     },
     addOrUpdateAnswer(data) {
       if (this.isUpdate === -1) {
         this.listAnswers.push({
           answerContent: data.answerContent,
-          isRandom: data.isRandom,
-          isRightAnswer: data.isRightAnswer,
+          random: data.isRandom,
+          rightAnswer: data.isRightAnswer,
+          hashId: '',
+          position: 0,
+          plainText: data.answerContent,
         })
       } else {
         // this.answers[index] = {
@@ -90,6 +100,27 @@ export default defineComponent({
       }
       console.log(data)
       alert('Thêm câu trả lời thanh công')
+    },
+    createQuestion() {
+      const data = {
+        question: {
+          hashId: '',
+          title: 'Thế nào là nguồn vốn của NHTM?',
+          questionTypeId: 1,
+          questionContent: this.questionContent,
+          explainationIfCorrect: 'Chúc mừng, bạn đã chọn đúng',
+          explainationIfIncorrect: 'Xem hướng dẫn tại địa chỉ abc.com',
+          statusId: this.statusId,
+          levelId: this.levelForm,
+          plainText: 'Thế nào là nguồn vốn của NHTM?',
+          tags: ['nguôn vốn', 'ngân hàng', 'ngân hàng thương mại'],
+          categories: this.categories,
+          questionGroupId: null,
+          groupOrder: null,
+        },
+        answers: this.listAnswers,
+      }
+      console.log(data)
     },
   },
 })

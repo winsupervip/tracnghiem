@@ -10,11 +10,9 @@
     <p class="border_title"><strong>Mức độ (*)</strong></p>
     <div class="container">
       <label v-for="option in listLevelRadio" :key="option.id"
-        ><input
-          v-model="levelForm"
-          type="radio"
-          :value="listLevelRadio[option.id - 1]"
-        />{{ option.name }}</label
+        ><input v-model="levelForm" type="radio" :value="option.id" />{{
+          option.name
+        }}</label
       >
     </div>
   </section>
@@ -40,22 +38,22 @@ export default defineComponent({
       levelForm: [],
       listLevelRadio: [
         {
-          id: 1,
+          id: 0,
           value: false,
           name: 'Cơ bản',
         },
         {
-          id: 2,
+          id: 1,
           value: false,
           name: 'Trung bình',
         },
         {
-          id: 3,
+          id: 2,
           value: false,
           name: 'Nâng cao',
         },
         {
-          id: 4,
+          id: 3,
           value: false,
           name: 'Khó',
         },

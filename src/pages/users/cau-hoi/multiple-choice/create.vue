@@ -9,8 +9,8 @@
       <ListAnswer :list-answers="listAnswers" type-question="multiple-choice" />
     </div>
     <div class="layout_right">
-      <CategoryForm :get-category-form="getCategoryForm" />
-      <ChoiceForm :get-form-checkbox="getFormCheckbox" />
+      <PublishQuestion :get-category-form="getCategoryForm" />
+      <Category :get-form-checkbox="getFormCheckbox" />
       <LevelForm :get-level-form="getLevelForm" />
     </div>
   </div>
@@ -23,17 +23,17 @@ import {
   toRefs,
   useContext,
 } from '@nuxtjs/composition-api'
-import CategoryForm from '../components/CategoryForm.vue'
+import PublishQuestion from '../components/PublishQuestion.vue'
 import LevelForm from '../components/LevelForm.vue'
-import ChoiceForm from '../components/ChoideForm.vue'
+import Category from '../components/Category.vue'
 import Header from '../components/Header.vue'
 import ListAnswer from '../components/ListAnswers.vue'
 export default defineComponent({
   components: {
     Header,
-    CategoryForm,
+    PublishQuestion,
     LevelForm,
-    ChoiceForm,
+    Category,
     ListAnswer,
   },
   layout: 'dashboard',
