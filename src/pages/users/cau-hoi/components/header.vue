@@ -2,8 +2,8 @@
   <div>
     <div>
       <p>Ngân Hàng câu hỏi > {{ questionType }}</p>
-      <p>Tiêu Đề (*)</p>
-      <p>Gắn Thẻ câu hỏi của bạn. Tối Đa 5 thẻ(*)</p>
+      <p class="form-control">Tiêu Đề (*)</p>
+      <p class="form-control">Gắn Thẻ câu hỏi của bạn. Tối Đa 5 thẻ(*)</p>
       <div>
         <editor v-model="content" />
       </div>
@@ -18,7 +18,7 @@
         id="modal-1"
         size="xl"
         title="Add Answer"
-        ok-only="true"
+        :ok-only="okOnly"
         ok-title="Đóng"
         @shown="shown"
         @hide="hide"
@@ -81,6 +81,11 @@ export default defineComponent({
         menubar: false,
       },
       content: '',
+      isRightAnswer: false,
+      isRandom: false,
+      isUpdate: -1,
+      doShow: false,
+      okOnly: true,
     })
     watch(
       () => data.content,
@@ -92,5 +97,35 @@ export default defineComponent({
       ...toRefs(data),
     }
   },
+  methods: {
+    shown() {
+      this.doShow = true
+    },
+    hide() {
+      this.doShow = false
+    },
+  },
 })
 </script>
+<style module>
+.addQuestionTitle {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+.checkBox {
+  display: flex;
+  margin: 2rem;
+}
+.checkBoxView {
+  display: flex;
+}
+.checkBoxInput {
+  align-self: center;
+  margin-right: 1rem;
+}
+.checkBoxTitle {
+  align-self: center;
+  margin: 0 auto;
+}
+</style>

@@ -1,55 +1,12 @@
 <template>
-  <div>
-    <header-component
-      :question-type="questionType"
-      :get-question="getQuestion"
-    />
-    <div>
-      <div :class="$style.addQuestionTitle">
-        <p>Câu Trả lời(*)</p>
-        <b-button v-b-modal.modal-1>Thêm câu trả lời</b-button>
-      </div>
-
-      <b-modal
-        id="modal-1"
-        size="xl"
-        title="Add Answer"
-        ok-only="true"
-        ok-title="Đóng"
-        @shown="shown"
-        @hide="hide"
-      >
-        <div>
-          <vue2-tinymce-editor
-            v-if="doShow"
-            v-model="answerContent"
-            :options="options"
-          ></vue2-tinymce-editor>
-          <div>
-            <div :class="$style.checkBoxView">
-              <div :class="$style.checkBox">
-                <input
-                  v-model="isRandom"
-                  type="checkbox"
-                  :class="$style.checkBoxInput"
-                />
-                <p :class="$style.checkBoxTitle">Cho phép xáo trộn</p>
-              </div>
-              <div :class="$style.checkBox">
-                <input
-                  v-model="isRightAnswer"
-                  type="checkbox"
-                  :class="$style.checkBoxInput"
-                />
-                <p :class="$style.checkBoxTitle">Câu trả lời đúng</p>
-              </div>
-            </div>
-            <b-button variant="outline-primary">{{
-              isUpdate != -1 ? 'Cập nhập câu trả lời' : 'Thêm câu trả lời'
-            }}</b-button>
-          </div>
-        </div>
-      </b-modal>
+  <div class="layout">
+    <div class="layout_left">
+      <Header :question-type="questionType" :get-question="getQuestion" />
+    </div>
+    <div class="layout_right">
+      <CategoryForm :get-category-form="getCategoryForm" />
+      <ChoiceForm :get-form-checkbox="getFormCheckbox" />
+      <LevelForm :get-level-form="getLevelForm" />
     </div>
   </div>
 </template>
@@ -61,10 +18,16 @@ import {
   toRefs,
   useContext,
 } from '@nuxtjs/composition-api'
-import header from '../components/header.vue'
+import CategoryForm from '../components/CategoryForm.vue'
+import LevelForm from '../components/LevelForm.vue'
+import ChoiceForm from '../components/ChoideForm.vue'
+import Header from '../components/Header.vue'
 export default defineComponent({
   components: {
-    'header-component': header,
+    Header,
+    CategoryForm,
+    LevelForm,
+    ChoiceForm,
   },
   layout: 'dashboard',
   auth: false,
@@ -77,7 +40,6 @@ export default defineComponent({
       options: {
         menubar: false,
       },
-      doShow: false,
       isRightAnswer: false,
       isRandom: false,
       answers: [],
@@ -94,11 +56,14 @@ export default defineComponent({
     }
   },
   methods: {
-    shown() {
-      this.doShow = true
+    getFormCheckbox(value) {
+      this.formCheckbox = value
     },
-    hide() {
-      this.doShow = false
+    getLevelForm(value) {
+      this.levelForm = value
+    },
+    getCategoryForm(value) {
+      this.categoryForm = value
     },
     addOrUpdateAnswer(index) {
       if (index === -1) {
