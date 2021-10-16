@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="rightCardForAddQuestion">
     <div v-if="!image">
-      <h2>Chọn ảnh</h2>
+      <p class="border_title"><strong>Chọn ảnh</strong></p>
       <input type="file" @change="onFileChange" />
     </div>
     <div v-else>
-      <img :src="image" />
+      <img :src="image" class="card" />
       <button @click="removeImage">Remove image</button>
     </div>
   </div>
@@ -13,17 +13,27 @@
 
 <script>
 export default {
+  props: {
+    getImage: {
+      type: Function,
+      required: true,
+    },
+  },
   data() {
     return {
       image: '',
-      a: '',
     }
   },
   methods: {
+    upImage(value) {
+      // call api
+      this.getImage('url')
+    },
     onFileChange(e) {
       const files = e.target.files || e.dataTransfer.files
       if (!files.length) return
       this.createImage(files[0])
+      this.upImage(files[0])
     },
     createImage(file) {
       const reader = new FileReader()
@@ -43,4 +53,9 @@ export default {
 }
 </script>
 
-<style module></style>
+<style module>
+.container {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+</style>

@@ -1,22 +1,22 @@
 <template>
-  <div>
+  <div :class="$style.answersList">
     <b-form-group
       v-if="typeQuestion === 'single-choice'"
       v-slot="{ ariaDescribedby }"
     >
-      <div v-for="(answer, index) in listAnswers" :key="index">
+      <div
+        v-for="(answer, index) in listAnswers"
+        :key="index"
+        :class="$style.choose1"
+      >
         <b-form-radio
           v-model="selected"
           :aria-describedby="ariaDescribedby"
           name="some-radios"
           :value="answer"
-          ><div :class="$style.choose">
+          ><div :class="$style.choose1">
             <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
-            <p v-html="answer.answerContent"></p>
-            <img
-              src="~/assets/img/dashboard/icon_plus.png"
-              alt="icon_plus"
-            /></div
+            <p v-html="answer.answerContent"></p></div
         ></b-form-radio>
       </div>
     </b-form-group>
@@ -101,6 +101,7 @@ export default defineComponent({
   display: flex;
   padding: 5px;
 }
-.choose_right {
+.answersList {
+  margin: 1rem;
 }
 </style>

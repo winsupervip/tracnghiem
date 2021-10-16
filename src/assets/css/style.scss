@@ -245,6 +245,16 @@ img {
     box-shadow: 0 4px 20px rgba(#4764C3, 0.2);
   }
 }
+.rightCardForAddQuestion {
+  box-shadow: 0 4px 15px rgba(#4764C3, 0.1);
+  transition: all 0.2s;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  &:hover {
+    box-shadow: 0 4px 20px rgba(#4764C3, 0.2);
+  }
+}
 .card-topic {
   border: none;
   .card-thumb {

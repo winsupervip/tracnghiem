@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="rightCardForAddQuestion">
     <!-- <treeselect
       v-model="value"
       :class="$style.display"
