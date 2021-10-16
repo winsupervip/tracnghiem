@@ -8,7 +8,7 @@
         :multiple="true"
         :always-open="alwaysOpen"
         :options="treeData"
-        placeholder="Select your favourite(s)..."
+        placeholder="Chuyên mục cho câu hỏi"
       />
     </div>
   </section>
@@ -36,7 +36,7 @@ export default defineComponent({
       listFormCheck: [],
       treeValue: [],
       treeData: [],
-      alwaysOpen: true,
+      alwaysOpen: false,
     })
     const { fetch } = useFetch(async () => {
       $loader()
@@ -63,8 +63,8 @@ section {
   border: 1px solid #aaa;
 }
 .container {
-  display: flex;
-  flex-direction: column;
+  background: chartreuse;
+  height: 15rem;
 }
 .display {
   display: none;

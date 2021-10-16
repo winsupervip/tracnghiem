@@ -12,6 +12,7 @@
       <PublishQuestion :get-publish-question="getPublishQuestion" />
       <Category :get-categories="getCategories" />
       <LevelForm :get-level-form="getLevelForm" />
+      <UploadImage />
     </div>
   </div>
 </template>
@@ -28,7 +29,7 @@ import LevelForm from '../components/LevelForm.vue'
 import Category from '../components/Category.vue'
 import Header from '../components/Header.vue'
 import ListAnswer from '../components/ListAnswers.vue'
-
+import UploadImage from '../components/UploadImage.vue'
 export default defineComponent({
   components: {
     Header,
@@ -36,6 +37,7 @@ export default defineComponent({
     LevelForm,
     Category,
     ListAnswer,
+    UploadImage,
   },
   layout: 'dashboard',
   auth: false,
