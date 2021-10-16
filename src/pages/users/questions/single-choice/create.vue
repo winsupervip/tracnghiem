@@ -6,7 +6,11 @@
         :get-question="getQuestion"
         :add-or-update-answer="addOrUpdateAnswer"
       />
-      <ListAnswer :list-answers="listAnswers" type-question="single-choice" />
+      <ListAnswer
+        :list-answers="listAnswers"
+        type-question="single-choice"
+        :selected="selected"
+      />
       <CommentOrNote :get-comment-or-note="getCommentOrNote" />
     </div>
     <div class="layout_right">
@@ -70,6 +74,7 @@ export default defineComponent({
       seoDescription: '',
       explainationIfCorrect: '',
       explainationIfInCorrect: '',
+      selected: {},
     })
     const getQuestion = (value) => {
       data.questionContent = value
@@ -109,14 +114,18 @@ export default defineComponent({
     },
     addOrUpdateAnswer(data) {
       if (this.isUpdate === -1) {
-        this.listAnswers.push({
+        const value = {
           answerContent: data.answerContent,
           random: data.isRandom,
           rightAnswer: data.isRightAnswer,
           hashId: '',
           position: 0,
           plainText: data.answerContent,
-        })
+        }
+        this.listAnswers.push(value)
+        if (data.isRightAnswer) {
+          this.selected = value
+        }
       } else {
         // this.answers[index] = {
         //   answer: this.answerContent,

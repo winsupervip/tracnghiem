@@ -7,17 +7,27 @@
       <div
         v-for="(answer, index) in listAnswers"
         :key="index"
-        :class="$style.choose1"
+        :class="$style.answerItem"
       >
         <b-form-radio
-          v-model="selected"
+          v-model="isSelected"
           :aria-describedby="ariaDescribedby"
           name="some-radios"
           :value="answer"
-          ><div :class="$style.choose1">
+          :aria-checked="true"
+          ><div :class="$style.answerItem">
             <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
-            <p v-html="answer.answerContent"></p></div
-        ></b-form-radio>
+            <p v-html="answer.answerContent"></p>
+          </div>
+        </b-form-radio>
+        <div>
+          <b-button variant="outline-warning"
+            ><b-icon icon="pencil-square"></b-icon
+          ></b-button>
+          <b-button variant="outline-danger"
+            ><b-icon icon="trash"></b-icon
+          ></b-button>
+        </div>
       </div>
     </b-form-group>
 
@@ -27,17 +37,17 @@
     >
       <b-form-checkbox-group
         id="checkbox-group-2"
-        v-model="selected"
+        v-model="isSelected"
         :aria-describedby="ariaDescribedby"
         name="flavour-2"
       >
         <div
           v-for="(answer, index) in listAnswers"
           :key="index"
-          :class="$style.choose1"
+          :class="$style.answerItem"
         >
           <b-form-checkbox :class="$style.choose" :value="answer"
-            ><div :class="$style.choose1">
+            ><div :class="$style.answerItem">
               <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
               <p v-html="answer.answerContent"></p>
             </div>
@@ -77,16 +87,26 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    selected: {
+      type: [Object, String],
+      required: true,
+    },
   },
-  setup() {
+  setup(props) {
     const { $logger } = useContext()
     const data = reactive({
-      selected: [],
+      isSelected: props.selected,
     })
     watch(
-      () => data.selected,
+      () => data.isSelected,
       () => {
-        $logger.info(data.selected)
+        $logger.info(data.isSelected)
+      }
+    )
+    watch(
+      () => props.selected,
+      () => {
+        data.isSelected = props.selected
       }
     )
     return {
@@ -97,11 +117,16 @@ export default defineComponent({
 })
 </script>
 <style module>
-.choose1 {
+.action {
   display: flex;
   padding: 5px;
 }
 .answersList {
   margin: 1rem;
+}
+.answerItem {
+  display: flex;
+  padding: 5px;
+  justify-content: space-between;
 }
 </style>
