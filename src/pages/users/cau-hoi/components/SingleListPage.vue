@@ -9,7 +9,21 @@
       </div>
       <div class="headline-right">
         <a href="">XEM TRÊN WEB</a>
-        <button><i class="fas fa-ellipsis-v"></i></button>
+
+        <b-dropdown variant="link" toggle-class="text-decoration-none" no-caret>
+          <template #button-content>
+            <i class="fas fa-ellipsis-v"></i>
+          </template>
+          <b-dropdown-item href="#">Cập nhật</b-dropdown-item>
+          <b-dropdown-item href="#">Tạo bản sao</b-dropdown-item>
+          <b-dropdown-item href="#">Xuất bản</b-dropdown-item>
+          <b-dropdown-item href="#">Chia sẻ</b-dropdown-item>
+          <b-dropdown-item href="#">tài liệu tham khảo</b-dropdown-item>
+
+          <b-dropdown-divider></b-dropdown-divider>
+          <b-dropdown-item href="#">Thống kê</b-dropdown-item>
+          <b-dropdown-item href="#">Xóa</b-dropdown-item>
+        </b-dropdown>
       </div>
     </div>
     <div class="line"></div>

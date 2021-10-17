@@ -13,7 +13,7 @@
               <a href="#" :style="{ fontWeight: 'bold' }">{{ item }}</a>
             </li>
           </ul>
-          <div class="line"></div>
+          <div class="dropdown-divider"></div>
           <a href="#" :style="{ fontWeight: 'bold' }">Câu chùm</a>
         </div>
         <b-button
@@ -25,7 +25,10 @@
       </b-modal>
     </div>
     <div class="type-list-question">
-      <button @click="showSingleQuestion">Danh sách câu đơn</button>
+      <button @click="showSingleQuestion = !showSingleQuestion">
+        Danh sách câu đơn
+      </button>
+
       <span></span>
       <button @click="showMultipleQuestion = !showMultipleQuestion">
         Danh sách câu chùm
@@ -33,27 +36,45 @@
     </div>
     <div class="type-question">
       <div class="input-group">
-        <input type="search" placeholder="Tìm kiếm câu hỏi" />
-
-        <span id="search-addon" class="input-group-text">
-          <i class="fas fa-search"></i>
-        </span>
+        <b-form-input
+          list="my-list-id"
+          placeholder="Tìm kiếm câu hỏi"
+          no-caret
+        ></b-form-input
+        ><datalist id="my-list-id">
+          <option v-for="(option, index) in options" :key="index">
+            {{ option }}
+          </option>
+        </datalist>
       </div>
-      <treeselect :multiple="true" :options="options" placeholder="Danh mục" />
+      <treeselect
+        :options="category"
+        :load-options="loadOptions"
+        placeholder="Danh mục"
+      />
       <treeselect
         :multiple="true"
-        :options="options"
+        :options="treeQuestionTypes"
+        :load-options="loadOptions"
         placeholder="Loại câu hỏi"
       />
       <treeselect
-        :multiple="true"
-        :options="options"
+        :options="listStatus"
+        :load-options="loadOptions"
         placeholder="Trạng thái"
       />
-      <treeselect :multiple="true" :option="options" placeholder="Mức độ" />
-      <treeselect :multiple="true" :options="options" placeholder="Sắp xếp" />
+      <treeselect
+        :options="level"
+        :load-options="loadOptions"
+        placeholder="Mức độ"
+      />
+      <treeselect
+        :options="options"
+        :load-options="loadOptions"
+        placeholder="Sắp xếp"
+      />
     </div>
-    <SingleQuestion v-show="showSingleQuestion" />
+    <SingleQuestion v-if="showSingleQuestion" />
     <MultipleQuestion v-show="showMultipleQuestion" />
   </div>
 </template>
@@ -64,12 +85,16 @@ import {
   useContext,
   useRoute,
   useFetch,
-  watch,
   reactive,
+  toRefs,
 } from '@nuxtjs/composition-api'
+import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
 import QuestionApi from '../../../../src/api/question-list-page'
 import SingleListPage from './components/SingleListPage.vue'
 import MultipleListPage from './components/MultipleListPage.vue'
+const simulateAsyncOperation = (fn) => {
+  setTimeout(fn, 2000)
+}
 export default defineComponent({
   components: {
     SingleQuestion: SingleListPage,
@@ -78,30 +103,40 @@ export default defineComponent({
   layout: 'dashboard',
   auth: false,
   setup() {
-    const { $loader } = useContext()
+    const { $loader, $logger } = useContext()
     const route = useRoute()
     const queryPage = route?.value?.query?.page || 1
     const data = reactive({
       currentPage: queryPage,
+      showSingleQuestion: true,
+      showMultipleQuestion: false,
       total: 0,
+      category: [],
+      treeQuestionTypes: [],
+      listStatus: [],
+      level: [],
     })
+
     const { fetch } = useFetch(async () => {
       $loader()
-      const { data: result } = await QuestionApi.getListStatus({
-        page: data.currentPage,
-      })
-      data.total = result.object?.total
+      const { data: result1 } = await QuestionApi.getCategory()
+      const { data: result2 } = await QuestionApi.getTreeQuestionTypes()
+      const { data: result3 } = await QuestionApi.getListStatus()
+      const { data: result4 } = await QuestionApi.getLevel()
+      data.category = result1.object.items
+      data.treeQuestionTypes = result2.object.items
+      data.listStatus = result3.object.items
+      data.level = result4.object.items
+      $logger.info(result4.object.items)
+      $loader().close()
     })
-    watch(
-      () => data.currentPage,
-      () => {
-        fetch()
-      }
-    )
+
+    fetch()
+    return {
+      ...toRefs(data),
+    }
   },
   data: () => ({
-    showSingleQuestion: true,
-    showMultipleQuestion: false,
     options: [
       {
         id: '1',
@@ -122,17 +157,50 @@ export default defineComponent({
       'Sắp thứ tự',
     ],
   }),
+  methods: {
+    loadOptions({ action, parentNode, callback }) {
+      // Typically, do the AJAX stuff here.
+      // Once the server has responded,
+      // assign children options to the parent node & call the callback.
+
+      if (action === LOAD_CHILDREN_OPTIONS) {
+        switch (parentNode.id) {
+          case 'success': {
+            simulateAsyncOperation(() => {
+              parentNode.children = [
+                {
+                  id: 'child',
+                  label: 'Child option',
+                },
+              ]
+              callback()
+            })
+            break
+          }
+          case 'no-children': {
+            simulateAsyncOperation(() => {
+              parentNode.children = []
+              callback()
+            })
+            break
+          }
+          case 'failure': {
+            simulateAsyncOperation(() => {
+              callback(new Error('Failed to load options: network error.'))
+            })
+            break
+          }
+          default: /* empty */
+        }
+      }
+    },
+  },
 })
 </script>
 
 <style lang="scss">
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
-.line {
-  width: 100%;
-  height: 0px;
-  background-color: #dddddd;
-  border: 1px solid #dddddd;
-}
+
 .page-container {
   font-family: OpenSans, sans-serif;
   font-style: normal;
@@ -164,9 +232,6 @@ export default defineComponent({
       font-weight: bold;
       font-size: 13px;
       color: #051e40;
-      &:visited {
-        background: red;
-      }
     }
   }
   .type-list-question {
@@ -191,28 +256,6 @@ export default defineComponent({
     display: grid;
     grid-template-columns: auto auto auto auto auto auto;
     grid-gap: 26px;
-    .input-group {
-      input {
-        width: 164px;
-        height: 33px;
-        font-style: normal;
-        font-weight: 600;
-        background: #ffffff;
-        border: 1px solid #000000;
-        border-radius: 4px;
-        box-sizing: border-box;
-        border-right: none;
-        outline: none;
-        padding: 0 0 0 5px;
-      }
-
-      span {
-        height: 33px;
-        background: #ffffff;
-        border: 1px solid #000000;
-        border-left: none;
-      }
-    }
   }
   .form-single-question {
     margin-top: 19px;
@@ -250,7 +293,7 @@ export default defineComponent({
         }
       }
       .headline-right {
-        a {
+        > a {
           background: #ffffff;
           border: 1px solid #051e40;
           box-sizing: border-box;
@@ -331,7 +374,7 @@ export default defineComponent({
         }
       }
       .headline-right {
-        a {
+        > a {
           background: #ffffff;
           border: 1px solid #051e40;
           box-sizing: border-box;
