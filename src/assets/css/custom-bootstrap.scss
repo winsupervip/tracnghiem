@@ -1,4 +1,6 @@
 /*overide bootstrap variable*/
+
+
 /*
 $grid-breakpoints: (
   xs: 0,
@@ -10,7 +12,7 @@ $grid-breakpoints: (
 $enable-rounded: false;
 */
 
-$blue: #1C3988;
+$blue: #0D6EFD;
 $primary: #1C3988;
 $link: #0D6EFD;
 $secondary: #6E8AE9;
@@ -24,7 +26,6 @@ $placeholder: #C2C2C2;
 $white: #ffffff;
 $textGray: #909090;
 $footerBg: #242426;
-
 //breakpoint
 $xl: 1440px;
 $lg: 1200px;
@@ -32,9 +33,7 @@ $md: 991px;
 $sm: 768px;
 $xs: 575px;
 $sp_max: 1024px;
-
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
-
 h6,
 .h6,
 h5,
@@ -47,276 +46,329 @@ h2,
 .h2,
 h1,
 .h1 {
-  line-height: 1.4;
+    line-height: 1.4;
 }
 
+
 /***Font***/
+
 .font-sm {
-  font-size: 0.8125rem !important;
+    font-size: 0.8125rem !important;
 }
+
 .font-smd {
-  font-size: 0.875rem;
+    font-size: 0.875rem;
 }
+
 .font-def {
-  font-size: 1rem;
+    font-size: 1rem;
 }
+
 .font-lmd {
-  font-size: 1.125rem;
+    font-size: 1.125rem;
 }
+
 .font-md {
-  font-size: 1.25rem;
+    font-size: 1.25rem;
 }
+
 .font-lg {
-  font-size: 1.5rem;
+    font-size: 1.5rem;
 }
+
 .font-xl {
-  font-size: 2.25rem;
+    font-size: 2.25rem;
 }
 
 @media screen and (max-width: $sm) {
-  .font-sm {
-    font-size: 0.75rem !important;
-  }
-  .font-smd {
-    font-size: 0.8125rem;
-  }
-  .font-def {
-    font-size: 0.875rem;
-  }
-  .font-lmd {
-    font-size: 1rem;
-  }
-  .font-md {
-    font-size: 1.125rem;
-  }
-  .font-lg {
-    font-size: 1.25rem;
-  }
-  .font-xl {
-    font-size: 1.75rem;
-  }
+    .font-sm {
+        font-size: 0.75rem !important;
+    }
+    .font-smd {
+        font-size: 0.8125rem;
+    }
+    .font-def {
+        font-size: 0.875rem;
+    }
+    .font-lmd {
+        font-size: 1rem;
+    }
+    .font-md {
+        font-size: 1.125rem;
+    }
+    .font-lg {
+        font-size: 1.25rem;
+    }
+    .font-xl {
+        font-size: 1.75rem;
+    }
 }
 
 .font-bold {
-  font-weight: bold;
+    font-weight: bold;
 }
+
+
 /***!Font***/
 
 a {
-  text-decoration: none;
+    text-decoration: none;
+    color: $blue;
 }
+
 .text-black {
-  color: $text;
+    color: $text;
 }
+
 .text-primary {
-  color: $primary;
+    color: $primary;
 }
+
 .text-green {
-  color: $green;
+    color: $green;
 }
+
 .text-gray {
-  color: $textGray;
+    color: $textGray;
 }
+
 .text-yellow {
-  color: $yellow;
+    color: $yellow;
 }
 
 .bg-black {
-  background-color: $text;
+    background-color: $text;
 }
+
 .bg-primary {
-  background-color: $primary;
+    background-color: $primary;
 }
+
 .bg-green {
-  background-color: $green;
+    background-color: $green;
 }
+
 .bg-gray {
-  background-color: $textGray;
+    background-color: $textGray;
 }
+
 .bg-yellow {
-  background-color: $yellow;
+    background-color: $yellow;
 }
 
 .btn {
-  font-weight: 600;
-  border-radius: 0.25rem;
-  border-width: 2px;
-  padding: 0.375rem 1.5rem;
+    font-weight: 600;
+    border-radius: 0.25rem;
+    border-width: 2px;
+    padding: 0.375rem 1.5rem;
 }
 
 .btn-secondary {
-  color: $white;
+    color: $white;
 }
 
 .btn-lg {
-  padding: 0.5rem 1.5rem;
-  border-width: 2px;
-  font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+    border-width: 2px;
+    font-size: 1rem;
 }
 
-
 .button-link {
-  padding: 0 !important;
-  border-radius: 0 !important;
-  border: none !important;
-  box-shadow: none !important;
-  color: $link !important;
-  background-color: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: $link !important;
+    background-color: transparent !important;
 }
 
 .container {
-  @media screen and (max-width: $lg) {
-    max-width: calc(100% - 1.5rem);
-  }
-  @media screen and (max-width: $md) {
-    max-width: calc(100% - 1rem);
-  }
-  @media screen and (max-width: $xs) {
-    max-width: calc(100% - 0.5rem);
-  }
+    @media screen and (max-width: $lg) {
+        max-width: calc(100% - 1.5rem);
+    }
+    @media screen and (max-width: $md) {
+        max-width: calc(100% - 1rem);
+    }
+    @media screen and (max-width: $xs) {
+        max-width: calc(100% - 0.5rem);
+    }
 }
 
 .form-control {
-  border-color: $border;
-  min-height: 44px;
-  padding: 10px 15px;
-  font-family: 'Roboto', sans-serif;
-  &::-webkit-input-placeholder {
-    color: $placeholder;
-  }
-  &:-ms-input-placeholder {
-    color: $placeholder;
-  }
-  &::placeholder {
-    color: $placeholder;
-  }
-  &:focus {
-    border-color: $link;
-    box-shadow: 0 0 0 0.24rem rgba($link, 0.25);
-  }
+    border-color: $border;
+    min-height: 44px;
+    padding: 10px 15px;
+    font-family: 'Roboto', sans-serif;
+    &::-webkit-input-placeholder {
+        color: $placeholder;
+    }
+    &:-ms-input-placeholder {
+        color: $placeholder;
+    }
+    &::placeholder {
+        color: $placeholder;
+    }
+    &:focus {
+        border-color: $link;
+        box-shadow: 0 0 0 0.24rem rgba($link, 0.25);
+    }
 }
 
 .custom-select {
-  border-radius: 4px;
-  padding: 0.375rem 1.5rem 0.375rem 0.75rem;
-  border: 1px solid $border;
-  appearance: none;
-  position: relative;
-  background-image: url('/images/icons/down.svg');
-  background-repeat: no-repeat;
-  background-position: calc(100% - 5px) center;
+    border-radius: 4px;
+    padding: 0.375rem 1.5rem 0.375rem 0.75rem;
+    border: 1px solid $border;
+    appearance: none;
+    position: relative;
+    background-image: url('/images/icons/down.svg');
+    background-repeat: no-repeat;
+    background-position: calc(100% - 5px) center;
 }
 
 //checkbox & radio
-
 .custom-control {
-  margin-bottom: 10px;
-  padding-left: 30px;
-  display: flex;
-  position: relative;
-  z-index: 1;
-  min-height: 20px;
-  -webkit-print-color-adjust: exact;
-  .custom-control-input {
-    position: absolute;
-    left: 0;
-    z-index: -1;
-    width: 1rem;
-    height: 1.25rem;
-    opacity: 0;
-  }
-  .custom-control-label {
+    margin-bottom: 10px;
+    padding-left: 30px;
+    display: flex;
     position: relative;
-    margin-bottom: 0;
-    vertical-align: top;
-    word-break: break-word;
-    font-size: 0.875rem;
-    line-height: 20px;
-    &:before {
-      position: absolute;
-      top: 0px;
-      left: -30px;
-      display: block;
-      width: 20px;
-      height: 20px;
-      pointer-events: none;
-      content: "";
-      background-color: $white !important;
-      border: 1px solid $border !important;
-      border-radius: 4px;
-      transition: background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    z-index: 1;
+    min-height: 20px;
+    -webkit-print-color-adjust: exact;
+    .custom-control-input {
+        position: absolute;
+        left: 0;
+        z-index: -1;
+        width: 1rem;
+        height: 1.25rem;
+        opacity: 0;
     }
-    &:after {
-      position: absolute;
-      top: 0;
-      left: -30px;
-      display: block;
-      width: 20px;
-      height: 20px;
-      content: "";
-      background-color: transparent;
+    .custom-control-label {
+        position: relative;
+        margin-bottom: 0;
+        vertical-align: top;
+        word-break: break-word;
+        font-size: 0.875rem;
+        line-height: 20px;
+        &:before {
+            position: absolute;
+            top: 0px;
+            left: -30px;
+            display: block;
+            width: 20px;
+            height: 20px;
+            pointer-events: none;
+            content: "";
+            background-color: $white !important;
+            border: 1px solid $border !important;
+            border-radius: 4px;
+            transition: background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+        &:after {
+            position: absolute;
+            top: 0;
+            left: -30px;
+            display: block;
+            width: 20px;
+            height: 20px;
+            content: "";
+            background-color: transparent;
+        }
     }
-  }
-  .custom-control-input:checked ~ .custom-control-label::before {
-    color: #fff;
-    border-color: $link !important;
-    background-color: $link !important;
-  }
+    .custom-control-input:checked~.custom-control-label::before {
+        color: #fff;
+        border-color: $link !important;
+        background-color: $link !important;
+    }
 }
 
-
 .custom-checkbox {
-  .custom-control-label {
-    &:after {
-      transition: all .3s cubic-bezier(.78,.14,.15,.86);
-      left: -20px;
-      top: 3px;
-      transform: scale(0);
-      opacity: 0;
+    .custom-control-label {
+        &:after {
+            transition: all .3s cubic-bezier(.78, .14, .15, .86);
+            left: -20px;
+            top: 3px;
+            transform: scale(0);
+            opacity: 0;
+        }
     }
-  }
-  .custom-control-input:checked ~ .custom-control-label::after {
-    border-bottom: 2px solid $white;
-    border-left: 2px solid $white;
-    width: 12px;
-    height: 6px;
-    left: -20px;
-    top: 3px;
-    transform: rotate(-45deg) scale(1) translate(-50%, -50%);
-    opacity: 1;
-    transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
-  }
+    .custom-control-input:checked~.custom-control-label::after {
+        border-bottom: 2px solid $white;
+        border-left: 2px solid $white;
+        width: 12px;
+        height: 6px;
+        left: -20px;
+        top: 3px;
+        transform: rotate(-45deg) scale(1) translate(-50%, -50%);
+        opacity: 1;
+        transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
+    }
 }
 
 .custom-radio {
-  .custom-control-label {
-    &:before {
-      border-radius: 50%;
+    .custom-control-label {
+        &:before {
+            border-radius: 50%;
+        }
+        &:after {
+            transition: all .3s cubic-bezier(.78, .14, .15, .86);
+            left: -28px;
+            top: 2px;
+            transform: scale(0);
+            opacity: 0;
+            width: 16px;
+            height: 16px;
+            background-color: $link;
+            border-radius: 50%;
+            border: 3px solid $white;
+        }
     }
-    &:after {
-      transition: all .3s cubic-bezier(.78,.14,.15,.86);
-      left: -28px;
-      top: 2px;
-      transform: scale(0);
-      opacity: 0;
-      width: 16px;
-      height: 16px;
-      background-color: $link;
-      border-radius: 50%;
-      border: 3px solid $white;
+    .custom-control-input:checked~.custom-control-label::after {
+        transform: scale(1);
+        opacity: 1;
+        transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
     }
-  }
-  .custom-control-input:checked ~ .custom-control-label::after {
-    transform: scale(1);
-    opacity: 1;
-    transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
-  }
 }
 
 .badge {
-  font-weight: normal;
+    font-weight: normal;
 }
 
 .rounded-full {
-  border-radius: 50px;
+    border-radius: 50px;
+}
+
+.progress {
+    border-radius: 20px;
+}
+
+hr {
+    background-color: $border;
+    opacity: 1;
+}
+
+.btn-link {
+    color: $blue;
+    text-decoration: none;
+    font-weight: normal;
+    padding: 0;
+    border: none;
+    outline: none;
+    i {
+        margin-right: 0.5rem;
+    }
+}
+
+.pagination {
+    font-size: 0.875rem;
+    li {
+        margin: 2.5px;
+        button,
+        .page-link {
+            border-radius: 0.25rem;
+            min-width: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
 }

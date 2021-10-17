@@ -55,6 +55,7 @@ export default defineComponent({
   text-align: center;
   flex-direction: column;
   padding: 50px 0;
+  background-color: #ffffff;
   .error-title {
     color: #1c3988;
     text-transform: uppercase;
