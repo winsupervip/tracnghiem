@@ -2,11 +2,21 @@
   <div class="rightCardForAddQuestion">
     <div v-if="!image">
       <p class="border_title"><strong>Chọn ảnh</strong></p>
-      <input type="file" @change="onFileChange" />
+      <label class="btn btn-outline-primary" @click="handleFileAvata"
+        >Image</label
+      >
+      <input
+        ref="fileAvata"
+        class="input-avata"
+        type="file"
+        @change="onFileChange"
+      />
     </div>
     <div v-else>
       <img :src="image" class="card" />
-      <button @click="removeImage">Remove image</button>
+      <button class="btn btn-outline-primary" @click="removeImage">
+        Remove image
+      </button>
     </div>
   </div>
 </template>
@@ -28,6 +38,9 @@ export default {
     upImage(value) {
       // call api
       this.getImage('url')
+    },
+    handleFileAvata(e) {
+      this.$refs.fileAvata.click()
     },
     onFileChange(e) {
       const files = e.target.files || e.dataTransfer.files
@@ -53,9 +66,12 @@ export default {
 }
 </script>
 
-<style module>
+<style scope>
 .container {
   margin-top: 1rem;
   margin-bottom: 1rem;
+}
+.input-avata {
+  display: none;
 }
 </style>
