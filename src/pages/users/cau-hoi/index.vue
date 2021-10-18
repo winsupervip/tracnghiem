@@ -40,6 +40,7 @@
           list="my-list-id"
           placeholder="Tìm kiếm câu hỏi"
           no-caret
+          :value="keyword"
         ></b-form-input
         ><datalist id="my-list-id">
           <option v-for="(option, index) in options" :key="index">
@@ -115,6 +116,8 @@ export default defineComponent({
       treeQuestionTypes: [],
       listStatus: [],
       level: [],
+      autoCompleteTag: [],
+      keyword: '',
     })
 
     const { fetch } = useFetch(async () => {
@@ -123,15 +126,19 @@ export default defineComponent({
       const { data: result2 } = await QuestionApi.getTreeQuestionTypes()
       const { data: result3 } = await QuestionApi.getListStatus()
       const { data: result4 } = await QuestionApi.getLevel()
+      const { data: result5 } = await QuestionApi.getAutoCompleteTag('1')
+
       data.category = result1.object.items
       data.treeQuestionTypes = result2.object.items
       data.listStatus = result3.object.items
       data.level = result4.object.items
-      $logger.info(result4.object.items)
+      data.autoCompleteTag = result5.object.items
+      $logger.info(data.autoCompleteTag)
       $loader().close()
     })
 
     fetch()
+
     return {
       ...toRefs(data),
     }
