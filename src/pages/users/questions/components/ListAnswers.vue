@@ -52,16 +52,13 @@
               <p v-html="answer.answerContent"></p>
             </div>
           </b-form-checkbox>
-          <div :class="$style.choose_right">
-            <img
-              src="~/assets/img/dashboard/icon_shuffle.png"
-              alt="icon_shuffle"
-            />
-            <img src="~/assets/img/dashboard/icon_edit.png" alt="icon_edit" />
-            <img
-              src="~/assets/img/dashboard/icon_delete.png"
-              alt="icon_delete"
-            />
+          <div>
+            <b-button variant="outline-warning"
+              ><b-icon icon="pencil-square"></b-icon
+            ></b-button>
+            <b-button variant="outline-danger"
+              ><b-icon icon="trash"></b-icon
+            ></b-button>
           </div>
         </div>
       </b-form-checkbox-group>

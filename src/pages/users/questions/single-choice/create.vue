@@ -5,6 +5,8 @@
         :question-type="questionType"
         :get-question="getQuestion"
         :add-or-update-answer="addOrUpdateAnswer"
+        :get-tags="getTags"
+        :get-title="getTitle"
       />
       <ListAnswer
         :list-answers="listAnswers"
@@ -14,7 +16,10 @@
       <CommentOrNote :get-comment-or-note="getCommentOrNote" />
     </div>
     <div class="layout_right">
-      <PublishQuestion :get-publish-question="getPublishQuestion" />
+      <PublishQuestion
+        :get-publish-question="getPublishQuestion"
+        :save-question="saveQuestion"
+      />
       <Category :get-categories="getCategories" />
       <LevelForm :get-level-form="getLevelForm" />
       <UploadImage :get-image="getImage" />
@@ -38,6 +43,7 @@ import ListAnswer from '../components/ListAnswers.vue'
 import UploadImage from '../components/UploadImage.vue'
 import AddSeo from '../components/AddSeo.vue'
 import CommentOrNote from '../components/CommentOrNote.vue'
+import CauHoiApi from '../../../../api/cauHoi'
 export default defineComponent({
   components: {
     Header,
@@ -75,6 +81,8 @@ export default defineComponent({
       explainationIfCorrect: '',
       explainationIfInCorrect: '',
       selected: {},
+      tags: [],
+      title: '',
     })
     const getQuestion = (value) => {
       data.questionContent = value
@@ -112,6 +120,12 @@ export default defineComponent({
       this.explainationIfInCorrect = value.explainationIfInCorrect
       console.log(value)
     },
+    getTags(value) {
+      this.tags = value
+    },
+    getTitle(value) {
+      this.title = value
+    },
     addOrUpdateAnswer(data) {
       if (this.isUpdate === -1) {
         const value = {
@@ -137,29 +151,37 @@ export default defineComponent({
       console.log(data)
       alert('Thêm câu trả lời thanh công')
     },
-    createQuestion() {
+    saveQuestion() {
       const data = {
         question: {
           hashId: '',
-          title: 'Thế nào là nguồn vốn của NHTM?',
+          title: this.title,
           questionTypeId: 1,
           questionContent: this.questionContent,
           explainationIfCorrect: this.explainationIfCorrect,
           explainationIfIncorrect: this.explainationIfInCorrect,
           statusId: this.statusId,
           levelId: this.levelForm,
-          plainText: 'Thế nào là nguồn vốn của NHTM?',
+          plainText: this.title,
           seoAvatar: 'string',
           seoTitle: this.seoTitle,
           seoDescription: this.seoDescription,
-          tags: ['nguôn vốn', 'ngân hàng', 'ngân hàng thương mại'],
+          tags: this.tags,
           categories: this.categories,
           questionGroupId: null,
           groupOrder: null,
         },
         answers: this.listAnswers,
       }
-      console.log(data)
+      CauHoiApi.createQuestion(
+        data,
+        () => {
+          alert('Thêm Thành Công')
+        },
+        () => {
+          alert('Có lỗi sảy ra')
+        }
+      )
     },
   },
 })

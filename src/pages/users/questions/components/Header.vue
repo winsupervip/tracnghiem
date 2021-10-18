@@ -2,8 +2,82 @@
   <div>
     <div>
       <p>Ngân Hàng câu hỏi > {{ questionType }}</p>
-      <p class="form-control">Tiêu Đề (*)</p>
-      <p class="form-control">Gắn Thẻ câu hỏi của bạn. Tối Đa 5 thẻ(*)</p>
+      <b-form-input
+        v-model="title"
+        class="form-control"
+        placeholder="Tiêu Đề (*)"
+      ></b-form-input>
+      <div class="marginTag">
+        <b-form-group label-for="tags-with-dropdown">
+          <b-form-tags
+            id="tags-with-dropdown"
+            v-model="value"
+            label="Gắn thẻ câu hỏi của bạn, tối đa 5 thẻ(*)"
+            no-outer-focus
+            class="mb-2"
+          >
+            <template #default="{ tags, addTag, removeTag }">
+              <ul
+                v-if="tags.length > 0"
+                class="list-inline d-inline-block mb-2"
+              >
+                <li v-for="tag in tags" :key="tag" class="list-inline-item">
+                  <b-form-tag
+                    :title="tag"
+                    variant="info"
+                    @remove="removeTag(tag)"
+                    >{{ tag }}</b-form-tag
+                  >
+                </li>
+              </ul>
+
+              <b-dropdown
+                size="sm"
+                variant="outline-secondary"
+                block
+                menu-class="w-100"
+              >
+                <template #button-content>
+                  <b-icon icon="tag-fill"></b-icon> Chọn tag
+                </template>
+                <b-dropdown-form @submit.stop.prevent="() => {}">
+                  <b-form-group
+                    label="Search tags"
+                    label-for="tag-search-input"
+                    label-cols-md="auto"
+                    class="mb-0"
+                    label-size="sm"
+                    :description="searchDesc"
+                  >
+                    <b-form-input
+                      id="tag-search-input"
+                      v-model="search"
+                      type="search"
+                      size="sm"
+                      autocomplete="off"
+                    ></b-form-input>
+                  </b-form-group>
+                </b-dropdown-form>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item-button
+                  v-for="(option, index) in availableOptions"
+                  :key="index"
+                  @click="onOptionClick({ option, addTag })"
+                >
+                  {{ option.label }}
+                </b-dropdown-item-button>
+
+                <b-button
+                  v-if="search.length > 0"
+                  variant="success"
+                  @click="userAddTag"
+                  >Add</b-button
+                >
+              </b-dropdown>
+            </template>
+          </b-form-tags>
+        </b-form-group>
+      </div>
       <div>
         <editor v-model="questionContent" />
       </div>
@@ -27,7 +101,7 @@
           <vue2-tinymce-editor
             v-if="doShow"
             v-model="answerContent"
-            :options="options"
+            :options="optionsText"
           ></vue2-tinymce-editor>
           <div>
             <div :class="$style.checkBoxView">
@@ -64,6 +138,7 @@ import {
   toRefs,
   watch,
 } from '@nuxtjs/composition-api'
+import CauHoiApi from '../../../../api/cauHoi'
 export default defineComponent({
   name: 'Header',
   props: {
@@ -79,10 +154,18 @@ export default defineComponent({
       type: Function,
       required: true,
     },
+    getTags: {
+      type: Function,
+      required: true,
+    },
+    getTitle: {
+      type: Function,
+      required: true,
+    },
   },
   setup(props) {
     const data = reactive({
-      options: {
+      optionsText: {
         convert_urls: false,
         entity_encoding: 'raw',
       },
@@ -93,6 +176,10 @@ export default defineComponent({
       isUpdate: -1,
       doShow: false,
       okOnly: true,
+      options: [],
+      search: '',
+      value: [],
+      title: '',
     })
     watch(
       () => data.content,
@@ -103,6 +190,48 @@ export default defineComponent({
     return {
       ...toRefs(data),
     }
+  },
+  computed: {
+    criteria() {
+      // Compute the search criteria
+      return this.search.trim()
+    },
+    availableOptions() {
+      // const criteria = this.criteria
+      // // Filter out already selected options
+      // const options = this.options.filter(
+      //   (opt) => !this.value.includes(opt.label)
+      // )
+      // if (criteria) {
+      //   // Show only options that match criteria
+      //   return options.filter((opt) => opt.label.includes(criteria))
+      // }
+      // Show all options available
+      return this.options
+    },
+
+    searchDesc() {
+      if (this.criteria && this.availableOptions.length === 0) {
+        return 'There are no tags matching your search criteria'
+      }
+      return ''
+    },
+  },
+  watch: {
+    search() {
+      if (this.search.length >= 2) {
+        CauHoiApi.getTagByKey(this.search, (response) => {
+          this.options = response
+          console.log(response)
+        })
+      }
+    },
+    title() {
+      this.getTitle(this.title)
+    },
+    value() {
+      this.getTags(this.value)
+    },
   },
   methods: {
     shown() {
@@ -125,6 +254,21 @@ export default defineComponent({
       this.isRandom = false
       this.answerContent = ''
       this.addOrUpdateAnswer(data)
+    },
+    onOptionClick({ option, addTag }) {
+      if (this.value.length >= 5) {
+        alert('Tối đa 5 tags')
+        return
+      }
+      addTag(option.label)
+      this.search = ''
+    },
+    userAddTag() {
+      if (this.value.length >= 5) {
+        alert('Tối đa 5 tags')
+        return
+      }
+      this.value.push(this.search)
     },
   },
 })
