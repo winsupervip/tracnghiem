@@ -7,7 +7,13 @@
           <b-col cols="12" sm="12" md="4" lg="3" class="filter-sidebar">
             <SidebarExam />
           </b-col>
-          <b-col cols="12" sm="12" md="8" lg="9" class="exam-main-container">
+          <b-col
+            cols="12"
+            sm="12"
+            md="8"
+            lg="9"
+            class="exam-page-main-container"
+          >
             <b-tabs class="custom-tabs" content-class="mt-3">
               <b-tab title="Tất cả đề thi" active>
                 <div class="count-result mb-4">

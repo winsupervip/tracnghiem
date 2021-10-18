@@ -167,6 +167,11 @@ a {
     color: $white;
 }
 
+.btn-outline {
+    border: 1px solid $border;
+    color: rgba(#151920, 0.5);
+}
+
 .btn-lg {
     padding: 0.5rem 1.5rem;
     border-width: 2px;
@@ -183,6 +188,9 @@ a {
 }
 
 .container {
+    @media (min-width: 1400px) {
+        max-width: 1140px;
+    }
     @media screen and (max-width: $lg) {
         max-width: calc(100% - 1.5rem);
     }

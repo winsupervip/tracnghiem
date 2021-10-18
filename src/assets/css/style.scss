@@ -659,7 +659,28 @@ img {
     }
     &.exam-page-heading {
         .page-heading-inner {
+            transition: all 0.2s;
+        }
+        .page-heading-inner {
             background-image: url("/images/header-exam-bg.png");
+        }
+        .button-expand-heading {
+            position: absolute;
+            right: 2rem;
+            top: 1.5rem;
+            padding: 0.5rem 1rem;
+        }
+        &.expand {
+            .page-heading-inner {
+                transition: all 0.2s;
+                padding: 1.25rem 0;
+            }
+            .breadcrumb,
+            .page-heading-description,
+            .exam-teacher-row,
+            .toolbar-action-exam {
+                display: none;
+            }
         }
     }
 }
@@ -1030,6 +1051,25 @@ img {
         .button-do-exam {
             width: 100%;
         }
+        .button-do-exam-sp {
+            display: none;
+            @media screen and (max-width: $sp) {
+                display: inline-flex;
+                position: fixed;
+                z-index: 9;
+                width: 100%;
+                left: 0;
+                bottom: 0;
+                border-radius: 0;
+                margin: 0 !important;
+            }
+        }
+    }
+    .card-filter {
+        @media screen and (max-width: $sp) {
+            position: static;
+            z-index: 1;
+        }
     }
 }
 
@@ -1273,6 +1313,47 @@ img {
                         margin-bottom: 0;
                     }
                 }
+            }
+        }
+    }
+}
+
+// modal
+
+.modal {
+    box-shadow: 0 1px 8px rgba(#000000, 0.15);
+    border-radius: 20px;
+    border: none;
+    .modal-content {
+        border: none;
+        border-radius: 20px;
+        .modal-header {
+            border-bottom: none;
+            padding: 10px 12px;
+            .close {
+                border: none;
+                outline: none;
+                border-radius: 50%;
+                display: flex;
+                width: 1.5rem;
+                height: 1.5rem;
+                justify-content: center;
+                align-items: center;
+                background-color: $red;
+                color: $white;
+                font-size: 1.5rem;
+            }
+        }
+        .modal-body {
+            padding-top: 0;
+        }
+        .modal-footer-common {
+            display: flex;
+            justify-content: center;
+            .btn {
+                height: 2.75rem;
+                margin: 0.25rem;
+                width: 100%;
             }
         }
     }
