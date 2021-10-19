@@ -34,7 +34,7 @@
                 <div class="p-navItem">
                   <nuxt-link to="">
                     <img
-                      src="~/assets/img/dashboard/icon_plus.png"
+                      src="~/assets/img/dashboard/icon_plus.svg"
                       alt="icon_plus"
                     />
                   </nuxt-link>
@@ -42,7 +42,7 @@
                 <div class="p-navItem">
                   <nuxt-link to="">
                     <img
-                      src="~/assets/img/dashboard/icon_search.png"
+                      src="~/assets/img/dashboard/icon_search.svg"
                       alt="icon_search"
                     />
                   </nuxt-link>
@@ -50,7 +50,7 @@
                 <div class="p-navItem">
                   <nuxt-link to="">
                     <img
-                      src="~/assets/img/dashboard/icon_tag.png"
+                      src="~/assets/img/dashboard/icon_tag.svg"
                       alt="icon_tag"
                     />
                   </nuxt-link>
@@ -62,8 +62,8 @@
                     <div class="p-navItem--dropdown__inner__icon">
                       <nuxt-link to="">
                         <img
-                          src="~/assets/img/dashboard/icon_question.png"
-                          alt="icon_question.png"
+                          src="~/assets/img/dashboard/icon_question.svg"
+                          alt="icon_question.svg"
                         />
                       </nuxt-link>
                     </div>
@@ -163,8 +163,8 @@
                     <nuxt-link to="" class="active">
                       <div>
                         <img
-                          src="~/assets/img/dashboard/icon_lslambai.png"
-                          alt="icon_lslambai.png"
+                          src="~/assets/img/dashboard/icon_lslambai.svg"
+                          alt="icon_lslambai.svg"
                         />
                       </div>
                       <span>Lịch sử làm bài</span>
@@ -174,8 +174,8 @@
                     <nuxt-link to="">
                       <div>
                         <img
-                          src="~/assets/img/dashboard/icon_dethi.png"
-                          alt="icon_dethi.png"
+                          src="~/assets/img/dashboard/icon_dethi.svg"
+                          alt="icon_dethi.svg"
                         />
                       </div>
                       <span>Đề thi của bạn</span>
@@ -185,8 +185,8 @@
                     <nuxt-link to="">
                       <div>
                         <img
-                          src="~/assets/img/dashboard/icon_nhch.png"
-                          alt="icon_nhch.png"
+                          src="~/assets/img/dashboard/icon_nhch.svg"
+                          alt="icon_nhch.svg"
                         />
                       </div>
                       <span>Ngân hàng câu hỏi</span>
@@ -204,8 +204,8 @@
                     <nuxt-link to="" class="active">
                       <div>
                         <img
-                          src="~/assets/img/dashboard/bx_bx-network-chart.png"
-                          alt="bx_bx-network-chart.png"
+                          src="~/assets/img/dashboard/bx_bx-network-chart.svg"
+                          alt="bx_bx-network-chart.svg"
                         />
                       </div>
                       <span>Affiliate</span>
@@ -215,8 +215,8 @@
                     <nuxt-link to="">
                       <div>
                         <img
-                          src="~/assets/img/dashboard/carbon_notification.png"
-                          alt="carbon_notification.png"
+                          src="~/assets/img/dashboard/carbon_notification.svg"
+                          alt="carbon_notification.svg"
                         />
                       </div>
                       <span>Thông báo</span>
@@ -226,8 +226,8 @@
                     <nuxt-link to="">
                       <div>
                         <img
-                          src="~/assets/img/dashboard/ant-design_dollar-outlined.png"
-                          alt="ant-design_dollar-outlined.png"
+                          src="~/assets/img/dashboard/icon_dollar.svg"
+                          alt="icon_dollar.svg"
                         />
                       </div>
                       <span>Lịch sử thanh toán</span>
