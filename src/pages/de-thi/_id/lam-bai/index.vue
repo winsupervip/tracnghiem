@@ -140,14 +140,116 @@
         <b-row>
           <b-col md="12" lg="3" class="do-exam-wrapper">
             <div class="card do-exam-box">
-              <div class="text-green do-exam-timer">
+              <div class="text-green do-exam-timer mb-4">
                 <i class="icon-timer" />
                 <strong>01:30:00</strong>
+              </div>
+              <div class="list-type-question">
+                <ul class="list-unstyled">
+                  <li>
+                    <div class="type"></div>
+                    <span>Chưa xem</span>
+                  </li>
+                  <li>
+                    <div class="type tick"></div>
+                    <span>Đánh dấu</span>
+                  </li>
+                  <li>
+                    <div class="type answered"></div>
+                    <span>Đã trả lời</span>
+                  </li>
+                  <li>
+                    <div class="type not-answered"></div>
+                    <span>Chưa trả lời</span>
+                  </li>
+                </ul>
               </div>
             </div>
           </b-col>
           <b-col md="12" lg="9" class="exam-main-content">
-            <div class="card"></div>
+            <b-card
+              class="card-question"
+              header-tag="header"
+              footer-tag="footer"
+            >
+              <template #header>
+                <div
+                  class="d-flex justify-content-between card-question-header"
+                >
+                  <div class="font-bold">Câu 1</div>
+                  <b-form-checkbox
+                    id="checkbox-bookmark"
+                    v-model="bookmarkQuestion"
+                    name="checkbox-bookmark"
+                    :value="true"
+                    :unchecked-value="false"
+                  >
+                    Đánh dấu
+                  </b-form-checkbox>
+                </div>
+              </template>
+              <div class="list-question mb-4">
+                <div class="question-item">
+                  <div class="question-content text-smd">
+                    Which of the following lists all and only the appropriate
+                    descriptions about a 32-bit CPU and a 64-bit CPU? I When a
+                    32-bit CPU and a 64-bit CPU are compared, a 64-bit CPU has a
+                    larger theoretical maximum memory space.. II There is no
+                    32-bit OS that runs on a PC with a 64-bit CPU. III In terms
+                    of the read and write speed of a USB memory, the speed of a
+                    PC with a 64-bit CPU is twice as fast as that of a PC with a
+                    32-bit CPU.
+                  </div>
+                  <div class="question-item-answer">
+                    <div class="answer-head">
+                      <span class="font-sm text-gray">câu trả lời</span>
+                    </div>
+                    <div class="list-answer">
+                      <ul class="list-unstyled p-0">
+                        <li>
+                          <b-form-radio name="anwser-radios" value="A">
+                            <b>A.</b>
+                            Deciding one’s own strategy in a game according to
+                            the strategy of the opponent
+                          </b-form-radio>
+                        </li>
+                        <li>
+                          <b-form-radio name="anwser-radios" value="B">
+                            <b>B.</b>
+                            Deciding one’s own strategy in a game according to
+                            the strategy of the opponent
+                          </b-form-radio>
+                        </li>
+                        <li>
+                          <b-form-radio name="anwser-radios" value="C">
+                            <b>C.</b>
+                            Deciding one’s own strategy in a game according to
+                            the strategy of the opponent
+                          </b-form-radio>
+                        </li>
+                        <li>
+                          <b-form-radio name="anwser-radios" value="A">
+                            <b>D.</b>
+                            Deciding one’s own strategy in a game according to
+                            the strategy of the opponent
+                          </b-form-radio>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <template #footer>
+                <b-btn variant="outline">
+                  <i class="icon-arrow-left me-2"></i>
+                  Câu trước
+                </b-btn>
+                <b-btn variant="outline">
+                  Câu trước
+                  <i class="icon-arrow-right ms-2"></i>
+                </b-btn>
+              </template>
+            </b-card>
           </b-col>
         </b-row>
       </b-container>
@@ -181,6 +283,25 @@ export default defineComponent({
         {
           text: '400 câu trắc nghiệm Mạo từ trong tiếng Anh có đáp án cực hay',
           active: true,
+        },
+      ],
+      bookmarkQuestion: false,
+      listAnswer: [
+        {
+          text: 'A. Deciding one own strategy in a game according to the strategy of the opponent',
+          value: 'a',
+        },
+        {
+          text: 'B. Deciding one own strategy in a game according to the strategy of the opponent',
+          value: 'b',
+        },
+        {
+          text: 'B. Deciding one own strategy in a game according to the strategy of the opponent',
+          value: 'a',
+        },
+        {
+          text: 'A. Deciding one own strategy in a game according to the strategy of the opponent',
+          value: 'a',
         },
       ],
       expandHeading: false,
