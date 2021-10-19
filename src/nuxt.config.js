@@ -247,9 +247,8 @@ export default {
           authorization:
             'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/auth',
           userInfo:
-            'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/userinfo',
-          token:
-            'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/token',
+            'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/userinfo',          
+          token: 'https://dev-api.tracnghiem.vn/api/Account/token',
           logout:
             'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/logout?redirect_uri=' +
             encodeURIComponent(String('/home')),
