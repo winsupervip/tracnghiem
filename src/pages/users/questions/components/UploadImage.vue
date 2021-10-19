@@ -55,6 +55,7 @@ export default {
       reader.onload = (e) => {
         console.log(e)
         vm.image = e.target.result
+        console.log(vm.image)
       }
       const a = reader.readAsDataURL(file)
       console.log(a)

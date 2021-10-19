@@ -182,9 +182,9 @@ export default defineComponent({
       title: '',
     })
     watch(
-      () => data.content,
+      () => data.questionContent,
       () => {
-        props.getQuestion(data.content)
+        props.getQuestion(data.questionContent)
       }
     )
     return {
@@ -246,7 +246,7 @@ export default defineComponent({
         return 0
       }
       const data = {
-        isRightAnswer: this.isRightAnswer,
+        isRightAnswer: this.isRightAnswer ? 1 : 0,
         isRandom: this.isRandom,
         answerContent: this.answerContent,
       }

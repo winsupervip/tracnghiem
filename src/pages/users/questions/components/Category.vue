@@ -9,6 +9,7 @@
         :always-open="alwaysOpen"
         :options="treeData"
         placeholder="Chuyên mục cho câu hỏi"
+        :load-options="loadOptions"
       />
     </div>
   </section>
@@ -55,6 +56,11 @@ export default defineComponent({
     return {
       ...toRefs(data),
     }
+  },
+  methods: {
+    loadOptions({ action, callback, instanceId }) {
+      callback()
+    },
   },
 })
 </script>

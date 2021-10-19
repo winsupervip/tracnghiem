@@ -24,6 +24,9 @@
       <LevelForm :get-level-form="getLevelForm" />
       <UploadImage :get-image="getImage" />
       <AddSeo :get-seo="getSeo" />
+      <div>
+        <Uploader v-model="seoAvatar" :accept="'*/*'"></Uploader>
+      </div>
     </div>
   </div>
 </template>
@@ -44,6 +47,9 @@ import UploadImage from '../components/UploadImage.vue'
 import AddSeo from '../components/AddSeo.vue'
 import CommentOrNote from '../components/CommentOrNote.vue'
 import CauHoiApi from '../../../../api/cauHoi'
+// eslint-disable-next-line import/no-unresolved
+import Uploader from '@/components/Uploader'
+
 export default defineComponent({
   components: {
     Header,
@@ -54,6 +60,7 @@ export default defineComponent({
     UploadImage,
     AddSeo,
     CommentOrNote,
+    Uploader,
   },
   layout: 'dashboard',
   auth: false,
@@ -117,8 +124,9 @@ export default defineComponent({
     },
     getCommentOrNote(value) {
       this.explainationIfCorrect = value.explainationIfCorrect
-      this.explainationIfInCorrect = value.explainationIfInCorrect
+      this.explainationIfInCorrect = value.explainationIfIncorrect
       console.log(value)
+      console.log(this.explainationIfCorrect, this.explainationIfInCorrect)
     },
     getTags(value) {
       this.tags = value
@@ -161,7 +169,7 @@ export default defineComponent({
           explainationIfCorrect: this.explainationIfCorrect,
           explainationIfIncorrect: this.explainationIfInCorrect,
           statusId: this.statusId,
-          levelId: this.levelForm,
+          levelId: this.levelId,
           plainText: this.title,
           seoAvatar: 'string',
           seoTitle: this.seoTitle,
@@ -173,6 +181,7 @@ export default defineComponent({
         },
         answers: this.listAnswers,
       }
+      console.log(data)
       CauHoiApi.createQuestion(
         data,
         () => {
