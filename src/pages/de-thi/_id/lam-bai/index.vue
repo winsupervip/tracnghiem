@@ -138,7 +138,7 @@
     <section class="exam-main-container">
       <b-container>
         <b-row>
-          <b-col md="12" lg="3" class="do-exam-wrapper">
+          <b-col md="12" lg="4" xl="4" class="do-exam-wrapper">
             <div class="card do-exam-box">
               <div class="text-green do-exam-timer mb-4">
                 <i class="icon-timer" />
@@ -166,7 +166,7 @@
               </div>
             </div>
           </b-col>
-          <b-col md="12" lg="9" class="exam-main-content">
+          <b-col md="12" lg="8" xl="8" class="exam-main-content">
             <b-card
               class="card-question"
               header-tag="header"
