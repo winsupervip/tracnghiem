@@ -668,9 +668,20 @@ img {
     }
     .button-expand-heading {
       position: absolute;
-      right: 2rem;
-      top: 1.5rem;
+      right: 1.5rem;
+      top: 1.25rem;
       padding: 0.5rem 1rem;
+      z-index: 2;
+      @media screen and (max-width: $sp) {
+        font-size: 0;
+        padding: 0.5rem;
+        right: 0.5rem;
+        top: 0.5rem;
+        i {
+          margin: 0 !important;
+          font-size: 1rem;
+        }
+      }
     }
     &.expand {
       .page-heading-inner {
@@ -708,7 +719,33 @@ img {
     }
   }
 }
-
+.filter-group {
+  .filter-group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    cursor: default;
+    strong {
+      font-size: 0.875rem;
+    }
+    i {
+      transform: rotateX(180deg);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    &.collapsed {
+      i {
+        transform: rotateX(0deg);
+      }
+    }
+  }
+  .custom-control {
+    .custom-control-label {
+      width: 100%;
+    }
+  }
+}
 .card-filter {
   background-color: $white;
   border-radius: 8px;
@@ -1405,6 +1442,46 @@ img {
       }
     }
   }
+
+  .list-question-menu {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -0.3rem;
+    .btn {
+      margin: 0.3rem;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.875rem;
+      font-family: Roboto, 'Helvetica Neue', Helvetica, sans-serif;
+      border: 1px solid $border;
+      background-color: $white;
+      color: $text;
+      &.tick {
+        background-color: $blue;
+        border-color: $blue;
+        color: $white;
+      }
+      &.answered {
+        background-color: $primary;
+        border-color: $primary;
+        color: $white;
+      }
+      &.not-answered {
+        background-color: $border;
+        border-color: $border;
+        color: $text;
+      }
+      &:hover {
+        background-color: $blue;
+        border-color: $blue;
+        color: $white;
+      }
+    }
+  }
 }
 
 .card-question {
@@ -1424,6 +1501,9 @@ img {
     justify-content: center;
     .btn {
       margin: 0 0.5rem;
+      i {
+        font-size: 0.75rem;
+      }
       &:hover {
         color: $white;
         background-color: $primary;

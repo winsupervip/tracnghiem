@@ -164,6 +164,74 @@
                   </li>
                 </ul>
               </div>
+              <div class="text-gray font-sm my-2">
+                <b-icon icon="exclamation-circle" />
+                Bấm vào ô số để xem câu hỏi
+              </div>
+              <hr />
+              <div class="filter-group mb-2">
+                <strong
+                  :class="
+                    showListQuestionMenu
+                      ? 'filter-group-header'
+                      : 'filter-group-header collapsed'
+                  "
+                  @click="showListQuestionMenu = !showListQuestionMenu"
+                >
+                  Danh sách câu hỏi
+                  <i class="icon-caret-down"></i>
+                </strong>
+                <b-collapse
+                  v-model="showListQuestionMenu"
+                  class="filter-group-body"
+                >
+                  <div class="list-question-menu">
+                    <b-btn>1</b-btn>
+                    <b-btn class="tick">2</b-btn>
+                    <b-btn class="answered">3</b-btn>
+                    <b-btn>4</b-btn>
+                    <b-btn class="not-answered">5</b-btn>
+                    <b-btn>6</b-btn>
+                    <b-btn>7</b-btn>
+                    <b-btn>8</b-btn>
+                    <b-btn>9</b-btn>
+                    <b-btn>10</b-btn>
+                    <b-btn>11</b-btn>
+                    <b-btn>12</b-btn>
+                    <b-btn>13</b-btn>
+                    <b-btn>14</b-btn>
+                    <b-btn>15</b-btn>
+                    <b-btn>16</b-btn>
+                    <b-btn>17</b-btn>
+                    <b-btn>18</b-btn>
+                    <b-btn>19</b-btn>
+                    <b-btn>21</b-btn>
+                    <b-btn>21</b-btn>
+                    <b-btn>22</b-btn>
+                    <b-btn>23</b-btn>
+                    <b-btn>24</b-btn>
+                    <b-btn>25</b-btn>
+                    <b-btn>26</b-btn>
+                    <b-btn>27</b-btn>
+                    <b-btn>28</b-btn>
+                    <b-btn>29</b-btn>
+                    <b-btn>30</b-btn>
+                    <b-btn>31</b-btn>
+                    <b-btn>32</b-btn>
+                    <b-btn>33</b-btn>
+                    <b-btn>34</b-btn>
+                    <b-btn>35</b-btn>
+                  </div>
+                </b-collapse>
+              </div>
+              <div class="submit-exam d-grid">
+                <b-btn
+                  variant="primary"
+                  block
+                  @click="$bvModal.show('modal-submit-exam')"
+                  >Nộp bài</b-btn
+                >
+              </div>
             </div>
           </b-col>
           <b-col md="12" lg="8" xl="8" class="exam-main-content">
@@ -254,6 +322,17 @@
         </b-row>
       </b-container>
     </section>
+    <b-modal id="modal-submit-exam" class="modal-common" hide-footer centered>
+      <div class="text-center mb-4">
+        <img class="mb-3" src="/images/document.svg" alt="bot" />
+        <div class="font-bold text-lmd mb-3">Xác nhận nộp bài</div>
+        <p>Bạn đã hoàn thành hết bài thi và muốn nộp bài</p>
+      </div>
+      <div class="modal-footer-common">
+        <b-btn variant="outline" @click="hide()">Quay lại</b-btn>
+        <b-btn variant="primary" @click="SubmitExam()">Nộp bài</b-btn>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -267,6 +346,7 @@ export default defineComponent({
   setup() {},
   data() {
     return {
+      idExam: this.$route.params.id || null,
       breadcrumbs: [
         {
           text: 'Trang chủ',
@@ -285,6 +365,7 @@ export default defineComponent({
           active: true,
         },
       ],
+      showListQuestionMenu: true,
       bookmarkQuestion: false,
       listAnswer: [
         {
@@ -342,6 +423,13 @@ export default defineComponent({
         ],
       },
     }
+  },
+  methods: {
+    SubmitExam() {
+      this.$router.push({
+        path: `/de-thi/${this.idExam}/ket-qua`,
+      })
+    },
   },
 })
 </script>
