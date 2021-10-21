@@ -1,34 +1,39 @@
 <template>
-  <div class="layout">
-    <div class="layout_left">
-      <Header
-        :question-type="questionType"
-        :get-question="getQuestion"
-        :add-or-update-answer="addOrUpdateAnswer"
-        :get-tags="getTags"
-        :get-title="getTitle"
-      />
-      <ListAnswer
-        :list-answers="listAnswers"
-        type-question="single-choice"
-        :selected="selected"
-      />
-      <CommentOrNote :get-comment-or-note="getCommentOrNote" />
-    </div>
-    <div class="layout_right">
-      <PublishQuestion
-        :get-publish-question="getPublishQuestion"
-        :save-question="saveQuestion"
-      />
-      <Category :get-categories="getCategories" />
-      <LevelForm :get-level-form="getLevelForm" />
-      <UploadImage :get-image="getImage" />
-      <AddSeo :get-seo="getSeo" />
-      <div>
-        <Uploader v-model="seoAvatar" :accept="'*/*'"></Uploader>
+  <ValidationObserver>
+    <form @submit.prevent="handleSubmit()">
+      <div class="layout">
+        <div class="layout_left">
+          <Header
+            :question-type="questionType"
+            :get-question="getQuestion"
+            :add-or-update-answer="addOrUpdateAnswer"
+            :get-tags="getTags"
+            :get-title="getTitle"
+          />
+          <ListAnswer
+            :list-answers="listAnswers"
+            type-question="single-choice"
+            :selected="selected"
+          />
+          <CommentOrNote :get-comment-or-note="getCommentOrNote" />
+        </div>
+        <div class="layout_right">
+          <PublishQuestion :get-publish-question="getPublishQuestion" />
+          <Category :get-categories="getCategories" />
+          <LevelForm :get-level-form="getLevelForm" />
+          <UploadImage :get-image="getImage" />
+          <AddSeo :get-seo="getSeo" />
+          <div>
+            <Uploader
+              v-model="seoAvatar"
+              :accept="'*/*'"
+              :disabled="true"
+            ></Uploader>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    </form>
+  </ValidationObserver>
 </template>
 
 <script>
@@ -159,7 +164,7 @@ export default defineComponent({
       console.log(data)
       alert('Thêm câu trả lời thanh công')
     },
-    saveQuestion() {
+    handleSubmit() {
       const data = {
         question: {
           hashId: '',
