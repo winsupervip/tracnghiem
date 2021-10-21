@@ -1,6 +1,12 @@
+@import '@/assets/css/variables';
 .border_title{
   border-bottom: 1px solid #aaa;
   padding: 0.5em;
+  color: $primary;
+}
+.border_title1{
+  color: $primary;
+
 }
 .container {
   display: flex;
@@ -10,6 +16,31 @@
 section {
   border: 1px solid #aaa;
 }
+.wrapper{
+  display: flex;
+  padding-top: 0.5rem;
+  justify-content: space-between;
+  align-items: flex-end;
+  p{
+    margin: 0;
+  }
+}
+
+.wrapper-img{
+  padding-top:0.5rem ;
+  border-top: 1px solid #aaa;
+  min-height:200px;
+  position: relative;
+  .wrapper-icon{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
+}
+
 ul,li{
   padding: 0;
   margin: 0.5em;
@@ -30,4 +61,8 @@ ul,li{
   position: absolute;
   right: 0;
   margin-top:10px;
+}
+.btn_transparent{
+  background-color: transparent;
+  color:$primary;
 }
