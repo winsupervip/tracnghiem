@@ -34,18 +34,13 @@
         <a href="">#Vật Lý</a>
       </div>
       <div class="question">
-        Which of the following lists all and only the appropriate descriptions
-        about a 32-bit CPU and a 64-bit CPU? I When a 32-bit CPU and a 64-bit
-        CPU are compared, a 64-bit CPU has a larger theoretical maximum memory
-        space.. II There is no 32-bit OS that runs on a PC with a 64-bit CPU.
-        III In terms of the read and write speed of a USB memory, the speed of a
-        PC with a 64-bit CPU is twice as fast as that of a PC with a 32-bit CPU.
+        <p v-html="question.questionContent"></p>
       </div>
       <div class="answer">
         <ul>
-          <li v-for="(answer, index) in 4" :key="index" type="A">
-            Deciding one’s own strategy in a game according to the strategy of
-            the opponent
+          <li v-for="(answer, index) in question.answers" :key="index" type="A">
+            {{ String.fromCharCode(65 + index) + '. ' }}
+            <p v-html="answer.answerContent"></p>
           </li>
         </ul>
       </div>
@@ -65,9 +60,9 @@ import { defineComponent } from '@nuxtjs/composition-api'
 export default defineComponent({
   name: 'SingleListPage',
   props: {
-    products: {
-      type: Array,
-      default: () => [],
+    question: {
+      type: Object,
+      required: true,
     },
   },
 

@@ -4,6 +4,15 @@ export default {
   getTreeQuestionTypes: () =>
     global.$http.get('/api/v1/Catalog/get-tree-question-types'),
   getLevel: () => global.$http.get('/api/v1/Catalog/get-level'),
-  getAutoCompleteTag: (keyword) =>
-    global.$http.get(`/api/v1/Catalog/auto-complete-tag?keyword=${keyword}`),
+  getTagByKey: async (key, successCallApi) => {
+    const result = await global.$http.get(
+      `/api/v1/Catalog/auto-complete-tag?keyword=${key}`
+    )
+    console.log(result)
+    if (successCallApi) {
+      successCallApi(result?.data?.object?.items)
+    }
+  },
+  getQuestionList: () =>
+    global.$http.get('/api/v1/Question/get-user-question-list'),
 }

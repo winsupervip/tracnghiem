@@ -9,8 +9,14 @@
       <b-modal id="bv-modal-example" hide-footer title="Câu hỏi:">
         <div class="d-block">
           <ul>
-            <li v-for="item in items" :key="item.message" type="1">
-              <a href="#" :style="{ fontWeight: 'bold' }">{{ item }}</a>
+            <li type="1">
+              <a href="#"><strong>Một lựa chọn</strong></a>
+              <a href="#"><strong>Nhiều lựa chọn</strong></a>
+              <a href="#"><strong>Đúng sai</strong></a>
+              <a href="#"><strong>Ghép đôi</strong></a>
+              <a href="#"><strong> Điền vào chỗ trống</strong></a>
+              <a href="#"><strong>Câu hỏi trả lời ngắn</strong></a>
+              <a href="#"><strong>Sắp thứ tự</strong></a>
             </li>
           </ul>
           <div class="dropdown-divider"></div>
@@ -36,17 +42,20 @@
     </div>
     <div class="type-question">
       <div class="input-group">
-        <b-form-input
-          list="my-list-id"
-          placeholder="Tìm kiếm câu hỏi"
-          no-caret
-          :value="keyword"
-        ></b-form-input
-        ><datalist id="my-list-id">
-          <option v-for="(option, index) in options" :key="index">
-            {{ option }}
-          </option>
-        </datalist>
+        <b-form-group class="mb-0">
+          <b-form-input
+            id="tag-search-input"
+            v-model="search"
+            type="search"
+          ></b-form-input>
+          <b-dropdown-item
+            v-for="(option, index) in availableOptions"
+            :key="index"
+            @click="handleSearch(option.label)"
+          >
+            {{ option.label }}
+          </b-dropdown-item>
+        </b-form-group>
       </div>
       <treeselect
         :options="category"
@@ -75,7 +84,14 @@
         placeholder="Sắp xếp"
       />
     </div>
-    <SingleQuestion v-if="showSingleQuestion" />
+    <div v-if="showSingleQuestion">
+      <SingleQuestion
+        v-for="question in questionList"
+        :key="question.id"
+        :question="question"
+      />
+    </div>
+
     <MultipleQuestion v-show="showMultipleQuestion" />
   </div>
 </template>
@@ -108,6 +124,7 @@ export default defineComponent({
     const route = useRoute()
     const queryPage = route?.value?.query?.page || 1
     const data = reactive({
+      pageSize: 1,
       currentPage: queryPage,
       showSingleQuestion: true,
       showMultipleQuestion: false,
@@ -118,6 +135,9 @@ export default defineComponent({
       level: [],
       autoCompleteTag: [],
       keyword: '',
+      search: '',
+      options: [],
+      questionList: [],
     })
 
     const { fetch } = useFetch(async () => {
@@ -126,44 +146,52 @@ export default defineComponent({
       const { data: result2 } = await QuestionApi.getTreeQuestionTypes()
       const { data: result3 } = await QuestionApi.getListStatus()
       const { data: result4 } = await QuestionApi.getLevel()
-      const { data: result5 } = await QuestionApi.getAutoCompleteTag('1')
-
+      const { data: result5 } = await QuestionApi.getQuestionList()
+      data.questionList = result5.object.items
       data.category = result1.object.items
       data.treeQuestionTypes = result2.object.items
       data.listStatus = result3.object.items
       data.level = result4.object.items
-      data.autoCompleteTag = result5.object.items
-      $logger.info(data.autoCompleteTag)
+
+      $logger.info(result5)
       $loader().close()
     })
 
     fetch()
-
+    const handleSearch = (e) => {
+      data.search = e
+    }
     return {
       ...toRefs(data),
+      handleSearch,
     }
   },
-  data: () => ({
-    options: [
-      {
-        id: '1',
-        label: '1',
-      },
-      {
-        id: '2',
-        label: '2',
-      },
-    ],
-    items: [
-      'Một lựa chọn',
-      'Nhiều lựa chọn',
-      'Đúng sai',
-      'Ghép đôi',
-      'Điền vào chỗ trống',
-      'Câu hỏi trả lời ngắn',
-      'Sắp thứ tự',
-    ],
-  }),
+
+  computed: {
+    criteria() {
+      return this.search.trim()
+    },
+    availableOptions() {
+      return this.options
+    },
+
+    searchDesc() {
+      if (this.criteria && this.availableOptions.length === 0) {
+        return 'There are no tags matching your search criteria'
+      }
+      return ''
+    },
+  },
+  watch: {
+    search() {
+      if (this.search.length >= 2) {
+        QuestionApi.getTagByKey(this.search, (response) => {
+          this.options = response
+          console.log(response)
+        })
+      }
+    },
+  },
   methods: {
     loadOptions({ action, parentNode, callback }) {
       // Typically, do the AJAX stuff here.
@@ -340,6 +368,7 @@ export default defineComponent({
       ul {
         li {
           padding: 12px 0;
+          display: flex;
         }
       }
     }
@@ -421,6 +450,7 @@ export default defineComponent({
       ul {
         li {
           padding: 12px 0;
+
           button {
             float: right;
             border: none;
