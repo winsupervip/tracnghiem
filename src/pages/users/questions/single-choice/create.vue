@@ -12,8 +12,6 @@
       <AddAnswer
         :add-or-update-answer="addOrUpdateAnswer"
         :update-value="updateValue"
-        :modal-show="modalShow"
-        :hide-modal="hideModal"
         :errors="errors"
       />
       <ListAnswer
@@ -159,13 +157,9 @@ export default defineComponent({
     updateAnswer(value) {
       console.log(value)
       this.updateValue = this.listAnswers[value]
-      this.modalShow = true
     },
     updateRightAnswer(value) {
       this.listAnswers = value
-    },
-    hideModal() {
-      this.modalShow = false
     },
     addOrUpdateAnswer(data) {
       if (this.isUpdate === -1) {

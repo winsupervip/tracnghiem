@@ -80,9 +80,7 @@ export default defineComponent({
         convert_urls: false,
         entity_encoding: 'raw',
       },
-      answerContent: props.updateValue.answerContent
-        ? props.updateValue.answerContent
-        : '',
+      answerContent: '',
       isRightAnswer: false,
       isRandom: false,
       isUpdate: -1,
@@ -91,9 +89,11 @@ export default defineComponent({
       isShowModal: false,
     })
     watch(
-      () => data.questionContent,
+      () => props.updateValue.answerContent,
       () => {
-        props.getQuestion(data.questionContent)
+        data.answerContent = props.updateValue.answerContent
+          ? props.updateValue.answerContent
+          : ''
       }
     )
     return {

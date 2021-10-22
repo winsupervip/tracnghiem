@@ -21,7 +21,10 @@
           </div>
         </b-form-radio>
         <div>
-          <b-button variant="outline-warning" @click="updateAnswer(index)"
+          <b-button
+            v-b-modal.modal-1
+            variant="outline-warning"
+            @click="updateAnswer(index)"
             ><b-icon icon="pencil-square"></b-icon
           ></b-button>
           <b-button variant="outline-danger"
@@ -88,6 +91,10 @@ export default defineComponent({
       required: true,
     },
     updateRightAnswer: {
+      type: Function,
+      required: true,
+    },
+    updateAnswer: {
       type: Function,
       required: true,
     },
