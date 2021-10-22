@@ -22,9 +22,15 @@
         </b-form-radio>
         <div>
           <b-button variant="outline-warning"
+            ><b-icon icon="shuffle"></b-icon
+          ></b-button>
+          <b-button
+            v-b-modal.modal-prevent-closing
+            variant="outline-warning"
+            @click="handleUpdate(index)"
             ><b-icon icon="pencil-square"></b-icon
           ></b-button>
-          <b-button variant="outline-danger"
+          <b-button variant="outline-danger" @click="handleDelete(index)"
             ><b-icon icon="trash"></b-icon
           ></b-button>
         </div>
@@ -54,15 +60,40 @@
           </b-form-checkbox>
           <div>
             <b-button variant="outline-warning"
+              ><b-icon icon="shuffle"></b-icon
+            ></b-button>
+            <!-- <b-button
+              v-b-modal.modal-prevent-closing
+              variant="outline-warning"
+              @click="getAnswerItem(index)"
+              ><b-icon icon="pencil-square"></b-icon
+            ></b-button> -->
+            <b-button variant="outline-warning"
               ><b-icon icon="pencil-square"></b-icon
             ></b-button>
-            <b-button variant="outline-danger"
+            <b-button variant="outline-danger" @click="handleDelete(index)"
               ><b-icon icon="trash"></b-icon
             ></b-button>
           </div>
         </div>
       </b-form-checkbox-group>
     </b-form-group>
+    <!-- <b-modal id="modal-prevent-closing" ref="modal" title="Chỉnh sửa câu hỏi">
+      <form ref="form">
+        <b-form-group
+          label-for="name-input"
+          invalid-feedback="Name is required"
+          :state="nameState"
+        >
+          <b-form-input
+            id="name-input"
+            v-model="dataUpdate"
+            :state="nameState"
+            required
+          ></b-form-input>
+        </b-form-group>
+      </form>
+    </b-modal> -->
   </div>
 </template>
 
@@ -88,11 +119,24 @@ export default defineComponent({
       type: [Object, String],
       required: true,
     },
+    handleDelete: {
+      type: Function,
+      required: true,
+    },
+    answerItem: {
+      type: Object,
+      required: true,
+    },
+    getAnswerItem: {
+      type: Function,
+      required: true,
+    },
   },
   setup(props) {
     const { $logger } = useContext()
     const data = reactive({
       isSelected: props.selected,
+      dataUpdate: props.getAnswerItem.answerContent,
     })
     watch(
       () => data.isSelected,

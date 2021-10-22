@@ -38,22 +38,22 @@ export default defineComponent({
       levelForm: [],
       listLevelRadio: [
         {
-          id: 0,
+          id: 1,
           value: false,
           name: 'Cơ bản',
         },
         {
-          id: 1,
+          id: 2,
           value: false,
           name: 'Trung bình',
         },
         {
-          id: 2,
+          id: 3,
           value: false,
           name: 'Nâng cao',
         },
         {
-          id: 3,
+          id: 4,
           value: false,
           name: 'Khó',
         },

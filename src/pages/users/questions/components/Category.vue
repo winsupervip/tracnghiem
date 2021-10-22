@@ -69,14 +69,9 @@ section {
   border: 1px solid #aaa;
 }
 .container {
-  background: chartreuse;
-  height: 15rem;
+  min-height: 3rem;
 }
 .display {
   display: none;
-}
-.border_title {
-  border-bottom: 1px solid #aaa;
-  padding: 0.5em;
 }
 </style>

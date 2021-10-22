@@ -8,9 +8,7 @@
               <i class="flaticon-file"></i>
             </div>
             <h4 class="message">Kéo thả tệp tin vào khung upload</h4>
-            <div class="note">
-              (Chỉ tải tệp tin OpenOffice, Microsoft Word, Excel, PDF, Hình ảnh)
-            </div>
+            <div class="note">(Chỉ tải tệp tin Hình ảnh)</div>
           </div>
           <div v-if="isSaving" class="dz-message" data-dz-message>
             <h4 class="message">Đang tải tệp tin lên máy chủ</h4>

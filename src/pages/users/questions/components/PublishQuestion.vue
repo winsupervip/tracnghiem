@@ -20,9 +20,7 @@
     </ul>
     <p>Chỉ bạn mới thấy được câu hỏi này.</p>
     <b-button variant="outline-primary ">Lưu Như bản nháp</b-button>
-    <b-button variant="outline-primary " @click="saveQuestion"
-      >Lưu Câu Hỏi</b-button
-    >
+    <input type="submit" variant="outline-primary " value="Lưu Câu Hỏi" />
   </section>
 </template>
 
@@ -39,10 +37,6 @@ export default defineComponent({
   name: 'CategoryForm',
   props: {
     getPublishQuestion: {
-      type: Function,
-      required: true,
-    },
-    saveQuestion: {
       type: Function,
       required: true,
     },
