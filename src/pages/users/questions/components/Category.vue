@@ -12,6 +12,9 @@
         :load-options="loadOptions"
       />
     </div>
+    <b-alert v-if="errors[4]" id="error" show variant="warning">{{
+      errors[4]
+    }}</b-alert>
   </section>
 </template>
 <script>
@@ -28,6 +31,10 @@ export default defineComponent({
   props: {
     getCategories: {
       type: Function,
+      required: true,
+    },
+    errors: {
+      type: Array,
       required: true,
     },
   },

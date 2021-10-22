@@ -15,6 +15,9 @@
         }}</label
       >
     </div>
+    <b-alert v-if="errors[3]" id="error" show variant="warning">{{
+      errors[3]
+    }}</b-alert>
   </section>
 </template>
 
@@ -30,6 +33,10 @@ export default defineComponent({
   props: {
     getLevelForm: {
       type: Function,
+      required: true,
+    },
+    errors: {
+      type: Array,
       required: true,
     },
   },
