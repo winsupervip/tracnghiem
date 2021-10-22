@@ -12,6 +12,9 @@
         :load-options="loadOptions"
       />
     </div>
+    <b-alert v-if="errors[4]" id="error" show variant="warning">{{
+      errors[4]
+    }}</b-alert>
   </section>
 </template>
 <script>
@@ -30,9 +33,13 @@ export default defineComponent({
       type: Function,
       required: true,
     },
+    errors: {
+      type: Array,
+      required: true,
+    },
   },
   setup(props) {
-    const { $loader, $logger } = useContext()
+    const { $loader } = useContext()
     const data = reactive({
       listFormCheck: [],
       treeValue: [],
@@ -43,7 +50,6 @@ export default defineComponent({
       $loader()
       const { data: result } = await CauHoiApi.getCategory()
       data.treeData = result.object?.items
-      $logger.info(data.treeData)
       $loader().close()
     })
     fetch()

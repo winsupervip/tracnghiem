@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.answersList">
     <b-form-group
-      v-if="typeQuestion === 'single-choice'"
+      v-if="typeQuestion === 'single-choice' || 'right-wrong'"
       v-slot="{ ariaDescribedby }"
     >
       <div
@@ -15,23 +15,19 @@
           name="some-radios"
           :value="answer"
           :aria-checked="true"
-        >
-          <!-- <div :class="$style.answerItem">
+          ><div :class="$style.answerItem">
             <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
             <p v-html="answer.answerContent"></p>
-          </div> -->
+          </div>
         </b-form-radio>
         <div>
-          <b-button variant="outline-warning"
-            ><b-icon icon="shuffle"></b-icon
-          ></b-button>
-          <!-- <b-button
-            v-b-modal.modal-prevent-closing
+          <b-button
+            v-b-modal.modal-1
             variant="outline-warning"
-            @click="handleUpdate(index)"
+            @click="updateAnswer(index)"
             ><b-icon icon="pencil-square"></b-icon
-          ></b-button> -->
-          <b-button variant="outline-danger" @click="handleDelete(index)"
+          ></b-button>
+          <b-button variant="outline-danger"
             ><b-icon icon="trash"></b-icon
           ></b-button>
         </div>
@@ -53,48 +49,26 @@
           :key="index"
           :class="$style.answerItem"
         >
-          <!-- <b-form-checkbox :class="$style.choose" :value="answer"
+          <b-form-checkbox :class="$style.choose" :value="answer"
             ><div :class="$style.answerItem">
               <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
               <p v-html="answer.answerContent"></p>
             </div>
-          </b-form-checkbox> -->
+          </b-form-checkbox>
           <div>
-            <b-button variant="outline-warning"
-              ><b-icon icon="shuffle"></b-icon
-            ></b-button>
-            <!-- <b-button
-              v-b-modal.modal-prevent-closing
-              variant="outline-warning"
-              @click="getAnswerItem(index)"
-              ><b-icon icon="pencil-square"></b-icon
-            ></b-button> -->
-            <b-button variant="outline-warning"
+            <b-button variant="outline-warning" @click="updateAnswer(index)"
               ><b-icon icon="pencil-square"></b-icon
             ></b-button>
-            <b-button variant="outline-danger" @click="handleDelete(index)"
+            <b-button variant="outline-danger"
               ><b-icon icon="trash"></b-icon
             ></b-button>
           </div>
         </div>
       </b-form-checkbox-group>
     </b-form-group>
-    <!-- <b-modal id="modal-prevent-closing" ref="modal" title="Chỉnh sửa câu hỏi">
-      <form ref="form">
-        <b-form-group
-          label-for="name-input"
-          invalid-feedback="Name is required"
-          :state="nameState"
-        >
-          <b-form-input
-            id="name-input"
-            v-model="dataUpdate"
-            :state="nameState"
-            required
-          ></b-form-input>
-        </b-form-group>
-      </form>
-    </b-modal> -->
+    <b-alert v-if="errors[5]" id="error" show variant="warning">{{
+      errors[5]
+    }}</b-alert>
   </div>
 </template>
 
@@ -116,20 +90,16 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    selected: {
-      type: [Object, String],
-      required: true,
-    },
-    handleDelete: {
+    updateRightAnswer: {
       type: Function,
       required: true,
     },
-    answerItem: {
-      type: Object,
+    updateAnswer: {
+      type: Function,
       required: true,
     },
-    getAnswerItem: {
-      type: Function,
+    errors: {
+      type: Array,
       required: true,
     },
   },
@@ -137,25 +107,43 @@ export default defineComponent({
     const { $logger } = useContext()
     const data = reactive({
       isSelected: props.selected,
-      // dataUpdate: props.getAnswerItem.answerContent,
     })
+    const getRightAnswer = () => {
+      const index = props.listAnswers.findIndex(
+        (item) => item.rightAnswer === 1
+      )
+      data.isSelected = props.listAnswers[index]
+    }
+    getRightAnswer()
     watch(
       () => data.isSelected,
       () => {
-        $logger.info(data.isSelected)
-      }
-    )
-    watch(
-      () => props.selected,
-      () => {
-        data.isSelected = props.selected
+        const answers = props.listAnswers.map((item) => {
+          if (data.isSelected.answerContent === item.answerContent) {
+            item.isRightAnswer = 1
+          } else {
+            item.rightAnswer = 0
+          }
+          return item
+        })
+        $logger.info(answers)
+        props.updateRightAnswer(answers)
       }
     )
     return {
       ...toRefs(data),
     }
   },
-  methods: {},
+  watch: {
+    listAnswers() {
+      console.log(this.listAnswers)
+    },
+  },
+  methods: {
+    hideModal() {
+      this.$refs['my-modal'].hide()
+    },
+  },
 })
 </script>
 <style module>

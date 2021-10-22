@@ -2,12 +2,27 @@
   <div>
     <div>
       <p>Ngân Hàng câu hỏi > {{ questionType }}</p>
+      <!-- <ValidationProvider v-slot="{ errors }" rules="required">
+        <input
+          v-model="title"
+          type="text"
+          name="Tiêu Dề"
+          class="form-control"
+          placeholder="Tiêu Đề (*)"
+        />
+        <b-alert v-if="errors[0]" id="error" show variant="warning">{{
+          errors[0]
+        }}</b-alert>
+      </ValidationProvider> -->
       <b-form-input
         v-model="title"
         class="form-control"
         placeholder="Tiêu Đề (*)"
-        required
       ></b-form-input>
+      <b-alert v-if="errors[0]" id="error" show variant="warning">{{
+        errors[0]
+      }}</b-alert>
+
       <div class="marginTag">
         <b-form-group label-for="tags-with-dropdown">
           <b-form-tags
@@ -78,57 +93,16 @@
             </template>
           </b-form-tags>
         </b-form-group>
+        <b-alert v-if="errors[2]" id="error" show variant="warning">{{
+          errors[2]
+        }}</b-alert>
       </div>
       <div>
         <editor v-model="questionContent" required />
+        <b-alert v-if="errors[1]" id="error" show variant="warning">{{
+          errors[1]
+        }}</b-alert>
       </div>
-    </div>
-    <div>
-      <div :class="$style.addQuestionTitle">
-        <p>Câu Trả lời(*)</p>
-        <b-button v-b-modal.modal-1>Thêm câu trả lời</b-button>
-      </div>
-
-      <b-modal
-        id="modal-1"
-        size="xl"
-        title="Add Answer"
-        :ok-only="okOnly"
-        ok-title="Đóng"
-        @shown="shown"
-        @hide="hide"
-      >
-        <div>
-          <vue2-tinymce-editor
-            v-if="doShow"
-            v-model="answerContent"
-            :options="optionsText"
-          ></vue2-tinymce-editor>
-          <div>
-            <div :class="$style.checkBoxView">
-              <div :class="$style.checkBox">
-                <input
-                  v-model="isRandom"
-                  type="checkbox"
-                  :class="$style.checkBoxInput"
-                />
-                <p :class="$style.checkBoxTitle">Cho phép xáo trộn</p>
-              </div>
-              <div :class="$style.checkBox">
-                <input
-                  v-model="isRightAnswer"
-                  type="checkbox"
-                  :class="$style.checkBoxInput"
-                />
-                <p :class="$style.checkBoxTitle">Câu trả lời đúng</p>
-              </div>
-            </div>
-            <b-button variant="outline-primary" @click="handleAnswer">{{
-              isUpdate != -1 ? 'Cập nhập câu trả lời' : 'Thêm câu trả lời'
-            }}</b-button>
-          </div>
-        </div>
-      </b-modal>
     </div>
   </div>
 </template>
@@ -161,6 +135,10 @@ export default defineComponent({
     },
     getTitle: {
       type: Function,
+      required: true,
+    },
+    errors: {
+      type: Array,
       required: true,
     },
   },
@@ -203,19 +181,8 @@ export default defineComponent({
       return this.search.trim()
     },
     availableOptions() {
-      // const criteria = this.criteria
-      // // Filter out already selected options
-      // const options = this.options.filter(
-      //   (opt) => !this.value.includes(opt.label)
-      // )
-      // if (criteria) {
-      //   // Show only options that match criteria
-      //   return options.filter((opt) => opt.label.includes(criteria))
-      // }
-      // Show all options available
       return this.options
     },
-
     searchDesc() {
       if (this.criteria && this.availableOptions.length === 0) {
         return 'There are no tags matching your search criteria'

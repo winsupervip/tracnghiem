@@ -156,7 +156,7 @@ export default defineComponent({
       data.level = result4.object.items
       data.questionList = result5.object.items
       data.questionGroupList = result6.object.items
-      $logger.info(data.questionList.categoryItems)
+      $logger.info(result5)
       $loader().close()
     })
 

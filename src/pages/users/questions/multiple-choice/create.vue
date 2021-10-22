@@ -7,26 +7,41 @@
         :add-or-update-answer="addOrUpdateAnswer"
         :get-tags="getTags"
         :get-title="getTitle"
+        :errors="errors"
+      />
+      <AddAnswer
+        :add-or-update-answer="addOrUpdateAnswer"
+        :update-value="updateValue"
+        :errors="errors"
+        :update-answer="updateAnswer"
       />
       <ListAnswer
         :list-answers="listAnswers"
-        type-question="multiple-choice"
+        type-question="single-choice"
         :selected="selected"
-        :handle-delete="getQuestionDelete"
-        :answer-item="answerUpdateItem"
-        :get-answer-item="getAnswerItem"
+        :update-answer="updateAnswer"
+        :update-right-answer="updateRightAnswer"
+        :errors="errors"
       />
       <CommentOrNote :get-comment-or-note="getCommentOrNote" />
     </div>
     <div class="layout_right">
       <PublishQuestion
         :get-publish-question="getPublishQuestion"
-        :save-question="saveQuestion"
+        :errors="errors"
+        :on-submit="onSubmit"
       />
-      <Category :get-categories="getCategories" />
-      <LevelForm :get-level-form="getLevelForm" />
+      <Category :get-categories="getCategories" :errors="errors" />
+      <LevelForm :get-level-form="getLevelForm" :errors="errors" />
       <UploadImage :get-image="getImage" />
-      <AddSeo :get-seo="getSeo" />
+      <AddSeo :get-seo="getSeo" :errors="errors" />
+      <div>
+        <Uploader
+          v-model="seoAvatar"
+          :accept="'*/*'"
+          :disabled="false"
+        ></Uploader>
+      </div>
     </div>
   </div>
 </template>
@@ -47,6 +62,11 @@ import UploadImage from '../components/UploadImage.vue'
 import AddSeo from '../components/AddSeo.vue'
 import CommentOrNote from '../components/CommentOrNote.vue'
 import CauHoiApi from '../../../../api/cauHoi'
+
+import AddAnswer from '../components/AddAnswer.vue'
+// eslint-disable-next-line import/no-unresolved
+import Uploader from '@/components/Uploader'
+
 export default defineComponent({
   components: {
     Header,
@@ -57,6 +77,8 @@ export default defineComponent({
     UploadImage,
     AddSeo,
     CommentOrNote,
+    Uploader,
+    AddAnswer,
   },
   layout: 'dashboard',
   auth: false,
@@ -74,7 +96,7 @@ export default defineComponent({
       isRightAnswer: false,
       isRandom: false,
       listAnswers: [],
-      isUpdate: -1,
+      indexDataUpdate: -1,
       categories: [],
       levelForm: false,
       statusId: false,
@@ -87,6 +109,9 @@ export default defineComponent({
       selected: {},
       tags: [],
       title: '',
+      modalShow: false,
+      updateValue: {},
+      errors: [],
     })
     const getQuestion = (value) => {
       data.questionContent = value
@@ -131,8 +156,9 @@ export default defineComponent({
     },
     getCommentOrNote(value) {
       this.explainationIfCorrect = value.explainationIfCorrect
-      this.explainationIfInCorrect = value.explainationIfInCorrect
+      this.explainationIfInCorrect = value.explainationIfIncorrect
       console.log(value)
+      console.log(this.explainationIfCorrect, this.explainationIfInCorrect)
     },
     getTags(value) {
       this.tags = value
@@ -140,8 +166,20 @@ export default defineComponent({
     getTitle(value) {
       this.title = value
     },
+    updateAnswer(value) {
+      if (value === 'remove_data') {
+        this.updateValue = {}
+        this.indexDataUpdate = -1
+      } else {
+        this.updateValue = this.listAnswers[value]
+        this.indexDataUpdate = value
+      }
+    },
+    updateRightAnswer(value) {
+      this.listAnswers = value
+    },
     addOrUpdateAnswer(data) {
-      if (this.isUpdate === -1) {
+      if (this.indexDataUpdate === -1) {
         const value = {
           answerContent: data.answerContent,
           random: data.isRandom,
@@ -154,19 +192,77 @@ export default defineComponent({
         if (data.isRightAnswer) {
           this.selected = value
         }
+        alert('Thêm câu trả lời thanh công')
       } else {
-        // this.answers[index] = {
-        //   answer: this.answerContent,
-        //   isRandom: this.isRandom,
-        //   isRightAnswer: this.isRightAnswer,
-        // }
-        this.isUpdate = -1
+        this.listAnswers[this.indexDataUpdate] = data
+        this.listAnswers = -1
+        alert('Cập nhâp câu trả lời thanh công')
       }
       console.log(data)
-      console.log('list answers', data.categories)
-      alert('Thêm câu trả lời thanh công')
     },
-    saveQuestion() {
+    isValid(data) {
+      // 0
+      this.errors = []
+      let valid = true
+      if (data.question.title === '') {
+        this.errors.push('Tiêu Đề Là Bắt Buột')
+        valid = false
+      } else {
+        this.errors.push(false)
+      }
+      // 1
+      if (data.question.questionContent === '') {
+        this.errors.push('Bạn Phải Nhập Vào Nội dung câu hỏi')
+        valid = false
+      } else {
+        this.errors.push(false)
+      }
+      // 2
+      if (data.question.tags.length === 0) {
+        this.errors.push('Bạn Phải Gán 1 Tag cho câu hỏi')
+        valid = false
+      } else {
+        this.errors.push(false)
+      }
+      // 3
+      if (!data.question.levelId) {
+        this.errors.push('Bạn Phải chọn level cho câu hỏi')
+        valid = false
+      } else {
+        this.errors.push(false)
+      }
+      // 4
+      if (data.question.categories.length === 0) {
+        this.errors.push('Bạn Phải chọn 1 danh mục cho câu hỏi')
+        valid = false
+      } else {
+        this.errors.push(false)
+      }
+      // 5
+      if (data.answers.length === 0 || data.answers.length > 3) {
+        this.errors.push('Loại câu hỏi này phải có từ 2->3 câu trả lời')
+        valid = false
+      } else {
+        this.errors.push(false)
+      }
+      // 6
+      console.log(data.question.statusId)
+      if (!data.question.statusId) {
+        this.errors.push('Bạn có muốn xuất bản câu hỏi')
+        valid = false
+      } else {
+        this.errors.push(false)
+      }
+      if (data.question.seoTitle === '') {
+        this.errors.push('Bạn có muốn xuất bản câu hỏi')
+        valid = false
+      } else {
+        this.errors.push(false)
+      }
+      return valid
+    },
+    onSubmit() {
+      console.log('okkkk')
       const data = {
         question: {
           hashId: '',
@@ -176,7 +272,7 @@ export default defineComponent({
           explainationIfCorrect: this.explainationIfCorrect,
           explainationIfIncorrect: this.explainationIfInCorrect,
           statusId: this.statusId,
-          levelId: this.levelForm,
+          levelId: this.levelId,
           plainText: this.title,
           seoAvatar: 'string',
           seoTitle: this.seoTitle,
@@ -188,15 +284,18 @@ export default defineComponent({
         },
         answers: this.listAnswers,
       }
-      CauHoiApi.createQuestion(
-        data,
-        () => {
-          alert('Thêm Thành Công')
-        },
-        () => {
-          alert('Có lỗi xảy ra')
-        }
-      )
+      console.log(this.errors)
+      if (this.isValid(data)) {
+        CauHoiApi.createQuestion(
+          data,
+          () => {
+            alert('Thêm Thành Công')
+          },
+          () => {
+            alert('Có lỗi sảy ra')
+          }
+        )
+      }
     },
   },
 })

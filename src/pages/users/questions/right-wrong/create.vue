@@ -94,7 +94,32 @@ export default defineComponent({
       },
       isRightAnswer: false,
       isRandom: false,
-      listAnswers: [],
+      listAnswers: [
+        {
+          hashId: '',
+          answerContent: 'Đúng',
+          rightAnswer: 1,
+          random: true,
+          position: 0,
+          plainText: 'Đúng',
+        },
+        {
+          hashId: '',
+          answerContent: 'Sai',
+          rightAnswer: 0,
+          random: true,
+          position: 0,
+          plainText: 'Sai',
+        },
+        {
+          hashId: '',
+          answerContent: 'Không có đáp án',
+          rightAnswer: 0,
+          random: true,
+          position: 0,
+          plainText: 'Không có đáp án',
+        },
+      ],
       indexDataUpdate: -1,
       categories: [],
       levelForm: false,
@@ -116,16 +141,10 @@ export default defineComponent({
       data.questionContent = value
       $logger.info(value)
     }
-    const getQuestionDelete = (e) => {
-      const newList = [...data.listAnswers]
-      const cal = newList.filter((item) => newList.indexOf(item) !== e)
-      data.listAnswers = cal
-      console.log('list answers', data.listAnswers)
-    }
+
     return {
       ...toRefs(data),
       getQuestion,
-      getQuestionDelete,
     }
   },
   methods: {
@@ -190,6 +209,7 @@ export default defineComponent({
         alert('Thêm câu trả lời thanh công')
       } else {
         this.listAnswers[this.indexDataUpdate] = data
+        console.log(this.listAnswers)
         this.indexDataUpdate = -1
         alert('Cập nhâp câu trả lời thanh công')
       }

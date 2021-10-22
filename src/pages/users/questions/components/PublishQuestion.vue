@@ -1,13 +1,7 @@
 <template>
   <section class="rightCardForAddQuestion">
-    <!-- <treeselect
-      v-model="value"
-      :class="$style.display"
-      :multiple="true"
-      :options="options"
-      :value-consists-of="valueConsistsOf"
-    /> -->
     <p class="border_title"><strong>Xuất bản câu hỏi (*)</strong></p>
+    <!-- <ValidationProvider v-slot="{ errors }" rules="required" name="choice"> -->
     <ul class="container">
       Hiện thị:
       <li v-for="option in listStatus" :key="option.id">
@@ -18,9 +12,15 @@
         >
       </li>
     </ul>
+    <b-alert v-if="errors[6]" id="error" show variant="warning">{{
+      errors[6]
+    }}</b-alert>
+    <!-- </ValidationProvider> -->
     <p>Chỉ bạn mới thấy được câu hỏi này.</p>
     <b-button variant="outline-primary ">Lưu Như bản nháp</b-button>
-    <input type="submit" variant="outline-primary " value="Lưu Câu Hỏi" />
+    <b-button variant="outline-primary " value="Lưu Câu Hỏi" @click="onSubmit"
+      >Lưu Câu Hỏi</b-button
+    >
   </section>
 </template>
 
@@ -37,6 +37,14 @@ export default defineComponent({
   name: 'CategoryForm',
   props: {
     getPublishQuestion: {
+      type: Function,
+      required: true,
+    },
+    errors: {
+      type: Array,
+      required: true,
+    },
+    onSubmit: {
       type: Function,
       required: true,
     },
