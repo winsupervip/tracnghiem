@@ -13,6 +13,8 @@ export default {
       successCallApi(result?.data?.object?.items)
     }
   },
-  getQuestionList: () =>
+  getUserQuestionList: () =>
     global.$http.get('/api/v1/Question/get-user-question-list'),
+  getUserQuestionGroupList: () =>
+    global.$http.get('/api/v1/Question/get-user-question-group-list'),
 }

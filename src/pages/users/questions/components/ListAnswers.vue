@@ -15,21 +15,22 @@
           name="some-radios"
           :value="answer"
           :aria-checked="true"
-          ><div :class="$style.answerItem">
+        >
+          <!-- <div :class="$style.answerItem">
             <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
             <p v-html="answer.answerContent"></p>
-          </div>
+          </div> -->
         </b-form-radio>
         <div>
           <b-button variant="outline-warning"
             ><b-icon icon="shuffle"></b-icon
           ></b-button>
-          <b-button
+          <!-- <b-button
             v-b-modal.modal-prevent-closing
             variant="outline-warning"
             @click="handleUpdate(index)"
             ><b-icon icon="pencil-square"></b-icon
-          ></b-button>
+          ></b-button> -->
           <b-button variant="outline-danger" @click="handleDelete(index)"
             ><b-icon icon="trash"></b-icon
           ></b-button>
@@ -52,12 +53,12 @@
           :key="index"
           :class="$style.answerItem"
         >
-          <b-form-checkbox :class="$style.choose" :value="answer"
+          <!-- <b-form-checkbox :class="$style.choose" :value="answer"
             ><div :class="$style.answerItem">
               <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
               <p v-html="answer.answerContent"></p>
             </div>
-          </b-form-checkbox>
+          </b-form-checkbox> -->
           <div>
             <b-button variant="outline-warning"
               ><b-icon icon="shuffle"></b-icon
@@ -136,7 +137,7 @@ export default defineComponent({
     const { $logger } = useContext()
     const data = reactive({
       isSelected: props.selected,
-      dataUpdate: props.getAnswerItem.answerContent,
+      // dataUpdate: props.getAnswerItem.answerContent,
     })
     watch(
       () => data.isSelected,

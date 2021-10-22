@@ -47,6 +47,7 @@
             id="tag-search-input"
             v-model="search"
             type="search"
+            placeholder="tìm kiếm câu hỏi"
           ></b-form-input>
           <b-dropdown-item
             v-for="(option, index) in availableOptions"
@@ -84,11 +85,11 @@
         placeholder="Sắp xếp"
       />
     </div>
-    <div v-if="showSingleQuestion">
+    <div v-show="showSingleQuestion">
       <SingleQuestion
         v-for="question in questionList"
         :key="question.id"
-        :question="question"
+        :questions="question"
       />
     </div>
 
@@ -146,14 +147,16 @@ export default defineComponent({
       const { data: result2 } = await QuestionApi.getTreeQuestionTypes()
       const { data: result3 } = await QuestionApi.getListStatus()
       const { data: result4 } = await QuestionApi.getLevel()
-      const { data: result5 } = await QuestionApi.getQuestionList()
-      data.questionList = result5.object.items
+      const { data: result5 } = await QuestionApi.getUserQuestionList()
+      const { data: result6 } = await QuestionApi.getUserQuestionGroupList()
+
       data.category = result1.object.items
       data.treeQuestionTypes = result2.object.items
       data.listStatus = result3.object.items
       data.level = result4.object.items
-
-      $logger.info(result5)
+      data.questionList = result5.object.items
+      data.questionGroupList = result6.object.items
+      $logger.info(data.questionList.categoryItems)
       $loader().close()
     })
 

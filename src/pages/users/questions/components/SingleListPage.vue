@@ -3,9 +3,9 @@
     <div class="form-headline">
       <div class="headline-left">
         <label for="">Thi tốt nghiệp THPT</label>
-        <span>Cơ bản</span>
-        <span>Một lựa chọn</span>
-        <span>Bản nháp</span>
+        <span>{{ questions.levelName }}</span>
+        <span>{{ questions.questionTypeName }}</span>
+        <span>{{ questions.statusName }}</span>
       </div>
       <div class="headline-right">
         <a href="">XEM TRÊN WEB</a>
@@ -31,14 +31,18 @@
       <div class="question-hashtag">
         <a href="">#vật lý 12</a>
         <a href="">#Luyện thi đại học</a>
-        <a href="">#Vật Lý</a>
+        <a href="">{{ questions.categoryItems.categoryName }}</a>
       </div>
       <div class="question">
-        <p v-html="question.questionContent"></p>
+        <p v-html="questions.questionContent"></p>
       </div>
       <div class="answer">
         <ul>
-          <li v-for="(answer, index) in question.answers" :key="index" type="A">
+          <li
+            v-for="(answer, index) in questions.answers"
+            :key="index"
+            type="A"
+          >
             {{ String.fromCharCode(65 + index) + '. ' }}
             <p v-html="answer.answerContent"></p>
           </li>
@@ -60,7 +64,7 @@ import { defineComponent } from '@nuxtjs/composition-api'
 export default defineComponent({
   name: 'SingleListPage',
   props: {
-    question: {
+    questions: {
       type: Object,
       required: true,
     },

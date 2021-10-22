@@ -14,6 +14,7 @@
             :list-answers="listAnswers"
             type-question="single-choice"
             :selected="selected"
+            :handle-delete="getQuestionDelete"
           />
           <CommentOrNote :get-comment-or-note="getCommentOrNote" />
         </div>
@@ -100,10 +101,16 @@ export default defineComponent({
       data.questionContent = value
       $logger.info(value)
     }
-
+    const getQuestionDelete = (e) => {
+      const newList = [...data.listAnswers]
+      const cal = newList.filter((item) => newList.indexOf(item) !== e)
+      data.listAnswers = cal
+      console.log('list answers', data.listAnswers)
+    }
     return {
       ...toRefs(data),
       getQuestion,
+      getQuestionDelete,
     }
   },
   methods: {
