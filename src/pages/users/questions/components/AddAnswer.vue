@@ -6,7 +6,6 @@
     </div>
     <b-modal
       id="modal-1"
-      v-model="isShowModal"
       size="xl"
       title="Add Answer"
       :ok-only="okOnly"
@@ -40,7 +39,9 @@
             </div>
           </div>
           <b-button variant="outline-primary" @click="handleAnswer">{{
-            isUpdate != -1 ? 'Cập nhập câu trả lời' : 'Thêm câu trả lời'
+            updateValue.answerContent
+              ? 'Cập nhập câu trả lời'
+              : 'Thêm câu trả lời'
           }}</b-button>
         </div>
       </div>
@@ -48,12 +49,7 @@
   </div>
 </template>
 <script>
-import {
-  defineComponent,
-  reactive,
-  toRefs,
-  watch,
-} from '@nuxtjs/composition-api'
+import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
 export default defineComponent({
   name: 'Header',
   props: {
@@ -65,11 +61,7 @@ export default defineComponent({
       type: Object,
       required: true,
     },
-    modalShow: {
-      type: Boolean,
-      required: true,
-    },
-    hideModal: {
+    updateAnswer: {
       type: Function,
       required: true,
     },
@@ -86,37 +78,26 @@ export default defineComponent({
       isUpdate: -1,
       doShow: false,
       okOnly: true,
-      isShowModal: false,
     })
-    watch(
-      () => props.updateValue.answerContent,
-      () => {
-        data.answerContent = props.updateValue.answerContent
-          ? props.updateValue.answerContent
-          : ''
-      }
-    )
     return {
       ...toRefs(data),
     }
   },
   watch: {
-    modalShow() {
-      this.isShowModal = this.modalShow
-    },
-    isShowModal() {
-      if (this.isShowModal === false) {
-        this.hideModal()
-      }
+    updateValue() {
+      console.log(this.updateValue)
+      this.answerContent = this.updateValue?.answerContent
+        ? this.updateValue.answerContent
+        : ''
     },
   },
-
   methods: {
     shown() {
       this.doShow = true
     },
     hide() {
       this.doShow = false
+      this.updateAnswer('remove_data')
     },
     handleAnswer() {
       if (this.answerContent === '') {

@@ -12,9 +12,8 @@
       <AddAnswer
         :add-or-update-answer="addOrUpdateAnswer"
         :update-value="updateValue"
-        :modal-show="modalShow"
-        :hide-modal="hideModal"
         :errors="errors"
+        :update-answer="updateAnswer"
       />
       <ListAnswer
         :list-answers="listAnswers"
@@ -121,7 +120,7 @@ export default defineComponent({
           plainText: 'Không có đáp án',
         },
       ],
-      isUpdate: -1,
+      indexDataUpdate: -1,
       categories: [],
       levelForm: false,
       statusId: false,
@@ -182,18 +181,19 @@ export default defineComponent({
       this.title = value
     },
     updateAnswer(value) {
-      console.log(value)
-      this.updateValue = this.listAnswers[value]
-      this.modalShow = true
+      if (value === 'remove_data') {
+        this.updateValue = {}
+        this.indexDataUpdate = -1
+      } else {
+        this.updateValue = this.listAnswers[value]
+        this.indexDataUpdate = value
+      }
     },
     updateRightAnswer(value) {
       this.listAnswers = value
     },
-    hideModal() {
-      this.modalShow = false
-    },
     addOrUpdateAnswer(data) {
-      if (this.isUpdate === -1) {
+      if (this.indexDataUpdate === -1) {
         const value = {
           answerContent: data.answerContent,
           random: data.isRandom,
@@ -206,16 +206,14 @@ export default defineComponent({
         if (data.isRightAnswer) {
           this.selected = value
         }
+        alert('Thêm câu trả lời thanh công')
       } else {
-        // this.answers[index] = {
-        //   answer: this.answerContent,
-        //   isRandom: this.isRandom,
-        //   isRightAnswer: this.isRightAnswer,
-        // }
-        this.isUpdate = -1
+        this.listAnswers[this.indexDataUpdate] = data
+        console.log(this.listAnswers)
+        this.indexDataUpdate = -1
+        alert('Cập nhâp câu trả lời thanh công')
       }
       console.log(data)
-      alert('Thêm câu trả lời thanh công')
     },
     isValid(data) {
       // 0
@@ -302,9 +300,7 @@ export default defineComponent({
         answers: this.listAnswers,
       }
       console.log(this.errors)
-      const isValid = false
-      console.log(this.isValid(data))
-      if (isValid) {
+      if (this.isValid(data)) {
         CauHoiApi.createQuestion(
           data,
           () => {

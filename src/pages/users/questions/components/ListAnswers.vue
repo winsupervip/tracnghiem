@@ -134,6 +134,11 @@ export default defineComponent({
       ...toRefs(data),
     }
   },
+  watch: {
+    listAnswers() {
+      console.log(this.listAnswers)
+    },
+  },
   methods: {
     hideModal() {
       this.$refs['my-modal'].hide()

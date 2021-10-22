@@ -39,7 +39,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { $loader, $logger } = useContext()
+    const { $loader } = useContext()
     const data = reactive({
       listFormCheck: [],
       treeValue: [],
@@ -50,7 +50,6 @@ export default defineComponent({
       $loader()
       const { data: result } = await CauHoiApi.getCategory()
       data.treeData = result.object?.items
-      $logger.info(data.treeData)
       $loader().close()
     })
     fetch()
