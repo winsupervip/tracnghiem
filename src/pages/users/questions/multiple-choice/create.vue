@@ -1,34 +1,36 @@
 <template>
-  <div class="layout">
-    <div class="layout_left">
-      <Header
-        :question-type="questionType"
-        :get-question="getQuestion"
-        :add-or-update-answer="addOrUpdateAnswer"
-        :get-tags="getTags"
-        :get-title="getTitle"
-      />
-      <ListAnswer
-        :list-answers="listAnswers"
-        type-question="multiple-choice"
-        :selected="selected"
-        :handle-delete="getQuestionDelete"
-        :answer-item="answerUpdateItem"
-        :get-answer-item="getAnswerItem"
-      />
-      <CommentOrNote :get-comment-or-note="getCommentOrNote" />
-    </div>
-    <div class="layout_right">
-      <PublishQuestion
-        :get-publish-question="getPublishQuestion"
-        :save-question="saveQuestion"
-      />
-      <Category :get-categories="getCategories" />
-      <LevelForm :get-level-form="getLevelForm" />
-      <UploadImage :get-image="getImage" />
-      <AddSeo :get-seo="getSeo" />
-    </div>
-  </div>
+  <ValidationObserver>
+    <form @submit.prevent="handleSubmit(saveQuestion())">
+      <div class="layout">
+        <div class="layout_left">
+          <Header
+            :question-type="questionType"
+            :get-question="getQuestion"
+            :add-or-update-answer="addOrUpdateAnswer"
+            :get-tags="getTags"
+            :get-title="getTitle"
+          />
+          <ListAnswer
+            :list-answers="listAnswers"
+            type-question="multiple-choice"
+            :selected="selected"
+            :handle-delete="getQuestionDelete"
+          />
+          <CommentOrNote :get-comment-or-note="getCommentOrNote" />
+        </div>
+        <div class="layout_right">
+          <PublishQuestion
+            :get-publish-question="getPublishQuestion"
+            :save-question="saveQuestion"
+          />
+          <Category :get-categories="getCategories" />
+          <LevelForm :get-level-form="getLevelForm" />
+          <UploadImage :get-image="getImage" />
+          <AddSeo :get-seo="getSeo" />
+        </div>
+      </div>
+    </form>
+  </ValidationObserver>
 </template>
 
 <script>
@@ -46,7 +48,7 @@ import ListAnswer from '../components/ListAnswers.vue'
 import UploadImage from '../components/UploadImage.vue'
 import AddSeo from '../components/AddSeo.vue'
 import CommentOrNote from '../components/CommentOrNote.vue'
-import CauHoiApi from '../../../../api/cauHoi'
+// import CauHoiApi from '../../../../api/cauHoi'
 export default defineComponent({
   components: {
     Header,
@@ -70,7 +72,6 @@ export default defineComponent({
         convert_urls: false,
         entity_encoding: 'raw',
       },
-      answerUpdateItem: {},
       isRightAnswer: false,
       isRandom: false,
       listAnswers: [],
@@ -106,9 +107,6 @@ export default defineComponent({
     }
   },
   methods: {
-    getAnswerItem(index) {
-      this.answerUpdateItem = this.listAnswers[index]
-    },
     getCategories(value) {
       this.categories = value
       console.log(value)
@@ -188,15 +186,16 @@ export default defineComponent({
         },
         answers: this.listAnswers,
       }
-      CauHoiApi.createQuestion(
-        data,
-        () => {
-          alert('Thêm Thành Công')
-        },
-        () => {
-          alert('Có lỗi xảy ra')
-        }
-      )
+      console.log(data)
+      // CauHoiApi.createQuestion(
+      //   data,
+      //   () => {
+      //     alert('Thêm Thành Công')
+      //   },
+      //   () => {
+      //     alert('Có lỗi xảy ra')
+      //   }
+      // )
     },
   },
 })

@@ -1,18 +1,23 @@
 <template>
-  <section class="rightCardForAddQuestion">
-    <p class="border_title"><strong>Chuyên mục(*)</strong></p>
+  <ValidationProvider v-slot="{ errors }" rules="required">
+    <section class="rightCardForAddQuestion">
+      <p class="border_title"><strong>Chuyên mục(*)</strong></p>
 
-    <div v-if="treeData.length > 0" class="container">
-      <treeselect
-        v-model="treeValue"
-        :multiple="true"
-        :always-open="alwaysOpen"
-        :options="treeData"
-        placeholder="Chuyên mục cho câu hỏi"
-        :load-options="loadOptions"
-      />
-    </div>
-  </section>
+      <div v-if="treeData.length > 0" class="container">
+        <treeselect
+          v-model="treeValue"
+          :multiple="true"
+          :always-open="alwaysOpen"
+          :options="treeData"
+          placeholder="Chuyên mục cho câu hỏi"
+          :load-options="loadOptions"
+        />
+      </div>
+    </section>
+    <b-alert v-if="errors[0]" id="error" show variant="warning">{{
+      errors[0]
+    }}</b-alert>
+  </ValidationProvider>
 </template>
 <script>
 import {
@@ -38,6 +43,7 @@ export default defineComponent({
       treeValue: [],
       treeData: [],
       alwaysOpen: false,
+      errors: 'avc',
     })
     const { fetch } = useFetch(async () => {
       $loader()
