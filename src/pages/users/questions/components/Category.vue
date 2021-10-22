@@ -1,23 +1,20 @@
 <template>
-  <ValidationProvider v-slot="{ errors }" rules="required">
-    <section class="rightCardForAddQuestion">
-      <p class="border_title"><strong>Chuyên mục(*)</strong></p>
-
-      <div v-if="treeData.length > 0" class="container">
-        <treeselect
-          v-model="treeValue"
-          :multiple="true"
-          :always-open="alwaysOpen"
-          :options="treeData"
-          placeholder="Chuyên mục cho câu hỏi"
-          :load-options="loadOptions"
-        />
-      </div>
-    </section>
-    <b-alert v-if="errors[0]" id="error" show variant="warning">{{
-      errors[0]
+  <section class="rightCardForAddQuestion">
+    <p class="border_title"><strong>Chuyên mục(*)</strong></p>
+    <div v-if="treeData.length > 0" class="container">
+      <treeselect
+        v-model="treeValue"
+        :multiple="true"
+        :always-open="alwaysOpen"
+        :options="treeData"
+        placeholder="Chuyên mục cho câu hỏi"
+        :load-options="loadOptions"
+      />
+    </div>
+    <b-alert v-if="errors[4]" id="error" show variant="warning">{{
+      errors[4]
     }}</b-alert>
-  </ValidationProvider>
+  </section>
 </template>
 <script>
 import {
@@ -35,9 +32,13 @@ export default defineComponent({
       type: Function,
       required: true,
     },
+    errors: {
+      type: Array,
+      required: true,
+    },
   },
   setup(props) {
-    const { $loader, $logger } = useContext()
+    const { $loader } = useContext()
     const data = reactive({
       listFormCheck: [],
       treeValue: [],
@@ -49,7 +50,6 @@ export default defineComponent({
       $loader()
       const { data: result } = await CauHoiApi.getCategory()
       data.treeData = result.object?.items
-      $logger.info(data.treeData)
       $loader().close()
     })
     fetch()

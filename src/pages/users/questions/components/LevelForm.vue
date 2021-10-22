@@ -1,26 +1,24 @@
 <template>
-  <ValidationProvider v-slot="{ errors }" rules="required">
-    <section class="rightCardForAddQuestion">
-      <!-- <treeselect
+  <section class="rightCardForAddQuestion">
+    <!-- <treeselect
       v-model="value"
       :class="$style.display"
       :multiple="true"
       :options="options"
       :value-consists-of="valueConsistsOf"
     /> -->
-      <p class="border_title"><strong>Mức độ (*)</strong></p>
-      <div class="container">
-        <label v-for="option in listLevelRadio" :key="option.id"
-          ><input v-model="levelForm" type="radio" :value="option.id + 1" />{{
-            option.name
-          }}</label
-        >
-      </div>
-    </section>
-    <b-alert v-if="errors[0]" id="error" show variant="warning">{{
-      errors[0]
+    <p class="border_title"><strong>Mức độ (*)</strong></p>
+    <div class="container">
+      <label v-for="option in listLevelRadio" :key="option.id"
+        ><input v-model="levelForm" type="radio" :value="option.id" />{{
+          option.name
+        }}</label
+      >
+    </div>
+    <b-alert v-if="errors[3]" id="error" show variant="warning">{{
+      errors[3]
     }}</b-alert>
-  </ValidationProvider>
+  </section>
 </template>
 
 <script>
@@ -35,6 +33,10 @@ export default defineComponent({
   props: {
     getLevelForm: {
       type: Function,
+      required: true,
+    },
+    errors: {
+      type: Array,
       required: true,
     },
   },

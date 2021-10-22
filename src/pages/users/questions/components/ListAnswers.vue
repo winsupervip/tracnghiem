@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.answersList">
     <b-form-group
-      v-if="typeQuestion === 'single-choice'"
+      v-if="typeQuestion === 'single-choice' || 'right-wrong'"
       v-slot="{ ariaDescribedby }"
     >
       <div
@@ -24,7 +24,10 @@
           <b-button variant="outline-warning"
             ><b-icon icon="shuffle"></b-icon
           ></b-button>
-          <b-button variant="outline-warning"
+          <b-button
+            v-b-modal.modal-1
+            variant="outline-warning"
+            @click="updateAnswer(index)"
             ><b-icon icon="pencil-square"></b-icon
           ></b-button>
           <b-button variant="outline-danger" @click="handleDelete(index)"
@@ -59,7 +62,7 @@
             <b-button variant="outline-warning"
               ><b-icon icon="shuffle"></b-icon
             ></b-button>
-            <b-button variant="outline-warning"
+            <b-button variant="outline-warning" @click="updateAnswer(index)"
               ><b-icon icon="pencil-square"></b-icon
             ></b-button>
             <b-button variant="outline-danger" @click="handleDelete(index)"
@@ -69,6 +72,9 @@
         </div>
       </b-form-checkbox-group>
     </b-form-group>
+    <b-alert v-if="errors[5]" id="error" show variant="warning">{{
+      errors[5]
+    }}</b-alert>
   </div>
 </template>
 
@@ -90,8 +96,16 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    selected: {
-      type: [Object, String],
+    updateRightAnswer: {
+      type: Function,
+      required: true,
+    },
+    updateAnswer: {
+      type: Function,
+      required: true,
+    },
+    errors: {
+      type: Array,
       required: true,
     },
     handleDelete: {
@@ -104,23 +118,42 @@ export default defineComponent({
     const data = reactive({
       isSelected: props.selected,
     })
+    const getRightAnswer = () => {
+      const index = props.listAnswers.findIndex(
+        (item) => item.rightAnswer === 1
+      )
+      data.isSelected = props.listAnswers[index]
+    }
+    getRightAnswer()
     watch(
       () => data.isSelected,
       () => {
-        $logger.info(data.isSelected)
-      }
-    )
-    watch(
-      () => props.selected,
-      () => {
-        data.isSelected = props.selected
+        const answers = props.listAnswers.map((item) => {
+          if (data.isSelected.answerContent === item.answerContent) {
+            item.isRightAnswer = 1
+          } else {
+            item.rightAnswer = 0
+          }
+          return item
+        })
+        $logger.info(answers)
+        props.updateRightAnswer(answers)
       }
     )
     return {
       ...toRefs(data),
     }
   },
-  methods: {},
+  watch: {
+    listAnswers() {
+      console.log(this.listAnswers)
+    },
+  },
+  methods: {
+    hideModal() {
+      this.$refs['my-modal'].hide()
+    },
+  },
 })
 </script>
 <style module>
