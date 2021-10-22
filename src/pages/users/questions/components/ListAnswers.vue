@@ -62,10 +62,13 @@
             <b-button variant="outline-warning"
               ><b-icon icon="shuffle"></b-icon
             ></b-button>
-            <b-button
+            <!-- <b-button
               v-b-modal.modal-prevent-closing
               variant="outline-warning"
               @click="getAnswerItem(index)"
+              ><b-icon icon="pencil-square"></b-icon
+            ></b-button> -->
+            <b-button variant="outline-warning"
               ><b-icon icon="pencil-square"></b-icon
             ></b-button>
             <b-button variant="outline-danger" @click="handleDelete(index)"
@@ -75,7 +78,7 @@
         </div>
       </b-form-checkbox-group>
     </b-form-group>
-    <b-modal id="modal-prevent-closing" ref="modal" title="Chỉnh sửa câu hỏi">
+    <!-- <b-modal id="modal-prevent-closing" ref="modal" title="Chỉnh sửa câu hỏi">
       <form ref="form">
         <b-form-group
           label-for="name-input"
@@ -90,7 +93,7 @@
           ></b-form-input>
         </b-form-group>
       </form>
-    </b-modal>
+    </b-modal> -->
   </div>
 </template>
 

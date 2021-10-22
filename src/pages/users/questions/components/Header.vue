@@ -6,6 +6,7 @@
         v-model="title"
         class="form-control"
         placeholder="Tiêu Đề (*)"
+        required
       ></b-form-input>
       <div class="marginTag">
         <b-form-group label-for="tags-with-dropdown">
@@ -79,7 +80,7 @@
         </b-form-group>
       </div>
       <div>
-        <editor v-model="questionContent" />
+        <editor v-model="questionContent" required />
       </div>
     </div>
     <div>
@@ -185,8 +186,11 @@ export default defineComponent({
     watch(
       () => data.content,
       () => data.options,
+
+      () => data.questionContent,
+
       () => {
-        props.getQuestion(data.content)
+        props.getQuestion(data.questionContent)
       }
     )
     return {
@@ -248,7 +252,7 @@ export default defineComponent({
         return 0
       }
       const data = {
-        isRightAnswer: this.isRightAnswer,
+        isRightAnswer: this.isRightAnswer ? 1 : 0,
         isRandom: this.isRandom,
         answerContent: this.answerContent,
       }

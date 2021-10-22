@@ -1,31 +1,39 @@
 <template>
-  <div class="layout">
-    <div class="layout_left">
-      <Header
-        :question-type="questionType"
-        :get-question="getQuestion"
-        :add-or-update-answer="addOrUpdateAnswer"
-        :get-tags="getTags"
-        :get-title="getTitle"
-      />
-      <ListAnswer
-        :list-answers="listAnswers"
-        type-question="single-choice"
-        :selected="selected"
-      />
-      <CommentOrNote :get-comment-or-note="getCommentOrNote" />
-    </div>
-    <div class="layout_right">
-      <PublishQuestion
-        :get-publish-question="getPublishQuestion"
-        :save-question="saveQuestion"
-      />
-      <Category :get-categories="getCategories" />
-      <LevelForm :get-level-form="getLevelForm" />
-      <UploadImage :get-image="getImage" />
-      <AddSeo :get-seo="getSeo" />
-    </div>
-  </div>
+  <ValidationObserver>
+    <form @submit.prevent="handleSubmit()">
+      <div class="layout">
+        <div class="layout_left">
+          <Header
+            :question-type="questionType"
+            :get-question="getQuestion"
+            :add-or-update-answer="addOrUpdateAnswer"
+            :get-tags="getTags"
+            :get-title="getTitle"
+          />
+          <ListAnswer
+            :list-answers="listAnswers"
+            type-question="single-choice"
+            :selected="selected"
+          />
+          <CommentOrNote :get-comment-or-note="getCommentOrNote" />
+        </div>
+        <div class="layout_right">
+          <PublishQuestion :get-publish-question="getPublishQuestion" />
+          <Category :get-categories="getCategories" />
+          <LevelForm :get-level-form="getLevelForm" />
+          <UploadImage :get-image="getImage" />
+          <AddSeo :get-seo="getSeo" />
+          <div>
+            <Uploader
+              v-model="seoAvatar"
+              :accept="'*/*'"
+              :disabled="true"
+            ></Uploader>
+          </div>
+        </div>
+      </div>
+    </form>
+  </ValidationObserver>
 </template>
 
 <script>
@@ -44,6 +52,9 @@ import UploadImage from '../components/UploadImage.vue'
 import AddSeo from '../components/AddSeo.vue'
 import CommentOrNote from '../components/CommentOrNote.vue'
 import CauHoiApi from '../../../../api/cauHoi'
+// eslint-disable-next-line import/no-unresolved
+import Uploader from '@/components/Uploader'
+
 export default defineComponent({
   components: {
     Header,
@@ -54,6 +65,7 @@ export default defineComponent({
     UploadImage,
     AddSeo,
     CommentOrNote,
+    Uploader,
   },
   layout: 'dashboard',
   auth: false,
@@ -117,8 +129,9 @@ export default defineComponent({
     },
     getCommentOrNote(value) {
       this.explainationIfCorrect = value.explainationIfCorrect
-      this.explainationIfInCorrect = value.explainationIfInCorrect
+      this.explainationIfInCorrect = value.explainationIfIncorrect
       console.log(value)
+      console.log(this.explainationIfCorrect, this.explainationIfInCorrect)
     },
     getTags(value) {
       this.tags = value
@@ -151,7 +164,7 @@ export default defineComponent({
       console.log(data)
       alert('Thêm câu trả lời thanh công')
     },
-    saveQuestion() {
+    handleSubmit() {
       const data = {
         question: {
           hashId: '',
@@ -161,7 +174,7 @@ export default defineComponent({
           explainationIfCorrect: this.explainationIfCorrect,
           explainationIfIncorrect: this.explainationIfInCorrect,
           statusId: this.statusId,
-          levelId: this.levelForm,
+          levelId: this.levelId,
           plainText: this.title,
           seoAvatar: 'string',
           seoTitle: this.seoTitle,
@@ -173,6 +186,7 @@ export default defineComponent({
         },
         answers: this.listAnswers,
       }
+      console.log(data)
       CauHoiApi.createQuestion(
         data,
         () => {
