@@ -65,13 +65,14 @@
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
+import { uuid } from 'vue-uuid'
 export default defineComponent({
   name: 'Header',
   props: {
-    addOrUpdateAnswer: {
-      type: Function,
-      required: true,
-    },
+    // addOrUpdateAnswer: {
+    //   type: Function,
+    //   required: true,
+    // },
     updateValue: {
       type: Object,
       required: true,
@@ -123,6 +124,7 @@ export default defineComponent({
         return 0
       }
       const data = {
+        id: uuid.v4(),
         isRightAnswer: this.isRightAnswer ? 1 : 0,
         isRandom: this.isRandom,
         answerContent: this.answerContent,
@@ -130,7 +132,7 @@ export default defineComponent({
       this.isRightAnswer = false
       this.isRandom = false
       this.answerContent = ''
-      this.addOrUpdateAnswer(data)
+      this.$emit('add', data)
     },
   },
 })
