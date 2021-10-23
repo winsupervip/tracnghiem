@@ -80,4 +80,9 @@ section {
 .display {
   display: none;
 }
+.border_title {
+  border-bottom: 1px solid #aaa;
+  padding: 0.5em;
+  color: #1c3988;
+}
 </style>

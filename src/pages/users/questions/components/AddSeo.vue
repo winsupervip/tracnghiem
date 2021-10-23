@@ -1,6 +1,6 @@
 <template>
   <div class="rightCardForAddQuestion">
-    <p class="border_title"><strong>Cài đặt SEO*</strong></p>
+    <p :class="$style.border_title"><strong>Cài đặt SEO*</strong></p>
     <!-- <ValidationProvider v-slot="{ errors }" rules="required">
       <b-form-input
         v-model="seoTitle"
@@ -73,5 +73,10 @@ export default defineComponent({
 .inputF {
   margin-left: 5px;
   margin-right: 5px;
+}
+.border_title {
+  border-bottom: 1px solid #aaa;
+  padding: 0.5em;
+  color: #1c3988;
 }
 </style>

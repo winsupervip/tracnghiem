@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <p class="border_title"><strong>Lời Phê/ Chú thích</strong></p>
+    <p :class="$style.border_title"><strong>Lời Phê/ Chú thích</strong></p>
     <b-form-textarea
       id="textarea-default"
       v-model="explainationIfCorrect"
@@ -52,5 +52,10 @@ export default {
   margin-left: 5px;
   margin-right: 5px;
   margin-bottom: 0.5rem;
+}
+.border_title {
+  border-bottom: 1px solid #aaa;
+  padding: 0.5em;
+  color: #1c3988;
 }
 </style>

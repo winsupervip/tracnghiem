@@ -1,6 +1,6 @@
 <template>
-  <div class="layout">
-    <div class="layout_left">
+  <div :class="$style.layout">
+    <div :class="$style.layout_left">
       <Header
         :question-type="questionType"
         :get-question="getQuestion"
@@ -17,7 +17,7 @@
       />
       <ListAnswer
         :list-answers="listAnswers"
-        type-question="single-choice"
+        type-question="multiple-choice"
         :selected="selected"
         :update-answer="updateAnswer"
         :update-right-answer="updateRightAnswer"
@@ -25,7 +25,7 @@
       />
       <CommentOrNote :get-comment-or-note="getCommentOrNote" />
     </div>
-    <div class="layout_right">
+    <div :class="$style.layout_right">
       <PublishQuestion
         :get-publish-question="getPublishQuestion"
         :errors="errors"
@@ -289,7 +289,7 @@ export default defineComponent({
   },
 })
 </script>
-<style module>
+<style lang="scss" module>
 .addQuestionTitle {
   display: flex;
   justify-content: space-between;
@@ -309,5 +309,16 @@ export default defineComponent({
 .checkBoxTitle {
   align-self: center;
   margin: 0 auto;
+}
+.layout {
+  display: flex;
+  gap: 20px;
+  &_left {
+    width: 70%;
+    position: relative;
+  }
+  &_right {
+    width: 30%;
+  }
 }
 </style>

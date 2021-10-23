@@ -36,12 +36,10 @@
             <b-form-group
               label-for="name-input"
               invalid-feedback="Name is required"
-              :state="nameState"
             >
               <b-form-input
                 id="name-input"
                 v-model="image"
-                :state="nameState"
                 required
               ></b-form-input>
             </b-form-group>
@@ -98,12 +96,36 @@ export default {
 }
 </script>
 
-<style scope>
+<style lang="scss" scope>
 .container {
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
 .input-avata {
   display: none;
+}
+.wrapper {
+  display: flex;
+  padding-top: 0.5rem;
+  justify-content: space-between;
+  align-items: flex-end;
+  p {
+    margin: 0;
+  }
+}
+
+.wrapper-img {
+  padding-top: 0.5rem;
+  border-top: 1px solid #aaa;
+  min-height: 200px;
+  position: relative;
+  .wrapper-icon {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
 </style>

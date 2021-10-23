@@ -78,4 +78,15 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="scss" module></style>
+<style lang="scss" scoped>
+.border_title {
+  border-bottom: 1px solid #aaa;
+  padding: 0.5em;
+  color: #1c3988;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #aaa;
+}
+</style>
