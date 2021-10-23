@@ -4,20 +4,20 @@
       <Header
         :question-type="questionType"
         :get-question="getQuestion"
-        :add-or-update-answer="addOrUpdateAnswer"
         :get-tags="getTags"
         :get-title="getTitle"
         :errors="errors"
+        :add-or-update-answer="addOrUpdateAnswer"
       />
       <AddAnswer
-        :add-or-update-answer="addOrUpdateAnswer"
         :update-value="updateValue"
         :errors="errors"
         :update-answer="updateAnswer"
+        @add="addOrUpdateAnswer"
       />
       <ListAnswer
         :list-answers="listAnswers"
-        type-question="single-choice"
+        type-question="multiple-choice"
         :selected="selected"
         :update-answer="updateAnswer"
         :update-right-answer="updateRightAnswer"
@@ -53,6 +53,9 @@ import {
   toRefs,
   useContext,
 } from '@nuxtjs/composition-api'
+// eslint-disable-next-line no-unused-vars
+import { uuid } from 'vue-uuid'
+import EventBus from '../../../../plugins/eventBus'
 import PublishQuestion from '@/components/Question/PublishQuestion.vue'
 import LevelForm from '@/components/Question/LevelForm.vue'
 import Category from '@/components/Question/Category.vue'
@@ -62,11 +65,9 @@ import UploadImage from '@/components/Question/UploadImage.vue'
 import AddSeo from '@/components/Question/AddSeo.vue'
 import CommentOrNote from '@/components/Question/CommentOrNote.vue'
 import CauHoiApi from '@/api/cauHoi'
-
 import AddAnswer from '@/components/Question/AddAnswer.vue'
 // eslint-disable-next-line import/no-unresolved
 import Uploader from '@/components/Uploader'
-
 export default defineComponent({
   components: {
     Header,
@@ -184,7 +185,9 @@ export default defineComponent({
         alert('Thêm câu trả lời thanh công')
       } else {
         this.listAnswers[this.indexDataUpdate] = data
-        this.listAnswers = -1
+        console.log(this.listAnswers)
+        EventBus.$emit('updateListAnswer', this.listAnswers)
+        this.indexDataUpdate = -1
         alert('Cập nhâp câu trả lời thanh công')
       }
       console.log(data)
