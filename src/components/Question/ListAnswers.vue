@@ -13,7 +13,7 @@
           v-model="isSelected"
           :aria-describedby="ariaDescribedby"
           name="some-radios"
-          :value="answer"
+          :value="answer.id"
           :aria-checked="true"
           ><div :class="$style.answerItem">
             <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
@@ -45,11 +45,11 @@
         name="flavour-2"
       >
         <div
-          v-for="(answer, index) in listAnswers"
+          v-for="(answer, index) in answers"
           :key="index"
           :class="$style.answerItem"
         >
-          <b-form-checkbox :class="$style.choose" :value="answer"
+          <b-form-checkbox :class="$style.choose" :value="answer.id"
             ><div :class="$style.answerItem">
               <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
               <p v-html="answer.answerContent"></p>
@@ -80,6 +80,7 @@ import {
   watch,
   useContext,
 } from '@nuxtjs/composition-api'
+import EventBus from '../../plugins/eventBus'
 export default defineComponent({
   props: {
     listAnswers: {
@@ -106,20 +107,28 @@ export default defineComponent({
   setup(props) {
     const { $logger } = useContext()
     const data = reactive({
-      isSelected: props.selected,
+      isSelected: '',
+      answers: props.listAnswers,
     })
     const getRightAnswer = () => {
       const index = props.listAnswers.findIndex(
         (item) => item.rightAnswer === 1
       )
-      data.isSelected = props.listAnswers[index]
+      $logger.info(props.listAnswers[index].id)
+      data.isSelected = props.listAnswers[index].id
     }
     getRightAnswer()
     watch(
       () => data.isSelected,
       () => {
+        $logger.info('data.isSelected', data.isSelected)
         const answers = props.listAnswers.map((item) => {
-          if (data.isSelected.answerContent === item.answerContent) {
+          $logger.info(
+            'data.isSelected',
+            data.isSelected?.answerContent,
+            item?.answerContent
+          )
+          if (data.isSelected === item.id) {
             item.isRightAnswer = 1
           } else {
             item.rightAnswer = 0
@@ -130,6 +139,15 @@ export default defineComponent({
         props.updateRightAnswer(answers)
       }
     )
+    // watch(
+    //   () => props.listAnswers,
+    //   () => {
+    //     const index = props.listAnswers.findIndex(
+    //       (item) => item.rightAnswer === 1
+    //     )
+    //     data.isSelected = props.listAnswers[index]
+    //   }
+    // )
     return {
       ...toRefs(data),
     }
@@ -139,10 +157,12 @@ export default defineComponent({
       console.log(this.listAnswers)
     },
   },
-  methods: {
-    hideModal() {
-      this.$refs['my-modal'].hide()
-    },
+  created() {
+    // eslint-disable-next-line no-undef
+    const that = this
+    EventBus.$on('updateListAnswer', function (data) {
+      that.answers = data
+    })
   },
 })
 </script>

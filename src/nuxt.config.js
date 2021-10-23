@@ -158,7 +158,8 @@ export default {
     { src: '@/plugins/vue2-scrollspy', ssr: false },
     { src: '@/plugins/treeselect.js', ssr: true },
     { src: "@/plugins/validators", ssr: false },
-    { src: '@/plugins/bootstrap-vue.js', ssr: true }
+    { src: '@/plugins/bootstrap-vue.js', ssr: true },
+    { src: '@/plugins/uuid.js', ssr: true },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -178,13 +179,13 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/google-gtag',
     '@nuxtjs/auth-next',
-    'bootstrap-vue/nuxt'
+    'bootstrap-vue/nuxt',
   ],
   // https://github.com/nuxt-community/google-gtag-module
   'google-gtag': {
     id: 'G-4RQGST5TRG'
   },
-
+ 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     baseURL: process.env.apiURI,
