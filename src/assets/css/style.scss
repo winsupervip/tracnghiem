@@ -1353,6 +1353,52 @@ img {
           }
         }
       }
+      .list-answered {
+        font-size: 0.875rem;
+        li {
+          margin-bottom: 0.5rem;
+          display: flex;
+          .check {
+            min-width: 20px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid $border;
+            margin-right: 10px;
+            position: relative;
+            margin-top: 2px;
+            &:before {
+              width: 18px;
+              height: 18px;
+              border-radius: 50%;
+              content: '';
+              border: 3px solid $white;
+              position: absolute;
+              top: 0;
+              left: 0;
+            }
+          }
+          &:last-child {
+            margin-bottom: 0;
+          }
+          &.true {
+            color: $green;
+            .check {
+              &:before {
+                background-color: $green;
+              }
+            }
+          }
+          &.false {
+            color: $red;
+            .check {
+              &:before {
+                background-color: $red;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -1400,6 +1446,9 @@ img {
 
 .do-exam-box {
   padding: 1rem;
+  hr {
+    margin: 0.5rem 0;
+  }
   .do-exam-timer {
     font-size: 1.5rem;
     display: flex;
@@ -1438,6 +1487,14 @@ img {
         }
         .not-answered {
           background-color: $border;
+        }
+        .true {
+          border-color: $green;
+          background-color: $green;
+        }
+        .false {
+          border-color: $red;
+          background-color: $red;
         }
       }
     }
@@ -1480,6 +1537,21 @@ img {
         border-color: $blue;
         color: $white;
       }
+      &.true {
+        border-color: $green;
+        background-color: $green;
+        color: $white;
+      }
+      &.false {
+        border-color: $red;
+        background-color: $red;
+        color: $white;
+      }
+    }
+  }
+  .filter-group {
+    .filter-group-header {
+      margin-bottom: 0.5rem;
     }
   }
 }
@@ -1509,6 +1581,56 @@ img {
         background-color: $primary;
         border-color: $primary;
       }
+    }
+  }
+}
+
+.exam-main-content {
+  .card-question {
+    min-height: 100%;
+  }
+}
+
+.exam-information-detail {
+  .exam-userinfo {
+    .exam-userinfo-inner {
+      padding-right: 1rem;
+      @media screen and (max-width: $md) {
+        padding-right: 0;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+  .exam-analytic-inner {
+    padding-left: 1rem;
+    @media screen and (max-width: $md) {
+      padding-left: 0;
+    }
+  }
+  .form-review-exam {
+    .button-submit-rating {
+      min-width: 110px;
+      margin-left: auto;
+    }
+  }
+}
+
+.list-exam-analytic {
+  .exam-analytic-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    .item-title {
+      width: 20%;
+    }
+    .item-progress {
+      width: calc(80% - 40px);
+      padding-left: 1rem;
+    }
+    .item-number {
+      width: 40px;
+      text-align: right;
     }
   }
 }

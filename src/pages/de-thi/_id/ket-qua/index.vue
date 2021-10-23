@@ -137,39 +137,41 @@
     </section>
     <section class="exam-main-container">
       <b-container>
-        <b-row>
+        <b-row class="mb-3">
           <b-col md="12" lg="4" xl="4" class="do-exam-wrapper">
             <div class="card do-exam-box">
-              <div class="text-green do-exam-timer mb-4">
-                <i class="icon-timer" />
-                <strong>01:30:00</strong>
+              <div class="do-exam-timer mb-3">
+                <strong class="text-green">70</strong>
+                <span class="ms-2 text-black font-smd">điểm</span>
               </div>
               <div class="list-type-question">
                 <ul class="list-unstyled">
-                  <li>
-                    <div class="type"></div>
-                    <span>Chưa xem</span>
+                  <li class="justify-content-center">
+                    <div class="type true"></div>
+                    <span>Trả lời đúng</span>
                   </li>
-                  <li>
-                    <div class="type tick"></div>
-                    <span>Đánh dấu</span>
-                  </li>
-                  <li>
-                    <div class="type answered"></div>
-                    <span>Đã trả lời</span>
-                  </li>
-                  <li>
-                    <div class="type not-answered"></div>
-                    <span>Chưa trả lời</span>
+                  <li class="justify-content-center">
+                    <div class="type false"></div>
+                    <span>Trả lời sai</span>
                   </li>
                 </ul>
+              </div>
+              <div class="row mb-2">
+                <div class="col col-6 text-center d-flex flex-column">
+                  <strong class="text-green font-md">70</strong>
+                  <span>câu đúng</span>
+                </div>
+                <div class="col col-6 text-center d-flex flex-column">
+                  <strong class="text-red font-md">30</strong>
+                  <span>câu sai</span>
+                </div>
               </div>
               <div class="text-gray font-sm my-2">
                 <b-icon icon="exclamation-circle" />
                 Bấm vào ô số để xem câu hỏi
               </div>
               <hr />
-              <div class="filter-group mb-2">
+              <div class="filter-group">
                 <strong
                   :class="
                     showListQuestionMenu
@@ -186,51 +188,38 @@
                   class="filter-group-body"
                 >
                   <div class="list-question-menu">
-                    <b-btn>1</b-btn>
-                    <b-btn class="tick">2</b-btn>
-                    <b-btn class="answered">3</b-btn>
-                    <b-btn>4</b-btn>
-                    <b-btn class="not-answered">5</b-btn>
-                    <b-btn>6</b-btn>
-                    <b-btn>7</b-btn>
-                    <b-btn>8</b-btn>
-                    <b-btn>9</b-btn>
-                    <b-btn>10</b-btn>
-                    <b-btn>11</b-btn>
-                    <b-btn>12</b-btn>
-                    <b-btn>13</b-btn>
-                    <b-btn>14</b-btn>
-                    <b-btn>15</b-btn>
-                    <b-btn>16</b-btn>
-                    <b-btn>17</b-btn>
-                    <b-btn>18</b-btn>
-                    <b-btn>19</b-btn>
-                    <b-btn>20</b-btn>
-                    <b-btn>21</b-btn>
-                    <b-btn>22</b-btn>
-                    <b-btn>23</b-btn>
-                    <b-btn>24</b-btn>
-                    <b-btn>25</b-btn>
-                    <b-btn>26</b-btn>
-                    <b-btn>27</b-btn>
-                    <b-btn>28</b-btn>
-                    <b-btn>29</b-btn>
-                    <b-btn>30</b-btn>
-                    <b-btn>31</b-btn>
-                    <b-btn>32</b-btn>
-                    <b-btn>33</b-btn>
-                    <b-btn>34</b-btn>
-                    <b-btn>35</b-btn>
+                    <b-btn class="true">1</b-btn>
+                    <b-btn class="true">2</b-btn>
+                    <b-btn class="false">3</b-btn>
+                    <b-btn class="true">4</b-btn>
+                    <b-btn class="false">5</b-btn>
+                    <b-btn class="false">6</b-btn>
+                    <b-btn class="true">7</b-btn>
+                    <b-btn class="true">8</b-btn>
+                    <b-btn class="true">9</b-btn>
+                    <b-btn class="true">10</b-btn>
+                    <b-btn class="true">11</b-btn>
+                    <b-btn class="true">12</b-btn>
+                    <b-btn class="true">13</b-btn>
+                    <b-btn class="true">14</b-btn>
+                    <b-btn class="true">15</b-btn>
+                    <b-btn class="true">16</b-btn>
+                    <b-btn class="true">17</b-btn>
+                    <b-btn class="true">18</b-btn>
+                    <b-btn class="true">19</b-btn>
+                    <b-btn class="true">20</b-btn>
+                    <b-btn class="true">21</b-btn>
+                    <b-btn class="false">22</b-btn>
+                    <b-btn class="true">23</b-btn>
+                    <b-btn class="true">24</b-btn>
+                    <b-btn class="true">25</b-btn>
+                    <b-btn class="true">26</b-btn>
+                    <b-btn class="true">27</b-btn>
+                    <b-btn class="true">28</b-btn>
+                    <b-btn class="true">29</b-btn>
+                    <b-btn class="true">30</b-btn>
                   </div>
                 </b-collapse>
-              </div>
-              <div class="submit-exam d-grid">
-                <b-btn
-                  variant="primary"
-                  block
-                  @click="$bvModal.show('modal-submit-exam')"
-                  >Nộp bài</b-btn
-                >
               </div>
             </div>
           </b-col>
@@ -272,35 +261,31 @@
                     <div class="answer-head">
                       <span class="font-sm text-gray">câu trả lời</span>
                     </div>
-                    <div class="list-answer">
+                    <div class="list-answered">
                       <ul class="list-unstyled p-0">
-                        <li>
-                          <b-form-radio name="anwser-radios" value="A">
-                            <b>A.</b>
-                            Deciding one’s own strategy in a game according to
-                            the strategy of the opponent
-                          </b-form-radio>
+                        <li class="true">
+                          <div class="check"></div>
+                          <b class="me-1">A.</b>
+                          Deciding one’s own strategy in a game according to the
+                          strategy of the opponent
                         </li>
-                        <li>
-                          <b-form-radio name="anwser-radios" value="B">
-                            <b>B.</b>
-                            Deciding one’s own strategy in a game according to
-                            the strategy of the opponent
-                          </b-form-radio>
+                        <li class="">
+                          <div class="check"></div>
+                          <b class="me-1">B.</b>
+                          Deciding one’s own strategy in a game according to the
+                          strategy of the opponent
                         </li>
-                        <li>
-                          <b-form-radio name="anwser-radios" value="C">
-                            <b>C.</b>
-                            Deciding one’s own strategy in a game according to
-                            the strategy of the opponent
-                          </b-form-radio>
+                        <li class="">
+                          <div class="check"></div>
+                          <b class="me-1">C.</b>
+                          Deciding one’s own strategy in a game according to the
+                          strategy of the opponent
                         </li>
-                        <li>
-                          <b-form-radio name="anwser-radios" value="A">
-                            <b>D.</b>
-                            Deciding one’s own strategy in a game according to
-                            the strategy of the opponent
-                          </b-form-radio>
+                        <li class="false">
+                          <div class="check"></div>
+                          <b class="me-1">D.</b>
+                          Deciding one’s own strategy in a game according to the
+                          strategy of the opponent
                         </li>
                       </ul>
                     </div>
@@ -320,6 +305,107 @@
             </b-card>
           </b-col>
         </b-row>
+        <div class="exam-information-detail card p-3">
+          <b-row>
+            <b-col md="12" lg="4" xl="4" class="exam-userinfo">
+              <div class="exam-userinfo-inner">
+                <h3 class="font-lmd font-bold mb-3">Thông tin lượt thi</h3>
+                <div class="mb-3">
+                  <ul class="list-unstyled p-0 m-0">
+                    <li class="d-flex justify-content-between mt-2">
+                      <span>Thí sinh:</span>
+                      <strong>Phùng Văn Việt</strong>
+                    </li>
+                    <li class="d-flex justify-content-between mt-2">
+                      <span>Thứ hạng lượt thi:</span>
+                      <strong>10</strong>
+                    </li>
+                    <li class="d-flex justify-content-between mt-2">
+                      <span>Điểm:</span>
+                      <strong>70</strong>
+                    </li>
+                    <li class="d-flex justify-content-between mt-2">
+                      <span>Ngày thi:</span>
+                      <strong>22-08-2021</strong>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </b-col>
+            <b-col md="12" lg="8" xl="8" class="exam-analytic">
+              <div class="exam-analytic-inner">
+                <h3 class="font-lmd font-bold mb-3">
+                  Phân tích kết quả làm bài
+                </h3>
+                <div>
+                  <div class="list-exam-analytic">
+                    <div class="exam-analytic-item font-smd">
+                      <strong class="item-title">Listening</strong>
+                      <div class="item-progress">
+                        <b-progress variant="success" value="54" max="100" />
+                      </div>
+                      <div class="item-number">54%</div>
+                    </div>
+                    <div class="exam-analytic-item font-smd">
+                      <strong class="item-title">Reading</strong>
+                      <div class="item-progress">
+                        <b-progress variant="success" value="25" max="100" />
+                      </div>
+                      <div class="item-number">25%</div>
+                    </div>
+                    <div class="exam-analytic-item font-smd">
+                      <strong class="item-title">Writing</strong>
+                      <div class="item-progress">
+                        <b-progress variant="success" value="15" max="100" />
+                      </div>
+                      <div class="item-number">15%</div>
+                    </div>
+                    <div class="exam-analytic-item font-smd">
+                      <strong class="item-title">Speaking</strong>
+                      <div class="item-progress">
+                        <b-progress variant="success" value="6" max="100" />
+                      </div>
+                      <div class="item-number">6%</div>
+                    </div>
+                  </div>
+                  <hr />
+                  <div class="form-review-exam">
+                    <div class="form-group mb-4">
+                      <label for="rating-input" class="font-bold mb-2"
+                        >Nhận xét</label
+                      >
+                      <b-form-textarea
+                        id="rating-input"
+                        placeholder="Nhận xét về đề thi này"
+                        rows="5"
+                        max-rows="10"
+                      ></b-form-textarea>
+                    </div>
+                    <div
+                      class="
+                        d-flex
+                        flex-wrap
+                        align-items-center
+                        justify-content-between
+                      "
+                    >
+                      <div class="d-flex mb-3">
+                        <strong class="me-3">Đánh giá:</strong>
+                        <b-form-rating
+                          v-model="ratingExam"
+                          class="custom-rating"
+                        />
+                      </div>
+                      <b-btn variant="primary" class="button-submit-rating mb-3"
+                        >Gửi</b-btn
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </b-col>
+          </b-row>
+        </div>
       </b-container>
     </section>
     <b-modal id="modal-submit-exam" class="modal-common" hide-footer centered>
@@ -346,6 +432,7 @@ export default defineComponent({
   setup() {},
   data() {
     return {
+      ratingExam: 5,
       idExam: this.$route.params.id || null,
       breadcrumbs: [
         {
