@@ -32,7 +32,7 @@ import {
   watch,
   useFetch,
 } from '@nuxtjs/composition-api'
-import CauHoiApi from '../../../../api/cauHoi'
+import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   name: 'CategoryForm',
   props: {
