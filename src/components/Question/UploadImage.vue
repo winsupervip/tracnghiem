@@ -14,11 +14,17 @@
     </div>
     <div class="p-question__box__body">
       <div class="p-question__box__body__item">
-        <p>Vui lòng sử dụng hình ảnh chất lượng cao để thu hút người dùng</p>
+        <p>
+          <b>Vui lòng sử dụng hình ảnh chất lượng cao để thu hút người dùng</b>
+        </p>
         <div class="wrapper">
           <label class="btn btn-outline-primary" @click="handleFileAvata"
-            ><b-icon icon="cloud-upload" aria-hidden="true"></b-icon> Tải
-            lên</label
+            ><b-icon
+              icon="cloud-upload"
+              aria-hidden="true"
+              class="icon"
+            ></b-icon>
+            Tải lên</label
           >
           <input
             ref="fileAvata"
@@ -29,8 +35,8 @@
           <b-button
             v-b-modal.modal-prevent-closing
             class="btn btn-outline-primary btn_transparent"
-            ><b-icon icon="link45deg" aria-hidden="true"></b-icon>Link
-            ảnh</b-button
+            ><b-icon icon="link45deg" aria-hidden="true" class="icon"></b-icon
+            >Link ảnh</b-button
           >
           <b-modal id="modal-prevent-closing" ref="modal" title="Link ảnh">
             <form ref="form">
@@ -99,10 +105,6 @@ export default {
 </script>
 
 <style lang="scss" scope>
-.container {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
 .input-avata {
   display: none;
 }
@@ -129,6 +131,27 @@ export default {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+  }
+
+  img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.icon {
+  margin-right: 5px;
+}
+
+.btn {
+  @media screen and (max-width: 374px) {
+    padding: 10px;
+  }
+
+  @media screen and (max-width: 1200px) and (min-width: 769px) {
+    padding: 10px;
   }
 }
 </style>

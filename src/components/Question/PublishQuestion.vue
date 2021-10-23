@@ -24,13 +24,15 @@
       <div class="p-question__box__body__item">
         <p><b>Chỉ bạn mới thấy được câu hỏi này.</b></p>
         <div>
-          <b-button variant="outline-primary">Lưu bản nháp</b-button><br />
+          <b-button variant="outline-primary" class="btnQuestion"
+            >Lưu bản nháp</b-button
+          ><br />
           <b-button
             variant="outline-primary"
-            class="btn-save"
+            class="btnQuestion btn-save"
             value="Lưu Câu Hỏi"
             @click="onSubmit"
-            >Lưu Câu Hỏi</b-button
+            >Lưu câu hỏi</b-button
           >
         </div>
       </div>
@@ -119,5 +121,10 @@ li {
   padding: 0;
   margin: 0.5em;
   list-style: none;
+}
+
+button {
+  width: 100%;
+  height: auto;
 }
 </style>

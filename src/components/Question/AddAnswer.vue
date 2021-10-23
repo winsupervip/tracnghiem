@@ -1,17 +1,19 @@
 <template>
   <div>
     <div :class="$style.addQuestionTitle">
-      <p>Câu Trả lời(*)</p>
-      <b-button v-b-modal.modal-1 class="btn--addAnswer"
+      <p style="font-weight: bold">Câu trả lời (*)</p>
+      <b-button v-b-modal.modal-1 class="btnQuestion" variant="outline-primary"
         >Thêm câu trả lời</b-button
       >
     </div>
     <b-modal
       id="modal-1"
+      ref="modal-question"
       size="xl"
       title="Add Answer"
       :ok-only="okOnly"
       ok-title="Đóng"
+      hide-footer
       @shown="shown"
       @hide="hide"
     >
@@ -40,11 +42,22 @@
               <p :class="$style.checkBoxTitle">Câu trả lời đúng</p>
             </div>
           </div>
-          <b-button variant="outline-primary" @click="handleAnswer">{{
-            updateValue.answerContent
-              ? 'Cập nhập câu trả lời'
-              : 'Thêm câu trả lời'
-          }}</b-button>
+          <b-button
+            class="btnQuestion"
+            variant="outline-primary"
+            @click="handleAnswer"
+            >{{
+              updateValue.answerContent
+                ? 'Cập nhập câu trả lời'
+                : 'Thêm câu trả lời'
+            }}</b-button
+          >
+          <b-button
+            class="btnQuestion btnQuestion--close"
+            variant="outline-primary"
+            @click="hideModal"
+            >Đóng</b-button
+          >
         </div>
       </div>
     </b-modal>
@@ -101,6 +114,9 @@ export default defineComponent({
       this.doShow = false
       this.updateAnswer('remove_data')
     },
+    hideModal() {
+      this.$refs['modal-question'].hide()
+    },
     handleAnswer() {
       if (this.answerContent === '') {
         alert('Câu trả lời không được bỏ trống')
@@ -143,20 +159,12 @@ export default defineComponent({
 </style>
 
 <style lang="scss" scoped>
-.btn--addAnswer {
-  border: 1px solid #051e40;
-  background: #fff;
-  color: #051e40;
-  width: 187px;
-  height: 27px;
-  font-family: 'Open Sans';
-  font-size: 13px;
-  font-weight: bold;
-  border-radius: 5px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+::v-deep .modal-body {
+  padding-bottom: 50px;
+}
 
-  &:focus {
-    box-shadow: none;
-  }
+.btnQuestion--close {
+  margin-left: 20px;
+  width: auto;
 }
 </style>

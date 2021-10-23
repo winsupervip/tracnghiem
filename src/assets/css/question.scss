@@ -44,16 +44,12 @@
 .p-question__box {
   transition: all 0.2s;
   border-radius: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 20px;
   border: 1px solid #DDDDDD;
   font-family: 'Open Sans';
 
-  // &:hover {
-  //   box-shadow: 0 4px 20px rgba(#4764C3, 0.2);
-  // }
-
-  @media screen and (max-width: $sm) {
-    margin-bottom: 20px;
+  &:hover {
+    box-shadow: 0 4px 20px rgba(#4764C3, 0.2);
   }
 
   &__heading  {
@@ -110,5 +106,26 @@
     ul {
       margin: 0 !important;
     }
+  }
+}
+
+.btnQuestion {
+  border: 1px solid #051e40;
+  background: #fff;
+  color: #051e40;
+  width: 187px;
+  height: 27px;
+  font-family: 'Open Sans';
+  font-size: 13px;
+  font-weight: bold;
+  border-radius: 5px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+  &:focus {
+    box-shadow: none;
+  }
+
+  @media screen and (max-width: $sm) {
+    filter: none;
   }
 }
