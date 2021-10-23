@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 <template>
   <div>
     <header ref="headerDashboard" class="header--dashboardTheme">

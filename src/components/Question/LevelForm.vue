@@ -78,4 +78,12 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="scss" module></style>
+<style lang="scss" scoped>
+label {
+  margin: 0.5rem;
+
+  input {
+    margin-right: 10px;
+  }
+}
+</style>

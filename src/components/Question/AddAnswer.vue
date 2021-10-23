@@ -2,7 +2,9 @@
   <div>
     <div :class="$style.addQuestionTitle">
       <p>Câu Trả lời(*)</p>
-      <b-button v-b-modal.modal-1>Thêm câu trả lời</b-button>
+      <b-button v-b-modal.modal-1 class="btn--addAnswer"
+        >Thêm câu trả lời</b-button
+      >
     </div>
     <b-modal
       id="modal-1"
@@ -137,5 +139,19 @@ export default defineComponent({
 .checkBoxTitle {
   align-self: center;
   margin: 0 auto;
+}
+</style>
+
+<style lang="scss" scoped>
+.btn--addAnswer {
+  border: 1px solid #051e40;
+  background: #fff;
+  color: #051e40;
+  width: 187px;
+  height: 27px;
+  font-family: 'Open Sans';
+  font-size: 13px;
+  border-radius: 5px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 </style>

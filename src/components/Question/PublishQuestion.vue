@@ -3,7 +3,7 @@
     <p class="border_title"><strong>Xuất bản câu hỏi (*)</strong></p>
     <!-- <ValidationProvider v-slot="{ errors }" rules="required" name="choice"> -->
     <ul class="container">
-      Hiện thị:
+      <b>Hiển thị:</b>
       <li v-for="option in listStatus" :key="option.id">
         <label
           ><input v-model="status" type="radio" :value="option.id" />{{
@@ -17,10 +17,16 @@
     }}</b-alert>
     <!-- </ValidationProvider> -->
     <p>Chỉ bạn mới thấy được câu hỏi này.</p>
-    <b-button variant="outline-primary ">Lưu Như bản nháp</b-button>
-    <b-button variant="outline-primary " value="Lưu Câu Hỏi" @click="onSubmit"
-      >Lưu Câu Hỏi</b-button
-    >
+    <div>
+      <b-button variant="outline-primary">Lưu bản nháp</b-button><br />
+      <b-button
+        variant="outline-primary"
+        class="btn-save"
+        value="Lưu Câu Hỏi"
+        @click="onSubmit"
+        >Lưu Câu Hỏi</b-button
+      >
+    </div>
   </section>
 </template>
 
@@ -34,7 +40,6 @@ import {
 } from '@nuxtjs/composition-api'
 import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
-  name: 'CategoryForm',
   props: {
     getPublishQuestion: {
       type: Function,
@@ -71,3 +76,29 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss" scoped>
+ul {
+  li {
+    margin: 0 0.5em 0.5em;
+
+    &:nth-of-type(1) {
+      margin-top: 10px;
+    }
+
+    label {
+      input {
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+button {
+  min-width: 160px;
+}
+
+.btn-save {
+  margin-top: 10px;
+}
+</style>

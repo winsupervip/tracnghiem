@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <p>Ngân Hàng câu hỏi > {{ questionType }}</p>
+      <p class="p-headerQuestion">Ngân Hàng câu hỏi > {{ questionType }}</p>
       <!-- <ValidationProvider v-slot="{ errors }" rules="required">
         <input
           v-model="title"
@@ -261,5 +261,13 @@ export default defineComponent({
 .checkBoxTitle {
   align-self: center;
   margin: 0 auto;
+}
+</style>
+
+<style lang="scss" scoped>
+.p-headerQuestion {
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Open Sans', sans-serif;
 }
 </style>

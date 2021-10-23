@@ -1,16 +1,16 @@
 <template>
   <div class="card">
-    <p class="border_title"><strong>Lời Phê/ Chú thích</strong></p>
+    <p class="border_title"><strong>Lời phê/ Chú thích</strong></p>
     <b-form-textarea
       id="textarea-default"
       v-model="explainationIfCorrect"
-      placeholder="khi trả lời đúng"
+      placeholder="Khi trả lời đúng"
       :class="$style.inputF"
     ></b-form-textarea>
     <b-form-textarea
       id="textarea-default"
       v-model="explainationIfIncorrect"
-      placeholder="khi trả lời sai"
+      placeholder="Khi trả lời sai"
       :class="$style.inputF"
     ></b-form-textarea>
   </div>
