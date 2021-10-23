@@ -26,7 +26,7 @@ import {
   useFetch,
   useContext,
 } from '@nuxtjs/composition-api'
-import CauHoiApi from '../../../../api/cauHoi'
+import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   props: {
     getCategories: {

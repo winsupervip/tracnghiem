@@ -53,17 +53,17 @@ import {
   toRefs,
   useContext,
 } from '@nuxtjs/composition-api'
-import PublishQuestion from '../components/PublishQuestion.vue'
-import LevelForm from '../components/LevelForm.vue'
-import Category from '../components/Category.vue'
-import Header from '../components/Header.vue'
-import ListAnswer from '../components/ListAnswers.vue'
-import UploadImage from '../components/UploadImage.vue'
-import AddSeo from '../components/AddSeo.vue'
-import CommentOrNote from '../components/CommentOrNote.vue'
-import CauHoiApi from '../../../../api/cauHoi'
+import PublishQuestion from '@/components/Question/PublishQuestion.vue'
+import LevelForm from '@/components/Question/LevelForm.vue'
+import Category from '@/components/Question/Category.vue'
+import Header from '@/components/Question/Header.vue'
+import ListAnswer from '@/components/Question/ListAnswers.vue'
+import UploadImage from '@/components/Question/UploadImage.vue'
+import AddSeo from '@/components/Question/AddSeo.vue'
+import CommentOrNote from '@/components/Question/CommentOrNote.vue'
+import CauHoiApi from '@/api/cauHoi'
 
-import AddAnswer from '../components/AddAnswer.vue'
+import AddAnswer from '@/components/Question/AddAnswer.vue'
 // eslint-disable-next-line import/no-unresolved
 import Uploader from '@/components/Uploader'
 
