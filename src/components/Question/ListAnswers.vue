@@ -5,7 +5,7 @@
       v-slot="{ ariaDescribedby }"
     >
       <div
-        v-for="(answer, index) in listAnswers"
+        v-for="(answer, index) in answers"
         :key="index"
         class="p-answerItem"
       >
@@ -116,8 +116,10 @@ export default defineComponent({
       const index = props.listAnswers.findIndex(
         (item) => item.rightAnswer === 1
       )
-      $logger.info(props.listAnswers[index].id)
-      data.isSelected = props.listAnswers[index].id
+      if (index !== -1) {
+        $logger.info(props.listAnswers[index].id)
+        data.isSelected = props.listAnswers[index].id
+      }
     }
     getRightAnswer()
     watch(
@@ -125,11 +127,6 @@ export default defineComponent({
       () => {
         $logger.info('data.isSelected', data.isSelected)
         const answers = props.listAnswers.map((item) => {
-          $logger.info(
-            'data.isSelected',
-            data.isSelected?.answerContent,
-            item?.answerContent
-          )
           if (data.isSelected === item.id) {
             item.isRightAnswer = 1
           } else {
