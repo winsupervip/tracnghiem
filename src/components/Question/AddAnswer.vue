@@ -151,7 +151,12 @@ export default defineComponent({
   height: 27px;
   font-family: 'Open Sans';
   font-size: 13px;
+  font-weight: bold;
   border-radius: 5px;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+  &:focus {
+    box-shadow: none;
+  }
 }
 </style>

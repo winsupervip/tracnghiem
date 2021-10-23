@@ -21,13 +21,16 @@
           </div>
         </b-form-radio>
         <div>
+          <b-button variant="outline-warning"
+            ><b-icon icon="shuffle"></b-icon
+          ></b-button>
           <b-button
             v-b-modal.modal-1
             variant="outline-warning"
             @click="updateAnswer(index)"
             ><b-icon icon="pencil-square"></b-icon
           ></b-button>
-          <b-button variant="outline-danger"
+          <b-button variant="outline-danger" @click="handleDelete(index)"
             ><b-icon icon="trash"></b-icon
           ></b-button>
         </div>
@@ -56,10 +59,13 @@
             </div>
           </b-form-checkbox>
           <div>
+            <b-button variant="outline-warning"
+              ><b-icon icon="shuffle"></b-icon
+            ></b-button>
             <b-button variant="outline-warning" @click="updateAnswer(index)"
               ><b-icon icon="pencil-square"></b-icon
             ></b-button>
-            <b-button variant="outline-danger"
+            <b-button variant="outline-danger" @click="handleDelete(index)"
               ><b-icon icon="trash"></b-icon
             ></b-button>
           </div>
@@ -102,6 +108,10 @@ export default defineComponent({
       type: Array,
       required: true,
     },
+    // handleDelete: {
+    //   type: Function,
+    //   required: true,
+    // },
   },
   setup(props) {
     const { $logger } = useContext()

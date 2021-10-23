@@ -1,0 +1,114 @@
+@import "variables";
+/**
+* Layout question
+*/
+.p-question {
+  display: flex;
+  gap: 20px;
+
+  @media screen and (max-width: $sm) {
+    flex-direction: column;
+  }
+
+  &__left {
+    width: calc(100% - 356px);
+    position: relative;
+
+    @media screen and (max-width: $lg) {
+      width: calc(100% - 300px);
+    }
+
+    @media screen and (max-width: $sm) {
+      width:100%;
+    }
+  }
+
+  &__right {
+    width: 356px;
+    margin-top: 40px;
+
+    @media screen and (max-width: $lg) {
+      width: 300px;
+    }
+
+    @media screen and (max-width: $sm) {
+      margin-top: 0;
+      width:100%;
+    }
+  }
+}
+
+/**
+* p-question__box
+*/
+.p-question__box {
+  transition: all 0.2s;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #DDDDDD;
+  font-family: 'Open Sans';
+
+  // &:hover {
+  //   box-shadow: 0 4px 20px rgba(#4764C3, 0.2);
+  // }
+
+  @media screen and (max-width: $sm) {
+    margin-bottom: 20px;
+  }
+
+  &__heading  {
+    padding: 15px;
+    margin-bottom: 0;
+    border-bottom: 1px solid #DDDDDD;
+
+    strong {
+      color: #051E40;
+      font-family: 'Open Sans';
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    // Ảnh đại diện
+    &.box--uploadImage {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  &__body {
+    &__item {
+      padding: 15px;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid #DDDDDD;
+      }
+
+      b {
+        font-weight: 600;
+      }
+
+      // Mức độ
+      &.box--level {
+        display: flex;
+        flex-direction: column;
+
+        label {
+          margin: 0 0.5rem 0.5rem;
+
+          &:last-child {
+            margin: 0 0.5rem 0;
+          }
+
+          input {
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+
+    ul {
+      margin: 0 !important;
+    }
+  }
+}

@@ -1,6 +1,6 @@
 <template>
-  <div class="layout">
-    <div class="layout_left">
+  <div class="p-question p-question--singleChoice">
+    <div class="p-question__left">
       <Header
         :question-type="questionType"
         :get-question="getQuestion"
@@ -25,7 +25,7 @@
       />
       <CommentOrNote :get-comment-or-note="getCommentOrNote" />
     </div>
-    <div class="layout_right">
+    <div class="p-question__right">
       <PublishQuestion
         :get-publish-question="getPublishQuestion"
         :errors="errors"
@@ -288,7 +288,7 @@ export default defineComponent({
   },
 })
 </script>
-<style module>
+<style lang="scss" module>
 .addQuestionTitle {
   display: flex;
   justify-content: space-between;

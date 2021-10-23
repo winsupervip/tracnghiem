@@ -1,18 +1,22 @@
 <template>
-  <div class="card">
-    <p class="border_title"><strong>Lời phê/ Chú thích</strong></p>
-    <b-form-textarea
-      id="textarea-default"
-      v-model="explainationIfCorrect"
-      placeholder="Khi trả lời đúng"
-      :class="$style.inputF"
-    ></b-form-textarea>
-    <b-form-textarea
-      id="textarea-default"
-      v-model="explainationIfIncorrect"
-      placeholder="Khi trả lời sai"
-      :class="$style.inputF"
-    ></b-form-textarea>
+  <div class="card p-question__box">
+    <p class="p-question__box__heading"><strong>Lời phê/ Chú thích</strong></p>
+    <div class="p-question__box__body">
+      <div class="p-question__box__body__item">
+        <b-form-textarea
+          id="textarea-default"
+          v-model="explainationIfCorrect"
+          placeholder="Khi trả lời đúng"
+          :class="$style.inputF"
+        ></b-form-textarea>
+        <b-form-textarea
+          id="textarea-default"
+          v-model="explainationIfIncorrect"
+          placeholder="Khi trả lời sai"
+          :class="$style.inputF"
+        ></b-form-textarea>
+      </div>
+    </div>
   </div>
 </template>
 

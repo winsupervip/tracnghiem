@@ -136,8 +136,14 @@ export default {
     '@/assets/css/custom-bootstrap.scss',
     '@/assets/css/style.scss',
     '@/assets/css/dashboard.scss',
-    '@/assets/css/user-hoang.scss'
+    '@/assets/css/question.scss'
   ],
+
+  styleResources: {
+    scss: [
+      '@/assets/scss/foundation/_mixins.scss',
+    ]
+  },
 
   render: {
     etag: {
@@ -157,7 +163,7 @@ export default {
     { src: '@/plugins/filters.js', ssr: true },
     { src: '@/plugins/vue2-scrollspy', ssr: false },
     { src: '@/plugins/treeselect.js', ssr: true },
-    { src: "@/plugins/validators", ssr: false },
+    { src: '@/plugins/validators', ssr: false },
     { src: '@/plugins/bootstrap-vue.js', ssr: true }
   ],
 
