@@ -4,11 +4,7 @@
       v-if="typeQuestion === 'single-choice' || 'right-wrong'"
       v-slot="{ ariaDescribedby }"
     >
-      <div
-        v-for="(answer, index) in answers"
-        :key="index"
-        class="p-answerItem"
-      >
+      <div v-for="(answer, index) in answers" :key="index" class="p-answerItem">
         <b-form-radio
           v-model="isSelected"
           :aria-describedby="ariaDescribedby"

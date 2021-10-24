@@ -18,7 +18,6 @@
       @hide="hide"
     >
       <div>
-        zz {{ indexAnswerUpdate }}
         <vue2-tinymce-editor
           v-if="doShow"
           v-model="answerContent"
