@@ -159,8 +159,8 @@ export default defineComponent({
   created() {
     // eslint-disable-next-line no-undef
     const that = this
-    EventBus.$on('updateListAnswer', function (data) {
-      that.answers = data
+    EventBus.$on('updateListAnswer', function (item) {
+      that.$emit('updateListAnswer', item)
     })
   },
 })
