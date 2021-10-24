@@ -191,7 +191,7 @@ export default {
   'google-gtag': {
     id: 'G-4RQGST5TRG'
   },
-
+ 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     baseURL: process.env.apiURI,
