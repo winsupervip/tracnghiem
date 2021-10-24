@@ -111,6 +111,10 @@ export default defineComponent({
       this.answerContent = this.updateValue?.answerContent
         ? this.updateValue.answerContent
         : ''
+      // eslint-disable-next-line no-unneeded-ternary
+      this.isRightAnswer = this.updateValue.rightAnswer === 1 ? true : false
+      // eslint-disable-next-line no-unneeded-ternary
+      this.isRandom = this.updateValue.random ? true : false
     },
   },
   methods: {
@@ -140,7 +144,9 @@ export default defineComponent({
       this.answerContent = ''
       if (this.updateValue.answerContent) {
         data.index = this.indexAnswerUpdate
+        console.log('a')
         EventBus.$emit('updateListAnswer', data)
+        console.log('b')
       } else {
         this.$emit('add', data)
       }

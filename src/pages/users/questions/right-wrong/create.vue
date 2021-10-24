@@ -1,5 +1,5 @@
 <template>
-  <div class="p-question">
+  <div class="p-question p-question--singleChoice">
     <div class="p-question__left">
       <Header
         :question-type="questionType"
@@ -7,21 +7,21 @@
         :get-tags="getTags"
         :get-title="getTitle"
         :errors="errors"
-        :add-or-update-answer="addOrUpdateAnswer"
       />
       <AddAnswer
         :update-value="updateValue"
         :errors="errors"
         :update-answer="updateAnswer"
-        @add="addOrUpdateAnswer"
+        :index-answer-update="indexDataUpdate"
+        @add="addListAnswer"
       />
       <ListAnswer
         :list-answers="listAnswers"
         type-question="single-choice"
-        :selected="selected"
         :update-answer="updateAnswer"
         :update-right-answer="updateRightAnswer"
         :errors="errors"
+        @updateListAnswer="updateListAnswer"
       />
       <CommentOrNote :get-comment-or-note="getCommentOrNote" />
     </div>
@@ -53,8 +53,10 @@ import {
   toRefs,
   useContext,
 } from '@nuxtjs/composition-api'
+// import _ from 'lodash'
+// eslint-disable-next-line no-unused-vars
 import { uuid } from 'vue-uuid'
-import EventBus from '../../../../plugins/eventBus'
+// import EventBus from '../../../../plugins/eventBus'
 import PublishQuestion from '@/components/Question/PublishQuestion.vue'
 import LevelForm from '@/components/Question/LevelForm.vue'
 import Category from '@/components/Question/Category.vue'
@@ -133,12 +135,12 @@ export default defineComponent({
       seoDescription: '',
       explainationIfCorrect: '',
       explainationIfInCorrect: '',
-      selected: {},
       tags: [],
       title: '',
       modalShow: false,
       updateValue: {},
       errors: [],
+      position: 0,
     })
     const getQuestion = (value) => {
       data.questionContent = value
@@ -188,36 +190,38 @@ export default defineComponent({
         this.updateValue = {}
         this.indexDataUpdate = -1
       } else {
-        this.updateValue = this.listAnswers[value]
-        this.indexDataUpdate = value
+        this.indexDataUpdate = this.listAnswers.findIndex(
+          (item) => item.id === value
+        )
+        this.updateValue = this.listAnswers[this.indexDataUpdate]
       }
     },
     updateRightAnswer(value) {
       this.listAnswers = value
     },
-    addOrUpdateAnswer(data) {
-      if (this.indexDataUpdate === -1) {
-        const value = {
-          answerContent: data.answerContent,
-          random: data.isRandom,
-          rightAnswer: data.isRightAnswer,
-          hashId: '',
-          position: 0,
-          plainText: data.answerContent,
-        }
-        this.listAnswers.push(value)
-        if (data.isRightAnswer) {
-          this.selected = value
-        }
-        alert('Thêm câu trả lời thanh công')
-      } else {
-        this.listAnswers[this.indexDataUpdate] = data
-        console.log(this.listAnswers)
-        EventBus.$emit('updateListAnswer', this.listAnswers)
-        this.indexDataUpdate = -1
-        alert('Cập nhâp câu trả lời thanh công')
+    addListAnswer(data) {
+      const value = {
+        answerContent: data.answerContent,
+        random: data.isRandom,
+        rightAnswer: data.isRightAnswer,
+        hashId: '',
+        position: 0,
+        plainText: data.answerContent,
+        id: data.id,
       }
-      console.log(data)
+      this.listAnswers.push(value)
+      alert('Thêm câu trả lời thanh công')
+      console.log(this.listAnswers)
+    },
+    updateListAnswer(item) {
+      console.log(3)
+      const answer = this.listAnswers[item.index]
+      answer.answerContent = item.answerContent
+      answer.random = item.isRandom
+      answer.plainText = item.answerContent
+      answer.rightAnswer = item.isRightAnswer
+      console.log(4)
+      alert('Cập nhâp câu trả lời thanh công nhé')
     },
     isValid(data) {
       // 0
@@ -319,7 +323,7 @@ export default defineComponent({
   },
 })
 </script>
-<style module>
+<style lang="scss" module>
 .addQuestionTitle {
   display: flex;
   justify-content: space-between;

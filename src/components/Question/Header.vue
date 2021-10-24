@@ -125,10 +125,6 @@ export default defineComponent({
       type: Function,
       required: true,
     },
-    addOrUpdateAnswer: {
-      type: Function,
-      required: true,
-    },
     getTags: {
       type: Function,
       required: true,
@@ -149,7 +145,6 @@ export default defineComponent({
         entity_encoding: 'raw',
       },
       questionContent: '',
-      answerContent: '',
       isRightAnswer: false,
       isRandom: false,
       isUpdate: -1,
@@ -207,21 +202,6 @@ export default defineComponent({
     },
     hide() {
       this.doShow = false
-    },
-    handleAnswer() {
-      if (this.answerContent === '') {
-        alert('Câu trả lời không được bỏ trống')
-        return 0
-      }
-      const data = {
-        isRightAnswer: this.isRightAnswer ? 1 : 0,
-        isRandom: this.isRandom,
-        answerContent: this.answerContent,
-      }
-      this.isRightAnswer = false
-      this.isRandom = false
-      this.answerContent = ''
-      this.addOrUpdateAnswer(data)
     },
     onOptionClick({ option, addTag }) {
       if (this.value.length >= 5) {

@@ -1,7 +1,7 @@
 <template>
   <div class="answersList">
     <b-form-group
-      v-if="typeQuestion === 'single-choice' || 'right-wrong'"
+      v-if="typeQuestion === 'single-choice' || typeQuestion === 'right-wrong'"
       v-slot="{ ariaDescribedby }"
     >
       <div v-for="(answer, index) in answers" :key="index" class="p-answerItem">
@@ -24,9 +24,10 @@
           <b-icon
             v-b-modal.modal-1
             icon="pencil-square"
-            @click="updateAnswer(index)"
+            @click="updateAnswer(answer.id)"
           ></b-icon>
-          <b-icon icon="trash" @click="handleDelete(index)"></b-icon>
+          <!-- <b-icon icon="trash" @click="handleDelete(index)"></b-icon> -->
+          <b-icon icon="trash"></b-icon>
         </div>
       </div>
     </b-form-group>
@@ -46,20 +47,26 @@
           :key="index"
           class="p-answerItem"
         >
-          <b-form-checkbox :class="$style.choose" :value="answer.id"
-            ><div :class="$style.answerItem">
+          <b-form-checkbox :value="answer.id"
+            ><div class="p-answerItem">
               <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
               <p v-html="answer.answerContent"></p>
             </div>
           </b-form-checkbox>
           <div class="p-answerItem__func">
             <b-icon icon="shuffle"></b-icon>
-            <b-icon icon="pencil-square" @click="updateAnswer(index)"></b-icon>
-            <b-icon icon="trash" @click="handleDelete(index)"></b-icon>
+            <b-icon
+              v-b-modal.modal-1
+              icon="pencil-square"
+              @click="updateAnswer(answer.id)"
+            ></b-icon>
+            <!-- <b-icon icon="trash" @click="handleDelete(index)"></b-icon> -->
+            <b-icon icon="trash"></b-icon>
           </div>
         </div>
       </b-form-checkbox-group>
     </b-form-group>
+
     <b-alert v-if="errors[5]" id="error" show variant="warning">{{
       errors[5]
     }}</b-alert>
@@ -105,15 +112,17 @@ export default defineComponent({
   setup(props) {
     const { $logger } = useContext()
     const data = reactive({
-      isSelected: '',
+      isSelected: [],
       answers: props.listAnswers,
     })
+    // hàm ni chạy cho câu hỏi đúng sai chỉ chạy 1 lần
     const getRightAnswer = () => {
+      $logger.info('get')
       const index = props.listAnswers.findIndex(
         (item) => item.rightAnswer === 1
       )
       if (index !== -1) {
-        $logger.info(props.listAnswers[index].id)
+        $logger.info('watch', props.listAnswers[index].id)
         data.isSelected = props.listAnswers[index].id
       }
     }
@@ -124,7 +133,7 @@ export default defineComponent({
         $logger.info('data.isSelected', data.isSelected)
         const answers = props.listAnswers.map((item) => {
           if (data.isSelected === item.id) {
-            item.isRightAnswer = 1
+            item.rightAnswer = 1
           } else {
             item.rightAnswer = 0
           }
@@ -134,29 +143,28 @@ export default defineComponent({
         props.updateRightAnswer(answers)
       }
     )
-    // watch(
-    //   () => props.listAnswers,
-    //   () => {
-    //     const index = props.listAnswers.findIndex(
-    //       (item) => item.rightAnswer === 1
-    //     )
-    //     data.isSelected = props.listAnswers[index]
-    //   }
-    // )
     return {
       ...toRefs(data),
     }
   },
   watch: {
     listAnswers() {
-      console.log(this.listAnswers)
+      console.log('listAnswer')
+      const index = this.listAnswers.findIndex((item) => item.rightAnswer === 1)
+      if (index !== -1) {
+        console.log('listAnswer 2')
+        this.isSelected = this.listAnswers[index].id
+      }
+      this.answers = this.listAnswers
     },
   },
   created() {
     // eslint-disable-next-line no-undef
     const that = this
     EventBus.$on('updateListAnswer', function (item) {
+      console.log(1)
       that.$emit('updateListAnswer', item)
+      console.log(2)
     })
   },
 })
