@@ -65,13 +65,16 @@
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
+import { uuid } from 'vue-uuid'
+import EventBus from '@/plugins/eventBus'
+
 export default defineComponent({
   name: 'Header',
   props: {
-    addOrUpdateAnswer: {
-      type: Function,
-      required: true,
-    },
+    // addOrUpdateAnswer: {
+    //   type: Function,
+    //   required: true,
+    // },
     updateValue: {
       type: Object,
       required: true,
@@ -79,6 +82,10 @@ export default defineComponent({
     updateAnswer: {
       type: Function,
       required: true,
+    },
+    indexAnswerUpdate: {
+      type: Number,
+      default: -1,
     },
   },
   setup(props) {
@@ -104,6 +111,10 @@ export default defineComponent({
       this.answerContent = this.updateValue?.answerContent
         ? this.updateValue.answerContent
         : ''
+      // eslint-disable-next-line no-unneeded-ternary
+      this.isRightAnswer = this.updateValue.rightAnswer === 1 ? true : false
+      // eslint-disable-next-line no-unneeded-ternary
+      this.isRandom = this.updateValue.random ? true : false
     },
   },
   methods: {
@@ -123,6 +134,7 @@ export default defineComponent({
         return 0
       }
       const data = {
+        id: uuid.v4(),
         isRightAnswer: this.isRightAnswer ? 1 : 0,
         isRandom: this.isRandom,
         answerContent: this.answerContent,
@@ -130,7 +142,14 @@ export default defineComponent({
       this.isRightAnswer = false
       this.isRandom = false
       this.answerContent = ''
-      this.addOrUpdateAnswer(data)
+      if (this.updateValue.answerContent) {
+        data.index = this.indexAnswerUpdate
+        console.log('a')
+        EventBus.$emit('updateListAnswer', data)
+        console.log('b')
+      } else {
+        this.$emit('add', data)
+      }
     },
   },
 })

@@ -1,19 +1,15 @@
 <template>
   <div class="answersList">
     <b-form-group
-      v-if="typeQuestion === 'single-choice' || 'right-wrong'"
+      v-if="typeQuestion === 'single-choice' || typeQuestion === 'right-wrong'"
       v-slot="{ ariaDescribedby }"
     >
-      <div
-        v-for="(answer, index) in listAnswers"
-        :key="index"
-        class="p-answerItem"
-      >
+      <div v-for="(answer, index) in answers" :key="index" class="p-answerItem">
         <b-form-radio
           v-model="isSelected"
           :aria-describedby="ariaDescribedby"
           name="some-radios"
-          :value="answer"
+          :value="answer.id"
           :aria-checked="true"
           ><div class="p-answerItem">
             <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
@@ -28,9 +24,10 @@
           <b-icon
             v-b-modal.modal-1
             icon="pencil-square"
-            @click="updateAnswer(index)"
+            @click="updateAnswer(answer.id)"
           ></b-icon>
-          <b-icon icon="trash" @click="handleDelete(index)"></b-icon>
+          <!-- <b-icon icon="trash" @click="handleDelete(index)"></b-icon> -->
+          <b-icon icon="trash"></b-icon>
         </div>
       </div>
     </b-form-group>
@@ -46,27 +43,30 @@
         name="flavour-2"
       >
         <div
-          v-for="(answer, index) in listAnswers"
+          v-for="(answer, index) in answers"
           :key="index"
           class="p-answerItem"
         >
-          <b-form-checkbox class="choose" :value="answer"
+          <b-form-checkbox :value="answer.id"
             ><div class="p-answerItem">
-              <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
-              <div
-                class="p-answerItem__content"
-                v-html="answer.answerContent"
-              ></div>
+              <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
+              <p v-html="answer.answerContent"></p>
             </div>
           </b-form-checkbox>
           <div class="p-answerItem__func">
             <b-icon icon="shuffle"></b-icon>
-            <b-icon icon="pencil-square" @click="updateAnswer(index)"></b-icon>
-            <b-icon icon="trash" @click="handleDelete(index)"></b-icon>
+            <b-icon
+              v-b-modal.modal-1
+              icon="pencil-square"
+              @click="updateAnswer(answer.id)"
+            ></b-icon>
+            <!-- <b-icon icon="trash" @click="handleDelete(index)"></b-icon> -->
+            <b-icon icon="trash"></b-icon>
           </div>
         </div>
       </b-form-checkbox-group>
     </b-form-group>
+
     <b-alert v-if="errors[5]" id="error" show variant="warning">{{
       errors[5]
     }}</b-alert>
@@ -81,6 +81,7 @@ import {
   watch,
   useContext,
 } from '@nuxtjs/composition-api'
+import EventBus from '../../plugins/eventBus'
 export default defineComponent({
   props: {
     listAnswers: {
@@ -111,21 +112,28 @@ export default defineComponent({
   setup(props) {
     const { $logger } = useContext()
     const data = reactive({
-      isSelected: props.selected,
+      isSelected: [],
+      answers: props.listAnswers,
     })
+    // hàm ni chạy cho câu hỏi đúng sai chỉ chạy 1 lần
     const getRightAnswer = () => {
+      $logger.info('get')
       const index = props.listAnswers.findIndex(
         (item) => item.rightAnswer === 1
       )
-      data.isSelected = props.listAnswers[index]
+      if (index !== -1) {
+        $logger.info('watch', props.listAnswers[index].id)
+        data.isSelected = props.listAnswers[index].id
+      }
     }
     getRightAnswer()
     watch(
       () => data.isSelected,
       () => {
+        $logger.info('data.isSelected', data.isSelected)
         const answers = props.listAnswers.map((item) => {
-          if (data.isSelected.answerContent === item.answerContent) {
-            item.isRightAnswer = 1
+          if (data.isSelected === item.id) {
+            item.rightAnswer = 1
           } else {
             item.rightAnswer = 0
           }
@@ -141,13 +149,23 @@ export default defineComponent({
   },
   watch: {
     listAnswers() {
-      console.log(this.listAnswers)
+      console.log('listAnswer')
+      const index = this.listAnswers.findIndex((item) => item.rightAnswer === 1)
+      if (index !== -1) {
+        console.log('listAnswer 2')
+        this.isSelected = this.listAnswers[index].id
+      }
+      this.answers = this.listAnswers
     },
   },
-  methods: {
-    hideModal() {
-      this.$refs['my-modal'].hide()
-    },
+  created() {
+    // eslint-disable-next-line no-undef
+    const that = this
+    EventBus.$on('updateListAnswer', function (item) {
+      console.log(1)
+      that.$emit('updateListAnswer', item)
+      console.log(2)
+    })
   },
 })
 </script>

@@ -1,27 +1,27 @@
 <template>
-  <div class="p-question">
+  <div class="p-question p-question--singleChoice">
     <div class="p-question__left">
       <Header
         :question-type="questionType"
         :get-question="getQuestion"
-        :add-or-update-answer="addOrUpdateAnswer"
         :get-tags="getTags"
         :get-title="getTitle"
         :errors="errors"
       />
       <AddAnswer
-        :add-or-update-answer="addOrUpdateAnswer"
         :update-value="updateValue"
         :errors="errors"
         :update-answer="updateAnswer"
+        :index-answer-update="indexDataUpdate"
+        @add="addListAnswer"
       />
       <ListAnswer
         :list-answers="listAnswers"
         type-question="single-choice"
-        :selected="selected"
         :update-answer="updateAnswer"
         :update-right-answer="updateRightAnswer"
         :errors="errors"
+        @updateListAnswer="updateListAnswer"
       />
       <CommentOrNote :get-comment-or-note="getCommentOrNote" />
     </div>
@@ -53,6 +53,10 @@ import {
   toRefs,
   useContext,
 } from '@nuxtjs/composition-api'
+// import _ from 'lodash'
+// eslint-disable-next-line no-unused-vars
+import { uuid } from 'vue-uuid'
+// import EventBus from '../../../../plugins/eventBus'
 import PublishQuestion from '@/components/Question/PublishQuestion.vue'
 import LevelForm from '@/components/Question/LevelForm.vue'
 import Category from '@/components/Question/Category.vue'
@@ -62,11 +66,9 @@ import UploadImage from '@/components/Question/UploadImage.vue'
 import AddSeo from '@/components/Question/AddSeo.vue'
 import CommentOrNote from '@/components/Question/CommentOrNote.vue'
 import CauHoiApi from '@/api/cauHoi'
-
 import AddAnswer from '@/components/Question/AddAnswer.vue'
 // eslint-disable-next-line import/no-unresolved
 import Uploader from '@/components/Uploader'
-
 export default defineComponent({
   components: {
     Header,
@@ -96,6 +98,7 @@ export default defineComponent({
       isRandom: false,
       listAnswers: [
         {
+          id: uuid.v4(),
           hashId: '',
           answerContent: 'Đúng',
           rightAnswer: 1,
@@ -104,6 +107,7 @@ export default defineComponent({
           plainText: 'Đúng',
         },
         {
+          id: uuid.v4(),
           hashId: '',
           answerContent: 'Sai',
           rightAnswer: 0,
@@ -112,6 +116,7 @@ export default defineComponent({
           plainText: 'Sai',
         },
         {
+          id: uuid.v4(),
           hashId: '',
           answerContent: 'Không có đáp án',
           rightAnswer: 0,
@@ -130,12 +135,12 @@ export default defineComponent({
       seoDescription: '',
       explainationIfCorrect: '',
       explainationIfInCorrect: '',
-      selected: {},
       tags: [],
       title: '',
       modalShow: false,
       updateValue: {},
       errors: [],
+      position: 0,
     })
     const getQuestion = (value) => {
       data.questionContent = value
@@ -185,70 +190,73 @@ export default defineComponent({
         this.updateValue = {}
         this.indexDataUpdate = -1
       } else {
-        this.updateValue = this.listAnswers[value]
-        this.indexDataUpdate = value
+        this.indexDataUpdate = this.listAnswers.findIndex(
+          (item) => item.id === value
+        )
+        this.updateValue = this.listAnswers[this.indexDataUpdate]
       }
     },
     updateRightAnswer(value) {
       this.listAnswers = value
     },
-    addOrUpdateAnswer(data) {
-      if (this.indexDataUpdate === -1) {
-        const value = {
-          answerContent: data.answerContent,
-          random: data.isRandom,
-          rightAnswer: data.isRightAnswer,
-          hashId: '',
-          position: 0,
-          plainText: data.answerContent,
-        }
-        this.listAnswers.push(value)
-        if (data.isRightAnswer) {
-          this.selected = value
-        }
-        alert('Thêm câu trả lời thanh công')
-      } else {
-        this.listAnswers[this.indexDataUpdate] = data
-        console.log(this.listAnswers)
-        this.indexDataUpdate = -1
-        alert('Cập nhâp câu trả lời thanh công')
+    addListAnswer(data) {
+      const value = {
+        answerContent: data.answerContent,
+        random: data.isRandom,
+        rightAnswer: data.isRightAnswer,
+        hashId: '',
+        position: 0,
+        plainText: data.answerContent,
+        id: data.id,
       }
-      console.log(data)
+      this.listAnswers.push(value)
+      alert('Thêm câu trả lời thanh công')
+      console.log(this.listAnswers)
+    },
+    updateListAnswer(item) {
+      console.log(3)
+      const answer = this.listAnswers[item.index]
+      answer.answerContent = item.answerContent
+      answer.random = item.isRandom
+      answer.plainText = item.answerContent
+      answer.rightAnswer = item.isRightAnswer
+      console.log(4)
+      alert('Cập nhâp câu trả lời thanh công nhé')
     },
     isValid(data) {
       // 0
       this.errors = []
       let valid = true
       if (data.question.title === '') {
-        this.errors.push('Tiêu Đề Là Bắt Buột')
+        this.errors.push('Tiêu đề là bắt buộc')
         valid = false
       } else {
         this.errors.push(false)
       }
       // 1
       if (data.question.questionContent === '') {
-        this.errors.push('Bạn Phải Nhập Vào Nội dung câu hỏi')
+        this.errors.push('Bạn phải nhập vào nội dung câu hỏi')
         valid = false
       } else {
         this.errors.push(false)
       }
       // 2
       if (data.question.tags.length === 0) {
-        this.errors.push('Bạn Phải Gán 1 Tag cho câu hỏi')
+        this.errors.push('Bạn phải gán ít nhất 1 tag cho câu hỏi')
         valid = false
       } else {
         this.errors.push(false)
       }
       // 3
       if (!data.question.levelId) {
-        this.errors.push('Bạn Phải chọn level cho câu hỏi')
+        this.errors.push('Bạn phải chọn level cho câu hỏi')
         valid = false
       } else {
         this.errors.push(false)
       }
       // 4
       if (data.question.categories.length === 0) {
-        this.errors.push('Bạn Phải chọn 1 danh mục cho câu hỏi')
+        this.errors.push('Bạn phải chọn 1 danh mục cho câu hỏi')
         valid = false
       } else {
         this.errors.push(false)
@@ -307,7 +315,7 @@ export default defineComponent({
             alert('Thêm Thành Công')
           },
           () => {
-            alert('Có lỗi sảy ra')
+            alert('Có lỗi xảy ra')
           }
         )
       }
@@ -315,7 +323,7 @@ export default defineComponent({
   },
 })
 </script>
-<style module>
+<style lang="scss" module>
 .addQuestionTitle {
   display: flex;
   justify-content: space-between;
