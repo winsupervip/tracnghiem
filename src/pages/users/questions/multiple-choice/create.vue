@@ -197,35 +197,35 @@ export default defineComponent({
       this.errors = []
       let valid = true
       if (data.question.title === '') {
-        this.errors.push('Tiêu Đề Là Bắt Buột')
+        this.errors.push('Tiêu đề là bắt buộc')
         valid = false
       } else {
         this.errors.push(false)
       }
       // 1
       if (data.question.questionContent === '') {
-        this.errors.push('Bạn Phải Nhập Vào Nội dung câu hỏi')
+        this.errors.push('Bạn phải nhập vào nội dung câu hỏi')
         valid = false
       } else {
         this.errors.push(false)
       }
       // 2
       if (data.question.tags.length === 0) {
-        this.errors.push('Bạn Phải Gán 1 Tag cho câu hỏi')
+        this.errors.push('Bạn phải gán ít nhất 1 tag cho câu hỏi')
         valid = false
       } else {
         this.errors.push(false)
       }
       // 3
       if (!data.question.levelId) {
-        this.errors.push('Bạn Phải chọn level cho câu hỏi')
+        this.errors.push('Bạn phải chọn level cho câu hỏi')
         valid = false
       } else {
         this.errors.push(false)
       }
       // 4
       if (data.question.categories.length === 0) {
-        this.errors.push('Bạn Phải chọn 1 danh mục cho câu hỏi')
+        this.errors.push('Bạn phải chọn 1 danh mục cho câu hỏi')
         valid = false
       } else {
         this.errors.push(false)
@@ -281,10 +281,10 @@ export default defineComponent({
         CauHoiApi.createQuestion(
           data,
           () => {
-            alert('Thêm Thành Công')
+            alert('Thêm thành công')
           },
           () => {
-            alert('Có lỗi sảy ra')
+            alert('Có lỗi xảy ra')
           }
         )
       }
