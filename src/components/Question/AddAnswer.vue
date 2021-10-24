@@ -1,15 +1,19 @@
 <template>
   <div>
     <div :class="$style.addQuestionTitle">
-      <p>Câu Trả lời(*)</p>
-      <b-button v-b-modal.modal-1>Thêm câu trả lời</b-button>
+      <p style="font-weight: bold">Câu trả lời (*)</p>
+      <b-button v-b-modal.modal-1 class="btnQuestion" variant="outline-primary"
+        >Thêm câu trả lời</b-button
+      >
     </div>
     <b-modal
       id="modal-1"
+      ref="modal-question"
       size="xl"
       title="Add Answer"
       :ok-only="okOnly"
       ok-title="Đóng"
+      hide-footer
       @shown="shown"
       @hide="hide"
     >
@@ -38,11 +42,22 @@
               <p :class="$style.checkBoxTitle">Câu trả lời đúng</p>
             </div>
           </div>
-          <b-button variant="outline-primary" @click="handleAnswer">{{
-            updateValue.answerContent
-              ? 'Cập nhập câu trả lời'
-              : 'Thêm câu trả lời'
-          }}</b-button>
+          <b-button
+            class="btnQuestion"
+            variant="outline-primary"
+            @click="handleAnswer"
+            >{{
+              updateValue.answerContent
+                ? 'Cập nhập câu trả lời'
+                : 'Thêm câu trả lời'
+            }}</b-button
+          >
+          <b-button
+            class="btnQuestion btnQuestion--close"
+            variant="outline-primary"
+            @click="hideModal"
+            >Đóng</b-button
+          >
         </div>
       </div>
     </b-modal>
@@ -99,6 +114,9 @@ export default defineComponent({
       this.doShow = false
       this.updateAnswer('remove_data')
     },
+    hideModal() {
+      this.$refs['modal-question'].hide()
+    },
     handleAnswer() {
       if (this.answerContent === '') {
         alert('Câu trả lời không được bỏ trống')
@@ -137,5 +155,16 @@ export default defineComponent({
 .checkBoxTitle {
   align-self: center;
   margin: 0 auto;
+}
+</style>
+
+<style lang="scss" scoped>
+::v-deep .modal-body {
+  padding-bottom: 50px;
+}
+
+.btnQuestion--close {
+  margin-left: 20px;
+  width: auto;
 }
 </style>

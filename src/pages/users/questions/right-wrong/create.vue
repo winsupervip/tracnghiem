@@ -1,6 +1,6 @@
 <template>
-  <div class="layout">
-    <div class="layout_left">
+  <div class="p-question">
+    <div class="p-question__left">
       <Header
         :question-type="questionType"
         :get-question="getQuestion"
@@ -25,7 +25,7 @@
       />
       <CommentOrNote :get-comment-or-note="getCommentOrNote" />
     </div>
-    <div class="layout_right">
+    <div class="p-question__right">
       <PublishQuestion
         :get-publish-question="getPublishQuestion"
         :errors="errors"

@@ -1,0 +1,34 @@
+/**
+ * mixin
+ */
+
+//--------------------------------------------------
+//  breakpoints
+//--------------------------------------------------
+$mq-max-breakpoints: (
+  'xs': 359px,
+  'sm': 767px,
+  'md': 991px,
+  'xm': 1024px,
+  'lg': 1365px
+);
+
+$mq-min-breakpoints: (
+  'xs': 360px,
+  'sm': 768px,
+  'md': 992px,
+  'xm': 1025px,
+  'lg': 1366px
+);
+
+@mixin mq-max($breakpoint) {
+  @media(max-width: #{ map-get($mq-max-breakpoints, $breakpoint) }) {
+    @content;
+  }
+}
+
+@mixin mq-min($breakpoint) {
+  @media(min-width: #{ map-get($mq-min-breakpoints, $breakpoint) }) {
+    @content;
+  }
+}

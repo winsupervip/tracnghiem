@@ -1,50 +1,58 @@
 <template>
-  <div class="rightCardForAddQuestion">
-    <div>
-      <div class="wrapper">
-        <p class="border_title1"><strong> Ảnh đại diện</strong></p>
-        <b-icon icon="trash" aria-hidden="true" @click="removeImage"></b-icon>
-      </div>
-      <div class="wrapper-img">
-        <b-icon
-          class="wrapper-icon"
-          icon="card-image"
-          aria-hidden="true"
-        ></b-icon>
-        <img :src="image" class="card" />
-      </div>
-      <p>Vui lòng sử dụng hình ảnh chất lượng cao để thu hút người dùng</p>
-      <div class="wrapper">
-        <label class="btn btn-outline-primary" @click="handleFileAvata"
-          ><b-icon icon="cloud-upload" aria-hidden="true"></b-icon> Tải
-          lên</label
-        >
-        <input
-          ref="fileAvata"
-          class="input-avata"
-          type="file"
-          @change="onFileChange"
-        />
-        <b-button
-          v-b-modal.modal-prevent-closing
-          class="btn btn-outline-primary btn_transparent"
-          ><b-icon icon="link45deg" aria-hidden="true"></b-icon>Link
-          ảnh</b-button
-        >
-        <b-modal id="modal-prevent-closing" ref="modal" title="Link ảnh">
-          <form ref="form">
-            <b-form-group
-              label-for="name-input"
-              invalid-feedback="Name is required"
-            >
-              <b-form-input
-                id="name-input"
-                v-model="image"
-                required
-              ></b-form-input>
-            </b-form-group>
-          </form>
-        </b-modal>
+  <div class="p-question__box">
+    <div class="p-question__box__heading box--uploadImage">
+      <strong> Ảnh đại diện</strong>
+      <b-icon icon="trash" aria-hidden="true" @click="removeImage"></b-icon>
+    </div>
+    <div class="wrapper-img">
+      <b-icon
+        class="wrapper-icon"
+        icon="card-image"
+        aria-hidden="true"
+      ></b-icon>
+      <img :src="image" class="card" />
+    </div>
+    <div class="p-question__box__body">
+      <div class="p-question__box__body__item">
+        <p>
+          <b>Vui lòng sử dụng hình ảnh chất lượng cao để thu hút người dùng</b>
+        </p>
+        <div class="wrapper">
+          <label class="btn btn-outline-primary" @click="handleFileAvata"
+            ><b-icon
+              icon="cloud-upload"
+              aria-hidden="true"
+              class="icon"
+            ></b-icon>
+            Tải lên</label
+          >
+          <input
+            ref="fileAvata"
+            class="input-avata"
+            type="file"
+            @change="onFileChange"
+          />
+          <b-button
+            v-b-modal.modal-prevent-closing
+            class="btn btn-outline-primary btn_transparent"
+            ><b-icon icon="link45deg" aria-hidden="true" class="icon"></b-icon
+            >Link ảnh</b-button
+          >
+          <b-modal id="modal-prevent-closing" ref="modal" title="Link ảnh">
+            <form ref="form">
+              <b-form-group
+                label-for="name-input"
+                invalid-feedback="Name is required"
+              >
+                <b-form-input
+                  id="name-input"
+                  v-model="image"
+                  required
+                ></b-form-input>
+              </b-form-group>
+            </form>
+          </b-modal>
+        </div>
       </div>
     </div>
   </div>
@@ -97,10 +105,6 @@ export default {
 </script>
 
 <style lang="scss" scope>
-.container {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
 .input-avata {
   display: none;
 }
@@ -115,10 +119,11 @@ export default {
 }
 
 .wrapper-img {
-  padding-top: 0.5rem;
-  border-top: 1px solid #aaa;
-  min-height: 200px;
+  // padding-top: 0.5rem;
+  // border-top: 1px solid #aaa;
   position: relative;
+  min-height: 200px;
+
   .wrapper-icon {
     position: absolute;
     width: 50px;
@@ -126,6 +131,27 @@ export default {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+  }
+
+  img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.icon {
+  margin-right: 5px;
+}
+
+.btn {
+  @media screen and (max-width: 374px) {
+    padding: 10px;
+  }
+
+  @media screen and (max-width: 1200px) and (min-width: 769px) {
+    padding: 10px;
   }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <section class="rightCardForAddQuestion">
+  <section class="p-question__box">
     <!-- <treeselect
       v-model="value"
       :class="$style.display"
@@ -7,17 +7,19 @@
       :options="options"
       :value-consists-of="valueConsistsOf"
     /> -->
-    <p class="border_title"><strong>Mức độ (*)</strong></p>
-    <div class="container">
-      <label v-for="option in listLevelRadio" :key="option.id"
-        ><input v-model="levelForm" type="radio" :value="option.id" />{{
-          option.name
-        }}</label
-      >
+    <p class="p-question__box__heading"><strong>Mức độ (*)</strong></p>
+    <div class="p-question__box__body">
+      <div class="p-question__box__body__item box--level">
+        <label v-for="option in listLevelRadio" :key="option.id"
+          ><input v-model="levelForm" type="radio" :value="option.id" />{{
+            option.name
+          }}</label
+        >
+        <b-alert v-if="errors[3]" id="error" show variant="warning">{{
+          errors[3]
+        }}</b-alert>
+      </div>
     </div>
-    <b-alert v-if="errors[3]" id="error" show variant="warning">{{
-      errors[3]
-    }}</b-alert>
   </section>
 </template>
 
@@ -78,15 +80,3 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="scss" scoped>
-.border_title {
-  border-bottom: 1px solid #aaa;
-  padding: 0.5em;
-  color: #1c3988;
-}
-.container {
-  display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid #aaa;
-}
-</style>

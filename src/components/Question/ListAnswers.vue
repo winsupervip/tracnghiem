@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.answersList">
+  <div class="answersList">
     <b-form-group
       v-if="typeQuestion === 'single-choice' || 'right-wrong'"
       v-slot="{ ariaDescribedby }"
@@ -7,7 +7,7 @@
       <div
         v-for="(answer, index) in listAnswers"
         :key="index"
-        :class="$style.answerItem"
+        class="p-answerItem"
       >
         <b-form-radio
           v-model="isSelected"
@@ -15,24 +15,22 @@
           name="some-radios"
           :value="answer"
           :aria-checked="true"
-          ><div :class="$style.answerItem">
-            <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
-            <p v-html="answer.answerContent"></p>
+          ><div class="p-answerItem">
+            <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
+            <div
+              class="p-answerItem__content"
+              v-html="answer.answerContent"
+            ></div>
           </div>
         </b-form-radio>
-        <div>
-          <b-button variant="outline-warning"
-            ><b-icon icon="shuffle"></b-icon
-          ></b-button>
-          <b-button
+        <div class="p-answerItem__func">
+          <b-icon icon="shuffle"></b-icon>
+          <b-icon
             v-b-modal.modal-1
-            variant="outline-warning"
+            icon="pencil-square"
             @click="updateAnswer(index)"
-            ><b-icon icon="pencil-square"></b-icon
-          ></b-button>
-          <b-button variant="outline-danger" @click="handleDelete(index)"
-            ><b-icon icon="trash"></b-icon
-          ></b-button>
+          ></b-icon>
+          <b-icon icon="trash" @click="handleDelete(index)"></b-icon>
         </div>
       </div>
     </b-form-group>
@@ -50,24 +48,21 @@
         <div
           v-for="(answer, index) in listAnswers"
           :key="index"
-          :class="$style.answerItem"
+          class="p-answerItem"
         >
-          <b-form-checkbox :class="$style.choose" :value="answer"
-            ><div :class="$style.answerItem">
-              <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
-              <p v-html="answer.answerContent"></p>
+          <b-form-checkbox class="choose" :value="answer"
+            ><div class="p-answerItem">
+              <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
+              <div
+                class="p-answerItem__content"
+                v-html="answer.answerContent"
+              ></div>
             </div>
           </b-form-checkbox>
-          <div>
-            <b-button variant="outline-warning"
-              ><b-icon icon="shuffle"></b-icon
-            ></b-button>
-            <b-button variant="outline-warning" @click="updateAnswer(index)"
-              ><b-icon icon="pencil-square"></b-icon
-            ></b-button>
-            <b-button variant="outline-danger" @click="handleDelete(index)"
-              ><b-icon icon="trash"></b-icon
-            ></b-button>
+          <div class="p-answerItem__func">
+            <b-icon icon="shuffle"></b-icon>
+            <b-icon icon="pencil-square" @click="updateAnswer(index)"></b-icon>
+            <b-icon icon="trash" @click="handleDelete(index)"></b-icon>
           </div>
         </div>
       </b-form-checkbox-group>
@@ -108,10 +103,10 @@ export default defineComponent({
       type: Array,
       required: true,
     },
-    handleDelete: {
-      type: Function,
-      required: true,
-    },
+    // handleDelete: {
+    //   type: Function,
+    //   required: true,
+    // },
   },
   setup(props) {
     const { $logger } = useContext()
@@ -156,7 +151,11 @@ export default defineComponent({
   },
 })
 </script>
-<style module>
+<style lang="scss" scoped>
+p {
+  margin-bottom: 0;
+}
+
 .action {
   display: flex;
   padding: 5px;
@@ -164,9 +163,27 @@ export default defineComponent({
 .answersList {
   margin: 1rem;
 }
-.answerItem {
+
+.p-answerItem {
   display: flex;
-  padding: 5px;
   justify-content: space-between;
+
+  b {
+    min-width: 20px;
+  }
+
+  &__content {
+    padding: 0 10px;
+  }
+
+  &__func {
+    svg {
+      cursor: pointer;
+
+      &:not(:last-child) {
+        margin-right: 15px;
+      }
+    }
+  }
 }
 </style>

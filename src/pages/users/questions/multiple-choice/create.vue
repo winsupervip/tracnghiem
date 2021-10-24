@@ -1,6 +1,6 @@
 <template>
-  <div :class="$style.layout">
-    <div :class="$style.layout_left">
+  <div class="p-question p-question--multiChoice">
+    <div class="p-question__left">
       <Header
         :question-type="questionType"
         :get-question="getQuestion"
@@ -25,7 +25,7 @@
       />
       <CommentOrNote :get-comment-or-note="getCommentOrNote" />
     </div>
-    <div :class="$style.layout_right">
+    <div class="p-question__right">
       <PublishQuestion
         :get-publish-question="getPublishQuestion"
         :errors="errors"
@@ -309,16 +309,5 @@ export default defineComponent({
 .checkBoxTitle {
   align-self: center;
   margin: 0 auto;
-}
-.layout {
-  display: flex;
-  gap: 20px;
-  &_left {
-    width: 70%;
-    position: relative;
-  }
-  &_right {
-    width: 30%;
-  }
 }
 </style>

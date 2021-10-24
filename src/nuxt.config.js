@@ -135,8 +135,15 @@ export default {
   css: [
     '@/assets/css/custom-bootstrap.scss',
     '@/assets/css/style.scss',
-    '@/assets/css/dashboard.scss'
+    '@/assets/css/dashboard.scss',
+    '@/assets/css/question.scss'
   ],
+
+  styleResources: {
+    scss: [
+      '@/assets/scss/foundation/_mixins.scss',
+    ]
+  },
 
   render: {
     etag: {
