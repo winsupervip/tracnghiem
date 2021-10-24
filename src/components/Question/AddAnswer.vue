@@ -14,6 +14,7 @@
       @hide="hide"
     >
       <div>
+        zz {{ indexAnswerUpdate }}
         <vue2-tinymce-editor
           v-if="doShow"
           v-model="answerContent"
@@ -51,6 +52,8 @@
 <script>
 import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
 import { uuid } from 'vue-uuid'
+import EventBus from '@/plugins/eventBus'
+
 export default defineComponent({
   name: 'Header',
   props: {
@@ -65,6 +68,10 @@ export default defineComponent({
     updateAnswer: {
       type: Function,
       required: true,
+    },
+    indexAnswerUpdate: {
+      type: Number,
+      default: -1,
     },
   },
   setup(props) {
@@ -114,7 +121,12 @@ export default defineComponent({
       this.isRightAnswer = false
       this.isRandom = false
       this.answerContent = ''
-      this.$emit('add', data)
+      if (this.updateValue.answerContent) {
+        data.index = this.indexAnswerUpdate
+        EventBus.$emit('updateListAnswer', data)
+      } else {
+        this.$emit('add', data)
+      }
     },
   },
 })

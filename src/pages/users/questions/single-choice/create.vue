@@ -13,6 +13,7 @@
         :update-value="updateValue"
         :errors="errors"
         :update-answer="updateAnswer"
+        :index-answer-update="indexDataUpdate"
         @add="addOrUpdateAnswer"
       />
       <ListAnswer
@@ -22,6 +23,7 @@
         :update-answer="updateAnswer"
         :update-right-answer="updateRightAnswer"
         :errors="errors"
+        @updateListAnswer="updateListAnswer"
       />
       <CommentOrNote :get-comment-or-note="getCommentOrNote" />
     </div>
@@ -53,6 +55,7 @@ import {
   toRefs,
   useContext,
 } from '@nuxtjs/composition-api'
+// import _ from 'lodash'
 // eslint-disable-next-line no-unused-vars
 import { uuid } from 'vue-uuid'
 import EventBus from '../../../../plugins/eventBus'
@@ -112,6 +115,7 @@ export default defineComponent({
       modalShow: false,
       updateValue: {},
       errors: [],
+      position: 0,
     })
     const getQuestion = (value) => {
       data.questionContent = value
@@ -191,6 +195,13 @@ export default defineComponent({
         alert('Cập nhâp câu trả lời thanh công')
       }
       console.log(data)
+    },
+    updateListAnswer(item) {
+      const answer = this.listAnswers[item.index]
+      answer.answerContent = item.answerContent
+      answer.random = item.isRandom
+      answer.plainText = item.answerContent
+      answer.rightAnswer = item.isRightAnswer
     },
     isValid(data) {
       // 0
