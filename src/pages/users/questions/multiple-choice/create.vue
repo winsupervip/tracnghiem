@@ -34,15 +34,14 @@
       />
       <Category :get-categories="getCategories" :errors="errors" />
       <LevelForm :get-level-form="getLevelForm" :errors="errors" />
-      <UploadImage :get-image="getImage" />
+      <!-- <UploadImage :get-image="getImage" /> -->
+      <Uploader
+        v-model="seoAvatar"
+        :accept="'*/*'"
+        :disabled="false"
+        :get-image="getImage"
+      ></Uploader>
       <AddSeo :get-seo="getSeo" :errors="errors" />
-      <div>
-        <Uploader
-          v-model="seoAvatar"
-          :accept="'*/*'"
-          :disabled="false"
-        ></Uploader>
-      </div>
     </div>
   </div>
 </template>
@@ -77,6 +76,7 @@ export default defineComponent({
     LevelForm,
     Category,
     ListAnswer,
+    // eslint-disable-next-line vue/no-unused-components
     UploadImage,
     AddSeo,
     CommentOrNote,
@@ -274,7 +274,7 @@ export default defineComponent({
           statusId: this.statusId,
           levelId: this.levelId,
           plainText: this.title,
-          seoAvatar: 'string',
+          seoAvatar: this.seoAvatar,
           seoTitle: this.seoTitle,
           seoDescription: this.seoDescription,
           tags: this.tags,
