@@ -170,6 +170,7 @@ export default defineComponent({
       }
     },
     updateRightAnswer(value) {
+      console.log(value)
       this.listAnswers = value
     },
     addListAnswer(data) {
@@ -187,13 +188,13 @@ export default defineComponent({
       console.log(this.listAnswers)
     },
     updateListAnswer(item) {
-      console.log(3)
+      console.log(this.listAnswers)
       const answer = this.listAnswers[item.index]
       answer.answerContent = item.answerContent
       answer.random = item.isRandom
       answer.plainText = item.answerContent
       answer.rightAnswer = item.isRightAnswer
-      console.log(4)
+      console.log(this.listAnswers)
       alert('Cập nhâp câu trả lời thanh công nhé')
     },
     deleteAnswer(value) {
@@ -239,8 +240,8 @@ export default defineComponent({
         this.errors.push(false)
       }
       // 5
-      if (data.answers.length === 0 || data.answers.length > 3) {
-        this.errors.push('Loại câu hỏi này phải có từ 2->3 câu trả lời')
+      if (data.answers.length < 2) {
+        this.errors.push('Loại câu hỏi này phải có từ 2 câu trả lời trở lên')
         valid = false
       } else {
         this.errors.push(false)

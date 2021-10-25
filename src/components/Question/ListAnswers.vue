@@ -113,6 +113,7 @@ export default defineComponent({
     const data = reactive({
       isSelected: [],
       answers: props.listAnswers,
+      listAnswersIsChange: false,
     })
     // hàm ni chạy cho câu hỏi đúng sai chỉ chạy 1 lần
     const getRightAnswer = () => {
@@ -138,30 +139,35 @@ export default defineComponent({
       return answers
     }
     const handleRightAnswerMulipleChoice = () => {
-      const answers = props.listAnswers.map((item) => {
-        const index = data.isSelected.findIndex((select) => select === item.id)
-        if (index !== -1) {
-          item.rightAnswer = 1
-        }
-        return item
+      const rest = props.listAnswers.map((element) => {
+        element.rightAnswer = 0
+        return element
       })
-      return answers
+      data.isSelected.forEach((e) => {
+        const index = rest.findIndex((item) => item.id === e)
+        rest[index].rightAnswer = 1
+      })
+      console.log(rest)
+      return rest
     }
     watch(
       () => data.isSelected,
       () => {
-        const typeQuestion = props.typeQuestion
-        let answers = []
-        if (
-          typeQuestion === 'single-choice' ||
-          typeQuestion === 'right-wrong'
-        ) {
-          answers = handleRightAnswerSingleChoice()
-        } else if (typeQuestion === 'multiple-choice') {
-          answers = handleRightAnswerMulipleChoice()
+        if (!data.listAnswersIsChange) {
+          const typeQuestion = props.typeQuestion
+          let answers = []
+          if (
+            typeQuestion === 'single-choice' ||
+            typeQuestion === 'right-wrong'
+          ) {
+            answers = handleRightAnswerSingleChoice()
+          } else if (typeQuestion === 'multiple-choice') {
+            answers = handleRightAnswerMulipleChoice()
+          }
+          $logger.info(answers, data.isSelected)
+          props.updateRightAnswer(answers)
         }
-
-        props.updateRightAnswer(answers)
+        data.listAnswersIsChange = false
       }
     )
     return {
@@ -184,25 +190,29 @@ export default defineComponent({
     // eslint-disable-next-line no-undef
     const that = this
     EventBus.$on('updateListAnswer', function (item) {
-      console.log(1)
       that.$emit('updateListAnswer', item)
-      console.log(2)
     })
   },
   methods: {
     activeSingleRightAnswer() {
       const index = this.listAnswers.findIndex((item) => item.rightAnswer === 1)
       if (index !== -1) {
-        console.log('listAnswer 2')
+        this.listAnswersIsChange = true
         this.isSelected = this.listAnswers[index].id
       }
     },
     activeMultipleAnswer() {
+      // eslint-disable-next-line prefer-const
+      let listRightAnswer = []
       this.listAnswers.forEach((element) => {
         if (element.rightAnswer === 1) {
-          this.isSelected.push(element.id)
+          listRightAnswer.push(element.id)
         }
       })
+      if (listRightAnswer.length > 0) {
+        this.listAnswersIsChange = true
+        this.isSelected = listRightAnswer
+      }
     },
   },
 })
