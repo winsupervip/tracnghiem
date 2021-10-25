@@ -5,12 +5,12 @@
 
       <span>{{ questions.levelName }}</span>
       <span>{{ questions.questionTypeName }}</span>
-      <span>{{ questions.statusName }}</span>
+      <span>{{ questions.statusId }}</span>
     </div>
     <div class="headline-right">
       <a href="">XEM TRÊN WEB</a>
 
-      <b-dropdown variant="link" toggle-class="text-decoration-none" no-caret>
+      <b-dropdown variant="light" toggle-class="text-decoration-none" no-caret>
         <template #button-content>
           <i class="fas fa-ellipsis-v"></i>
         </template>

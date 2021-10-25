@@ -29,7 +29,8 @@ export default {
     }
     const url = `/api/v1/Question/get-user-item-list?Page=${urlQuery.page}&PageSize=${urlQuery.pageSize}&Keyword=${urlQuery.keyword}${urlCate}&statusId=${statusId}&levelId=${levelId}&questionTypeId=${questionTypeId}&orderBy=${orderBy}&questionGroupId=${questionGroupId}`
 
-    await global.$http.get(url)
+    const result = await global.$http.get(url)
+    return result
   },
   getUserQuestionGroupList: () =>
     global.$http.get('/api/v1/Question/get-user-question-group-list'),

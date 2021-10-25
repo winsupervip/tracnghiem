@@ -9,14 +9,18 @@
       <b-modal id="bv-modal-example" hide-footer title="Câu hỏi:">
         <div class="d-block">
           <ul>
-            <li type="1">
-              <a href="#"><strong>Một lựa chọn</strong></a>
-              <a href="#"><strong>Nhiều lựa chọn</strong></a>
-              <a href="#"><strong>Đúng sai</strong></a>
-              <a href="#"><strong>Ghép đôi</strong></a>
-              <a href="#"><strong> Điền vào chỗ trống</strong></a>
-              <a href="#"><strong>Câu hỏi trả lời ngắn</strong></a>
-              <a href="#"><strong>Sắp thứ tự</strong></a>
+            <li type="none">
+              <a href="#" class="d-block"><strong>Một lựa chọn</strong></a>
+              <a href="#" class="d-block"><strong>Nhiều lựa chọn</strong></a>
+              <a href="#" class="d-block"><strong>Đúng sai</strong></a>
+              <a href="#" class="d-block"><strong>Ghép đôi</strong></a>
+              <a href="#" class="d-block"
+                ><strong> Điền vào chỗ trống</strong></a
+              >
+              <a href="#" class="d-block"
+                ><strong>Câu hỏi trả lời ngắn</strong></a
+              >
+              <a href="#" class="d-block"><strong>Sắp thứ tự</strong></a>
             </li>
           </ul>
           <div class="dropdown-divider"></div>
@@ -39,7 +43,7 @@
             v-model="search"
             type="search"
             placeholder="tìm kiếm câu hỏi"
-            :style="{ width: '25vw' }"
+            :style="{ width: '22vw' }"
           ></b-form-input>
           <b-dropdown-item
             v-for="(option, index) in availableOptions"
@@ -93,7 +97,11 @@
           :load-options="loadOptions"
           placeholder="Sắp xếp"
         />
-        <b-button v-b-toggle.collapse-1-inner size="sm" @click="handleSearch"
+        <b-button
+          v-b-toggle.collapse-1-inner
+          class="mx-auto"
+          :style="{ width: ' 10vw' }"
+          @click="handleSearch"
           >áp dụng</b-button
         >
       </b-card>
@@ -105,10 +113,13 @@
         :questions="question"
       />
       <b-pagination
+        v-model="currentPage"
         class="pagination"
         first-number
         align="center"
         size="lg"
+        :link-gen="linkGen"
+        :number-of-pages="10"
       ></b-pagination>
     </div>
 
@@ -124,6 +135,7 @@ import {
   useFetch,
   reactive,
   toRefs,
+  watch,
 } from '@nuxtjs/composition-api'
 import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
 import QuestionApi from '@/api/question-list-page'
@@ -158,10 +170,10 @@ export default defineComponent({
       options: [],
       questionList: [],
       urlQuery: {
-        pageSize: 1,
+        pageSize: 2,
         keyword: '',
         categories: [],
-        page: 1,
+        page: queryPage,
         statusId: null,
         levelId: null,
         questionTypeId: null,
@@ -185,13 +197,22 @@ export default defineComponent({
       $logger.info('ok')
       $loader().close()
     })
-    const handleSearch = () => {
+    const linkGen = (pageNumber) => {
+      return { path: route.path, query: { page: pageNumber } }
+    }
+    const handleSearch = async () => {
       $logger.info(data.urlQuery)
-      const { data: result } = QuestionApi.getUserItemList(data.urlQuery)
-      $logger.info(result)
+      const result = await QuestionApi.getUserItemList(data.urlQuery)
+      data.questionList = result.data.object.items
+      $logger.info(result.data.object.items)
     }
 
-    fetch()
+    watch(
+      () => data.currentPage,
+      () => {
+        fetch()
+      }
+    )
     const inputSearch = (e) => {
       data.search = e
       data.urlQuery.keyword = e
@@ -201,6 +222,7 @@ export default defineComponent({
       ...toRefs(data),
       inputSearch,
       handleSearch,
+      linkGen,
     }
   },
   data: () => ({}),
@@ -314,6 +336,16 @@ export default defineComponent({
     grid-gap: 26px;
     .input-group {
       width: 100%;
+      li {
+        list-style-type: none;
+      }
+    }
+  }
+  #collapse-1 {
+    .card-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-gap: 10px;
     }
   }
   .form-single-question {
@@ -490,10 +522,7 @@ export default defineComponent({
   }
   .pagination {
     position: relative;
-    width: 730px;
-    height: 66px;
-    left: 381px;
-
+    margin-top: 10px;
     background: #ffffff;
   }
 }

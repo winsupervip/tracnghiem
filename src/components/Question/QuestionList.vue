@@ -1,6 +1,6 @@
 <template>
   <div class="question">
-    <p v-html="questionlist.questionContent"></p>
+    <p v-html="questionlist.description"></p>
 
     <div class="answer">
       <ul>
