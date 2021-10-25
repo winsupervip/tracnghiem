@@ -50,17 +50,11 @@
         </ul>
       </div>
     </div>
-    <b-pagination
-      class="pagination"
-      first-number
-      align="center"
-      size="lg"
-    ></b-pagination>
   </div>
 </template>
 
 <script>
-import { defineComponent, onMounted } from '@nuxtjs/composition-api'
+import { defineComponent } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   name: 'MultiListPage',

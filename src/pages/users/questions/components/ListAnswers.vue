@@ -21,6 +21,9 @@
           </div>
         </b-form-radio>
         <div>
+          <b-button variant="outline-warning"
+            ><b-icon icon="shuffle"></b-icon
+          ></b-button>
           <b-button
             v-b-modal.modal-1
             variant="outline-warning"
@@ -56,6 +59,9 @@
             </div>
           </b-form-checkbox>
           <div>
+            <b-button variant="outline-warning"
+              ><b-icon icon="shuffle"></b-icon
+            ></b-button>
             <b-button variant="outline-warning" @click="updateAnswer(index)"
               ><b-icon icon="pencil-square"></b-icon
             ></b-button>

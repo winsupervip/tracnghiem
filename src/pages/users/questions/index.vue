@@ -30,16 +30,7 @@
         >
       </b-modal>
     </div>
-    <div class="type-list-question">
-      <button @click="showSingleQuestion = !showSingleQuestion">
-        Danh sách câu đơn
-      </button>
 
-      <span></span>
-      <button @click="showMultipleQuestion = !showMultipleQuestion">
-        Danh sách câu chùm
-      </button>
-    </div>
     <div class="type-question">
       <div class="input-group">
         <b-form-group class="mb-0">
@@ -48,49 +39,77 @@
             v-model="search"
             type="search"
             placeholder="tìm kiếm câu hỏi"
+            :style="{ width: '25vw' }"
           ></b-form-input>
           <b-dropdown-item
             v-for="(option, index) in availableOptions"
             :key="index"
-            @click="handleSearch(option.label)"
+            @click="inputSearch(option.label)"
           >
             {{ option.label }}
           </b-dropdown-item>
         </b-form-group>
       </div>
-      <treeselect
-        :options="category"
-        :load-options="loadOptions"
-        placeholder="Danh mục"
-      />
-      <treeselect
-        :multiple="true"
-        :options="treeQuestionTypes"
-        :load-options="loadOptions"
-        placeholder="Loại câu hỏi"
-      />
-      <treeselect
-        :options="listStatus"
-        :load-options="loadOptions"
-        placeholder="Trạng thái"
-      />
-      <treeselect
-        :options="level"
-        :load-options="loadOptions"
-        placeholder="Mức độ"
-      />
-      <treeselect
-        :options="options"
-        :load-options="loadOptions"
-        placeholder="Sắp xếp"
-      />
+
+      <b-button
+        v-b-toggle.collapse-1
+        :style="{ margin: ' 0 30%', height: '50px' }"
+        block
+        >tìm kiếm</b-button
+      >
+
+      <b-button :style="{ margin: ' 0 30%', height: '50px' }">add</b-button>
     </div>
+    <b-collapse id="collapse-1" class="mt-2">
+      <b-card>
+        <treeselect
+          v-model="urlQuery.categories"
+          :multiple="true"
+          :options="category"
+          :load-options="loadOptions"
+          placeholder="Danh mục"
+        />
+        <treeselect
+          v-model="urlQuery.questionTypeId"
+          :multiple="true"
+          :options="treeQuestionTypes"
+          :load-options="loadOptions"
+          placeholder="Loại câu hỏi"
+        />
+        <treeselect
+          v-model="urlQuery.statusId"
+          :options="listStatus"
+          :load-options="loadOptions"
+          placeholder="Trạng thái"
+        />
+        <treeselect
+          v-model="urlQuery.levelId"
+          :options="level"
+          :load-options="loadOptions"
+          placeholder="Mức độ"
+        />
+        <treeselect
+          :options="options"
+          :load-options="loadOptions"
+          placeholder="Sắp xếp"
+        />
+        <b-button v-b-toggle.collapse-1-inner size="sm" @click="handleSearch"
+          >áp dụng</b-button
+        >
+      </b-card>
+    </b-collapse>
     <div v-show="showSingleQuestion">
       <SingleQuestion
         v-for="question in questionList"
         :key="question.id"
         :questions="question"
       />
+      <b-pagination
+        class="pagination"
+        first-number
+        align="center"
+        size="lg"
+      ></b-pagination>
     </div>
 
     <MultipleQuestion v-show="showMultipleQuestion" />
@@ -125,7 +144,6 @@ export default defineComponent({
     const route = useRoute()
     const queryPage = route?.value?.query?.page || 1
     const data = reactive({
-      pageSize: 1,
       currentPage: queryPage,
       showSingleQuestion: true,
       showMultipleQuestion: false,
@@ -135,10 +153,21 @@ export default defineComponent({
       listStatus: [],
       level: [],
       autoCompleteTag: [],
-      keyword: '',
+      text: [],
       search: '',
       options: [],
       questionList: [],
+      urlQuery: {
+        pageSize: 1,
+        keyword: '',
+        categories: [],
+        page: 1,
+        statusId: null,
+        levelId: null,
+        questionTypeId: null,
+        orderby: 1,
+        questionGroupId: null,
+      },
     })
 
     const { fetch } = useFetch(async () => {
@@ -147,28 +176,34 @@ export default defineComponent({
       const { data: result2 } = await QuestionApi.getTreeQuestionTypes()
       const { data: result3 } = await QuestionApi.getListStatus()
       const { data: result4 } = await QuestionApi.getLevel()
-      const { data: result5 } = await QuestionApi.getUserQuestionList()
-      const { data: result6 } = await QuestionApi.getUserQuestionGroupList()
 
       data.category = result1.object.items
       data.treeQuestionTypes = result2.object.items
       data.listStatus = result3.object.items
       data.level = result4.object.items
-      data.questionList = result5.object.items
-      data.questionGroupList = result6.object.items
-      $logger.info(result5)
+
+      $logger.info('ok')
       $loader().close()
     })
+    const handleSearch = () => {
+      $logger.info(data.urlQuery)
+      const { data: result } = QuestionApi.getUserItemList(data.urlQuery)
+      $logger.info(result)
+    }
 
     fetch()
-    const handleSearch = (e) => {
+    const inputSearch = (e) => {
       data.search = e
+      data.urlQuery.keyword = e
+      console.log('abc', data.urlQuery.categories)
     }
     return {
       ...toRefs(data),
+      inputSearch,
       handleSearch,
     }
   },
+  data: () => ({}),
 
   computed: {
     criteria() {
@@ -272,28 +307,14 @@ export default defineComponent({
       color: #051e40;
     }
   }
-  .type-list-question {
-    button {
-      font-weight: 600;
-      font-size: 16px;
-      margin: 30px 0;
-      background: transparent;
-      border: none;
-      color: #000000;
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-    span {
-      margin: 0 25px;
-      background-color: #000000;
-      border: 1px solid #000000;
-    }
-  }
+
   .type-question {
     display: grid;
-    grid-template-columns: auto auto auto auto auto auto;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 26px;
+    .input-group {
+      width: 100%;
+    }
   }
   .form-single-question {
     margin-top: 19px;
@@ -361,7 +382,9 @@ export default defineComponent({
     .question {
       padding: 22px 17px 11px 17px;
       .question-hashtag {
+        display: flex;
         a {
+          padding: 10px;
           color: #0d6efd;
         }
       }
@@ -442,7 +465,9 @@ export default defineComponent({
     }
     .question {
       padding: 22px 17px 11px 17px;
+
       .question-hashtag {
+        display: flex;
         a {
           color: #0d6efd;
         }
@@ -464,11 +489,10 @@ export default defineComponent({
     }
   }
   .pagination {
-    position: absolute;
+    position: relative;
     width: 730px;
     height: 66px;
     left: 381px;
-    top: 1358px;
 
     background: #ffffff;
   }

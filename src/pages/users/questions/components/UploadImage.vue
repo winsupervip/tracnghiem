@@ -36,12 +36,10 @@
             <b-form-group
               label-for="name-input"
               invalid-feedback="Name is required"
-              :state="nameState"
             >
               <b-form-input
                 id="name-input"
                 v-model="image"
-                :state="nameState"
                 required
               ></b-form-input>
             </b-form-group>

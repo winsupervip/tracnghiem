@@ -156,17 +156,12 @@ export default defineComponent({
       doShow: false,
       okOnly: true,
       options: [],
-      listQuestions: [],
       search: '',
       value: [],
       title: '',
     })
     watch(
-      () => data.content,
-      () => data.options,
-
       () => data.questionContent,
-
       () => {
         props.getQuestion(data.questionContent)
       }
@@ -226,7 +221,6 @@ export default defineComponent({
       this.isRightAnswer = false
       this.isRandom = false
       this.answerContent = ''
-      this.listQuestions.push(data)
       this.addOrUpdateAnswer(data)
     },
     onOptionClick({ option, addTag }) {

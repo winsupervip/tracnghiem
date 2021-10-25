@@ -13,8 +13,24 @@ export default {
       successCallApi(result?.data?.object?.items)
     }
   },
-  getUserQuestionList: () =>
-    global.$http.get('/api/v1/Question/get-user-question-list'),
+  getUserItemList: async (urlQuery) => {
+    const statusId = urlQuery.statusId == null ? -1 : urlQuery.statusId
+    const levelId = urlQuery.levelId == null ? -1 : urlQuery.levelId
+    const questionTypeId =
+      urlQuery.questionTypeId == null ? -1 : urlQuery.questionTypeId
+    const orderBy = urlQuery.orderBy == null ? 1 : urlQuery.orderBy
+    const questionGroupId =
+      urlQuery.questionGroupId == null ? -1 : urlQuery.questionGroupId
+    let urlCate = ''
+    if (urlQuery.categories && urlQuery.categories.length > 0) {
+      urlQuery.categories.forEach((item) => {
+        urlCate += '&categories=' + item
+      })
+    }
+    const url = `/api/v1/Question/get-user-item-list?Page=${urlQuery.page}&PageSize=${urlQuery.pageSize}&Keyword=${urlQuery.keyword}${urlCate}&statusId=${statusId}&levelId=${levelId}&questionTypeId=${questionTypeId}&orderBy=${orderBy}&questionGroupId=${questionGroupId}`
+
+    await global.$http.get(url)
+  },
   getUserQuestionGroupList: () =>
     global.$http.get('/api/v1/Question/get-user-question-group-list'),
 }

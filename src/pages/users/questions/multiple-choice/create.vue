@@ -85,14 +85,13 @@ export default defineComponent({
   setup() {
     const { $logger } = useContext()
     const data = reactive({
-      questionType: 'Thêm câu hỏi nhiều lựa chọn',
+      questionType: 'Thêm câu hỏi 1 lựa chọn',
       questionContent: '',
       answerContent: '',
       options: {
         convert_urls: false,
         entity_encoding: 'raw',
       },
-      answerUpdateItem: {},
       isRightAnswer: false,
       isRandom: false,
       listAnswers: [],
@@ -117,23 +116,13 @@ export default defineComponent({
       data.questionContent = value
       $logger.info(value)
     }
-    const getQuestionDelete = (e) => {
-      const newList = [...data.listAnswers]
-      const cal = newList.filter((item) => newList.indexOf(item) !== e)
-      data.listAnswers = cal
-      console.log('list answers', data.listAnswers)
-    }
 
     return {
       ...toRefs(data),
       getQuestion,
-      getQuestionDelete,
     }
   },
   methods: {
-    getAnswerItem(index) {
-      this.answerUpdateItem = this.listAnswers[index]
-    },
     getCategories(value) {
       this.categories = value
       console.log(value)
@@ -205,7 +194,7 @@ export default defineComponent({
       this.errors = []
       let valid = true
       if (data.question.title === '') {
-        this.errors.push('Tiêu Đề Là Bắt Buột')
+        this.errors.push('Tiêu Đề Là Bắt Buộc')
         valid = false
       } else {
         this.errors.push(false)

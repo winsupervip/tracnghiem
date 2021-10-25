@@ -1,7 +1,6 @@
 <template>
   <section class="rightCardForAddQuestion">
     <p class="border_title"><strong>Chuyên mục(*)</strong></p>
-
     <div v-if="treeData.length > 0" class="container">
       <treeselect
         v-model="treeValue"
@@ -45,6 +44,7 @@ export default defineComponent({
       treeValue: [],
       treeData: [],
       alwaysOpen: false,
+      errors: 'avc',
     })
     const { fetch } = useFetch(async () => {
       $loader()
