@@ -132,11 +132,12 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-    '@/assets/css/custom-bootstrap.scss',
-    '@/assets/css/style.scss',
-    '@/assets/css/dashboard.scss',
-    '@/assets/css/question.scss'
+  css: [    
+    '~assets/css/main.css',
+    '@/assets/scss/custom-bootstrap.scss',
+    '@/assets/scss/style.scss',
+    '@/assets/scss/dashboard.scss',
+    '@/assets/scss/question.scss',
   ],
 
   styleResources: {
@@ -175,6 +176,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
+    '@nuxtjs/style-resources',
     '@nuxtjs/composition-api/module',
     '@nuxtjs/dotenv'
   ],
@@ -259,9 +261,8 @@ export default {
           authorization:
             'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/auth',
           userInfo:
-            'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/userinfo',
-          token:
-            'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/token',
+            'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/userinfo',          
+          token: 'https://dev-api.tracnghiem.vn/api/Account/token',
           logout:
             'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/logout?redirect_uri=' +
             encodeURIComponent(String('/home'))
