@@ -21,6 +21,7 @@
         :update-answer="updateAnswer"
         :update-right-answer="updateRightAnswer"
         :errors="errors"
+        :delete-answer="deleteAnswer"
         @updateListAnswer="updateListAnswer"
       />
       <CommentOrNote :get-comment-or-note="getCommentOrNote" />
@@ -194,6 +195,10 @@ export default defineComponent({
       answer.rightAnswer = item.isRightAnswer
       console.log(4)
       alert('Cập nhâp câu trả lời thanh công nhé')
+    },
+    deleteAnswer(value) {
+      const index = this.listAnswers.findIndex((item) => item.id === value)
+      this.listAnswers.splice(index, 1)
     },
     isValid(data) {
       // 0

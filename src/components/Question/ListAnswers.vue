@@ -26,8 +26,7 @@
             icon="pencil-square"
             @click="updateAnswer(answer.id)"
           ></b-icon>
-          <!-- <b-icon icon="trash" @click="handleDelete(index)"></b-icon> -->
-          <b-icon icon="trash"></b-icon>
+          <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
         </div>
       </div>
     </b-form-group>
@@ -104,10 +103,10 @@ export default defineComponent({
       type: Array,
       required: true,
     },
-    // handleDelete: {
-    //   type: Function,
-    //   required: true,
-    // },
+    deleteAnswer: {
+      type: Function,
+      required: true,
+    },
   },
   setup(props) {
     const { $logger } = useContext()
@@ -127,19 +126,41 @@ export default defineComponent({
       }
     }
     getRightAnswer()
+    const handleRightAnswerSingleChoice = () => {
+      const answers = props.listAnswers.map((item) => {
+        if (data.isSelected === item.id) {
+          item.rightAnswer = 1
+        } else {
+          item.rightAnswer = 0
+        }
+        return item
+      })
+      return answers
+    }
+    const handleRightAnswerMulipleChoice = () => {
+      const answers = props.listAnswers.map((item) => {
+        const index = data.isSelected.findIndex((select) => select === item.id)
+        if (index !== -1) {
+          item.rightAnswer = 1
+        }
+        return item
+      })
+      return answers
+    }
     watch(
       () => data.isSelected,
       () => {
-        $logger.info('data.isSelected', data.isSelected)
-        const answers = props.listAnswers.map((item) => {
-          if (data.isSelected === item.id) {
-            item.rightAnswer = 1
-          } else {
-            item.rightAnswer = 0
-          }
-          return item
-        })
-        $logger.info(answers)
+        const typeQuestion = props.typeQuestion
+        let answers = []
+        if (
+          typeQuestion === 'single-choice' ||
+          typeQuestion === 'right-wrong'
+        ) {
+          answers = handleRightAnswerSingleChoice()
+        } else if (typeQuestion === 'multiple-choice') {
+          answers = handleRightAnswerMulipleChoice()
+        }
+
         props.updateRightAnswer(answers)
       }
     )
@@ -150,10 +171,11 @@ export default defineComponent({
   watch: {
     listAnswers() {
       console.log('listAnswer')
-      const index = this.listAnswers.findIndex((item) => item.rightAnswer === 1)
-      if (index !== -1) {
-        console.log('listAnswer 2')
-        this.isSelected = this.listAnswers[index].id
+      const typeQuestion = this.typeQuestion
+      if (typeQuestion === 'single-choice' || typeQuestion === 'right-wrong') {
+        this.activeSingleRightAnswer()
+      } else if (typeQuestion === 'multiple-choice') {
+        this.activeMultipleAnswer()
       }
       this.answers = this.listAnswers
     },
@@ -166,6 +188,22 @@ export default defineComponent({
       that.$emit('updateListAnswer', item)
       console.log(2)
     })
+  },
+  methods: {
+    activeSingleRightAnswer() {
+      const index = this.listAnswers.findIndex((item) => item.rightAnswer === 1)
+      if (index !== -1) {
+        console.log('listAnswer 2')
+        this.isSelected = this.listAnswers[index].id
+      }
+    },
+    activeMultipleAnswer() {
+      this.listAnswers.forEach((element) => {
+        if (element.rightAnswer === 1) {
+          this.isSelected.push(element.id)
+        }
+      })
+    },
   },
 })
 </script>

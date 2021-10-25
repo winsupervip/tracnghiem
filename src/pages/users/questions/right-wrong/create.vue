@@ -21,6 +21,7 @@
         :update-answer="updateAnswer"
         :update-right-answer="updateRightAnswer"
         :errors="errors"
+        :delete-answer="deleteAnswer"
         @updateListAnswer="updateListAnswer"
       />
       <CommentOrNote :get-comment-or-note="getCommentOrNote" />
@@ -223,6 +224,10 @@ export default defineComponent({
       console.log(4)
       alert('Cập nhâp câu trả lời thanh công nhé')
     },
+    deleteAnswer(value) {
+      const index = this.listAnswers.findIndex((item) => item.id === value)
+      this.listAnswers.splice(index, 1)
+    },
     isValid(data) {
       // 0
       this.errors = []
@@ -266,7 +271,21 @@ export default defineComponent({
         this.errors.push('Loại câu hỏi này phải có từ 2->3 câu trả lời')
         valid = false
       } else {
-        this.errors.push(false)
+        let count = 0
+        data.answers.forEach((e) => {
+          if (e.rightAnswer === 1) {
+            count += 1
+          }
+        })
+        if (count === 0) {
+          alert('Chọn 1 câu trả lời đúng đi')
+          valid = false
+        } else if (count > 1) {
+          alert('Loại câu hỏi ni có 1 đáp án thôi')
+          valid = false
+        } else {
+          this.errors.push(false)
+        }
       }
       // 6
       console.log(data.question.statusId)
@@ -290,7 +309,7 @@ export default defineComponent({
         question: {
           hashId: '',
           title: this.title,
-          questionTypeId: 1,
+          questionTypeId: 3,
           questionContent: this.questionContent,
           explainationIfCorrect: this.explainationIfCorrect,
           explainationIfIncorrect: this.explainationIfInCorrect,
