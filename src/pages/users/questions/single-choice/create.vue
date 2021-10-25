@@ -239,8 +239,8 @@ export default defineComponent({
         this.errors.push(false)
       }
       // 5
-      if (data.answers.length === 0 || data.answers.length > 3) {
-        this.errors.push('Loại câu hỏi này phải có từ 2->3 câu trả lời')
+      if (data.answers.length < 2) {
+        this.errors.push('Loại câu hỏi này phải có từ 2 câu trả lời trở lên')
         valid = false
       } else {
         let count = 0
