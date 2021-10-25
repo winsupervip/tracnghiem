@@ -35,7 +35,11 @@
     "vue-slick-carousel": "^1.0.6",
     "vue-uuid": "^2.0.2",
     "vue2-scrollspy": "^2.3.1",
-    "vue2-tinymce-editor": "^0.0.1"
+    "vue2-tinymce-editor": "^0.0.1",
+    "pug": "^3.0.2",
+    "pug-plain-loader": "^1.1.0",
+    "sass": "^1.43.3",
+    "sass-loader": "10"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.14.7",
@@ -50,11 +54,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-vue": "^7.15.0",
     "fibers": "^5.0.0",
-    "prettier": "^2.3.2",
-    "pug": "^3.0.2",
-    "pug-plain-loader": "^1.1.0",
-    "sass": "^1.43.3",
-    "sass-loader": "10"
+    "prettier": "^2.3.2"
   },
   "eslintConfig": {
     "root": true,
