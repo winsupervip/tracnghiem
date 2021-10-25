@@ -88,7 +88,7 @@ export default defineComponent({
   setup() {
     const { $logger } = useContext()
     const data = reactive({
-      questionType: 'Thêm câu hỏi 1 lựa chọn',
+      questionType: 'Thêm câu hỏi nhiều lựa chọn',
       questionContent: '',
       answerContent: '',
       options: {

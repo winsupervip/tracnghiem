@@ -10,7 +10,7 @@
       id="modal-1"
       ref="modal-question"
       size="xl"
-      title="Add Answer"
+      title="Thêm câu hỏi"
       :ok-only="okOnly"
       ok-title="Đóng"
       hide-footer
