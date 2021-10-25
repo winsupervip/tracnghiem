@@ -136,8 +136,14 @@ export default {
     '@/assets/css/custom-bootstrap.scss',
     '@/assets/css/style.scss',
     '@/assets/css/dashboard.scss',
-    '@/assets/css/user-hoang.scss'
+    '@/assets/css/question.scss'
   ],
+
+  styleResources: {
+    scss: [
+      '@/assets/scss/foundation/_mixins.scss',
+    ]
+  },
 
   render: {
     etag: {
@@ -158,7 +164,8 @@ export default {
     { src: '@/plugins/vue2-scrollspy', ssr: false },
     { src: '@/plugins/treeselect.js', ssr: true },
     { src: "@/plugins/validators", ssr: false },
-    { src: '@/plugins/bootstrap-vue.js', ssr: true }
+    { src: '@/plugins/bootstrap-vue.js', ssr: true },
+    { src: '@/plugins/uuid.js', ssr: true },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -178,13 +185,13 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/google-gtag',
     '@nuxtjs/auth-next',
-    'bootstrap-vue/nuxt'
+    'bootstrap-vue/nuxt',
   ],
   // https://github.com/nuxt-community/google-gtag-module
   'google-gtag': {
     id: 'G-4RQGST5TRG'
   },
-
+ 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     baseURL: process.env.apiURI,
@@ -252,9 +259,8 @@ export default {
           authorization:
             'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/auth',
           userInfo:
-            'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/userinfo',
-          token:
-            'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/token',
+            'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/userinfo',          
+          token: 'https://dev-api.tracnghiem.vn/api/Account/token',
           logout:
             'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/logout?redirect_uri=' +
             encodeURIComponent(String('/home'))

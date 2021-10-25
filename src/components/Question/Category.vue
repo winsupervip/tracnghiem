@@ -1,19 +1,23 @@
 <template>
-  <section class="rightCardForAddQuestion">
-    <p class="border_title"><strong>Chuyên mục(*)</strong></p>
-    <div v-if="treeData.length > 0" class="container">
-      <treeselect
-        v-model="treeValue"
-        :multiple="true"
-        :always-open="alwaysOpen"
-        :options="treeData"
-        placeholder="Chuyên mục cho câu hỏi"
-        :load-options="loadOptions"
-      />
+  <section class="p-question__box">
+    <p class="p-question__box__heading"><strong>Chuyên mục (*)</strong></p>
+    <div class="p-question__box__body">
+      <div class="p-question__box__body__item">
+        <div v-if="treeData.length > 0">
+          <treeselect
+            v-model="treeValue"
+            :multiple="true"
+            :always-open="alwaysOpen"
+            :options="treeData"
+            placeholder="Chuyên mục cho câu hỏi"
+            :load-options="loadOptions"
+          />
+        </div>
+        <b-alert v-if="errors[4]" id="error" show variant="warning">{{
+          errors[4]
+        }}</b-alert>
+      </div>
     </div>
-    <b-alert v-if="errors[4]" id="error" show variant="warning">{{
-      errors[4]
-    }}</b-alert>
   </section>
 </template>
 <script>
@@ -25,7 +29,7 @@ import {
   useFetch,
   useContext,
 } from '@nuxtjs/composition-api'
-import CauHoiApi from '../../../../api/cauHoi'
+import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   props: {
     getCategories: {
@@ -44,7 +48,6 @@ export default defineComponent({
       treeValue: [],
       treeData: [],
       alwaysOpen: false,
-      errors: 'avc',
     })
     const { fetch } = useFetch(async () => {
       $loader()
@@ -71,9 +74,6 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
-section {
-  border: 1px solid #aaa;
-}
 .container {
   min-height: 3rem;
 }

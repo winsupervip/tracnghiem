@@ -1,15 +1,19 @@
 <template>
   <div>
     <div :class="$style.addQuestionTitle">
-      <p>Câu Trả lời(*)</p>
-      <b-button v-b-modal.modal-1>Thêm câu trả lời</b-button>
+      <p style="font-weight: bold">Câu trả lời (*)</p>
+      <b-button v-b-modal.modal-1 class="btnQuestion" variant="outline-primary"
+        >Thêm câu trả lời</b-button
+      >
     </div>
     <b-modal
       id="modal-1"
+      ref="modal-question"
       size="xl"
       title="Add Answer"
       :ok-only="okOnly"
       ok-title="Đóng"
+      hide-footer
       @shown="shown"
       @hide="hide"
     >
@@ -38,11 +42,22 @@
               <p :class="$style.checkBoxTitle">Câu trả lời đúng</p>
             </div>
           </div>
-          <b-button variant="outline-primary" @click="handleAnswer">{{
-            updateValue.answerContent
-              ? 'Cập nhập câu trả lời'
-              : 'Thêm câu trả lời'
-          }}</b-button>
+          <b-button
+            class="btnQuestion"
+            variant="outline-primary"
+            @click="handleAnswer"
+            >{{
+              updateValue.answerContent
+                ? 'Cập nhập câu trả lời'
+                : 'Thêm câu trả lời'
+            }}</b-button
+          >
+          <b-button
+            class="btnQuestion btnQuestion--close"
+            variant="outline-primary"
+            @click="hideModal"
+            >Đóng</b-button
+          >
         </div>
       </div>
     </b-modal>
@@ -50,13 +65,16 @@
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
+import { uuid } from 'vue-uuid'
+import EventBus from '@/plugins/eventBus'
+
 export default defineComponent({
   name: 'Header',
   props: {
-    addOrUpdateAnswer: {
-      type: Function,
-      required: true,
-    },
+    // addOrUpdateAnswer: {
+    //   type: Function,
+    //   required: true,
+    // },
     updateValue: {
       type: Object,
       required: true,
@@ -64,6 +82,10 @@ export default defineComponent({
     updateAnswer: {
       type: Function,
       required: true,
+    },
+    indexAnswerUpdate: {
+      type: Number,
+      default: -1,
     },
   },
   setup(props) {
@@ -89,6 +111,10 @@ export default defineComponent({
       this.answerContent = this.updateValue?.answerContent
         ? this.updateValue.answerContent
         : ''
+      // eslint-disable-next-line no-unneeded-ternary
+      this.isRightAnswer = this.updateValue.rightAnswer === 1 ? true : false
+      // eslint-disable-next-line no-unneeded-ternary
+      this.isRandom = this.updateValue.random ? true : false
     },
   },
   methods: {
@@ -99,12 +125,16 @@ export default defineComponent({
       this.doShow = false
       this.updateAnswer('remove_data')
     },
+    hideModal() {
+      this.$refs['modal-question'].hide()
+    },
     handleAnswer() {
       if (this.answerContent === '') {
         alert('Câu trả lời không được bỏ trống')
         return 0
       }
       const data = {
+        id: uuid.v4(),
         isRightAnswer: this.isRightAnswer ? 1 : 0,
         isRandom: this.isRandom,
         answerContent: this.answerContent,
@@ -112,7 +142,14 @@ export default defineComponent({
       this.isRightAnswer = false
       this.isRandom = false
       this.answerContent = ''
-      this.addOrUpdateAnswer(data)
+      if (this.updateValue.answerContent) {
+        data.index = this.indexAnswerUpdate
+        console.log('a')
+        EventBus.$emit('updateListAnswer', data)
+        console.log('b')
+      } else {
+        this.$emit('add', data)
+      }
     },
   },
 })
@@ -137,5 +174,16 @@ export default defineComponent({
 .checkBoxTitle {
   align-self: center;
   margin: 0 auto;
+}
+</style>
+
+<style lang="scss" scoped>
+::v-deep .modal-body {
+  padding-bottom: 50px;
+}
+
+.btnQuestion--close {
+  margin-left: 20px;
+  width: auto;
 }
 </style>

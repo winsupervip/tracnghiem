@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <p>Ngân Hàng câu hỏi > {{ questionType }}</p>
+      <p class="p-headerQuestion">Ngân Hàng câu hỏi > {{ questionType }}</p>
       <!-- <ValidationProvider v-slot="{ errors }" rules="required">
         <input
           v-model="title"
@@ -113,7 +113,7 @@ import {
   toRefs,
   watch,
 } from '@nuxtjs/composition-api'
-import CauHoiApi from '../../../../api/cauHoi'
+import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   name: 'Header',
   props: {
@@ -122,10 +122,6 @@ export default defineComponent({
       required: true,
     },
     getQuestion: {
-      type: Function,
-      required: true,
-    },
-    addOrUpdateAnswer: {
       type: Function,
       required: true,
     },
@@ -149,7 +145,6 @@ export default defineComponent({
         entity_encoding: 'raw',
       },
       questionContent: '',
-      answerContent: '',
       isRightAnswer: false,
       isRandom: false,
       isUpdate: -1,
@@ -208,21 +203,6 @@ export default defineComponent({
     hide() {
       this.doShow = false
     },
-    handleAnswer() {
-      if (this.answerContent === '') {
-        alert('Câu trả lời không được bỏ trống')
-        return 0
-      }
-      const data = {
-        isRightAnswer: this.isRightAnswer ? 1 : 0,
-        isRandom: this.isRandom,
-        answerContent: this.answerContent,
-      }
-      this.isRightAnswer = false
-      this.isRandom = false
-      this.answerContent = ''
-      this.addOrUpdateAnswer(data)
-    },
     onOptionClick({ option, addTag }) {
       if (this.value.length >= 5) {
         alert('Tối đa 5 tags')
@@ -261,5 +241,13 @@ export default defineComponent({
 .checkBoxTitle {
   align-self: center;
   margin: 0 auto;
+}
+</style>
+
+<style lang="scss" scoped>
+.p-headerQuestion {
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Open Sans', sans-serif;
 }
 </style>

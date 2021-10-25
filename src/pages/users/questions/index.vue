@@ -126,9 +126,9 @@ import {
   toRefs,
 } from '@nuxtjs/composition-api'
 import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
-import QuestionApi from '../../../../src/api/question-list-page'
-import SingleListPage from './components/SingleListPage.vue'
-import MultipleListPage from './components/MultipleListPage.vue'
+import QuestionApi from '@/api/question-list-page'
+import SingleListPage from '@/components/Question/SingleListPage.vue'
+import MultipleListPage from '@/components/Question/MultipleListPage.vue'
 const simulateAsyncOperation = (fn) => {
   setTimeout(fn, 2000)
 }
