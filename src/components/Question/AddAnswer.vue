@@ -154,7 +154,7 @@ export default defineComponent({
   },
 })
 </script>
-<style module>
+<style lang="scss" module>
 .addQuestionTitle {
   display: flex;
   justify-content: space-between;
