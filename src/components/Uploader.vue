@@ -1,6 +1,11 @@
 <template>
-  <div v-show="!disabled">
-    <form v-if="isInitial || isSaving" enctype="multipart/form-data" novalidate>
+  <div class="p-question__box">
+    <form
+      v-if="(isInitial || isSaving) && image.length === 0"
+      class="wrapper-img"
+      enctype="multipart/form-data"
+      novalidate
+    >
       <div class="form-group">
         <div class="dropzone">
           <div v-if="isInitial" class="dz-message" data-dz-message>
@@ -30,6 +35,14 @@
         </div>
       </div>
     </form>
+    <div v-else class="wrapper-img">
+      <b-icon
+        class="wrapper-icon"
+        icon="card-image"
+        aria-hidden="true"
+      ></b-icon>
+      <img :src="image" class="card" />
+    </div>
     <!--PROCESS-->
     <div v-if="isProcess" class="text-center">
       <button class="btn btn-outline-primary" type="button" disabled>
@@ -57,6 +70,43 @@
       </p>
       <pre>{{ uploadError }}</pre>
     </div>
+    <div class="p-question__box__body">
+      <div class="p-question__box__body__item">
+        <p>
+          <b>Vui lòng sử dụng hình ảnh chất lượng cao để thu hút người dùng</b>
+        </p>
+        <div class="wrapper">
+          <b-button
+            v-b-modal.modal-prevent-closing
+            class="btn btn-outline-primary btn_transparent"
+            ><b-icon icon="link45deg" aria-hidden="true" class="icon"></b-icon
+            >Link ảnh</b-button
+          >
+          <label class="btn btn-outline-primary" @click="reset()"
+            ><b-icon
+              icon="cloud-upload"
+              aria-hidden="true"
+              class="icon"
+            ></b-icon>
+            Tải lại</label
+          >
+          <b-modal id="modal-prevent-closing" ref="modal" title="Link ảnh">
+            <form ref="form">
+              <b-form-group
+                label-for="name-input"
+                invalid-feedback="Name is required"
+              >
+                <b-form-input
+                  id="name-input"
+                  v-model="image"
+                  required
+                ></b-form-input>
+              </b-form-group>
+            </form>
+          </b-modal>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -75,23 +125,20 @@ export default {
       type: String,
       required: true,
     },
-    value: {
-      type: null,
-      required: true,
-    },
-    disabled: {
-      type: Boolean,
-      required: true,
-    },
     isPrivate: {
       type: Boolean,
       required: false,
+    },
+    getImage: {
+      type: Function,
+      required: true,
     },
   },
   data: () => ({
     uploadError: null,
     currentStatus: null,
     uploadFieldName: 'photos',
+    image: '',
   }),
   computed: {
     isInitial() {
@@ -110,7 +157,11 @@ export default {
       return this.currentStatus === STATUS_IMPORT
     },
   },
-  watch: {},
+  watch: {
+    image() {
+      this.getImage(this.image)
+    },
+  },
   created() {},
   mounted() {
     this.reset()
@@ -128,25 +179,23 @@ export default {
       if (this.$refs.fileupload) {
         this.$refs.fileupload.value = null
       }
+      this.image = ''
     },
     async save(formData) {
       // upload data to the server
       this.currentStatus = STATUS_SAVING
       try {
         const { data } = await fileApi.upload(formData)
-
         if (data.state) {
-          this.$log.debug('upload success')
           this.currentStatus = STATUS_SUCCESS
-
-          this.$emit('input', data.object)
+          // this.$emit('input', data.object)
+          this.image = data.object.url
         } else {
           // console.log("upload fail");
           this.uploadError = data.data.message
           this.currentStatus = STATUS_FAILED
         }
       } catch (err) {
-        this.$log.debug(err)
         this.currentStatus = STATUS_FAILED
       }
     },
@@ -172,6 +221,7 @@ export default {
 
       // append the files to FormData
       Array.from(Array(fileList.length).keys()).map((x) => {
+        console.log(fieldName, fileList[x], fileList[x].name)
         formData.append(fieldName, fileList[x], fileList[x].name)
         return 0
       })
@@ -179,18 +229,7 @@ export default {
       await this.save(formData)
     },
     checkFileExt(fileName) {
-      const allow = [
-        'doc',
-        'docx',
-        'xls',
-        'xlsx',
-        'png',
-        'jpg',
-        'jpeg',
-        'gif',
-        'pdf',
-        'csv',
-      ]
+      const allow = ['png', 'jpg', 'jpeg']
       const ext = fileName.split('.').pop().toLowerCase()
       // console.log(allow);
       return this.isInArray(ext, allow)
@@ -201,7 +240,7 @@ export default {
   },
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .input-file {
   opacity: 0;
   width: 100%;
@@ -213,5 +252,54 @@ export default {
 }
 .dropzone {
   position: relative;
+}
+.input-avata {
+  display: none;
+}
+.wrapper {
+  display: flex;
+  padding-top: 0.5rem;
+  justify-content: space-between;
+  align-items: flex-end;
+  p {
+    margin: 0;
+  }
+}
+
+.wrapper-img {
+  // padding-top: 0.5rem;
+  // border-top: 1px solid #aaa;
+  position: relative;
+  min-height: 200px;
+
+  .wrapper-icon {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.icon {
+  margin-right: 5px;
+}
+
+.btn {
+  @media screen and (max-width: 374px) {
+    padding: 10px;
+  }
+
+  @media screen and (max-width: 1200px) and (min-width: 769px) {
+    padding: 10px;
+  }
 }
 </style>
