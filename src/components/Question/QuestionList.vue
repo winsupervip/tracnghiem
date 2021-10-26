@@ -10,7 +10,10 @@
           type="A"
         >
           {{ String.fromCharCode(65 + index) + '. ' }}
-          <p v-html="answer.answerContent"></p>
+          <p
+            :class="answer.rightAnswer ? $style.a : $style.b"
+            v-html="answer.answerContent"
+          ></p>
         </li>
       </ul>
     </div>
