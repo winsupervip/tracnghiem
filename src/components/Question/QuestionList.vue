@@ -9,11 +9,13 @@
           :key="index"
           type="A"
         >
-          {{ String.fromCharCode(65 + index) + '. ' }}
-          <p
-            :class="answer.rightAnswer ? $style.a : $style.b"
-            v-html="answer.answerContent"
-          ></p>
+          <span
+            :style="{ display: 'flex' }"
+            :class="answer.rightAnswer ? 'rightAnswer' : 'wrongAnswer'"
+          >
+            {{ String.fromCharCode(65 + index) + '. ' }}
+            <p v-html="answer.answerContent"></p>
+          </span>
         </li>
       </ul>
     </div>
@@ -22,6 +24,7 @@
 
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
+import '../../node_modules/bootstrap/scss/bootstrap.scss'
 export default defineComponent({
   name: 'QuestionTags',
   auth: false,
@@ -33,9 +36,9 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="scss" scoped>
+<style>
 .rightAnswer {
-  color: red;
+  color: #ff645a;
 }
 .wrongAnswer {
   color: #000;

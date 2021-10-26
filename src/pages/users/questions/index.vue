@@ -108,7 +108,7 @@
     </b-collapse>
     <div v-show="showSingleQuestion">
       <SingleQuestion
-        v-for="question in questionList"
+        v-for="question in questionList.items"
         :key="question.id"
         :questions="question"
       />
@@ -170,10 +170,10 @@ export default defineComponent({
       options: [],
       questionList: [],
       urlQuery: {
-        pageSize: 2,
+        pageSize: 1,
         keyword: '',
         categories: [],
-        page: queryPage,
+        page: 1,
         statusId: null,
         levelId: null,
         questionTypeId: null,
@@ -203,8 +203,8 @@ export default defineComponent({
     const handleSearch = async () => {
       $logger.info(data.urlQuery)
       const result = await QuestionApi.getUserItemList(data.urlQuery)
-      data.questionList = result.data.object.items
-      $logger.info(result.data.object.items)
+      data.questionList = result.data.object
+      $logger.info(result.data.object)
     }
 
     watch(
