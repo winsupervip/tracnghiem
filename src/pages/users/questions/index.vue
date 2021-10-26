@@ -108,7 +108,7 @@
     </b-collapse>
     <div v-show="showSingleQuestion">
       <SingleQuestion
-        v-for="question in questionList.items"
+        v-for="question in questionList"
         :key="question.id"
         :questions="question"
       />
@@ -118,8 +118,8 @@
         first-number
         align="center"
         size="lg"
-        :link-gen="linkGen"
-        :number-of-pages="10"
+        :number-of-pages="urlQuery.page"
+        base-url="?page="
       ></b-pagination>
     </div>
 
@@ -203,8 +203,14 @@ export default defineComponent({
     const handleSearch = async () => {
       $logger.info(data.urlQuery)
       const result = await QuestionApi.getUserItemList(data.urlQuery)
-      data.questionList = result.data.object
-      $logger.info(result.data.object)
+      // const ispageNumber = result.data.object?.total % data.urlQuery.pageSize
+      // if (ispageNumber === 0) {
+      //   data.urlQuery.page = ispageNumber
+      // } else {
+      //   data.urlQuery.page = ispageNumber + 1
+      // }
+      data.questionList = result.data.object.items
+      $logger.info(result.data.object.total)
     }
 
     watch(
