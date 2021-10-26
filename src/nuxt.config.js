@@ -132,11 +132,12 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-    '@/assets/css/custom-bootstrap.scss',
-    '@/assets/css/style.scss',
-    '@/assets/css/dashboard.scss',
-    '@/assets/css/question.scss'
+  css: [    
+    '~assets/css/main.css',
+    {src:'@/assets/scss/custom-bootstrap.scss', lang: 'sass'},
+    '@/assets/scss/style.scss',
+    '@/assets/scss/dashboard.scss',
+    '@/assets/scss/question.scss',
   ],
 
   styleResources: {
@@ -175,6 +176,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
+    '@nuxtjs/style-resources',
     '@nuxtjs/composition-api/module',
     '@nuxtjs/dotenv'
   ],
