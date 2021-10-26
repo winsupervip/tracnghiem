@@ -30,3 +30,11 @@ export default defineComponent({
   },
 })
 </script>
+<style lang="scss" scoped>
+.rightAnswer {
+  color: red;
+}
+.wrongAnswer {
+  color: #000;
+}
+</style>
