@@ -268,7 +268,7 @@ export default defineComponent({
         question: {
           hashId: '',
           title: this.title,
-          questionTypeId: 1,
+          questionTypeId: 2,
           questionContent: this.questionContent,
           explainationIfCorrect: this.explainationIfCorrect,
           explainationIfIncorrect: this.explainationIfInCorrect,

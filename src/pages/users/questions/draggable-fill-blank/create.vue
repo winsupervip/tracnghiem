@@ -20,7 +20,7 @@
 
       <ListAnswer
         :list-answers="listAnswers"
-        type-question="fill-blank"
+        type-question="draggable"
         :update-answer="updateAnswer"
         :update-right-answer="updateRightAnswer"
         :errors="errors"
@@ -246,18 +246,7 @@ export default defineComponent({
         this.errors.push('Loại câu hỏi này phải có từ 1 câu trả lời')
         valid = false
       } else {
-        const n = data.answers.length
-        for (let i = 0; i < n; i++) {
-          for (let j = i + 1; j < n; j++) {
-            if (data.answers[i].rightAnswer === data.answers[j].rightAnswer) {
-              this.errors.push('Vị trí điền bị trùng lặp')
-              valid = false
-            }
-          }
-        }
-        if (valid) {
-          this.errors.push(false)
-        }
+        this.errors.push(false)
       }
       // 6
       console.log(data.question.statusId)
@@ -276,8 +265,9 @@ export default defineComponent({
       return valid
     },
     removeAnswerId(value) {
-      const listAnswers = value.map((item) => {
+      const listAnswers = value.map((item, index) => {
         delete item.id
+        item.rightAnswer = index + 1
         return item
       })
       return listAnswers
@@ -292,7 +282,7 @@ export default defineComponent({
         question: {
           hashId: '',
           title: this.title,
-          questionTypeId: 5,
+          questionTypeId: 7,
           questionContent: this.questionContent,
           explainationIfCorrect: this.explainationIfCorrect,
           explainationIfIncorrect: this.explainationIfInCorrect,
@@ -312,6 +302,8 @@ export default defineComponent({
 
       if (this.isValid(data)) {
         data.answers = this.removeAnswerId(this.listAnswers)
+        console.log(data)
+
         CauHoiApi.createQuestion(
           data,
           () => {
