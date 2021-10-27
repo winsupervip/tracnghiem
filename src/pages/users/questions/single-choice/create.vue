@@ -275,6 +275,13 @@ export default defineComponent({
       }
       return valid
     },
+    removeAnswerId(value) {
+      const listAnswers = value.map((item) => {
+        delete item.id
+        return item
+      })
+      return listAnswers
+    },
     onSubmit() {
       console.log('okkkk')
       const data = {
@@ -300,6 +307,8 @@ export default defineComponent({
       }
       console.log(this.errors)
       if (this.isValid(data)) {
+        data.answers = this.removeAnswerId(this.listAnswers)
+        this.listAnswers = []
         CauHoiApi.createQuestion(
           data,
           () => {

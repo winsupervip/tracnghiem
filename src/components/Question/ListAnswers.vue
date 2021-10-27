@@ -121,6 +121,15 @@
       </div>
     </div>
 
+    <div v-if="typeQuestion === 'draggable'">
+      <Draggable
+        :answers="answers"
+        :delete-answer="deleteAnswer"
+        :update-answer="updateAnswer"
+        :handle-draggable="handleDraggable"
+      />
+    </div>
+
     <b-alert v-if="errors[5]" id="error" show variant="warning">{{
       errors[5]
     }}</b-alert>
@@ -137,9 +146,11 @@ import {
 } from '@nuxtjs/composition-api'
 import EventBus from '../../plugins/eventBus'
 import SelectForFillBlank from './SelectForFillBlank.vue'
+import Draggable from './Draggable.vue'
 export default defineComponent({
   components: {
     SelectForFillBlank,
+    Draggable,
   },
   props: {
     listAnswers: {
@@ -224,6 +235,9 @@ export default defineComponent({
       console.log(listAnswer)
       props.updateRightAnswer(listAnswer)
     }
+    const handleDraggable = (value) => {
+      props.updateRightAnswer(value)
+    }
     watch(
       () => data.isSelected,
       () => {
@@ -239,6 +253,8 @@ export default defineComponent({
             answers = handleRightAnswerMulipleChoice()
           } else if (typeQuestion === 'fill-blank') {
             // cái này đặt biệt hơn, nên sẻ xử lý ở hàm handleFillBlank
+          } else if (typeQuestion === 'draggable') {
+            // cái này đặt biệt hơn, nên sẻ xử lý ở hàm handleDraggable
           }
 
           $logger.info(answers, data.isSelected)
@@ -250,6 +266,7 @@ export default defineComponent({
     return {
       ...toRefs(data),
       handleFillBlank,
+      handleDraggable,
     }
   },
   watch: {
