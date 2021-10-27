@@ -18,11 +18,11 @@
       @hide="hide"
     >
       <div>
-        <vue2-tinymce-editor
+        <TinyEditor
           v-if="doShow"
           v-model="answerContent"
           :options="optionsText"
-        ></vue2-tinymce-editor>
+        />
         <div>
           <div :class="$style.checkBoxView">
             <div :class="$style.checkBox">

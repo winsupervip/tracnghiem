@@ -239,7 +239,8 @@ export default {
       if (ctx.isDev) {
         config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
       }
-    }
+    },
+    vendor: ['tinymce']
   },
   router: {
     extendRoutes(routes, resolve) {
