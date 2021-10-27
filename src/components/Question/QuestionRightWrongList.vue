@@ -26,7 +26,7 @@
 import { defineComponent } from '@nuxtjs/composition-api'
 import '../../node_modules/bootstrap/scss/bootstrap.scss'
 export default defineComponent({
-  name: 'QuestionTags',
+  name: 'QuestionRightWrongList',
   auth: false,
   props: {
     questionlist: {

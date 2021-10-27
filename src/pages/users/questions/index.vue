@@ -107,7 +107,7 @@
       </b-card>
     </b-collapse>
     <div v-show="showSingleQuestion">
-      <SingleQuestion
+      <QuestionListPage
         v-for="question in questionList"
         :key="question.id"
         :questions="question"
@@ -139,14 +139,14 @@ import {
 } from '@nuxtjs/composition-api'
 import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
 import QuestionApi from '@/api/question-list-page'
-import SingleListPage from '@/components/Question/SingleListPage.vue'
+import QuestionListPage from '@/components/Question/QuestionListPage.vue'
 import MultipleListPage from '@/components/Question/MultipleListPage.vue'
 const simulateAsyncOperation = (fn) => {
   setTimeout(fn, 2000)
 }
 export default defineComponent({
   components: {
-    SingleQuestion: SingleListPage,
+    QuestionListPage,
     MultipleQuestion: MultipleListPage,
   },
   layout: 'dashboard',
@@ -170,7 +170,7 @@ export default defineComponent({
       options: [],
       questionList: [],
       urlQuery: {
-        pageSize: 1,
+        pageSize: 10,
         keyword: '',
         categories: [],
         page: 1,
@@ -210,7 +210,7 @@ export default defineComponent({
       //   data.urlQuery.page = ispageNumber + 1
       // }
       data.questionList = result.data.object.items
-      $logger.info(result.data.object.total)
+      $logger.info(result.data.object)
     }
 
     watch(
