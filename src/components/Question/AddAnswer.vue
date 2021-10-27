@@ -10,7 +10,7 @@
       id="modal-1"
       ref="modal-question"
       size="xl"
-      title="Add Answer"
+      title="Thêm câu hỏi"
       :ok-only="okOnly"
       ok-title="Đóng"
       hide-footer
@@ -25,7 +25,7 @@
         />
         <div>
           <div :class="$style.checkBoxView">
-            <div :class="$style.checkBox">
+            <div v-if="haveRandomAnswer" :class="$style.checkBox">
               <input
                 v-model="isRandom"
                 type="checkbox"
@@ -33,7 +33,7 @@
               />
               <p :class="$style.checkBoxTitle">Cho phép xáo trộn</p>
             </div>
-            <div :class="$style.checkBox">
+            <div v-if="haveRightAnswer" :class="$style.checkBox">
               <input
                 v-model="isRightAnswer"
                 type="checkbox"
@@ -86,6 +86,14 @@ export default defineComponent({
     indexAnswerUpdate: {
       type: Number,
       default: -1,
+    },
+    haveRightAnswer: {
+      type: Boolean,
+      default: true,
+    },
+    haveRandomAnswer: {
+      type: Boolean,
+      default: true,
     },
   },
   setup(props) {

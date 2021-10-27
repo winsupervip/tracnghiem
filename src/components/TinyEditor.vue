@@ -21,6 +21,7 @@ export default {
       default: 'tiny-editor-' + new Date().getTime(),
       type: String,
     },
+    // eslint-disable-next-line vue/require-prop-types
     value: { default: '' },
     options: {
       default() {
@@ -96,6 +97,7 @@ export default {
         options[key] = this.options[key]
       }
 
+      // eslint-disable-next-line no-undef
       tinymce.init(options)
     },
     initEditor(editor) {

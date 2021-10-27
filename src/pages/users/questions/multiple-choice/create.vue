@@ -88,7 +88,7 @@ export default defineComponent({
   setup() {
     const { $logger } = useContext()
     const data = reactive({
-      questionType: 'Thêm câu hỏi 1 lựa chọn',
+      questionType: 'Thêm câu hỏi nhiều lựa chọn',
       questionContent: '',
       answerContent: '',
       options: {
@@ -170,6 +170,7 @@ export default defineComponent({
       }
     },
     updateRightAnswer(value) {
+      console.log(value)
       this.listAnswers = value
     },
     addListAnswer(data) {
@@ -183,18 +184,18 @@ export default defineComponent({
         id: data.id,
       }
       this.listAnswers.push(value)
-      this.$toast('Thêm câu trả lời thanh công').goAway(1500)
+      this.$toast.show('Thêm câu trả lời thanh công').goAway(1500)
       console.log(this.listAnswers)
     },
     updateListAnswer(item) {
-      console.log(3)
+      console.log(this.listAnswers)
       const answer = this.listAnswers[item.index]
       answer.answerContent = item.answerContent
       answer.random = item.isRandom
       answer.plainText = item.answerContent
       answer.rightAnswer = item.isRightAnswer
       console.log(4)
-      this.$toast('Cập nhâp câu trả lời thanh công nhé').goAway(1500)
+      this.$toast.show('Cập nhâp câu trả lời thanh công nhé').goAway(1500)
     },
     deleteAnswer(value) {
       const index = this.listAnswers.findIndex((item) => item.id === value)
@@ -239,8 +240,8 @@ export default defineComponent({
         this.errors.push(false)
       }
       // 5
-      if (data.answers.length === 0 || data.answers.length > 3) {
-        this.errors.push('Loại câu hỏi này phải có từ 2->3 câu trả lời')
+      if (data.answers.length < 2) {
+        this.errors.push('Loại câu hỏi này phải có từ 2 câu trả lời trở lên')
         valid = false
       } else {
         this.errors.push(false)
@@ -289,10 +290,10 @@ export default defineComponent({
         CauHoiApi.createQuestion(
           data,
           () => {
-            this.$toast('Thêm Thành Công').goAway(1500)
+            this.$toast.show('Thêm Thành Công').goAway(1500)
           },
           () => {
-            this.$toast('Có lỗi xảy ra').goAway(1500)
+            this.$toast.show('Có lỗi xảy ra').goAway(1500)
           }
         )
       }

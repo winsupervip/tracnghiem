@@ -4,5 +4,7 @@
   "Ngân Hàng câu hỏi": "Ngân Hàng câu hỏi",
   "Gắn thẻ câu hỏi của bạn, tối đa 5 thẻ(*)": "Gắn thẻ câu hỏi của bạn, tối đa 5 thẻ(*)",
   "Chọn tag": "Chọn thẻ",
-  "There are no tags matching your search criteria": "Không tồn tại thẻ bạn vừa nhập, nhấn add để thêm mới"
+  "There are no tags matching your search criteria": "Không tồn tại thẻ bạn vừa nhập, nhấn add để thêm mới",
+  "short-answer-mo-ta-cach-tao-cau-hoi": "- Với loại câu hỏi này bạn sẽ phải thêm vào tất cả những đáp án có khả năng đúng",
+  "short-answer-vi-du-cach-tao-cau-hoi": "- Ví dụ: 1m = 1 mét (đây là 2 nội dụng khác nhau nhưng kết quả đúng)"
 }

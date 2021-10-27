@@ -100,7 +100,7 @@
         }}</b-alert>
       </div>
       <div>
-        <!-- <TinyEditor v-model="questionContent" /> -->
+        <TinyEditor v-model="questionContent" />
         <b-alert v-if="errors[1]" id="error" show variant="warning">{{
           errors[1]
         }}</b-alert>
@@ -117,8 +117,8 @@ import {
 } from '@nuxtjs/composition-api'
 import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
-  components: {},
   name: 'Header',
+  components: {},
   props: {
     questionType: {
       type: String,
