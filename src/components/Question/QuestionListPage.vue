@@ -13,6 +13,7 @@
         v-if="questions.questionTypeName == 'Đúng sai'"
         :questionlist="questions"
       />
+      <!-- <QuestionParingList :questionlist="questions" /> -->
     </div>
   </div>
 </template>
@@ -24,6 +25,7 @@ import QuestionHeader from './QuestionHeader.vue'
 import QuestionSingleChoiceList from './QuestionSingleChoiceList.vue'
 // import QuestionMultiChoiceList from './QuestionMultiChoiceList.vue'
 import QuestionRightWrongList from './QuestionRightWrongList.vue'
+// import QuestionParingList from './QuestionParingList.vue'
 
 export default defineComponent({
   name: 'SingleListPage',
@@ -33,6 +35,7 @@ export default defineComponent({
     QuestionSingleChoiceList,
     // QuestionMultiChoiceList,
     QuestionRightWrongList,
+    // QuestionParingList,
   },
   props: {
     questions: {
