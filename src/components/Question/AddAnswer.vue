@@ -18,14 +18,14 @@
       @hide="hide"
     >
       <div>
-        <vue2-tinymce-editor
+        <TinyEditor
           v-if="doShow"
           v-model="answerContent"
           :options="optionsText"
-        ></vue2-tinymce-editor>
+        />
         <div>
           <div :class="$style.checkBoxView">
-            <div :class="$style.checkBox">
+            <div v-if="haveRandomAnswer" :class="$style.checkBox">
               <input
                 v-model="isRandom"
                 type="checkbox"
@@ -33,7 +33,7 @@
               />
               <p :class="$style.checkBoxTitle">Cho phép xáo trộn</p>
             </div>
-            <div :class="$style.checkBox">
+            <div v-if="haveRightAnswer" :class="$style.checkBox">
               <input
                 v-model="isRightAnswer"
                 type="checkbox"
@@ -87,6 +87,14 @@ export default defineComponent({
       type: Number,
       default: -1,
     },
+    haveRightAnswer: {
+      type: Boolean,
+      default: true,
+    },
+    haveRandomAnswer: {
+      type: Boolean,
+      default: true,
+    },
   },
   setup(props) {
     const data = reactive({
@@ -130,7 +138,8 @@ export default defineComponent({
     },
     handleAnswer() {
       if (this.answerContent === '') {
-        alert('Câu trả lời không được bỏ trống')
+        // config: https://github.com/shakee93/vue-toasted
+        this.$toast.error('Câu trả lời không được bỏ trống').goAway(1500)
         return 0
       }
       const data = {

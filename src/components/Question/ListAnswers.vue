@@ -66,6 +66,61 @@
       </b-form-checkbox-group>
     </b-form-group>
 
+    <div v-if="typeQuestion === 'short-answer'">
+      <div v-for="(answer, index) in answers" :key="index" class="p-answerItem">
+        <div class="p-answerItem">
+          <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
+          <div
+            class="p-answerItem__content"
+            v-html="answer.answerContent"
+          ></div>
+        </div>
+        <div class="p-answerItem__func">
+          <b-icon
+            v-b-modal.modal-1
+            icon="pencil-square"
+            @click="updateAnswer(answer.id)"
+          ></b-icon>
+          <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="typeQuestion === 'fill-blank'">
+      <div v-for="(answer, index) in answers" :key="index" class="p-answerItem">
+        <div class="p-answerItem">
+          <!-- <b-form-select v-model="isSelected" class="mb-3">
+            <b-form-select-option :value="null" disabled
+              >-- Chọn --</b-form-select-option
+            >
+            <b-form-select-option
+              v-for="i in answers.length"
+              :key="i"
+              :value="answer.id + 'index' + i"
+              >({{ i }})</b-form-select-option
+            >
+          </b-form-select> -->
+          <SelectForFillBlank
+            :answer="answer"
+            :length-answers="answers.length"
+            :handle-fill-blank="handleFillBlank"
+          />
+          <div
+            class="p-answerItem__content"
+            v-html="answer.answerContent"
+          ></div>
+        </div>
+        <div class="p-answerItem__func">
+          <b-icon
+            v-b-modal.modal-1
+            icon="pencil-square"
+            @click="updateAnswer(answer.id)"
+          ></b-icon>
+          <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+        </div>
+      </div>
+    </div>
+
     <b-alert v-if="errors[5]" id="error" show variant="warning">{{
       errors[5]
     }}</b-alert>
@@ -81,7 +136,11 @@ import {
   useContext,
 } from '@nuxtjs/composition-api'
 import EventBus from '../../plugins/eventBus'
+import SelectForFillBlank from './SelectForFillBlank.vue'
 export default defineComponent({
+  components: {
+    SelectForFillBlank,
+  },
   props: {
     listAnswers: {
       type: Array,
@@ -138,6 +197,12 @@ export default defineComponent({
       })
       return answers
     }
+    const checkTypeSelected = () => {
+      if (props.typeQuestion === 'fill-blank') {
+        data.isSelected = null
+      }
+    }
+    checkTypeSelected()
     const handleRightAnswerMulipleChoice = () => {
       const rest = props.listAnswers.map((element) => {
         element.rightAnswer = 0
@@ -149,6 +214,15 @@ export default defineComponent({
       })
       console.log(rest)
       return rest
+    }
+    const handleFillBlank = (value) => {
+      const listAnswer = props.listAnswers
+      const getIndex = parseInt(value.split('index')[1])
+      const getId = value.split('index')[0]
+      const index = listAnswer.findIndex((item) => item.id === getId)
+      listAnswer[index].rightAnswer = getIndex
+      console.log(listAnswer)
+      props.updateRightAnswer(listAnswer)
     }
     watch(
       () => data.isSelected,
@@ -163,7 +237,10 @@ export default defineComponent({
             answers = handleRightAnswerSingleChoice()
           } else if (typeQuestion === 'multiple-choice') {
             answers = handleRightAnswerMulipleChoice()
+          } else if (typeQuestion === 'fill-blank') {
+            // cái này đặt biệt hơn, nên sẻ xử lý ở hàm handleFillBlank
           }
+
           $logger.info(answers, data.isSelected)
           props.updateRightAnswer(answers)
         }
@@ -172,6 +249,7 @@ export default defineComponent({
     )
     return {
       ...toRefs(data),
+      handleFillBlank,
     }
   },
   watch: {

@@ -184,7 +184,7 @@ export default defineComponent({
         id: data.id,
       }
       this.listAnswers.push(value)
-      alert('Thêm câu trả lời thanh công')
+      this.$toast.show('Thêm câu trả lời thanh công').goAway(1500)
       console.log(this.listAnswers)
     },
     updateListAnswer(item) {
@@ -194,8 +194,8 @@ export default defineComponent({
       answer.random = item.isRandom
       answer.plainText = item.answerContent
       answer.rightAnswer = item.isRightAnswer
-      console.log(this.listAnswers)
-      alert('Cập nhâp câu trả lời thanh công nhé')
+      console.log(4)
+      this.$toast.show('Cập nhâp câu trả lời thanh công nhé').goAway(1500)
     },
     deleteAnswer(value) {
       const index = this.listAnswers.findIndex((item) => item.id === value)
@@ -290,10 +290,10 @@ export default defineComponent({
         CauHoiApi.createQuestion(
           data,
           () => {
-            alert('Thêm Thành Công')
+            this.$toast.show('Thêm Thành Công').goAway(1500)
           },
           () => {
-            alert('Có lỗi xảy ra')
+            this.$toast.show('Có lỗi xảy ra').goAway(1500)
           }
         )
       }

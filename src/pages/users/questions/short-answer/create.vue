@@ -9,15 +9,22 @@
         :errors="errors"
       />
       <AddAnswer
+        :have-right-answer="false"
         :update-value="updateValue"
         :errors="errors"
         :update-answer="updateAnswer"
         :index-answer-update="indexDataUpdate"
         @add="addListAnswer"
       />
+      <p>
+        {{ $t('short-answer-mo-ta-cach-tao-cau-hoi') }}
+      </p>
+      <p>
+        {{ $t('short-answer-vi-du-cach-tao-cau-hoi') }}
+      </p>
       <ListAnswer
         :list-answers="listAnswers"
-        type-question="single-choice"
+        type-question="short-answer"
         :update-answer="updateAnswer"
         :update-right-answer="updateRightAnswer"
         :errors="errors"
@@ -88,7 +95,7 @@ export default defineComponent({
   setup() {
     const { $logger } = useContext()
     const data = reactive({
-      questionType: 'Thêm câu hỏi đúng sai',
+      questionType: 'Thêm câu hỏi trả lời ngắn',
       questionContent: '',
       answerContent: '',
       options: {
@@ -97,35 +104,7 @@ export default defineComponent({
       },
       isRightAnswer: false,
       isRandom: false,
-      listAnswers: [
-        {
-          id: uuid.v4(),
-          hashId: '',
-          answerContent: 'Đúng',
-          rightAnswer: 1,
-          random: true,
-          position: 0,
-          plainText: 'Đúng',
-        },
-        {
-          id: uuid.v4(),
-          hashId: '',
-          answerContent: 'Sai',
-          rightAnswer: 0,
-          random: true,
-          position: 0,
-          plainText: 'Sai',
-        },
-        {
-          id: uuid.v4(),
-          hashId: '',
-          answerContent: 'Không có đáp án',
-          rightAnswer: 0,
-          random: true,
-          position: 0,
-          plainText: 'Không có đáp án',
-        },
-      ],
+      listAnswers: [],
       indexDataUpdate: -1,
       categories: [],
       levelForm: false,
@@ -204,7 +183,7 @@ export default defineComponent({
       const value = {
         answerContent: data.answerContent,
         random: data.isRandom,
-        rightAnswer: data.isRightAnswer,
+        rightAnswer: 1,
         hashId: '',
         position: 0,
         plainText: data.answerContent,
@@ -267,25 +246,11 @@ export default defineComponent({
         this.errors.push(false)
       }
       // 5
-      if (data.answers.length === 0 || data.answers.length > 3) {
-        this.errors.push('Loại câu hỏi này phải có từ 2->3 câu trả lời')
+      if (data.answers.length === 0) {
+        this.errors.push('Loại câu hỏi này phải có từ 1 câu trả lời')
         valid = false
       } else {
-        let count = 0
-        data.answers.forEach((e) => {
-          if (e.rightAnswer === 1) {
-            count += 1
-          }
-        })
-        if (count === 0) {
-          this.$toast.show('Chọn 1 câu trả lời đúng đi').goAway(1500)
-          valid = false
-        } else if (count > 1) {
-          this.$toast.show('Loại câu hỏi ni có 1 đáp án thôi').goAway(1500)
-          valid = false
-        } else {
-          this.errors.push(false)
-        }
+        this.errors.push(false)
       }
       // 6
       console.log(data.question.statusId)
@@ -303,13 +268,20 @@ export default defineComponent({
       }
       return valid
     },
+    removeAnswerId(value) {
+      const listAnswers = value.map((item) => {
+        delete item.id
+        return item
+      })
+      return listAnswers
+    },
     onSubmit() {
       console.log('okkkk')
       const data = {
         question: {
           hashId: '',
           title: this.title,
-          questionTypeId: 3,
+          questionTypeId: 6,
           questionContent: this.questionContent,
           explainationIfCorrect: this.explainationIfCorrect,
           explainationIfIncorrect: this.explainationIfInCorrect,
@@ -324,9 +296,9 @@ export default defineComponent({
           questionGroupId: null,
           groupOrder: null,
         },
-        answers: this.listAnswers,
+        answers: this.removeAnswerId(this.listAnswers),
       }
-      console.log(this.errors)
+      console.log(this.removeAnswerId(this.listAnswers))
       if (this.isValid(data)) {
         CauHoiApi.createQuestion(
           data,
