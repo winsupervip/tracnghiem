@@ -1,7 +1,9 @@
 <template>
   <div>
     <div>
-      <p class="p-headerQuestion">Ngân Hàng câu hỏi > {{ questionType }}</p>
+      <p class="p-headerQuestion">
+        {{ $t('Ngân Hàng câu hỏi') }} > {{ questionType }}
+      </p>
       <!-- <ValidationProvider v-slot="{ errors }" rules="required">
         <input
           v-model="title"
@@ -28,7 +30,7 @@
           <b-form-tags
             id="tags-with-dropdown"
             v-model="value"
-            label="Gắn thẻ câu hỏi của bạn, tối đa 5 thẻ(*)"
+            :label="$t('Gắn thẻ câu hỏi của bạn, tối đa 5 thẻ(*)')"
             no-outer-focus
             class="mb-2"
           >
@@ -54,7 +56,7 @@
                 menu-class="w-100"
               >
                 <template #button-content>
-                  <b-icon icon="tag-fill"></b-icon> Chọn tag
+                  <b-icon icon="tag-fill"></b-icon> {{ $t('Chọn tag') }}
                 </template>
                 <b-dropdown-form @submit.stop.prevent="() => {}">
                   <b-form-group
@@ -98,7 +100,7 @@
         }}</b-alert>
       </div>
       <div>
-        <TinyEditor v-model="questionContent" />
+        <!-- <TinyEditor v-model="questionContent" /> -->
         <b-alert v-if="errors[1]" id="error" show variant="warning">{{
           errors[1]
         }}</b-alert>
@@ -176,7 +178,7 @@ export default defineComponent({
     },
     searchDesc() {
       if (this.criteria && this.availableOptions.length === 0) {
-        return 'There are no tags matching your search criteria'
+        return this.$i18n.t('There are no tags matching your search criteria')
       }
       return ''
     },
@@ -206,7 +208,7 @@ export default defineComponent({
     },
     onOptionClick({ option, addTag }) {
       if (this.value.length >= 5) {
-        alert('Tối đa 5 tags')
+        this.$toast.error(this.$18n.t('Tối đa 5 tags')).goAway(1500)
         return
       }
       addTag(option.label)
@@ -214,7 +216,7 @@ export default defineComponent({
     },
     userAddTag() {
       if (this.value.length >= 5) {
-        alert('Tối đa 5 tags')
+        this.$toast.error('Tối đa 5 tags').goAway(1500)
         return
       }
       this.value.push(this.search)

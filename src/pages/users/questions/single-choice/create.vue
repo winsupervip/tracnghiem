@@ -183,7 +183,7 @@ export default defineComponent({
         id: data.id,
       }
       this.listAnswers.push(value)
-      alert('Thêm câu trả lời thanh công')
+      this.$toast('Thêm câu trả lời thanh công').goAway(1500)
       console.log(this.listAnswers)
     },
     updateListAnswer(item) {
@@ -194,7 +194,7 @@ export default defineComponent({
       answer.plainText = item.answerContent
       answer.rightAnswer = item.isRightAnswer
       console.log(4)
-      alert('Cập nhâp câu trả lời thanh công nhé')
+      this.$toast('Cập nhâp câu trả lời thanh công nhé').goAway(1500)
     },
     deleteAnswer(value) {
       const index = this.listAnswers.findIndex((item) => item.id === value)
@@ -250,10 +250,10 @@ export default defineComponent({
           }
         })
         if (count === 0) {
-          alert('Chọn 1 câu trả lời đúng đi')
+          this.$toast('Chọn 1 câu trả lời đúng đi').goAway(1500)
           valid = false
         } else if (count > 1) {
-          alert('Loại câu hỏi ni có 1 đáp án thôi')
+          this.$toast('Loại câu hỏi ni có 1 đáp án thôi').goAway(1500)
           valid = false
         } else {
           this.errors.push(false)
@@ -303,10 +303,10 @@ export default defineComponent({
         CauHoiApi.createQuestion(
           data,
           () => {
-            alert('Thêm Thành Công')
+            this.$toast('Thêm Thành Công').goAway(1500)
           },
           () => {
-            alert('Có lỗi xảy ra')
+            this.$toast('Có lỗi xảy ra').goAway(1500)
           }
         )
       }

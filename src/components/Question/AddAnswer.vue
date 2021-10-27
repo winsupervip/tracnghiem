@@ -130,7 +130,8 @@ export default defineComponent({
     },
     handleAnswer() {
       if (this.answerContent === '') {
-        alert('Câu trả lời không được bỏ trống')
+        // config: https://github.com/shakee93/vue-toasted
+        this.$toast.error('Câu trả lời không được bỏ trống').goAway(1500)
         return 0
       }
       const data = {
