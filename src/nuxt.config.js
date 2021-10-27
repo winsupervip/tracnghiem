@@ -178,7 +178,7 @@ export default {
     '@nuxtjs/eslint-module',
     '@nuxtjs/style-resources',
     '@nuxtjs/composition-api/module',
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',    
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -188,12 +188,40 @@ export default {
     '@nuxtjs/google-gtag',
     '@nuxtjs/auth-next',
     'bootstrap-vue/nuxt',
+    '@nuxtjs/toast',
+    '@nuxtjs/i18n',
   ],
   // https://github.com/nuxt-community/google-gtag-module
   'google-gtag': {
     id: 'G-4RQGST5TRG'
   },
- 
+
+  // bootstrap-vue
+  bootstrapVue: {
+    bootstrapCSS: false, // Or `css: false`
+    bootstrapVueCSS: true // Or `bvCSS: false`
+  },
+  toast: {
+    position: 'top-right',
+    register: [ // Register custom toasts
+      {
+        name: 'my-error',
+        message: 'Oops...Something went wrong',
+        options: {
+          type: 'error'
+        }
+      }
+    ]
+  },
+  i18n: {
+    locales: [
+      { code: 'vi', iso: 'vi-VN', file: 'vi-VN.js' },
+      { code: 'en', iso: 'en-US', file: 'en-US.js' },
+    ],    
+    defaultLocale: 'vi',
+    lazy: true,
+    langDir: 'locales/',
+  },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     baseURL: process.env.apiURI,
@@ -239,7 +267,8 @@ export default {
       if (ctx.isDev) {
         config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
       }
-    }
+    },
+    vendor: ['tinymce']
   },
   router: {
     extendRoutes(routes, resolve) {
