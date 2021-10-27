@@ -1,26 +1,31 @@
-FROM node:12.16.1-alpine as frontend-build
-RUN apk add g++ make python
-# create destination directory
-RUN mkdir -p /src/nuxt-app
-WORKDIR /src/nuxt-app
+FROM node:lts as builder
 
-# copy the app, note .dockerignore
-COPY . /src/nuxt-app/
-RUN npm install
-RUN npm uninstall murmurhash-native
-RUN npm i murmurhash-native --build-from-source
+WORKDIR /app
 
-# build necessary, even if no static files are needed,
-# since it builds the server as well
-RUN yarn build --configuration=production
+COPY . .
 
-# expose 5000 on container
-EXPOSE 5000
+RUN yarn install \
+  --prefer-offline \
+  --frozen-lockfile \
+  --non-interactive \
+  --production=false
 
-# set app serving to permissive / assigned
-ENV NUXT_HOST=0.0.0.0
-# set app port
-ENV NUXT_PORT=5000
+RUN yarn build
 
-# start the app
-CMD [ "npm", "start" ]
+RUN rm -rf node_modules && \
+  NODE_ENV=production yarn install \
+  --prefer-offline \
+  --pure-lockfile \
+  --non-interactive \
+  --production=true
+
+FROM node:lts
+
+WORKDIR /app
+
+COPY --from=builder /app  .
+
+ENV HOST 0.0.0.0
+EXPOSE 80
+
+CMD [ "yarn", "start" ]

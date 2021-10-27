@@ -9,10 +9,10 @@
       :number-of-pages="10"
     />
 
-    <vue2-tinymce-editor
+    <!-- <vue2-tinymce-editor
       v-model="content"
       :options="options"
-    ></vue2-tinymce-editor>
+    ></vue2-tinymce-editor> -->
 
     <treeselect
       v-model="treeValue"

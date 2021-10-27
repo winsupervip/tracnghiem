@@ -66,6 +66,27 @@
       </b-form-checkbox-group>
     </b-form-group>
 
+    <div v-if="typeQuestion === 'short-answer'">
+      <div v-for="(answer, index) in answers" :key="index" class="p-answerItem">
+        <div class="p-answerItem">
+          <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
+          <div
+            class="p-answerItem__content"
+            v-html="answer.answerContent"
+          ></div>
+        </div>
+        <div class="p-answerItem__func">
+          <b-icon icon="shuffle"></b-icon>
+          <b-icon
+            v-b-modal.modal-1
+            icon="pencil-square"
+            @click="updateAnswer(answer.id)"
+          ></b-icon>
+          <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+        </div>
+      </div>
+    </div>
+
     <b-alert v-if="errors[5]" id="error" show variant="warning">{{
       errors[5]
     }}</b-alert>

@@ -1,17 +1,3 @@
-/*overide bootstrap variable*/
-
-
-/*
-$grid-breakpoints: (
-  xs: 0,
-  sm: 480px,
-  md: 640px,
-  lg: 992px,
-  xl: 1300px
-);
-$enable-rounded: false;
-*/
-
 $blue: #0D6EFD;
 $primary: #1C3988;
 $link: #0D6EFD;
@@ -33,7 +19,7 @@ $md: 991px;
 $sm: 768px;
 $xs: 575px;
 $sp_max: 1024px;
-@import '../../node_modules/bootstrap/scss/bootstrap.scss';
+@import '~bootstrap/scss/bootstrap.scss';
 h6,
 .h6,
 h5,
