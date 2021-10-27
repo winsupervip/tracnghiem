@@ -10,21 +10,17 @@
       />
       <AddAnswer
         :have-right-answer="false"
+        :have-random-answer="true"
         :update-value="updateValue"
         :errors="errors"
         :update-answer="updateAnswer"
         :index-answer-update="indexDataUpdate"
         @add="addListAnswer"
       />
-      <p>
-        {{ $t('short-answer-mo-ta-cach-tao-cau-hoi') }}
-      </p>
-      <p>
-        {{ $t('short-answer-vi-du-cach-tao-cau-hoi') }}
-      </p>
+
       <ListAnswer
         :list-answers="listAnswers"
-        type-question="short-answer"
+        type-question="fill-blank"
         :update-answer="updateAnswer"
         :update-right-answer="updateRightAnswer"
         :errors="errors"
@@ -250,7 +246,18 @@ export default defineComponent({
         this.errors.push('Loại câu hỏi này phải có từ 1 câu trả lời')
         valid = false
       } else {
-        this.errors.push(false)
+        const n = data.answers.length
+        for (let i = 0; i < n; i++) {
+          for (let j = i + 1; j < n; j++) {
+            if (data.answers[i].rightAnswer === data.answers[j].rightAnswer) {
+              this.errors.push('Vị trí điền bị trùng lặp')
+              valid = false
+            }
+          }
+        }
+        if (valid) {
+          this.errors.push(false)
+        }
       }
       // 6
       console.log(data.question.statusId)
@@ -275,13 +282,17 @@ export default defineComponent({
       })
       return listAnswers
     },
+    rest() {
+      this.listAnswers = []
+      this.questionContent = []
+    },
     onSubmit() {
       console.log('okkkk')
       const data = {
         question: {
           hashId: '',
           title: this.title,
-          questionTypeId: 6,
+          questionTypeId: 7,
           questionContent: this.questionContent,
           explainationIfCorrect: this.explainationIfCorrect,
           explainationIfIncorrect: this.explainationIfInCorrect,
@@ -296,14 +307,16 @@ export default defineComponent({
           questionGroupId: null,
           groupOrder: null,
         },
-        answers: this.removeAnswerId(this.listAnswers),
+        answers: this.listAnswers,
       }
-      console.log(this.removeAnswerId(this.listAnswers))
+
       if (this.isValid(data)) {
+        data.answers = this.removeAnswerId(this.listAnswers)
         CauHoiApi.createQuestion(
           data,
           () => {
             this.$toast.show('Thêm Thành Công').goAway(1500)
+            this.rest()
           },
           () => {
             this.$toast.show('Có lỗi xảy ra').goAway(1500)

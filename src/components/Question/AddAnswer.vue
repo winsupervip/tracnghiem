@@ -24,8 +24,8 @@
           :options="optionsText"
         />
         <div>
-          <div v-if="!haveRightAnswer" :class="$style.checkBoxView">
-            <div :class="$style.checkBox">
+          <div :class="$style.checkBoxView">
+            <div v-if="haveRandomAnswer" :class="$style.checkBox">
               <input
                 v-model="isRandom"
                 type="checkbox"
@@ -33,7 +33,7 @@
               />
               <p :class="$style.checkBoxTitle">Cho phép xáo trộn</p>
             </div>
-            <div :class="$style.checkBox">
+            <div v-if="haveRightAnswer" :class="$style.checkBox">
               <input
                 v-model="isRightAnswer"
                 type="checkbox"
@@ -89,7 +89,11 @@ export default defineComponent({
     },
     haveRightAnswer: {
       type: Boolean,
-      default: false,
+      default: true,
+    },
+    haveRandomAnswer: {
+      type: Boolean,
+      default: true,
     },
   },
   setup(props) {
