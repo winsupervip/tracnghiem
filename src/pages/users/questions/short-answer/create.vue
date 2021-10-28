@@ -298,8 +298,9 @@ export default defineComponent({
         },
         answers: this.removeAnswerId(this.listAnswers),
       }
-      console.log(this.removeAnswerId(this.listAnswers))
       if (this.isValid(data)) {
+        data.answers = this.removeAnswerId(this.listAnswers)
+        this.listAnswers = []
         CauHoiApi.createQuestion(
           data,
           () => {

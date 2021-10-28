@@ -14,6 +14,9 @@
 
 <script>
 export default {
+  name: 'Simple',
+  display: 'Simple',
+  order: 0,
   props: {
     lengthAnswers: {
       type: Number,
