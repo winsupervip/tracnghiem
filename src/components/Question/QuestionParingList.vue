@@ -1,28 +1,33 @@
 <template>
-  <div class="question">
-    <p>
-      Which of the following lists all and only the appropriate descriptions
-      about a 32-bit CPU and a 64-bit CPU? I When a 32-bit CPU and a 64-bit CPU
-      are compared, a 64-bit CPU has a larger theoretical maximum memory space..
-      II There is no 32-bit OS that runs on a PC with a 64-bit CPU. III In terms
-      of the read and write speed of a USB memory, the speed of a PC with a
-      64-bit CPU is twice as fast as that of a PC with a 32-bit CPU.
-    </p>
+  <div class="question-pairing">
+    <p v-html="questionlist.description"></p>
 
-    <div class="answer">
+    <div class="answer-pairing">
       <div class="row_A">
-        <label for="">Cột A</label>
-        <ul>
-          <li v-for="(answer, index) in 4" :key="index">
-            {{ String.fromCharCode(65 + index) + '. ' }}
-            <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+        <p for="">Cột A</p>
+        <ul v-for="(answer, index) in questionlist.answers" :key="index">
+          <li v-if="answer.position == 1">
+            <span
+              >{{ String.fromCharCode(65 + index) + '. ' }}
+              <p>{{ answer.answerContent }}</p></span
+            >
 
-            <treeselect class="choose-answer" value="as" disabled />
+            <treeselect
+              class="choose-answer"
+              :value="answer.rightAnswer"
+              disabled
+            />
           </li>
         </ul>
       </div>
       <div class="row_B">
-        <label for="">Cột B</label>
+        <p>Cột B</p>
+        <ul v-for="(answer, index) in questionlist.answers" :key="index">
+          <li v-if="answer.position == 2">
+            {{ index + '. ' }}
+            <p>{{ answer.answerContent }}</p>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -40,15 +45,40 @@ export default defineComponent({
       required: true,
     },
   },
+  methods: {},
 })
 </script>
 <style lang="scss">
-.answer {
+.answer-pairing {
   display: flex;
   .row_A {
     width: 50%;
 
-    label {
+    & > p {
+      text-align: center;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    ul {
+      li {
+        span {
+          display: flex;
+        }
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .choose-answer {
+          width: 30%;
+        }
+      }
+    }
+  }
+  .row_B {
+    width: 50%;
+
+    & > p {
+      text-align: center;
       font-style: normal;
       font-weight: bold;
       font-size: 14px;
@@ -56,23 +86,8 @@ export default defineComponent({
     }
     ul {
       li {
-        p {
-          width: 20%;
-        }
-        .choose-answer {
-          width: 40%;
-        }
+        display: flex;
       }
-    }
-  }
-  .row_B {
-    width: 50%;
-    text-align: center;
-    label {
-      font-style: normal;
-      font-weight: bold;
-      font-size: 14px;
-      line-height: 20px;
     }
   }
 }

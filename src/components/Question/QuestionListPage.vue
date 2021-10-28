@@ -8,12 +8,30 @@
         v-if="questions.questionTypeName == 'Một lựa chọn'"
         :questionlist="questions"
       />
-      <!-- <QuestionMultiChoiceList :questionlist="questions" /> -->
+      <QuestionMultiChoiceList
+        v-if="questions.questionTypeName == 'Nhiều lựa chọn'"
+        :questionlist="questions"
+      />
       <QuestionRightWrongList
         v-if="questions.questionTypeName == 'Đúng sai'"
         :questionlist="questions"
       />
-      <!-- <QuestionParingList :questionlist="questions" /> -->
+      <QuestionParingList
+        v-if="questions.questionTypeName == 'Ghép đôi'"
+        :questionlist="questions"
+      />
+      <QuestionFillBlankList
+        v-if="questions.questionTypeName == 'Điền vào chỗ trống'"
+        :questionlist="questions"
+      />
+      <QuestionShortAnswerList
+        v-if="questions.questionTypeName == 'Câu trả lời ngắn'"
+        :questionlist="questions"
+      />
+      <QuestionSortAnswerList
+        v-if="questions.questionTypeName == 'Sắp xếp thứ tự'"
+        :questionlist="questions"
+      />
     </div>
   </div>
 </template>
@@ -23,9 +41,11 @@ import { defineComponent } from '@nuxtjs/composition-api'
 import QuestionTags from './QuestionTags.vue'
 import QuestionHeader from './QuestionHeader.vue'
 import QuestionSingleChoiceList from './QuestionSingleChoiceList.vue'
-// import QuestionMultiChoiceList from './QuestionMultiChoiceList.vue'
+import QuestionMultiChoiceList from './QuestionMultiChoiceList.vue'
 import QuestionRightWrongList from './QuestionRightWrongList.vue'
-// import QuestionParingList from './QuestionParingList.vue'
+import QuestionParingList from './QuestionParingList.vue'
+import QuestionFillBlankList from './QuestionFillBlankList.vue'
+import QuestionShortAnswerList from './QuestionShortAnswerList.vue'
 
 export default defineComponent({
   name: 'SingleListPage',
@@ -33,9 +53,11 @@ export default defineComponent({
     QuestionHeader,
     QuestionTags,
     QuestionSingleChoiceList,
-    // QuestionMultiChoiceList,
+    QuestionMultiChoiceList,
     QuestionRightWrongList,
-    // QuestionParingList,
+    QuestionParingList,
+    QuestionFillBlankList,
+    QuestionShortAnswerList,
   },
   props: {
     questions: {

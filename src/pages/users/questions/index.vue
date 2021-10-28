@@ -10,14 +10,20 @@
         <div class="d-block">
           <ul>
             <li type="none">
-              <a href="#" class="d-block"><strong>Một lựa chọn</strong></a>
-              <a href="#" class="d-block"><strong>Nhiều lựa chọn</strong></a>
-              <a href="#" class="d-block"><strong>Đúng sai</strong></a>
+              <a href="/users/questions/single-choice/create" class="d-block"
+                ><strong>Nhiều lựa chọn</strong></a
+              >
+              <a href="/users/questions/multiple-choice/create" class="d-block"
+                ><strong>Nhiều lựa chọn</strong></a
+              >
+              <a href="/users/questions/right-wrong/create" class="d-block"
+                ><strong>Đúng sai</strong></a
+              >
               <a href="#" class="d-block"><strong>Ghép đôi</strong></a>
-              <a href="#" class="d-block"
+              <a href="/users/questions/fill-blank/create" class="d-block"
                 ><strong> Điền vào chỗ trống</strong></a
               >
-              <a href="#" class="d-block"
+              <a href="/users/questions/short-answer/create" class="d-block"
                 ><strong>Câu hỏi trả lời ngắn</strong></a
               >
               <a href="#" class="d-block"><strong>Sắp thứ tự</strong></a>
@@ -61,8 +67,6 @@
         block
         >tìm kiếm</b-button
       >
-
-      <b-button :style="{ margin: ' 0 30%', height: '50px' }">add</b-button>
     </div>
     <b-collapse id="collapse-1" class="mt-2">
       <b-card>
@@ -75,7 +79,6 @@
         />
         <treeselect
           v-model="urlQuery.questionTypeId"
-          :multiple="true"
           :options="treeQuestionTypes"
           :load-options="loadOptions"
           placeholder="Loại câu hỏi"
@@ -115,11 +118,10 @@
       <b-pagination
         v-model="currentPage"
         class="pagination"
-        first-number
         align="center"
-        size="lg"
-        :number-of-pages="urlQuery.page"
-        base-url="?page="
+        :total-rows="urlQuery.page"
+        :per-page="urlQuery.pageSize"
+        :link-gen="linkGen"
       ></b-pagination>
     </div>
 
@@ -170,7 +172,7 @@ export default defineComponent({
       options: [],
       questionList: [],
       urlQuery: {
-        pageSize: 10,
+        pageSize: 2,
         keyword: '',
         categories: [],
         page: 1,
@@ -198,23 +200,24 @@ export default defineComponent({
       $loader().close()
     })
     const linkGen = (pageNumber) => {
-      return { path: route.path, query: { page: pageNumber } }
+      return { path: route.path, query: { page: data.currentPage } }
     }
     const handleSearch = async () => {
       $logger.info(data.urlQuery)
       const result = await QuestionApi.getUserItemList(data.urlQuery)
-      // const ispageNumber = result.data.object?.total % data.urlQuery.pageSize
-      // if (ispageNumber === 0) {
-      //   data.urlQuery.page = ispageNumber
-      // } else {
-      //   data.urlQuery.page = ispageNumber + 1
-      // }
+      const ispageNumber = Math.ceil(
+        result.data.object?.total / data.urlQuery.pageSize
+      )
+
+      data.urlQuery.page = ispageNumber
+
       data.questionList = result.data.object.items
       $logger.info(result.data.object)
     }
 
     watch(
       () => data.currentPage,
+
       () => {
         fetch()
       }
