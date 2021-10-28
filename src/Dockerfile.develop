@@ -1,8 +1,8 @@
 FROM node:lts as builder
-
+ENV apiURI https://dev-api.tracnghiem.vn
+ENV NODE_ENV development
 WORKDIR /app
-
-COPY . .
+COPY package.json package-lock.json /app/
 
 RUN yarn install \
   --prefer-offline \
@@ -10,10 +10,12 @@ RUN yarn install \
   --non-interactive \
   --production=false
 
+COPY . .
+
 RUN yarn build
 
 RUN rm -rf node_modules && \
-  NODE_ENV=production yarn install \
+  NODE_ENV=development yarn install \
   --prefer-offline \
   --pure-lockfile \
   --non-interactive \
@@ -26,6 +28,6 @@ WORKDIR /app
 COPY --from=builder /app  .
 
 ENV HOST 0.0.0.0
-EXPOSE 80
+EXPOSE 3000
 
 CMD [ "yarn", "start" ]
