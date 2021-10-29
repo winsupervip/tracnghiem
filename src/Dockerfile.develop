@@ -1,4 +1,4 @@
-FROM node:lts as builder
+FROM node:12.16.1-alpine as builder
 ENV apiURI https://dev-api.tracnghiem.vn
 ENV NODE_ENV development
 WORKDIR /app
@@ -21,7 +21,7 @@ RUN rm -rf node_modules && \
   --non-interactive \
   --production=true
 
-FROM node:lts
+FROM node:12.16.1-alpine 
 
 WORKDIR /app
 
