@@ -308,7 +308,7 @@ export default {
         },
         responseType: 'code',
         grantType: 'authorization_code',
-        clientId: 'app-nuxt',
+        clientId: 'app-auth-vanilla',
         scope: ['openid', 'profile', 'email'],
         codeChallengeMethod: 'S256'
       }
