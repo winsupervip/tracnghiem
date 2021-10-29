@@ -59,8 +59,7 @@
               icon="pencil-square"
               @click="updateAnswer(answer.id)"
             ></b-icon>
-            <!-- <b-icon icon="trash" @click="handleDelete(index)"></b-icon> -->
-            <b-icon icon="trash"></b-icon>
+            <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
           </div>
         </div>
       </b-form-checkbox-group>

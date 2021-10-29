@@ -81,6 +81,7 @@ export default {
   },
   watch: {
     answers() {
+      console.log('answer', this.answers)
       const l = this.answers.length
       if (l > this.list.length) {
         const answer = this.answers[l - 1]
