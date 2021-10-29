@@ -86,6 +86,37 @@
       </div>
     </div>
 
+    <div v-if="typeQuestion === 'pairing'">
+      <div v-for="(answer, index) in answers" :key="index" class="p-answerItem">
+        <div class="p-answerItem">
+          <!-- <b-form-select v-model="isSelected" class="mb-3">
+            <b-form-select-option :value="null" disabled
+              >-- Chọn --</b-form-select-option
+            > 
+            <b-form-select-option
+              v-for="i in answers.length"
+              :key="i"
+              :value="answer.id + 'index' + i"
+              >({{ i }})</b-form-select-option
+            >
+          </b-form-select> -->
+          <Pairing :answer="answer" />
+          <div
+            class="p-answerItem__content"
+            v-html="answer.answerContent"
+          ></div>
+        </div>
+        <div class="p-answerItem__func">
+          <b-icon
+            v-b-modal.modal-1
+            icon="pencil-square"
+            @click="updateAnswer(answer.id)"
+          ></b-icon>
+          <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+        </div>
+      </div>
+    </div>
+
     <div v-if="typeQuestion === 'fill-blank'">
       <div v-for="(answer, index) in answers" :key="index" class="p-answerItem">
         <div class="p-answerItem">
@@ -137,9 +168,11 @@ import {
 } from '@nuxtjs/composition-api'
 import EventBus from '../../plugins/eventBus'
 import SelectForFillBlank from './SelectForFillBlank.vue'
+import Pairing from './Pairing.vue'
 export default defineComponent({
   components: {
     SelectForFillBlank,
+    Pairing,
   },
   props: {
     listAnswers: {

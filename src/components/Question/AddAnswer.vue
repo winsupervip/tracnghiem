@@ -18,11 +18,24 @@
       @hide="hide"
     >
       <div>
-        <TinyEditor
-          v-if="doShow"
-          v-model="answerContent"
-          :options="optionsText"
-        />
+        <div class="wrapper">
+          <div class="wrapper-left">
+            <p v-if="isPairing">Vế Trái</p>
+            <TinyEditor
+              v-if="doShow"
+              v-model="answerContent"
+              :options="optionsText"
+            />
+          </div>
+          <div v-if="isPairing" class="wrapper-right">
+            <p>Vế Phải</p>
+            <TinyEditor
+              v-if="doShow"
+              v-model="answerContentRight"
+              :options="optionsText"
+            />
+          </div>
+        </div>
         <div>
           <div :class="$style.checkBoxView">
             <div v-if="haveRandomAnswer" :class="$style.checkBox">
@@ -33,14 +46,6 @@
               />
               <p :class="$style.checkBoxTitle">Cho phép xáo trộn</p>
             </div>
-            <div v-if="haveRightAnswer" :class="$style.checkBox">
-              <input
-                v-model="isRightAnswer"
-                type="checkbox"
-                :class="$style.checkBoxInput"
-              />
-              <p :class="$style.checkBoxTitle">Câu trả lời đúng</p>
-            </div>
           </div>
           <b-button
             class="btnQuestion"
@@ -50,8 +55,8 @@
               updateValue.answerContent
                 ? 'Cập nhập câu trả lời'
                 : 'Thêm câu trả lời'
-            }}</b-button
-          >
+            }}
+          </b-button>
           <b-button
             class="btnQuestion btnQuestion--close"
             variant="outline-primary"
@@ -83,6 +88,10 @@ export default defineComponent({
       type: Function,
       required: true,
     },
+    isPairing: {
+      type: Boolean,
+      default: false,
+    },
     indexAnswerUpdate: {
       type: Number,
       default: -1,
@@ -103,6 +112,7 @@ export default defineComponent({
         entity_encoding: 'raw',
       },
       answerContent: '',
+      answerContentRight: '',
       isRightAnswer: false,
       isRandom: false,
       isUpdate: -1,
@@ -115,14 +125,25 @@ export default defineComponent({
   },
   watch: {
     updateValue() {
-      console.log(this.updateValue)
-      this.answerContent = this.updateValue?.answerContent
-        ? this.updateValue.answerContent
-        : ''
-      // eslint-disable-next-line no-unneeded-ternary
-      this.isRightAnswer = this.updateValue.rightAnswer === 1 ? true : false
-      // eslint-disable-next-line no-unneeded-ternary
-      this.isRandom = this.updateValue.random ? true : false
+      console.log('hoang', this.updateValue)
+      if (this.isPairing) {
+        this.answerContent = this.updateValue?.left?.answerContent
+          ? this.updateValue?.left?.answerContent
+          : ''
+        this.answerContentRight = this.updateValue?.right?.answerContent
+          ? this.updateValue?.right?.answerContent
+          : ''
+        // eslint-disable-next-line no-unneeded-ternary
+        this.isRandom = this.updateValue.random ? true : false
+      } else {
+        this.answerContent = this.updateValue?.answerContent
+          ? this.updateValue.answerContent
+          : ''
+        // eslint-disable-next-line no-unneeded-ternary
+        this.isRightAnswer = this.updateValue.rightAnswer === 1 ? true : false
+        // eslint-disable-next-line no-unneeded-ternary
+        this.isRandom = this.updateValue.random ? true : false
+      }
     },
   },
   methods: {
@@ -142,16 +163,41 @@ export default defineComponent({
         this.$toast.error('Câu trả lời không được bỏ trống').goAway(1500)
         return 0
       }
-      const data = {
-        id: uuid.v4(),
-        isRightAnswer: this.isRightAnswer ? 1 : 0,
-        isRandom: this.isRandom,
-        answerContent: this.answerContent,
+      let data = {}
+      if (this.isPairing) {
+        data = {
+          left: {
+            id: uuid.v4(),
+            position: 1,
+            isRightAnswer: this.isRightAnswer ? 1 : 0,
+            isRandom: this.isRandom,
+            answerContent: this.answerContent,
+          },
+          right: {
+            id: uuid.v4(),
+            position: 2,
+            isRightAnswer: this.isRightAnswer ? 1 : 0,
+            isRandom: this.isRandom,
+            answerContent: this.answerContentRight,
+          },
+          id: uuid.v4(),
+        }
+      } else {
+        data = {
+          id: uuid.v4(),
+          position: 0,
+          isRightAnswer: this.isRightAnswer ? 1 : 0,
+          isRandom: this.isRandom,
+          answerContent: this.answerContent,
+        }
       }
       this.isRightAnswer = false
       this.isRandom = false
       this.answerContent = ''
-      if (this.updateValue.answerContent) {
+      if (
+        this.updateValue.answerContent ||
+        this.updateValue?.left?.answerContent
+      ) {
         data.index = this.indexAnswerUpdate
         console.log('a')
         EventBus.$emit('updateListAnswer', data)
@@ -194,5 +240,9 @@ export default defineComponent({
 .btnQuestion--close {
   margin-left: 20px;
   width: auto;
+}
+.wrapper {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
