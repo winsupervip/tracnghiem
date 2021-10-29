@@ -262,13 +262,21 @@ export default defineComponent({
       }
       return valid
     },
+    removeAnswerId(value) {
+      console.log('remove', value)
+      const listAnswers = value.map((item) => {
+        delete item.id
+        return item
+      })
+      return listAnswers
+    },
     onSubmit() {
       console.log('okkkk')
       const data = {
         question: {
           hashId: '',
           title: this.title,
-          questionTypeId: 1,
+          questionTypeId: 2,
           questionContent: this.questionContent,
           explainationIfCorrect: this.explainationIfCorrect,
           explainationIfIncorrect: this.explainationIfInCorrect,
@@ -287,6 +295,8 @@ export default defineComponent({
       }
       console.log(this.errors)
       if (this.isValid(data)) {
+        data.answers = this.removeAnswerId(data.answers)
+        this.listAnswers = []
         CauHoiApi.createQuestion(
           data,
           () => {

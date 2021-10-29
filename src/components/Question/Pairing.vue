@@ -1,9 +1,10 @@
 <template>
-  <div>
-    <div class="wrapper">
-      <div class="left" v-html="answer.left.answerContent"></div>
-      <div class="right" v-html="answer.right.answerContent"></div>
-    </div>
+  <div class="wrapper-pairing">
+    <div class="wrapper-pairing__left" v-html="answer.left.answerContent"></div>
+    <div
+      class="wrapper-pairing__right"
+      v-html="answer.right.answerContent"
+    ></div>
   </div>
 </template>
 
@@ -18,28 +19,23 @@ export default {
   data() {
     return {}
   },
-  created() {
-    console.log('pairing', this.answer)
-  },
 }
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
+.wrapper-pairing {
   width: 100%;
   border: 1px solid black;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   display: flex;
-  .right {
+  &__right {
     width: 50%;
     word-break: break-word;
-    padding: 5px;
   }
-  .left {
+  &__left {
     width: 50%;
     border-right: 1px solid black;
     word-break: break-word;
-    padding: 5px;
   }
 }
 </style>

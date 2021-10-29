@@ -292,7 +292,7 @@ export default defineComponent({
         question: {
           hashId: '',
           title: this.title,
-          questionTypeId: 7,
+          questionTypeId: 5,
           questionContent: this.questionContent,
           explainationIfCorrect: this.explainationIfCorrect,
           explainationIfIncorrect: this.explainationIfInCorrect,
@@ -312,6 +312,8 @@ export default defineComponent({
 
       if (this.isValid(data)) {
         data.answers = this.removeAnswerId(this.listAnswers)
+
+        this.listAnswers = []
         CauHoiApi.createQuestion(
           data,
           () => {

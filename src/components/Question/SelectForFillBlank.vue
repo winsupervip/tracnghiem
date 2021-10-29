@@ -14,6 +14,9 @@
 
 <script>
 export default {
+  name: 'Simple',
+  display: 'Simple',
+  order: 0,
   props: {
     lengthAnswers: {
       type: Number,
@@ -47,5 +50,4 @@ export default {
   },
 }
 </script>
-
-<style></style>
+<style lang="scss" scoped></style>

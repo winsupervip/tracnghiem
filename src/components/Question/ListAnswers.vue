@@ -87,32 +87,21 @@
     </div>
 
     <div v-if="typeQuestion === 'pairing'">
-      <div v-for="(answer, index) in answers" :key="index" class="p-answerItem">
-        <div class="p-answerItem">
-          <!-- <b-form-select v-model="isSelected" class="mb-3">
-            <b-form-select-option :value="null" disabled
-              >-- Chọn --</b-form-select-option
-            > 
-            <b-form-select-option
-              v-for="i in answers.length"
-              :key="i"
-              :value="answer.id + 'index' + i"
-              >({{ i }})</b-form-select-option
-            >
-          </b-form-select> -->
-          <Pairing :answer="answer" />
-          <div
-            class="p-answerItem__content"
-            v-html="answer.answerContent"
-          ></div>
-        </div>
-        <div class="p-answerItem__func">
+      <div
+        v-for="(answer, index) in answers"
+        :key="index"
+        class="p-answerItem-pairing"
+      >
+        <div class="p-answerItem__func p-answerItem-pairing__top">
           <b-icon
             v-b-modal.modal-1
             icon="pencil-square"
             @click="updateAnswer(answer.id)"
           ></b-icon>
           <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+        </div>
+        <div class="p-answerItem">
+          <Pairing :answer="answer" />
         </div>
       </div>
     </div>
@@ -152,6 +141,15 @@
       </div>
     </div>
 
+    <div v-if="typeQuestion === 'draggable'">
+      <Draggable
+        :answers="answers"
+        :delete-answer="deleteAnswer"
+        :update-answer="updateAnswer"
+        :handle-draggable="handleDraggable"
+      />
+    </div>
+
     <b-alert v-if="errors[5]" id="error" show variant="warning">{{
       errors[5]
     }}</b-alert>
@@ -168,11 +166,13 @@ import {
 } from '@nuxtjs/composition-api'
 import EventBus from '../../plugins/eventBus'
 import SelectForFillBlank from './SelectForFillBlank.vue'
+import Draggable from './Draggable.vue'
 import Pairing from './Pairing.vue'
 export default defineComponent({
   components: {
     SelectForFillBlank,
     Pairing,
+    Draggable,
   },
   props: {
     listAnswers: {
@@ -257,6 +257,9 @@ export default defineComponent({
       console.log(listAnswer)
       props.updateRightAnswer(listAnswer)
     }
+    const handleDraggable = (value) => {
+      props.updateRightAnswer(value)
+    }
     watch(
       () => data.isSelected,
       () => {
@@ -272,6 +275,8 @@ export default defineComponent({
             answers = handleRightAnswerMulipleChoice()
           } else if (typeQuestion === 'fill-blank') {
             // cái này đặt biệt hơn, nên sẻ xử lý ở hàm handleFillBlank
+          } else if (typeQuestion === 'draggable') {
+            // cái này đặt biệt hơn, nên sẻ xử lý ở hàm handleDraggable
           }
 
           $logger.info(answers, data.isSelected)
@@ -283,6 +288,7 @@ export default defineComponent({
     return {
       ...toRefs(data),
       handleFillBlank,
+      handleDraggable,
     }
   },
   watch: {
@@ -340,7 +346,13 @@ p {
 .answersList {
   margin: 1rem;
 }
-
+.p-answerItem-pairing {
+  display: flex;
+  flex-direction: column;
+  &__top {
+    align-self: flex-end;
+  }
+}
 .p-answerItem {
   display: flex;
   justify-content: space-between;

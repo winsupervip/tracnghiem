@@ -46,6 +46,14 @@
               />
               <p :class="$style.checkBoxTitle">Cho phép xáo trộn</p>
             </div>
+            <div v-if="haveRightAnswer" :class="$style.checkBox">
+              <input
+                v-model="isRightAnswer"
+                type="checkbox"
+                :class="$style.checkBoxInput"
+              />
+              <p :class="$style.checkBoxTitle">Câu trả lời đúng</p>
+            </div>
           </div>
           <b-button
             class="btnQuestion"
