@@ -1,6 +1,8 @@
 <template>
   <section class="p-question__box">
-    <p class="p-question__box__heading"><strong>Chuyên mục (*)</strong></p>
+    <p class="p-question__box__heading">
+      <strong>{{ $t('Chuyên mục (*)') }}</strong>
+    </p>
     <div class="p-question__box__body">
       <div class="p-question__box__body__item">
         <div v-if="treeData.length > 0">
@@ -9,7 +11,7 @@
             :multiple="true"
             :always-open="alwaysOpen"
             :options="treeData"
-            placeholder="Chuyên mục cho câu hỏi"
+            :placeholder="$t('Chuyên mục cho câu hỏi')"
             :load-options="loadOptions"
           />
         </div>

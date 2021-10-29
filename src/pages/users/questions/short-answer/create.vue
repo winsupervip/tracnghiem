@@ -93,9 +93,9 @@ export default defineComponent({
   layout: 'dashboard',
   auth: false,
   setup() {
-    const { $logger } = useContext()
+    const { $logger, i18n } = useContext()
     const data = reactive({
-      questionType: 'Thêm câu hỏi trả lời ngắn',
+      questionType: i18n.t('Thêm câu hỏi trả lời ngắn'),
       questionContent: '',
       answerContent: '',
       options: {

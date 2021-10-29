@@ -1,8 +1,8 @@
 <template>
   <b-form-select v-model="isSelected" class="mb-3">
-    <b-form-select-option :value="null" disabled
-      >-- Chọn --</b-form-select-option
-    >
+    <b-form-select-option :value="null" disabled>{{
+      $t('-- Chọn --')
+    }}</b-form-select-option>
     <b-form-select-option
       v-for="i in lengthAnswers"
       :key="i"

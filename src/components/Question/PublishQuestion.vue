@@ -1,13 +1,13 @@
 <template>
   <section class="p-question__box">
     <p class="p-question__box__heading">
-      <strong>Xuất bản câu hỏi (*)</strong>
+      <strong>{{ $t('Xuất bản câu hỏi (*)') }}</strong>
     </p>
     <!-- <ValidationProvider v-slot="{ errors }" rules="required" name="choice"> -->
     <div class="p-question__box__body">
       <div class="p-question__box__body__item">
         <ul>
-          <b>Hiển thị:</b>
+          <b>{{ $t('Hiển thị:') }}</b>
           <li v-for="option in listStatus" :key="option.id">
             <label
               ><input v-model="status" type="radio" :value="option.id" />{{
@@ -22,17 +22,19 @@
         <!-- </ValidationProvider> -->
       </div>
       <div class="p-question__box__body__item">
-        <p><b>Chỉ bạn mới thấy được câu hỏi này.</b></p>
+        <p>
+          <b>{{ $t('Chỉ bạn mới thấy được câu hỏi này.') }}</b>
+        </p>
         <div>
-          <b-button variant="outline-primary" class="btnQuestion"
-            >Lưu bản nháp</b-button
+          <b-button variant="outline-primary" class="btnQuestion">{{
+            $t('Lưu bản nháp')
+          }}</b-button
           ><br />
           <b-button
             variant="outline-primary"
             class="btnQuestion btn-save"
-            value="Lưu Câu Hỏi"
             @click="onSubmit"
-            >Lưu câu hỏi</b-button
+            >{{ $t('Lưu câu hỏi') }}</b-button
           >
         </div>
       </div>

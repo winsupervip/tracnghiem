@@ -1,6 +1,8 @@
 <template>
   <div class="p-question__box">
-    <p class="p-question__box__heading"><strong>Cài đặt SEO*</strong></p>
+    <p class="p-question__box__heading">
+      <strong>{{ $t('Cài đặt SEO*') }}</strong>
+    </p>
     <!-- <ValidationProvider v-slot="{ errors }" rules="required">
       <b-form-input
         v-model="seoTitle"
@@ -16,7 +18,7 @@
       <div class="p-question__box__body__item">
         <b-form-input
           v-model="seoTitle"
-          placeholder="Tiêu đề SEO (*)"
+          :placeholder="$t('Tiêu đề SEO (*)')"
           :class="[$style.inputF]"
         ></b-form-input>
 
@@ -26,7 +28,7 @@
         <b-form-textarea
           id="textarea-default"
           v-model="seoDescription"
-          placeholder="Mô tả SEO (*)"
+          :placeholder="$t('Mô tả SEO (*)')"
           :class="$style.inputF"
         ></b-form-textarea>
       </div>

@@ -1,18 +1,21 @@
 <template>
   <div>
     <div :class="$style.addQuestionTitle">
-      <p style="font-weight: bold">Câu trả lời (*)</p>
-      <b-button v-b-modal.modal-1 class="btnQuestion" variant="outline-primary"
-        >Thêm câu trả lời</b-button
+      <p style="font-weight: bold">{{ $t('Câu trả lời (*)') }}</p>
+      <b-button
+        v-b-modal.modal-1
+        class="btnQuestion"
+        variant="outline-primary"
+        >{{ $t('Thêm câu trả lời') }}</b-button
       >
     </div>
     <b-modal
       id="modal-1"
       ref="modal-question"
       size="xl"
-      title="Thêm câu hỏi"
+      :title="$t('Thêm câu trả lời')"
       :ok-only="okOnly"
-      ok-title="Đóng"
+      :ok-title="$t('Đóng')"
       hide-footer
       @shown="shown"
       @hide="hide"
@@ -31,7 +34,7 @@
                 type="checkbox"
                 :class="$style.checkBoxInput"
               />
-              <p :class="$style.checkBoxTitle">Cho phép xáo trộn</p>
+              <p :class="$style.checkBoxTitle">{{ $t('Cho phép xáo trộn') }}</p>
             </div>
             <div v-if="haveRightAnswer" :class="$style.checkBox">
               <input
@@ -39,7 +42,7 @@
                 type="checkbox"
                 :class="$style.checkBoxInput"
               />
-              <p :class="$style.checkBoxTitle">Câu trả lời đúng</p>
+              <p :class="$style.checkBoxTitle">{{ $t('Câu trả lời đúng') }}</p>
             </div>
           </div>
           <b-button
@@ -48,15 +51,15 @@
             @click="handleAnswer"
             >{{
               updateValue.answerContent
-                ? 'Cập nhập câu trả lời'
-                : 'Thêm câu trả lời'
+                ? $t('Cập nhập câu trả lời')
+                : $t('Thêm câu trả lời')
             }}</b-button
           >
           <b-button
             class="btnQuestion btnQuestion--close"
             variant="outline-primary"
             @click="hideModal"
-            >Đóng</b-button
+            >{{ $t('Đóng') }}</b-button
           >
         </div>
       </div>
@@ -139,7 +142,8 @@ export default defineComponent({
     handleAnswer() {
       if (this.answerContent === '') {
         // config: https://github.com/shakee93/vue-toasted
-        this.$toast.error('Câu trả lời không được bỏ trống').goAway(1500)
+        // eslint-disable-next-line no-undef
+        this.$toast.error($t('Câu trả lời không được bỏ trống')).goAway(1500)
         return 0
       }
       const data = {
@@ -153,9 +157,7 @@ export default defineComponent({
       this.answerContent = ''
       if (this.updateValue.answerContent) {
         data.index = this.indexAnswerUpdate
-        console.log('a')
         EventBus.$emit('updateListAnswer', data)
-        console.log('b')
       } else {
         this.$emit('add', data)
       }
