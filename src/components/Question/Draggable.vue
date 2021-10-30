@@ -30,7 +30,7 @@
               icon="pencil-square"
               @click="updateAnswer(answer.id)"
             ></b-icon>
-            <b-icon icon="trash" @click="handleDelate(answer.id)"></b-icon>
+            <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
           </div>
         </div>
       </transition-group>
@@ -80,16 +80,8 @@ export default {
     },
   },
   watch: {
-    answers() {
-      console.log('answer', this.answers)
-      const l = this.answers.length
-      if (l > this.list.length) {
-        const answer = this.answers[l - 1]
-        answer.fixed = false
-        // this.list.push(answer)
-      }
-    },
     list() {
+      console.log('watch list chay')
       this.handleDraggable(this.list)
     },
   },
@@ -112,11 +104,6 @@ export default {
       const relatedElement = relatedContext.element
       const draggedElement = draggedContext.element
       return (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
-    },
-    handleDelate(id) {
-      const index = this.list.findIndex((item) => item.id === id)
-      this.list.splice(index, 1)
-      this.deleteAnswer(id)
     },
   },
 }
