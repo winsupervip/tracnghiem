@@ -284,7 +284,14 @@ export default defineComponent({
     // eslint-disable-next-line no-undef
     const that = this
     EventBus.$on('updateListAnswer', function (item) {
-      that.$emit('updateListAnswer', item)
+      // that.$emit('updateListAnswer', item)
+      console.log('item', item)
+      console.log('an', that.answers)
+      const answer = that.answers[item.index]
+      answer.answerContent = item.answerContent
+      answer.random = item.isRandom
+      answer.plainText = item.answerContent
+      answer.rightAnswer = item.isRightAnswer
     })
   },
   methods: {

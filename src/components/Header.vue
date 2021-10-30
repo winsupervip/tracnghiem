@@ -34,8 +34,11 @@
             >
               Đăng ký
             </b-button>
-            <b-button variant="primary" size="lg" @click="collapseMenuMb">
+            <!-- <b-button variant="primary" size="lg" @click="collapseMenuMb">
               Đăng nhập
+            </b-button> -->
+            <b-button variant="primary" @click="$auth.loginWith('keycloak')">
+              Đăng Nhập
             </b-button>
           </div>
         </div>

@@ -84,7 +84,7 @@ export default defineComponent({
     AddAnswer,
   },
   layout: 'dashboard',
-  auth: false,
+  auth: true,
   setup() {
     const { $logger, i18n } = useContext()
     const data = reactive({
@@ -186,14 +186,26 @@ export default defineComponent({
       this.$toast.show('Thêm câu trả lời thanh công').goAway(1500)
       console.log(this.listAnswers)
     },
-    updateListAnswer(item) {
-      console.log(3)
-      const answer = this.listAnswers[item.index]
-      answer.answerContent = item.answerContent
-      answer.random = item.isRandom
-      answer.plainText = item.answerContent
-      answer.rightAnswer = item.isRightAnswer
-      console.log(4)
+    updateListAnswer(value) {
+      // const answer = this.listAnswers[item.index]
+      this.listAnswers = this.listAnswers.map((item) => {
+        if (value.rightAnswer === 1) {
+          item.rightAnswer = 0
+        }
+        if (value.id === item.id) {
+          item.answerContent = value.answerContent
+          item.random = value.isRandom
+          item.plainText = value.answerContent
+          item.rightAnswer = value.isRightAnswer
+        }
+        return item
+      })
+      console.log('day la list answer', this.listAnswers)
+      // answer.answerContent = item.answerContent
+      // answer.random = item.isRandom
+      // answer.plainText = item.answerContent
+      // answer.rightAnswer = item.isRightAnswer
+      // console.log(4)
       this.$toast.show('Cập nhâp câu trả lời thanh công nhé').goAway(1500)
     },
     deleteAnswer(value) {

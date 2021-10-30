@@ -86,7 +86,7 @@ export default {
       if (l > this.list.length) {
         const answer = this.answers[l - 1]
         answer.fixed = false
-        this.list.push(answer)
+        // this.list.push(answer)
       }
     },
     list() {
