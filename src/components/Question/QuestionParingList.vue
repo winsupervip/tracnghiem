@@ -3,32 +3,32 @@
     <p v-html="questionlist.description"></p>
 
     <div class="answer-pairing">
-      <div class="row_A">
+      <!-- <div class="row_A">
         <p for="">Cột A</p>
-        <ul v-for="(answer, index) in questionlist.answers" :key="index">
+        <ul v-for="(answer, index) in convertPosition.row_A" :key="index">
           <li v-if="answer.position == 1">
             <span
               >{{ String.fromCharCode(65 + index) + '. ' }}
               <p>{{ answer.answerContent }}</p></span
             >
-
-            <treeselect
-              class="choose-answer"
-              :value="answer.rightAnswer"
-              disabled
-            />
           </li>
         </ul>
       </div>
       <div class="row_B">
         <p>Cột B</p>
-        <ul v-for="(answer, index) in questionlist.answers" :key="index">
+        <ul v-for="(answer, index) in convertPosition.row_B" :key="index">
           <li v-if="answer.position == 2">
-            {{ index + '. ' }}
+            {{ answer.rightAnswer + '. ' }}
             <p>{{ answer.answerContent }}</p>
           </li>
         </ul>
-      </div>
+      </div>-->
+      <table>
+        <tr>
+          <th>Cột A</th>
+          <th>Cột B</th>
+        </tr>
+      </table>
     </div>
   </div>
 </template>
@@ -36,6 +36,7 @@
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
 import '../../node_modules/bootstrap/scss/bootstrap.scss'
+
 export default defineComponent({
   name: 'QuestionParingList',
   auth: false,
@@ -45,7 +46,20 @@ export default defineComponent({
       required: true,
     },
   },
-  methods: {},
+  computed: {
+    convertPosition() {
+      const left = []
+      const right = []
+      this.questionlist.answers.forEach((e) => {
+        if (e.position === 1) {
+          left.push(e)
+        } else {
+          right.push(e)
+        }
+      })
+      return { row_A: left, row_B: right }
+    },
+  },
 })
 </script>
 <style lang="scss">
@@ -68,8 +82,9 @@ export default defineComponent({
         display: flex;
         justify-content: space-between;
         align-items: center;
-        .choose-answer {
-          width: 30%;
+        input {
+          width: 10%;
+          text-align: center;
         }
       }
     }

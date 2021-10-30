@@ -1,13 +1,13 @@
 <template>
-  <div class="question">
+  <div class="question-singleChoice">
     <p v-html="questionlist.description"></p>
 
-    <div class="answer">
+    <div class="answer-singleChoice">
       <ul>
         <li
           v-for="(answer, index) in questionlist.answers"
           :key="index"
-          type="A"
+          type="none"
         >
           <span
             :style="{ display: 'flex' }"

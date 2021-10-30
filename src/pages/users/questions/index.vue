@@ -11,7 +11,7 @@
           <ul>
             <li type="none">
               <a href="/users/questions/single-choice/create" class="d-block"
-                ><strong>Nhiều lựa chọn</strong></a
+                ><strong>Một lựa chọn</strong></a
               >
               <a href="/users/questions/multiple-choice/create" class="d-block"
                 ><strong>Nhiều lựa chọn</strong></a
@@ -26,7 +26,11 @@
               <a href="/users/questions/short-answer/create" class="d-block"
                 ><strong>Câu hỏi trả lời ngắn</strong></a
               >
-              <a href="#" class="d-block"><strong>Sắp thứ tự</strong></a>
+              <a
+                href="/users/questions/draggable-fill-blank/create"
+                class="d-block"
+                ><strong>Sắp thứ tự</strong></a
+              >
             </li>
           </ul>
           <div class="dropdown-divider"></div>
@@ -114,17 +118,15 @@
         v-for="question in questionList"
         :key="question.id"
         :questions="question"
-      />
+      ></QuestionListPage>
       <b-pagination
-        v-model="currentPage"
+        v-model="urlQuery.page"
         class="pagination"
-        align="center"
-        :total-rows="urlQuery.page"
+        :total-rows="total"
         :per-page="urlQuery.pageSize"
-        :link-gen="linkGen"
       ></b-pagination>
     </div>
-
+    <!-- :number-of-pages="total" -->
     <MultipleQuestion v-show="showMultipleQuestion" />
   </div>
 </template>
@@ -157,11 +159,12 @@ export default defineComponent({
     const { $loader, $logger } = useContext()
     const route = useRoute()
     const queryPage = route?.value?.query?.page || 1
+
     const data = reactive({
       currentPage: queryPage,
       showSingleQuestion: true,
       showMultipleQuestion: false,
-      total: 0,
+      total: 1,
       category: [],
       treeQuestionTypes: [],
       listStatus: [],
@@ -196,30 +199,25 @@ export default defineComponent({
       data.listStatus = result3.object.items
       data.level = result4.object.items
 
-      $logger.info('ok')
       $loader().close()
     })
-    const linkGen = (pageNumber) => {
-      return { path: route.path, query: { page: data.currentPage } }
-    }
+
     const handleSearch = async () => {
-      $logger.info(data.urlQuery)
       const result = await QuestionApi.getUserItemList(data.urlQuery)
-      const ispageNumber = Math.ceil(
-        result.data.object?.total / data.urlQuery.pageSize
-      )
 
-      data.urlQuery.page = ispageNumber
-
+      // data.total = Math.ceil(result.data.object?.total / data.urlQuery.pageSize)
+      data.total = result.data.object?.total
       data.questionList = result.data.object.items
-      $logger.info(result.data.object)
+      $logger.info(data.total)
     }
+
+    fetch()
 
     watch(
-      () => data.currentPage,
+      () => data.urlQuery.page,
 
       () => {
-        fetch()
+        handleSearch()
       }
     )
     const inputSearch = (e) => {
@@ -231,24 +229,13 @@ export default defineComponent({
       ...toRefs(data),
       inputSearch,
       handleSearch,
-      linkGen,
     }
   },
   data: () => ({}),
 
   computed: {
-    criteria() {
-      return this.search.trim()
-    },
     availableOptions() {
       return this.options
-    },
-
-    searchDesc() {
-      if (this.criteria && this.availableOptions.length === 0) {
-        return 'There are no tags matching your search criteria'
-      }
-      return ''
     },
   },
   watch: {
@@ -530,8 +517,9 @@ export default defineComponent({
     }
   }
   .pagination {
-    position: relative;
     margin-top: 10px;
+    display: flex;
+    justify-content: center;
     background: #ffffff;
   }
 }

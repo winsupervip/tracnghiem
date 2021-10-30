@@ -13,11 +13,7 @@
             {{ String.fromCharCode(65 + index) + '. ' }}
             <p v-html="answer.answerContent"></p
           ></span>
-          <treeselect
-            class="choose-answer"
-            :value="answer.rightAnswer"
-            disabled
-          />
+          <input type="text" :value="answer.rightAnswer" disabled />
         </li>
       </ul>
     </div>
@@ -51,8 +47,9 @@ export default defineComponent({
         align-items: center;
         span {
         }
-        .choose-answer {
-          width: 10vw;
+        input {
+          width: 10%;
+          text-align: center;
         }
       }
     }
