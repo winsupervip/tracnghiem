@@ -91,7 +91,7 @@ export default defineComponent({
     AddAnswer,
   },
   layout: 'dashboard',
-  auth: false,
+  auth: true,
   setup() {
     const { $logger, i18n } = useContext()
     const data = reactive({

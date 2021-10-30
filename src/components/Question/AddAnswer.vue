@@ -134,7 +134,7 @@ export default defineComponent({
     },
     hide() {
       this.doShow = false
-      this.updateAnswer('remove_data')
+      // this.updateAnswer('remove_data')
     },
     hideModal() {
       this.$refs['modal-question'].hide()
@@ -143,7 +143,9 @@ export default defineComponent({
       if (this.answerContent === '') {
         // config: https://github.com/shakee93/vue-toasted
         // eslint-disable-next-line no-undef
-        this.$toast.error($t('Câu trả lời không được bỏ trống')).goAway(1500)
+        this.$toast
+          .error(this.$i18n.t('Câu trả lời không được bỏ trống'))
+          .goAway(1500)
         return 0
       }
       const data = {

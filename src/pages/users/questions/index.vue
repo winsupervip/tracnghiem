@@ -10,7 +10,12 @@
         <div class="d-block">
           <ul>
             <li v-for="item in items" :key="item.message" type="1">
-              <a href="#" :style="{ fontWeight: 'bold' }">{{ item }}</a>
+              <a :href="item.url" :style="{ fontWeight: 'bold' }">{{
+                item.title
+              }}</a>
+              <!-- <nuxt-link :style="{ fontWeight: 'bold' }" :to="item.url">{{
+                item.title
+              }}</nuxt-link> -->
             </li>
           </ul>
           <div class="dropdown-divider"></div>
@@ -101,7 +106,7 @@ export default defineComponent({
     MultipleQuestion: MultipleListPage,
   },
   layout: 'dashboard',
-  auth: false,
+  auth: true,
   setup() {
     const { $loader, $logger } = useContext()
     const route = useRoute()
@@ -148,13 +153,13 @@ export default defineComponent({
       },
     ],
     items: [
-      'Một lựa chọn',
-      'Nhiều lựa chọn',
-      'Đúng sai',
-      'Ghép đôi',
-      'Điền vào chỗ trống',
-      'Câu hỏi trả lời ngắn',
-      'Sắp thứ tự',
+      { url: 'single-choice/create', title: 'Một lựa chọn' },
+      { url: 'multiple-choice/create', title: 'Nhiều lựa chọn' },
+      { url: 'right-wrong/create', title: 'Đúng sai' },
+      { url: '', title: 'Ghép đôi' },
+      { url: 'fill-blank/create', title: 'Điền vào chỗ trống' },
+      { url: 'short-answer/create', title: 'Câu hỏi trả lời ngắn' },
+      { url: 'draggable-fill-blank/create', title: 'Sắp thứ tự' },
     ],
   }),
   methods: {
