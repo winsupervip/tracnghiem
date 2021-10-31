@@ -24,7 +24,7 @@
       <b-alert v-if="errors[0]" id="error" show variant="warning">{{
         errors[0]
       }}</b-alert>
-
+      {{ getTitle1 }}
       <div class="marginTag">
         <b-form-group label-for="tags-with-dropdown">
           <b-form-tags
@@ -115,6 +115,7 @@ import {
   toRefs,
   watch,
 } from '@nuxtjs/composition-api'
+import { mapActions, mapGetters } from 'vuex'
 import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   name: 'Header',
@@ -169,6 +170,7 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapGetters(['getTitle1']),
     criteria() {
       // Compute the search criteria
       return this.search.trim()
@@ -194,12 +196,14 @@ export default defineComponent({
     },
     title() {
       this.getTitle(this.title)
+      this.addTitle(this.title)
     },
     value() {
       this.getTags(this.value)
     },
   },
   methods: {
+    ...mapActions(['insertCategory', 'addTitle']),
     shown() {
       this.doShow = true
     },
