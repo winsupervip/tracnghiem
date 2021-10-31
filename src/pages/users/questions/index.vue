@@ -1,30 +1,131 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <a href="#">Ngân hàng câu hỏi</a>
-      <button id="show-btn" @click="$bvModal.show('bv-modal-example')">
+    <div class="heading-page">
+      <h1 class="heading-title">Ngân hàng câu hỏi</h1>
+      <b-btn
+        pill
+        variant="primary"
+        size="sm"
+        class="btn-rounded"
+        @click="$bvModal.show('bv-modal-add-question')"
+      >
         Thêm mới
-      </button>
-
-      <b-modal id="bv-modal-example" hide-footer title="Câu hỏi:">
-        <div class="d-block">
-          <ul>
-            <li v-for="item in items" :key="item.message" type="1">
-              <a href="#" :style="{ fontWeight: 'bold' }">{{ item }}</a>
-            </li>
-          </ul>
-          <div class="dropdown-divider"></div>
-          <a href="#" :style="{ fontWeight: 'bold' }">Câu chùm</a>
-        </div>
+      </b-btn>
+    </div>
+    <b-modal id="bv-modal-add-question" hide-footer title="Câu hỏi:">
+      <div class="d-block">
+        <ul>
+          <li v-for="item in items" :key="item.message" type="1">
+            <a href="#" :style="{ fontWeight: 'bold' }">{{ item }}</a>
+          </li>
+        </ul>
+        <div class="dropdown-divider"></div>
+        <a href="#" :style="{ fontWeight: 'bold' }">Câu chùm</a>
+      </div>
+      <div class="d-flex justify-content-center mt-3">
         <b-button
-          class="text-center mt-3"
+          variant="primary"
+          class="text-center"
           block
-          @click="$bvModal.hide('bv-modal-example')"
+          @click="$bvModal.hide('bv-modal-add-question')"
           >Đóng</b-button
         >
-      </b-modal>
-    </div>
-    <div class="type-list-question">
+      </div>
+    </b-modal>
+
+    <b-tabs class="custom-tabs" content-class="mt-3">
+      <b-tab title="Danh sách câu đơn" active>
+        <div class="filter-bar">
+          <div class="row">
+            <div class="col-6 col-md-4 col-lg-2 mb-3">
+              <b-form-input placeholder="Tìm kiếm câu hỏi"></b-form-input>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 mb-3">
+              <treeselect
+                :options="category"
+                :load-options="loadOptions"
+                placeholder="Danh mục"
+              />
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 mb-3">
+              <treeselect
+                :multiple="true"
+                :options="treeQuestionTypes"
+                :load-options="loadOptions"
+                placeholder="Loại câu hỏi"
+              />
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 mb-3">
+              <treeselect
+                :options="listStatus"
+                :load-options="loadOptions"
+                placeholder="Trạng thái"
+              />
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 mb-3">
+              <treeselect
+                :options="level"
+                :load-options="loadOptions"
+                placeholder="Mức độ"
+              />
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 mb-3">
+              <treeselect
+                :options="options"
+                :load-options="loadOptions"
+                placeholder="Sắp xếp"
+              />
+            </div>
+          </div>
+        </div>
+        <SingleQuestion />
+      </b-tab>
+      <b-tab title="Danh sách câu chùm">
+        <div class="type-question">
+          <div class="input-group">
+            <b-form-input
+              list="my-list-id"
+              placeholder="Tìm kiếm câu hỏi"
+              no-caret
+            ></b-form-input
+            ><datalist id="my-list-id">
+              <option v-for="(option, index) in options" :key="index">
+                {{ option }}
+              </option>
+            </datalist>
+          </div>
+          <treeselect
+            :options="category"
+            :load-options="loadOptions"
+            placeholder="Danh mục"
+          />
+          <treeselect
+            :multiple="true"
+            :options="treeQuestionTypes"
+            :load-options="loadOptions"
+            placeholder="Loại câu hỏi"
+          />
+          <treeselect
+            :options="listStatus"
+            :load-options="loadOptions"
+            placeholder="Trạng thái"
+          />
+          <treeselect
+            :options="level"
+            :load-options="loadOptions"
+            placeholder="Mức độ"
+          />
+          <treeselect
+            :options="options"
+            :load-options="loadOptions"
+            placeholder="Sắp xếp"
+          />
+        </div>
+        <MultipleQuestion />
+      </b-tab>
+    </b-tabs>
+
+    <!-- <div class="type-list-question">
       <button @click="showSingleQuestion = !showSingleQuestion">
         Danh sách câu đơn
       </button>
@@ -75,7 +176,7 @@
       />
     </div>
     <SingleQuestion v-if="showSingleQuestion" />
-    <MultipleQuestion v-show="showMultipleQuestion" />
+    <MultipleQuestion v-show="showMultipleQuestion" /> -->
   </div>
 </template>
 

@@ -1,0 +1,22 @@
+.heading-page {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  .heading-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-right: 1rem;
+  }
+}
+
+.filter-bar {
+  .form-control {
+    min-height: 36px;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+  }
+  .vue-treeselect__control {
+    border-radius: 4px;
+  }
+}

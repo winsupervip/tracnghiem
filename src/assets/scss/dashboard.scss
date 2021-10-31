@@ -1,5 +1,5 @@
 // @import "reset";
-@import "variables";
+@import 'variables';
 
 body.dashboard {
   position: relative;
@@ -21,14 +21,15 @@ body.dashboard {
   z-index: 1;
   background-color: rgb(244, 245, 247);
 
-  @media screen and (max-width: 990px){
+  @media screen and (max-width: 990px) {
     display: flex;
   }
 
   .toggle--sp {
     &:hover {
       background: rgba(9, 30, 66, 0.08);
-      transition: background 0.1s ease-out 0s, box-shadow 0.15s cubic-bezier(0.47, 0.03, 0.49, 1.38) 0s;
+      transition: background 0.1s ease-out 0s,
+        box-shadow 0.15s cubic-bezier(0.47, 0.03, 0.49, 1.38) 0s;
       vertical-align: middle;
       width: auto;
       outline: none !important;
@@ -43,7 +44,7 @@ body.dashboard {
 }
 
 .img-circle {
-  border-radius:50%;
+  border-radius: 50%;
 }
 
 .l-dashboard {
@@ -78,19 +79,19 @@ body.dashboard {
     transition: width 300ms cubic-bezier(0.2, 0, 0, 1) 0s;
     max-width: 304px;
 
-    @media screen and (max-width: 990px){
+    @media screen and (max-width: 990px) {
       // transition: all 0.8s ease;
-      transition: all 300ms cubic-bezier(0.2, 0, 0, 1) 0s
+      transition: all 300ms cubic-bezier(0.2, 0, 0, 1) 0s;
     }
   }
 
   &__nav {
     // width: 304px;
     display: flex;
-    background-color: #0747A6;
+    background-color: #0747a6;
     height: 100vh;
 
-    @media screen and (min-width: 990px){
+    @media screen and (min-width: 990px) {
       // width: 304px;
     }
 
@@ -166,7 +167,8 @@ body.dashboard {
               left: 0px;
               background: rgb(255, 255, 255);
               border-radius: 3px;
-              box-shadow: rgb(9 30 66 / 25%) 0px 4px 8px -2px, rgb(9 30 66 / 31%) 0px 0px 1px;
+              box-shadow: rgb(9 30 66 / 25%) 0px 4px 8px -2px,
+                rgb(9 30 66 / 31%) 0px 0px 1px;
               box-sizing: border-box;
               overflow: auto;
               padding: 4px 0px;
@@ -176,7 +178,9 @@ body.dashboard {
               flex-direction: column;
               max-width: 800px;
               min-width: 234px;
-              font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
+              font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+                Oxygen, Ubuntu, Fira Sans, Droid Sans, Helvetica Neue,
+                sans-serif;
               // opacity: 0;
 
               &.account {
@@ -192,7 +196,7 @@ body.dashboard {
                 .item {
                   -webkit-box-align: center;
                   align-items: center;
-                  color: #172B4d;
+                  color: #172b4d;
                   display: flex;
                   flex: 1 1 auto;
                   padding: 8px 12px;
@@ -226,7 +230,8 @@ body.dashboard {
       padding: 20px 10px;
       width: calc(100% - 60px);
       color: #fff;
-      font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+        Ubuntu, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
       overflow: hidden;
 
       .p-navMenuList {
@@ -235,7 +240,6 @@ body.dashboard {
       }
 
       .p-navMenu__logo {
-        margin-top: 5px;
         margin-bottom: 25px;
         text-align: center;
         height: 44px;
@@ -306,7 +310,7 @@ body.dashboard {
         &:nth-of-type(2) {
           margin-top: 150px;
 
-          @media screen and (max-width: 990px){
+          @media screen and (max-width: 990px) {
             margin-top: 50px;
           }
 
@@ -331,7 +335,7 @@ body.dashboard {
           transform: rotate(360deg);
         }
 
-        @media screen and (max-width: 990px){
+        @media screen and (max-width: 990px) {
           display: none;
         }
       }
@@ -351,13 +355,13 @@ body.dashboard {
     overflow-y: auto;
     will-change: padding-left;
     transition: padding-left 300ms cubic-bezier(0.2, 0, 0, 1) 0s;
-    @media screen and (min-width: $md){
+    @media screen and (min-width: $md) {
       position: relative;
       width: calc(100% - 304px);
       left: 304px;
     }
 
-    @media screen and (max-width: 990px){
+    @media screen and (max-width: 990px) {
       margin-top: 50px;
       height: calc(100vh - 50px);
     }
@@ -365,14 +369,14 @@ body.dashboard {
 
   &.toggle--close {
     .l-dashboard__content {
-      @media screen and (min-width: $md){
+      @media screen and (min-width: $md) {
         width: calc(100% - 80px);
         left: 80px;
       }
     }
 
     .b-sidebar {
-      @media screen and (min-width: $md){
+      @media screen and (min-width: $md) {
         width: 80px;
       }
     }

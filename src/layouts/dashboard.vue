@@ -159,7 +159,7 @@
               >
                 <ul>
                   <li>
-                    <nuxt-link to="" class="active">
+                    <nuxt-link to="">
                       <div>
                         <img
                           src="~/assets/img/dashboard/icon_lslambai.svg"
@@ -200,7 +200,7 @@
                 <h2 class="one-line">Công cụ chung</h2>
                 <ul>
                   <li>
-                    <nuxt-link to="" class="active">
+                    <nuxt-link to="#">
                       <div>
                         <img
                           src="~/assets/img/dashboard/bx_bx-network-chart.svg"
@@ -359,3 +359,7 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss">
+@import '/assets/scss/layout-user';
+</style>
