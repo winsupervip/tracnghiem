@@ -30,6 +30,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'vue/no-v-html': 'off',
     'import/no-unresolved': 'off',
+    'no-trailing-spaces': 'error',
     'prettier/prettier': [
       'error',
       {

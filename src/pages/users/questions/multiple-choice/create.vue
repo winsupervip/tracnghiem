@@ -85,10 +85,10 @@ export default defineComponent({
   },
   layout: 'dashboard',
   auth: false,
-  setup() {
-    const { $logger } = useContext()
+  setup(context) {
+    const { $logger, i18n } = useContext()
     const data = reactive({
-      questionType: 'Thêm câu hỏi 1 lựa chọn',
+      questionType: i18n.t('Thêm câu hỏi nhiều lựa chọn'),
       questionContent: '',
       answerContent: '',
       options: {
@@ -170,6 +170,7 @@ export default defineComponent({
       }
     },
     updateRightAnswer(value) {
+      console.log(value)
       this.listAnswers = value
     },
     addListAnswer(data) {
@@ -183,18 +184,19 @@ export default defineComponent({
         id: data.id,
       }
       this.listAnswers.push(value)
-      alert('Thêm câu trả lời thanh công')
+      this.$toast.show(this.$i18n.t('Thêm câu trả lời thanh công')).goAway(1500)
       console.log(this.listAnswers)
     },
     updateListAnswer(item) {
-      console.log(3)
+      console.log(this.listAnswers)
       const answer = this.listAnswers[item.index]
       answer.answerContent = item.answerContent
       answer.random = item.isRandom
       answer.plainText = item.answerContent
       answer.rightAnswer = item.isRightAnswer
-      console.log(4)
-      alert('Cập nhâp câu trả lời thanh công nhé')
+      this.$toast
+        .show(this.$i18n.t('Cập nhâp câu trả lời thanh công'))
+        .goAway(1500)
     },
     deleteAnswer(value) {
       const index = this.listAnswers.findIndex((item) => item.id === value)
@@ -205,42 +207,42 @@ export default defineComponent({
       this.errors = []
       let valid = true
       if (data.question.title === '') {
-        this.errors.push('Tiêu đề là bắt buộc')
+        this.errors.push(this.$i18n.t('Tiêu đề là bắt buộc'))
         valid = false
       } else {
         this.errors.push(false)
       }
       // 1
       if (data.question.questionContent === '') {
-        this.errors.push('Bạn phải nhập vào nội dung câu hỏi')
+        this.errors.push(this.$i18n.t('Bạn phải nhập vào nội dung câu hỏi'))
         valid = false
       } else {
         this.errors.push(false)
       }
       // 2
       if (data.question.tags.length === 0) {
-        this.errors.push('Bạn phải gán ít nhất 1 tag cho câu hỏi')
+        this.errors.push(this.$i18n.t('Bạn phải gán ít nhất 1 tag cho câu hỏi'))
         valid = false
       } else {
         this.errors.push(false)
       }
       // 3
       if (!data.question.levelId) {
-        this.errors.push('Bạn phải chọn level cho câu hỏi')
+        this.errors.push(this.$i18n.t('Bạn phải chọn level cho câu hỏi'))
         valid = false
       } else {
         this.errors.push(false)
       }
       // 4
       if (data.question.categories.length === 0) {
-        this.errors.push('Bạn phải chọn 1 danh mục cho câu hỏi')
+        this.errors.push(this.$i18n.t('Bạn phải chọn 1 danh mục cho câu hỏi'))
         valid = false
       } else {
         this.errors.push(false)
       }
       // 5
-      if (data.answers.length === 0 || data.answers.length > 3) {
-        this.errors.push('Loại câu hỏi này phải có từ 2->3 câu trả lời')
+      if (data.answers.length < 2) {
+        this.$i18n.t('Loại câu hỏi này phải có từ 2 câu trả lời')
         valid = false
       } else {
         this.errors.push(false)
@@ -248,18 +250,26 @@ export default defineComponent({
       // 6
       console.log(data.question.statusId)
       if (!data.question.statusId) {
-        this.errors.push('Bạn có muốn xuất bản câu hỏi')
+        this.errors.push(this.$i18n.t('Bạn có muốn xuất bản câu hỏi'))
         valid = false
       } else {
         this.errors.push(false)
       }
       if (data.question.seoTitle === '') {
-        this.errors.push('Bạn có muốn xuất bản câu hỏi')
+        this.errors.push(this.$i18n.t('Bạn Phải nhập vào SEO'))
         valid = false
       } else {
         this.errors.push(false)
       }
       return valid
+    },
+    removeAnswerId(value) {
+      console.log('remove', value)
+      const listAnswers = value.map((item) => {
+        delete item.id
+        return item
+      })
+      return listAnswers
     },
     onSubmit() {
       console.log('okkkk')
@@ -267,7 +277,7 @@ export default defineComponent({
         question: {
           hashId: '',
           title: this.title,
-          questionTypeId: 1,
+          questionTypeId: 2,
           questionContent: this.questionContent,
           explainationIfCorrect: this.explainationIfCorrect,
           explainationIfIncorrect: this.explainationIfInCorrect,
@@ -286,13 +296,15 @@ export default defineComponent({
       }
       console.log(this.errors)
       if (this.isValid(data)) {
+        data.answers = this.removeAnswerId(data.answers)
+        this.listAnswers = []
         CauHoiApi.createQuestion(
           data,
           () => {
-            alert('Thêm Thành Công')
+            this.$toast.show(this.$i18n.t('Thêm Thành Công')).goAway(1500)
           },
           () => {
-            alert('Có lỗi xảy ra')
+            this.$toast.show(this.$i18n.t('Có lỗi xảy ra')).goAway(1500)
           }
         )
       }

@@ -86,9 +86,9 @@ export default defineComponent({
   layout: 'dashboard',
   auth: false,
   setup() {
-    const { $logger } = useContext()
+    const { $logger, i18n } = useContext()
     const data = reactive({
-      questionType: 'Thêm câu hỏi 1 lựa chọn',
+      questionType: i18n.t('Thêm câu hỏi 1 lựa chọn'),
       questionContent: '',
       answerContent: '',
       options: {
@@ -183,7 +183,7 @@ export default defineComponent({
         id: data.id,
       }
       this.listAnswers.push(value)
-      alert('Thêm câu trả lời thanh công')
+      this.$toast.show('Thêm câu trả lời thanh công').goAway(1500)
       console.log(this.listAnswers)
     },
     updateListAnswer(item) {
@@ -194,7 +194,7 @@ export default defineComponent({
       answer.plainText = item.answerContent
       answer.rightAnswer = item.isRightAnswer
       console.log(4)
-      alert('Cập nhâp câu trả lời thanh công nhé')
+      this.$toast.show('Cập nhâp câu trả lời thanh công nhé').goAway(1500)
     },
     deleteAnswer(value) {
       const index = this.listAnswers.findIndex((item) => item.id === value)
@@ -239,8 +239,8 @@ export default defineComponent({
         this.errors.push(false)
       }
       // 5
-      if (data.answers.length === 0 || data.answers.length > 3) {
-        this.errors.push('Loại câu hỏi này phải có từ 2->3 câu trả lời')
+      if (data.answers.length < 2) {
+        this.errors.push('Loại câu hỏi này phải có từ 2 câu trả lời trở lên')
         valid = false
       } else {
         let count = 0
@@ -250,10 +250,10 @@ export default defineComponent({
           }
         })
         if (count === 0) {
-          alert('Chọn 1 câu trả lời đúng đi')
+          this.$toast.show('Chọn 1 câu trả lời đúng đi').goAway(1500)
           valid = false
         } else if (count > 1) {
-          alert('Loại câu hỏi ni có 1 đáp án thôi')
+          this.$toast.show('Loại câu hỏi ni có 1 đáp án thôi').goAway(1500)
           valid = false
         } else {
           this.errors.push(false)
@@ -274,6 +274,13 @@ export default defineComponent({
         this.errors.push(false)
       }
       return valid
+    },
+    removeAnswerId(value) {
+      const listAnswers = value.map((item) => {
+        delete item.id
+        return item
+      })
+      return listAnswers
     },
     onSubmit() {
       console.log('okkkk')
@@ -300,13 +307,15 @@ export default defineComponent({
       }
       console.log(this.errors)
       if (this.isValid(data)) {
+        data.answers = this.removeAnswerId(this.listAnswers)
+        this.listAnswers = []
         CauHoiApi.createQuestion(
           data,
           () => {
-            alert('Thêm Thành Công')
+            this.$toast.show('Thêm Thành Công').goAway(1500)
           },
           () => {
-            alert('Có lỗi xảy ra')
+            this.$toast.show('Có lỗi xảy ra').goAway(1500)
           }
         )
       }

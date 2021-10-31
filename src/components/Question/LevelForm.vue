@@ -7,7 +7,9 @@
       :options="options"
       :value-consists-of="valueConsistsOf"
     /> -->
-    <p class="p-question__box__heading"><strong>Mức độ (*)</strong></p>
+    <p class="p-question__box__heading">
+      <strong>{{ $t('Mức độ (*)') }}</strong>
+    </p>
     <div class="p-question__box__body">
       <div class="p-question__box__body__item box--level">
         <label v-for="option in listLevelRadio" :key="option.id"
