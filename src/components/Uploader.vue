@@ -111,6 +111,7 @@
 </template>
 <script>
 // eslint-disable-next-line import/no-unresolved
+import { mapActions } from 'vuex'
 import fileApi from '@/api/fileApi'
 const STATUS_INITIAL = 0
 const STATUS_SAVING = 1
@@ -128,10 +129,6 @@ export default {
     isPrivate: {
       type: Boolean,
       required: false,
-    },
-    getImage: {
-      type: Function,
-      required: true,
     },
   },
   data: () => ({
@@ -159,14 +156,14 @@ export default {
   },
   watch: {
     image() {
-      this.getImage(this.image)
+      this.addSeoAvatar(this.image)
     },
   },
-  created() {},
   mounted() {
     this.reset()
   },
   methods: {
+    ...mapActions(['addSeoAvatar']),
     reup() {
       this.$emit('reupload')
       this.reset()

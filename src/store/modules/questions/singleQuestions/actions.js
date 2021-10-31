@@ -1,31 +1,34 @@
 export default {
   addCategory({ commit }, data) {
-    commit('INSERT_CATEGORY', data)
+    commit('ADD_CATEGORY', data)
   },
-  addTag({ commit }, data) {
-    commit('INSERT_CATEGORY', data)
+  addTags({ commit }, data) {
+    commit('ADD_TAGS', data)
+  },
+  addQuestionContent({ commit }, data) {
+    commit('ADD_QUESTION_CONTENT', data)
   },
   addExplainationIfCorrect({ commit }, data) {
-    commit('INSERT_CATEGORY', data)
+    commit('ADD_EXPLAINATION_IF_CORRECT', data)
   },
   addExplainationIfInCorrect({ commit }, data) {
-    commit('INSERT_CATEGORY', data)
+    commit('ADD_EXPLAINATION_IF_IN_CORRECT', data)
   },
   addlevel({ commit }, data) {
-    commit('INSERT_CATEGORY', data)
+    commit('ADD_LEVEL', data)
   },
   // có muốn xuất bản câu hỏi hay không
   addStatus({ commit }, data) {
-    commit('INSERT_CATEGORY', data)
+    commit('ADD_STATUS', data)
   },
   addSeoTitle({ commit }, data) {
-    commit('INSERT_CATEGORY', data)
+    commit('ADD_SEO_TITLE', data)
   },
   addSeoDescription({ commit }, data) {
-    commit('INSERT_CATEGORY', data)
+    commit('ADD_SEO_DESCRIPTION', data)
   },
   addSeoAvatar({ commit }, data) {
-    commit('INSERT_CATEGORY', data)
+    commit('ADD_SEO_AVATART', data)
   },
   addTitle({ commit }, data) {
     console.log('actions chay')
@@ -42,5 +45,8 @@ export default {
   },
   removeValueUpdateAnswer({ commit }) {
     commit('REMOVE_VALUE_UPDATE_ANSWER')
+  },
+  deleteAnswer({ commit }, data) {
+    commit('DELETE_ANSWER', data)
   },
 }

@@ -91,22 +91,12 @@ export default defineComponent({
     //   type: Function,
     //   required: true,
     // },
-    updateValue: {
-      type: Object,
-      required: true,
-    },
-    updateAnswer: {
-      type: Function,
-      required: true,
-    },
+
     isPairing: {
       type: Boolean,
       default: false,
     },
-    indexAnswerUpdate: {
-      type: Number,
-      default: -1,
-    },
+
     haveRightAnswer: {
       type: Boolean,
       default: true,
@@ -138,27 +128,27 @@ export default defineComponent({
     ...mapGetters(['getUpdateValueAnswer']),
   },
   watch: {
-    updateValue() {
-      console.log('hoang', this.updateValue)
-      if (this.isPairing) {
-        this.answerContent = this.updateValue?.left?.answerContent
-          ? this.updateValue?.left?.answerContent
-          : ''
-        this.answerContentRight = this.updateValue?.right?.answerContent
-          ? this.updateValue?.right?.answerContent
-          : ''
-        // eslint-disable-next-line no-unneeded-ternary
-        this.isRandom = this.updateValue.random ? true : false
-      } else {
-        this.answerContent = this.updateValue?.answerContent
-          ? this.updateValue.answerContent
-          : ''
-        // eslint-disable-next-line no-unneeded-ternary
-        this.isRightAnswer = this.updateValue.rightAnswer === 1 ? true : false
-        // eslint-disable-next-line no-unneeded-ternary
-        this.isRandom = this.updateValue.random ? true : false
-      }
-    },
+    // getUpdateValueAnswer() {
+    //   console.log('hoang', this.updateValue)
+    //   if (this.isPairing) {
+    //     this.answerContent = this.updateValue?.left?.answerContent
+    //       ? this.updateValue?.left?.answerContent
+    //       : ''
+    //     this.answerContentRight = this.updateValue?.right?.answerContent
+    //       ? this.updateValue?.right?.answerContent
+    //       : ''
+    //     // eslint-disable-next-line no-unneeded-ternary
+    //     this.isRandom = this.updateValue.random ? true : false
+    //   } else {
+    //     this.answerContent = this.updateValue?.answerContent
+    //       ? this.updateValue.answerContent
+    //       : ''
+    //     // eslint-disable-next-line no-unneeded-ternary
+    //     this.isRightAnswer = this.updateValue.rightAnswer === 1 ? true : false
+    //     // eslint-disable-next-line no-unneeded-ternary
+    //     this.isRandom = this.updateValue.random ? true : false
+    //   }
+    // },
     getUpdateValueAnswer() {
       this.answerContent = this.getUpdateValueAnswer?.answerContent
         ? this.getUpdateValueAnswer.answerContent
@@ -200,14 +190,14 @@ export default defineComponent({
           left: {
             id: uuid.v4(),
             position: 1,
-            isRightAnswer: this.isRightAnswer ? 1 : 0,
+            rightAnswer: this.isRightAnswer ? 1 : 0,
             isRandom: this.isRandom,
             answerContent: this.answerContent,
           },
           right: {
             id: uuid.v4(),
             position: 2,
-            isRightAnswer: this.isRightAnswer ? 1 : 0,
+            rightAnswer: this.isRightAnswer ? 1 : 0,
             isRandom: this.isRandom,
             answerContent: this.answerContentRight,
           },
@@ -217,7 +207,9 @@ export default defineComponent({
         data = {
           id: uuid.v4(),
           position: 0,
-          isRightAnswer: this.isRightAnswer ? 1 : 0,
+          hashId: '',
+          plainText: this.answerContent,
+          rightAnswer: this.isRightAnswer ? 1 : 0,
           isRandom: this.isRandom,
           answerContent: this.answerContent,
         }
@@ -233,12 +225,10 @@ export default defineComponent({
         // EventBus.$emit('updateListAnswer', data)
         data.id = this.getUpdateValueAnswer.id
         this.handleUpdateAnswer(data)
-
         this.removeValueUpdateAnswer()
       } else {
-        console.log('aaa', data)
-        this.$emit('add', data)
         this.handleAddAnswer(data)
+        this.$toast.show('Thêm câu trả lời thanh công').goAway(1500)
       }
     },
   },

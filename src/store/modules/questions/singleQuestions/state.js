@@ -1,17 +1,14 @@
 export default () => ({
   question: {
     questionContent: '',
-    answerContent: '',
+    plainText: '',
     options: {
       convert_urls: false,
       entity_encoding: 'raw',
     },
-    isRightAnswer: false,
     isRandom: false,
-    listAnswers: [],
     indexDataUpdate: -1,
     categories: [],
-    levelForm: false,
     statusId: false,
     levelId: false,
     seoAvatar: '',
@@ -23,6 +20,7 @@ export default () => ({
     title: '',
     position: 0,
   },
+  answers: [],
   updateValueAnswer: {},
   modalShow: false,
   updateValue: {},

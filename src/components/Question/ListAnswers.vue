@@ -28,10 +28,7 @@
           <b-icon
             v-b-modal.modal-1
             icon="pencil-square"
-            @click="
-              updateAnswer(answer.id)
-              addValueUpdateAnswer(answer)
-            "
+            @click="addValueUpdateAnswer(answer)"
           ></b-icon>
           <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
         </div>
@@ -64,8 +61,9 @@
             <b-icon
               v-b-modal.modal-1
               icon="pencil-square"
-              @click="updateAnswer(answer.id)"
+              @click="addValueUpdateAnswer(answer)"
             ></b-icon>
+
             <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
           </div>
         </div>
@@ -85,8 +83,9 @@
           <b-icon
             v-b-modal.modal-1
             icon="pencil-square"
-            @click="updateAnswer(answer.id)"
+            @click="addValueUpdateAnswer(answer)"
           ></b-icon>
+
           <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
         </div>
       </div>
@@ -116,8 +115,9 @@
           <b-icon
             v-b-modal.modal-1
             icon="pencil-square"
-            @click="updateAnswer(answer.id)"
+            @click="addValueUpdateAnswer(answer)"
           ></b-icon>
+
           <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
         </div>
       </div>
@@ -151,8 +151,9 @@
           <b-icon
             v-b-modal.modal-1
             icon="pencil-square"
-            @click="updateAnswer(answer.id)"
+            @click="addValueUpdateAnswer(answer)"
           ></b-icon>
+
           <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
         </div>
       </div>
@@ -162,11 +163,10 @@
       <Draggable
         :answers="answers"
         :delete-answer="deleteAnswer"
-        :update-answer="updateAnswer"
+        :update-answer="addValueUpdateAnswer"
         :handle-draggable="handleDraggable"
       />
     </div>
-
     <b-alert v-if="errors[5]" id="error" show variant="warning">{{
       errors[5]
     }}</b-alert>
@@ -191,28 +191,12 @@ export default defineComponent({
     Draggable,
   },
   props: {
-    listAnswers: {
-      type: Array,
-      required: true,
-    },
     typeQuestion: {
       type: String,
       required: true,
     },
-    updateRightAnswer: {
-      type: Function,
-      required: true,
-    },
-    updateAnswer: {
-      type: Function,
-      required: true,
-    },
     errors: {
       type: Array,
-      required: true,
-    },
-    deleteAnswer: {
-      type: Function,
       required: true,
     },
   },
@@ -224,17 +208,17 @@ export default defineComponent({
       listAnswersIsChange: false,
     })
     // hàm ni chạy cho câu hỏi đúng sai chỉ chạy 1 lần
-    const getRightAnswer = () => {
-      $logger.info('get')
-      const index = props.listAnswers.findIndex(
-        (item) => item.rightAnswer === 1
-      )
-      if (index !== -1) {
-        $logger.info('watch', props.listAnswers[index].id)
-        data.isSelected = props.listAnswers[index].id
-      }
-    }
-    getRightAnswer()
+    // const getRightAnswer = () => {
+    //   $logger.info('get')
+    //   const index = props.listAnswers.findIndex(
+    //     (item) => item.rightAnswer === 1
+    //   )
+    //   if (index !== -1) {
+    //     $logger.info('watch', props.listAnswers[index].id)
+    //     data.isSelected = props.listAnswers[index].id
+    //   }
+    // }
+    // getRightAnswer()
     const handleRightAnswerSingleChoice = () => {
       const answers = props.listAnswers.map((item) => {
         if (data.isSelected === item.id) {
@@ -340,7 +324,7 @@ export default defineComponent({
     })
   },
   methods: {
-    ...mapActions(['addValueUpdateAnswer']),
+    ...mapActions(['addValueUpdateAnswer', 'deleteAnswer']),
     activeSingleRightAnswer() {
       const index = this.listAnswers.findIndex((item) => item.rightAnswer === 1)
       if (index !== -1) {

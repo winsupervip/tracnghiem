@@ -22,13 +22,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
-  props: {
-    getCommentOrNote: {
-      type: Function,
-      required: true,
-    },
-  },
   data() {
     return {
       explainationIfCorrect: '',
@@ -37,17 +32,14 @@ export default {
   },
   watch: {
     explainationIfCorrect() {
-      this.getCommentOrNote({
-        explainationIfCorrect: this.explainationIfCorrect,
-        explainationIfIncorrect: this.explainationIfIncorrect,
-      })
+      this.addExplainationIfCorrect(this.explainationIfCorrect)
     },
     explainationIfIncorrect() {
-      this.getCommentOrNote({
-        explainationIfCorrect: this.explainationIfCorrect,
-        explainationIfIncorrect: this.explainationIfIncorrect,
-      })
+      this.addExplainationIfInCorrect(this.explainationIfIncorrect)
     },
+  },
+  methods: {
+    ...mapActions(['addExplainationIfCorrect', 'addExplainationIfInCorrect']),
   },
 }
 </script>
