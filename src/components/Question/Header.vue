@@ -19,7 +19,7 @@
       <b-form-input
         v-model="title"
         class="form-control"
-        placeholder="Tiêu Đề (*)"
+        :placeholder="$t('Tiêu Đề (*)')"
       ></b-form-input>
       <b-alert v-if="errors[0]" id="error" show variant="warning">{{
         errors[0]
@@ -89,7 +89,7 @@
                   v-if="search.length > 0"
                   variant="success"
                   @click="userAddTag"
-                  >Add</b-button
+                  >{{ $t('Thêm') }}</b-button
                 >
               </b-dropdown>
             </template>

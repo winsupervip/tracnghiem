@@ -91,11 +91,11 @@ export default defineComponent({
     AddAnswer,
   },
   layout: 'dashboard',
-  auth: false,
+  auth: true,
   setup() {
-    const { $logger } = useContext()
+    const { $logger, i18n } = useContext()
     const data = reactive({
-      questionType: 'Thêm câu hỏi trả lời ngắn',
+      questionType: i18n.t('Thêm câu hỏi trả lời ngắn'),
       questionContent: '',
       answerContent: '',
       options: {

@@ -87,11 +87,11 @@ export default defineComponent({
     AddAnswer,
   },
   layout: 'dashboard',
-  auth: false,
+  auth: true,
   setup() {
-    const { $logger } = useContext()
+    const { $logger, i18n } = useContext()
     const data = reactive({
-      questionType: 'Thêm câu hỏi trả lời ngắn',
+      questionType: i18n.t('Thêm câu hỏi điền vào chổ trống'),
       questionContent: '',
       answerContent: '',
       options: {
@@ -186,7 +186,7 @@ export default defineComponent({
         id: data.id,
       }
       this.listAnswers.push(value)
-      this.$toast.show('Thêm câu trả lời thanh công').goAway(1500)
+      this.$toast.show(this.$i18n.t('Thêm câu trả lời thanh công')).goAway(1500)
       console.log(this.listAnswers)
     },
     updateListAnswer(item) {
@@ -197,7 +197,9 @@ export default defineComponent({
       answer.plainText = item.answerContent
       answer.rightAnswer = item.isRightAnswer
       console.log(4)
-      this.$toast.show('Cập nhâp câu trả lời thanh công nhé').goAway(1500)
+      this.$toast
+        .show(this.$i18n.t('Cập nhâp câu trả lời thanh công'))
+        .goAway(1500)
     },
     deleteAnswer(value) {
       const index = this.listAnswers.findIndex((item) => item.id === value)
@@ -208,49 +210,49 @@ export default defineComponent({
       this.errors = []
       let valid = true
       if (data.question.title === '') {
-        this.errors.push('Tiêu đề là bắt buộc')
+        this.errors.push(this.$i18n.t('Tiêu đề là bắt buộc'))
         valid = false
       } else {
         this.errors.push(false)
       }
       // 1
       if (data.question.questionContent === '') {
-        this.errors.push('Bạn phải nhập vào nội dung câu hỏi')
+        this.errors.push(this.$i18n.t('Bạn phải gán ít nhất 1 tag cho câu hỏi'))
         valid = false
       } else {
         this.errors.push(false)
       }
       // 2
       if (data.question.tags.length === 0) {
-        this.errors.push('Bạn phải gán ít nhất 1 tag cho câu hỏi')
+        this.errors.push(this.$i18n.t('Bạn phải gán ít nhất 1 tag cho câu hỏi'))
         valid = false
       } else {
         this.errors.push(false)
       }
       // 3
       if (!data.question.levelId) {
-        this.errors.push('Bạn phải chọn level cho câu hỏi')
+        this.errors.push(this.$i18n.t('Bạn phải chọn level cho câu hỏi'))
         valid = false
       } else {
         this.errors.push(false)
       }
       // 4
       if (data.question.categories.length === 0) {
-        this.errors.push('Bạn phải chọn 1 danh mục cho câu hỏi')
+        this.errors.push(this.$i18n.t('Bạn phải chọn 1 danh mục cho câu hỏi'))
         valid = false
       } else {
         this.errors.push(false)
       }
       // 5
       if (data.answers.length === 0) {
-        this.errors.push('Loại câu hỏi này phải có từ 1 câu trả lời')
+        this.$i18n.t('Loại câu hỏi này phải có từ 1 câu trả lời')
         valid = false
       } else {
         const n = data.answers.length
         for (let i = 0; i < n; i++) {
           for (let j = i + 1; j < n; j++) {
             if (data.answers[i].rightAnswer === data.answers[j].rightAnswer) {
-              this.errors.push('Vị trí điền bị trùng lặp')
+              this.errors.push(this.$i18n.t('Vị trí điền bị trùng lặp'))
               valid = false
             }
           }
@@ -262,13 +264,13 @@ export default defineComponent({
       // 6
       console.log(data.question.statusId)
       if (!data.question.statusId) {
-        this.errors.push('Bạn có muốn xuất bản câu hỏi')
+        this.errors.push(this.$i18n.t('Bạn có muốn xuất bản câu hỏi'))
         valid = false
       } else {
         this.errors.push(false)
       }
       if (data.question.seoTitle === '') {
-        this.errors.push('Bạn có muốn xuất bản câu hỏi')
+        this.errors.push(this.$i18n.t('Bạn Phải nhập vào SEO'))
         valid = false
       } else {
         this.errors.push(false)
@@ -317,11 +319,10 @@ export default defineComponent({
         CauHoiApi.createQuestion(
           data,
           () => {
-            this.$toast.show('Thêm Thành Công').goAway(1500)
-            this.rest()
+            this.$toast.show(this.$i18n.t('Thêm Thành Công')).goAway(1500)
           },
           () => {
-            this.$toast.show('Có lỗi xảy ra').goAway(1500)
+            this.$toast.show(this.$i18n.t('Có lỗi xảy ra')).goAway(1500)
           }
         )
       }

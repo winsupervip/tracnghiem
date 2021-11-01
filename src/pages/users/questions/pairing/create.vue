@@ -9,6 +9,9 @@
         :errors="errors"
       />
       <AddAnswer
+        :have-right-answer="false"
+        :have-random-answer="true"
+        :is-pairing="true"
         :update-value="updateValue"
         :errors="errors"
         :update-answer="updateAnswer"
@@ -17,7 +20,7 @@
       />
       <ListAnswer
         :list-answers="listAnswers"
-        type-question="single-choice"
+        type-question="pairing"
         :update-answer="updateAnswer"
         :update-right-answer="updateRightAnswer"
         :errors="errors"
@@ -55,7 +58,7 @@ import {
 } from '@nuxtjs/composition-api'
 // import _ from 'lodash'
 // eslint-disable-next-line no-unused-vars
-import { uuid } from 'vue-uuid'
+// import { uuid } from 'vue-uuid'
 // import EventBus from '../../../../plugins/eventBus'
 import PublishQuestion from '@/components/Question/PublishQuestion.vue'
 import LevelForm from '@/components/Question/LevelForm.vue'
@@ -84,11 +87,11 @@ export default defineComponent({
     AddAnswer,
   },
   layout: 'dashboard',
-  auth: true,
+  auth: false,
   setup() {
-    const { $logger, i18n } = useContext()
+    const { $logger } = useContext()
     const data = reactive({
-      questionType: i18n.t('Thêm câu hỏi đúng sai'),
+      questionType: 'Thêm câu hỏi ghép đôi',
       questionContent: '',
       answerContent: '',
       options: {
@@ -96,36 +99,8 @@ export default defineComponent({
         entity_encoding: 'raw',
       },
       isRightAnswer: false,
-      isRandom: false,
-      listAnswers: [
-        {
-          id: uuid.v4(),
-          hashId: '',
-          answerContent: 'Đúng',
-          rightAnswer: 1,
-          random: true,
-          position: 0,
-          plainText: 'Đúng',
-        },
-        {
-          id: uuid.v4(),
-          hashId: '',
-          answerContent: 'Sai',
-          rightAnswer: 0,
-          random: true,
-          position: 0,
-          plainText: 'Sai',
-        },
-        {
-          id: uuid.v4(),
-          hashId: '',
-          answerContent: 'Không có đáp án',
-          rightAnswer: 0,
-          random: true,
-          position: 0,
-          plainText: 'Không có đáp án',
-        },
-      ],
+      isRandom: true,
+      listAnswers: [],
       indexDataUpdate: -1,
       categories: [],
       levelForm: false,
@@ -198,33 +173,48 @@ export default defineComponent({
       }
     },
     updateRightAnswer(value) {
+      console.log(value)
       this.listAnswers = value
     },
     addListAnswer(data) {
       const value = {
-        answerContent: data.answerContent,
-        random: data.isRandom,
-        rightAnswer: data.isRightAnswer,
-        hashId: '',
-        position: 0,
-        plainText: data.answerContent,
-        id: data.id,
+        left: {
+          answerContent: data.left.answerContent,
+          random: data.left.random,
+          rightAnswer: data.left.isRightAnswer,
+          hashId: '',
+          position: data.left.position,
+          plainText: data.left.answerContent,
+          id: data.left.id,
+        },
+        right: {
+          answerContent: data.right.answerContent,
+          random: data.right.random,
+          rightAnswer: data.right.isRightAnswer,
+          hashId: '',
+          position: data.right.position,
+          plainText: data.right.answerContent,
+          id: data.right.id,
+        },
       }
       this.listAnswers.push(value)
-      this.$toast.show(this.$i18n.t('Thêm câu trả lời thanh công')).goAway(1500)
+      console.log('abc', value)
+      this.$toast.show('Thêm câu trả lời thanh công').goAway(1500)
       console.log(this.listAnswers)
     },
     updateListAnswer(item) {
-      console.log(3)
+      console.log(this.listAnswers)
       const answer = this.listAnswers[item.index]
-      answer.answerContent = item.answerContent
-      answer.random = item.isRandom
-      answer.plainText = item.answerContent
-      answer.rightAnswer = item.isRightAnswer
+      answer.left.answerContent = item.left.answerContent
+      answer.right.answerContent = item.right.answerContent
+      answer.left.random = item.leftisRandom
+      answer.left.plainText = item.left.answerContent
+      answer.left.rightAnswer = item.left.isRightAnswer
+      answer.right.random = item.right.lisRandom
+      answer.right.plainText = item.right.answerContent
+      answer.right.rightAnswer = item.right.isRightAnswer
       console.log(4)
-      this.$toast
-        .show(this.$i18n.t('Cập nhâp câu trả lời thanh công nhé'))
-        .goAway(1500)
+      this.$toast.show('Cập nhâp câu trả lời thanh công nhé').goAway(1500)
     },
     deleteAnswer(value) {
       const index = this.listAnswers.findIndex((item) => item.id === value)
@@ -235,88 +225,81 @@ export default defineComponent({
       this.errors = []
       let valid = true
       if (data.question.title === '') {
-        this.errors.push(this.$i18n.t('Tiêu đề là bắt buộc'))
+        this.errors.push('Tiêu đề là bắt buộc')
         valid = false
       } else {
         this.errors.push(false)
       }
       // 1
       if (data.question.questionContent === '') {
-        this.errors.push(this.$i18n.t('Bạn phải nhập vào nội dung câu hỏi'))
+        this.errors.push('Bạn phải nhập vào nội dung câu hỏi')
         valid = false
       } else {
         this.errors.push(false)
       }
       // 2
       if (data.question.tags.length === 0) {
-        this.errors.push(this.$i18n.t('Bạn phải gán ít nhất 1 tag cho câu hỏi'))
+        this.errors.push('Bạn phải gán ít nhất 1 tag cho câu hỏi')
         valid = false
       } else {
         this.errors.push(false)
       }
       // 3
       if (!data.question.levelId) {
-        this.errors.push(this.$i18n.t('Bạn phải chọn level cho câu hỏi'))
+        this.errors.push('Bạn phải chọn level cho câu hỏi')
         valid = false
       } else {
         this.errors.push(false)
       }
       // 4
       if (data.question.categories.length === 0) {
-        this.errors.push(this.$i18n.t('Bạn phải chọn 1 danh mục cho câu hỏi'))
+        this.errors.push('Bạn phải chọn 1 danh mục cho câu hỏi')
         valid = false
       } else {
         this.errors.push(false)
       }
       // 5
-      if (data.answers.length === 0 || data.answers.length > 3) {
-        this.errors.push(
-          this.$i18n.t('Loại câu hỏi này phải có từ 2->3 câu trả lời')
-        )
+      if (data.answers.length < 2) {
+        this.errors.push('Loại câu hỏi này phải có từ 2 câu trả lời trở lên')
         valid = false
       } else {
-        let count = 0
-        data.answers.forEach((e) => {
-          if (e.rightAnswer === 1) {
-            count += 1
-          }
-        })
-        if (count === 0) {
-          this.$toast
-            .show(this.$i18n.t('Chọn 1 câu trả lời đúng đi'))
-            .goAway(1500)
-          valid = false
-        } else if (count > 1) {
-          this.$toast
-            .show(this.$i18n.t('Loại câu hỏi ni có 1 đáp án thôi'))
-            .goAway(1500)
-          valid = false
-        } else {
-          this.errors.push(false)
-        }
+        this.errors.push(false)
       }
       // 6
       console.log(data.question.statusId)
       if (!data.question.statusId) {
-        this.errors.push(this.$i18n.t('Bạn có muốn xuất bản câu hỏi'))
+        this.errors.push('Bạn có muốn xuất bản câu hỏi')
         valid = false
       } else {
         this.errors.push(false)
       }
       if (data.question.seoTitle === '') {
-        this.errors.push(this.$i18n.t('Bạn có muốn xuất bản câu hỏi'))
+        this.errors.push('Bạn có muốn xuất bản câu hỏi')
         valid = false
       } else {
         this.errors.push(false)
       }
       return valid
     },
-    removeAnswerId(value) {
-      const listAnswers = value.map((item) => {
-        delete item.id
-        return item
-      })
-      return listAnswers
+    convertListAnswer() {
+      const answers = []
+      for (let i = 0; i < this.listAnswers.length; i++) {
+        if (this.listAnswers[i].left) {
+          const temp = this.listAnswers[i].left
+          temp.rightAnswer = i + 1
+          temp.position = 1
+          delete temp.id
+          answers.push(temp)
+        }
+        if (this.listAnswers[i].right) {
+          const temp = this.listAnswers[i].right
+          temp.rightAnswer = i + 1
+          temp.position = 2
+          delete temp.id
+          answers.push(temp)
+        }
+      }
+      return answers
     },
     onSubmit() {
       console.log('okkkk')
@@ -324,7 +307,7 @@ export default defineComponent({
         question: {
           hashId: '',
           title: this.title,
-          questionTypeId: 3,
+          questionTypeId: 4,
           questionContent: this.questionContent,
           explainationIfCorrect: this.explainationIfCorrect,
           explainationIfIncorrect: this.explainationIfInCorrect,
@@ -341,17 +324,16 @@ export default defineComponent({
         },
         answers: this.listAnswers,
       }
-      console.log(this.errors)
+      console.log(this.listAnswers)
       if (this.isValid(data)) {
-        data.answers = this.removeAnswerId(this.listAnswers)
-        this.listAnswers = []
+        data.answers = this.convertListAnswer()
         CauHoiApi.createQuestion(
           data,
           () => {
-            this.$toast.show(this.$i18n.t('Thêm Thành Công')).goAway(1500)
+            this.$toast.show('Thêm Thành Công').goAway(1500)
           },
           () => {
-            this.$toast.show(this.$i18n.t('Có lỗi xảy ra')).goAway(1500)
+            this.$toast.show('Có lỗi xảy ra').goAway(1500)
           }
         )
       }

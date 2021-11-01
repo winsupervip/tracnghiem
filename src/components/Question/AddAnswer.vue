@@ -1,28 +1,44 @@
 <template>
   <div>
     <div :class="$style.addQuestionTitle">
-      <p style="font-weight: bold">Câu trả lời (*)</p>
-      <b-button v-b-modal.modal-1 class="btnQuestion" variant="outline-primary"
-        >Thêm câu trả lời</b-button
+      <p style="font-weight: bold">{{ $t('Câu trả lời (*)') }}</p>
+      <b-button
+        v-b-modal.modal-1
+        class="btnQuestion"
+        variant="outline-primary"
+        >{{ $t('Thêm câu trả lời') }}</b-button
       >
     </div>
     <b-modal
       id="modal-1"
       ref="modal-question"
       size="xl"
-      title="Thêm câu hỏi"
+      :title="$t('Thêm câu trả lời')"
       :ok-only="okOnly"
-      ok-title="Đóng"
+      :ok-title="$t('Đóng')"
       hide-footer
       @shown="shown"
       @hide="hide"
     >
       <div>
-        <TinyEditor
-          v-if="doShow"
-          v-model="answerContent"
-          :options="optionsText"
-        />
+        <div class="wrapper">
+          <div class="wrapper-left">
+            <p v-if="isPairing">Vế Trái</p>
+            <TinyEditor
+              v-if="doShow"
+              v-model="answerContent"
+              :options="optionsText"
+            />
+          </div>
+          <div v-if="isPairing" class="wrapper-right">
+            <p>Vế Phải</p>
+            <TinyEditor
+              v-if="doShow"
+              v-model="answerContentRight"
+              :options="optionsText"
+            />
+          </div>
+        </div>
         <div>
           <div :class="$style.checkBoxView">
             <div v-if="haveRandomAnswer" :class="$style.checkBox">
@@ -31,7 +47,7 @@
                 type="checkbox"
                 :class="$style.checkBoxInput"
               />
-              <p :class="$style.checkBoxTitle">Cho phép xáo trộn</p>
+              <p :class="$style.checkBoxTitle">{{ $t('Cho phép xáo trộn') }}</p>
             </div>
             <div v-if="haveRightAnswer" :class="$style.checkBox">
               <input
@@ -39,7 +55,7 @@
                 type="checkbox"
                 :class="$style.checkBoxInput"
               />
-              <p :class="$style.checkBoxTitle">Câu trả lời đúng</p>
+              <p :class="$style.checkBoxTitle">{{ $t('Câu trả lời đúng') }}</p>
             </div>
           </div>
           <b-button
@@ -48,15 +64,15 @@
             @click="handleAnswer"
             >{{
               updateValue.answerContent
-                ? 'Cập nhập câu trả lời'
-                : 'Thêm câu trả lời'
+                ? $t('Cập nhập câu trả lời')
+                : $t('Thêm câu trả lời')
             }}</b-button
           >
           <b-button
             class="btnQuestion btnQuestion--close"
             variant="outline-primary"
             @click="hideModal"
-            >Đóng</b-button
+            >{{ $t('Đóng') }}</b-button
           >
         </div>
       </div>
@@ -83,6 +99,10 @@ export default defineComponent({
       type: Function,
       required: true,
     },
+    isPairing: {
+      type: Boolean,
+      default: false,
+    },
     indexAnswerUpdate: {
       type: Number,
       default: -1,
@@ -103,6 +123,7 @@ export default defineComponent({
         entity_encoding: 'raw',
       },
       answerContent: '',
+      answerContentRight: '',
       isRightAnswer: false,
       isRandom: false,
       isUpdate: -1,
@@ -115,14 +136,25 @@ export default defineComponent({
   },
   watch: {
     updateValue() {
-      console.log(this.updateValue)
-      this.answerContent = this.updateValue?.answerContent
-        ? this.updateValue.answerContent
-        : ''
-      // eslint-disable-next-line no-unneeded-ternary
-      this.isRightAnswer = this.updateValue.rightAnswer === 1 ? true : false
-      // eslint-disable-next-line no-unneeded-ternary
-      this.isRandom = this.updateValue.random ? true : false
+      console.log('hoang', this.updateValue)
+      if (this.isPairing) {
+        this.answerContent = this.updateValue?.left?.answerContent
+          ? this.updateValue?.left?.answerContent
+          : ''
+        this.answerContentRight = this.updateValue?.right?.answerContent
+          ? this.updateValue?.right?.answerContent
+          : ''
+        // eslint-disable-next-line no-unneeded-ternary
+        this.isRandom = this.updateValue.random ? true : false
+      } else {
+        this.answerContent = this.updateValue?.answerContent
+          ? this.updateValue.answerContent
+          : ''
+        // eslint-disable-next-line no-unneeded-ternary
+        this.isRightAnswer = this.updateValue.rightAnswer === 1 ? true : false
+        // eslint-disable-next-line no-unneeded-ternary
+        this.isRandom = this.updateValue.random ? true : false
+      }
     },
   },
   methods: {
@@ -131,7 +163,7 @@ export default defineComponent({
     },
     hide() {
       this.doShow = false
-      this.updateAnswer('remove_data')
+      // this.updateAnswer('remove_data')
     },
     hideModal() {
       this.$refs['modal-question'].hide()
@@ -139,23 +171,50 @@ export default defineComponent({
     handleAnswer() {
       if (this.answerContent === '') {
         // config: https://github.com/shakee93/vue-toasted
-        this.$toast.error('Câu trả lời không được bỏ trống').goAway(1500)
+        // eslint-disable-next-line no-undef
+        this.$toast
+          .error(this.$i18n.t('Câu trả lời không được bỏ trống'))
+          .goAway(1500)
         return 0
       }
-      const data = {
-        id: uuid.v4(),
-        isRightAnswer: this.isRightAnswer ? 1 : 0,
-        isRandom: this.isRandom,
-        answerContent: this.answerContent,
+      let data = {}
+      if (this.isPairing) {
+        data = {
+          left: {
+            id: uuid.v4(),
+            position: 1,
+            isRightAnswer: this.isRightAnswer ? 1 : 0,
+            isRandom: this.isRandom,
+            answerContent: this.answerContent,
+          },
+          right: {
+            id: uuid.v4(),
+            position: 2,
+            isRightAnswer: this.isRightAnswer ? 1 : 0,
+            isRandom: this.isRandom,
+            answerContent: this.answerContentRight,
+          },
+          id: uuid.v4(),
+        }
+      } else {
+        data = {
+          id: uuid.v4(),
+          position: 0,
+          isRightAnswer: this.isRightAnswer ? 1 : 0,
+          isRandom: this.isRandom,
+          answerContent: this.answerContent,
+        }
       }
       this.isRightAnswer = false
       this.isRandom = false
       this.answerContent = ''
-      if (this.updateValue.answerContent) {
+      this.answerContentRight = ''
+      if (
+        this.updateValue.answerContent ||
+        this.updateValue?.left?.answerContent
+      ) {
         data.index = this.indexAnswerUpdate
-        console.log('a')
         EventBus.$emit('updateListAnswer', data)
-        console.log('b')
       } else {
         this.$emit('add', data)
       }
@@ -194,5 +253,9 @@ export default defineComponent({
 .btnQuestion--close {
   margin-left: 20px;
   width: auto;
+}
+.wrapper {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

@@ -1,20 +1,21 @@
 <template>
-  <div class="form-multiple-question">
+  <div class="form-single-question">
     <div class="form-headline">
       <div class="headline-left">
         <label for="">{{ $t('Thi tốt nghiệp THPT') }}</label>
         <span>{{ $t('Cơ bản') }}</span>
-
-        <span>{{ $t('Công khai') }}</span>
+        <span>{{ $t('Một lựa chọn') }}</span>
+        <span>{{ $t('Bản nháp') }}}</span>
       </div>
       <div class="headline-right">
         <a href="">{{ $t('XEM TRÊN WEB') }}</a>
+
         <b-dropdown variant="link" toggle-class="text-decoration-none" no-caret>
           <template #button-content>
             <i class="fas fa-ellipsis-v"></i>
           </template>
           <b-dropdown-item href="#">{{ $t('Cập nhật') }}</b-dropdown-item>
-          <b-dropdown-item href="#">{{ $t('Tạo bản sao') }}}</b-dropdown-item>
+          <b-dropdown-item href="#">{{ $t('Tạo bản sao') }}</b-dropdown-item>
           <b-dropdown-item href="#">{{ $t('Xuất bản') }}</b-dropdown-item>
           <b-dropdown-item href="#">{{ $t('Chia sẻ') }}</b-dropdown-item>
           <b-dropdown-item href="#">{{
@@ -44,14 +45,19 @@
       </div>
       <div class="answer">
         <ul>
-          <li v-for="answer in answers" :key="answer.id">
-            <strong>câu {{ answer.id }} :</strong> {{ answer.label }}
-            <button><i class="far fa-trash-alt"></i></button
-            ><button><i class="far fa-edit"></i></button>
+          <li v-for="(answer, index) in 4" :key="index" type="A">
+            Deciding one’s own strategy in a game according to the strategy of
+            the opponent
           </li>
         </ul>
       </div>
     </div>
+    <b-pagination
+      class="pagination"
+      first-number
+      align="center"
+      size="lg"
+    ></b-pagination>
   </div>
 </template>
 
@@ -59,7 +65,7 @@
 import { defineComponent } from '@nuxtjs/composition-api'
 
 export default defineComponent({
-  name: 'MultiListPage',
+  name: 'SingleListPage',
   props: {
     products: {
       type: Array,
@@ -68,29 +74,5 @@ export default defineComponent({
   },
 
   setup: () => {},
-  data: () => ({
-    answers: [
-      {
-        id: '1',
-        label: 'chọn đáp án đúng',
-      },
-      {
-        id: '2',
-        label: 'chọn đáp án đúng',
-      },
-      {
-        id: '3',
-        label: 'chọn đáp án đúng',
-      },
-      {
-        id: '4',
-        label: 'chọn đáp án đúng',
-      },
-      {
-        id: '5',
-        label: 'chọn đáp án đúng',
-      },
-    ],
-  }),
 })
 </script>
