@@ -46,7 +46,7 @@
         name="flavour-2"
       >
         <div
-          v-for="(answer, index) in answers"
+          v-for="(answer, index) in getListAnswer"
           :key="index"
           class="p-answerItem"
         >
@@ -71,9 +71,13 @@
     </b-form-group>
 
     <div v-if="typeQuestion === 'short-answer'">
-      <div v-for="(answer, index) in answers" :key="index" class="p-answerItem">
+      <div
+        v-for="(answer, index) in getListAnswer"
+        :key="index"
+        class="p-answerItem"
+      >
         <div class="p-answerItem">
-          <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
+          <b>{{ index + 1 + '. ' }}</b>
           <div
             class="p-answerItem__content"
             v-html="answer.answerContent"
@@ -92,7 +96,11 @@
     </div>
 
     <div v-if="typeQuestion === 'pairing'">
-      <div v-for="(answer, index) in answers" :key="index" class="p-answerItem">
+      <div
+        v-for="(answer, index) in getListAnswer"
+        :key="index"
+        class="p-answerItem"
+      >
         <div class="p-answerItem">
           <!-- <b-form-select v-model="isSelected" class="mb-3">
             <b-form-select-option :value="null" disabled
@@ -124,7 +132,11 @@
     </div>
 
     <div v-if="typeQuestion === 'fill-blank'">
-      <div v-for="(answer, index) in answers" :key="index" class="p-answerItem">
+      <div
+        v-for="(answer, index) in getListAnswer"
+        :key="index"
+        class="p-answerItem"
+      >
         <div class="p-answerItem">
           <!-- <b-form-select v-model="isSelected" class="mb-3">
             <b-form-select-option :value="null" disabled
@@ -137,11 +149,7 @@
               >({{ i }})</b-form-select-option
             >
           </b-form-select> -->
-          <SelectForFillBlank
-            :answer="answer"
-            :length-answers="answers.length"
-            :handle-fill-blank="handleFillBlank"
-          />
+          <SelectForFillBlank :answer="answer" />
           <div
             class="p-answerItem__content"
             v-html="answer.answerContent"
@@ -160,12 +168,7 @@
     </div>
 
     <div v-if="typeQuestion === 'draggable'">
-      <Draggable
-        :answers="answers"
-        :delete-answer="deleteAnswer"
-        :update-answer="addValueUpdateAnswer"
-        :handle-draggable="handleDraggable"
-      />
+      <Draggable />
     </div>
     <b-alert v-if="errors[5]" id="error" show variant="warning">{{
       errors[5]
@@ -185,10 +188,12 @@ import { mapGetters, mapActions } from 'vuex'
 import EventBus from '../../plugins/eventBus'
 import SelectForFillBlank from './SelectForFillBlank.vue'
 import Draggable from './Draggable.vue'
+import Pairing from './Pairing.vue'
 export default defineComponent({
   components: {
     SelectForFillBlank,
     Draggable,
+    Pairing,
   },
   props: {
     typeQuestion: {
@@ -257,9 +262,6 @@ export default defineComponent({
       console.log(listAnswer)
       props.updateRightAnswer(listAnswer)
     }
-    const handleDraggable = (value) => {
-      props.updateRightAnswer(value)
-    }
     watch(
       () => data.isSelected,
       () => {
@@ -288,7 +290,6 @@ export default defineComponent({
     return {
       ...toRefs(data),
       handleFillBlank,
-      handleDraggable,
     }
   },
   computed: {

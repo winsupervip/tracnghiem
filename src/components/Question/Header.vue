@@ -2,7 +2,7 @@
   <div>
     <div>
       <p class="p-headerQuestion">
-        {{ $t('Ngân Hàng câu hỏi') }} > {{ questionType }}
+        {{ $t('Ngân Hàng câu hỏi') }} > {{ questionTitle }}
       </p>
       <!-- <ValidationProvider v-slot="{ errors }" rules="required">
         <input
@@ -115,7 +115,7 @@ export default defineComponent({
   name: 'Header',
   components: {},
   props: {
-    questionType: {
+    questionTitle: {
       type: String,
       required: true,
     },

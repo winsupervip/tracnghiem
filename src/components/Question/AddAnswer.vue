@@ -189,14 +189,18 @@ export default defineComponent({
         data = {
           left: {
             id: uuid.v4(),
-            position: 1,
+            position: 0,
+            hashId: '',
+            plainText: this.answerContent,
             rightAnswer: this.isRightAnswer ? 1 : 0,
             isRandom: this.isRandom,
             answerContent: this.answerContent,
           },
           right: {
             id: uuid.v4(),
-            position: 2,
+            position: 0,
+            hashId: '',
+            plainText: this.answerContent,
             rightAnswer: this.isRightAnswer ? 1 : 0,
             isRandom: this.isRandom,
             answerContent: this.answerContentRight,
@@ -217,6 +221,7 @@ export default defineComponent({
       this.isRightAnswer = false
       this.isRandom = false
       this.answerContent = ''
+      this.answerContentRight = ''
       if (
         this.getUpdateValueAnswer.answerContent ||
         this.updateValue?.left?.answerContent
