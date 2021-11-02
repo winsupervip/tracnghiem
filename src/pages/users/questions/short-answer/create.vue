@@ -3,6 +3,8 @@
     question-type="short-answer"
     question-type-id="6"
     question-title="Thêm câu hỏi trả lời ngắn"
+    :have-random-answer="false"
+    :have-right-answer="false"
   />
 </template>
 <script>

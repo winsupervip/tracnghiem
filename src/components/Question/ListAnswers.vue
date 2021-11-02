@@ -102,22 +102,7 @@
         class="p-answerItem"
       >
         <div class="p-answerItem">
-          <!-- <b-form-select v-model="isSelected" class="mb-3">
-            <b-form-select-option :value="null" disabled
-              >-- Chọn --</b-form-select-option
-            >
-            <b-form-select-option
-              v-for="i in answers.length"
-              :key="i"
-              :value="answer.id + 'index' + i"
-              >({{ i }})</b-form-select-option
-            >
-          </b-form-select> -->
           <Pairing :answer="answer" />
-          <div
-            class="p-answerItem__content"
-            v-html="answer.answerContent"
-          ></div>
         </div>
         <div class="p-answerItem__func">
           <b-icon
@@ -138,17 +123,6 @@
         class="p-answerItem"
       >
         <div class="p-answerItem">
-          <!-- <b-form-select v-model="isSelected" class="mb-3">
-            <b-form-select-option :value="null" disabled
-              >-- Chọn --</b-form-select-option
-            >
-            <b-form-select-option
-              v-for="i in answers.length"
-              :key="i"
-              :value="answer.id + 'index' + i"
-              >({{ i }})</b-form-select-option
-            >
-          </b-form-select> -->
           <SelectForFillBlank :answer="answer" />
           <div
             class="p-answerItem__content"
@@ -177,13 +151,7 @@
 </template>
 
 <script>
-import {
-  defineComponent,
-  reactive,
-  toRefs,
-  watch,
-  useContext,
-} from '@nuxtjs/composition-api'
+import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
 import { mapGetters, mapActions } from 'vuex'
 import EventBus from '../../plugins/eventBus'
 import SelectForFillBlank from './SelectForFillBlank.vue'
@@ -205,106 +173,22 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
-    const { $logger } = useContext()
+  setup() {
     const data = reactive({
       isSelected: [],
       answers: [],
       listAnswersIsChange: false,
     })
-    // hàm ni chạy cho câu hỏi đúng sai chỉ chạy 1 lần
-    // const getRightAnswer = () => {
-    //   $logger.info('get')
-    //   const index = props.listAnswers.findIndex(
-    //     (item) => item.rightAnswer === 1
-    //   )
-    //   if (index !== -1) {
-    //     $logger.info('watch', props.listAnswers[index].id)
-    //     data.isSelected = props.listAnswers[index].id
-    //   }
-    // }
-    // getRightAnswer()
-    const handleRightAnswerSingleChoice = () => {
-      const answers = props.listAnswers.map((item) => {
-        if (data.isSelected === item.id) {
-          item.rightAnswer = 1
-        } else {
-          item.rightAnswer = 0
-        }
-        return item
-      })
-      return answers
-    }
-    const checkTypeSelected = () => {
-      if (props.typeQuestion === 'fill-blank') {
-        data.isSelected = null
-      }
-    }
-    checkTypeSelected()
-    const handleRightAnswerMulipleChoice = () => {
-      const rest = props.listAnswers.map((element) => {
-        element.rightAnswer = 0
-        return element
-      })
-      data.isSelected.forEach((e) => {
-        const index = rest.findIndex((item) => item.id === e)
-        rest[index].rightAnswer = 1
-      })
-      console.log(rest)
-      return rest
-    }
-    const handleFillBlank = (value) => {
-      const listAnswer = props.listAnswers
-      const getIndex = parseInt(value.split('index')[1])
-      const getId = value.split('index')[0]
-      const index = listAnswer.findIndex((item) => item.id === getId)
-      listAnswer[index].rightAnswer = getIndex
-      console.log(listAnswer)
-      props.updateRightAnswer(listAnswer)
-    }
-    watch(
-      () => data.isSelected,
-      () => {
-        if (!data.listAnswersIsChange) {
-          const typeQuestion = props.typeQuestion
-          let answers = []
-          if (
-            typeQuestion === 'single-choice' ||
-            typeQuestion === 'right-wrong'
-          ) {
-            answers = handleRightAnswerSingleChoice()
-          } else if (typeQuestion === 'multiple-choice') {
-            answers = handleRightAnswerMulipleChoice()
-          } else if (typeQuestion === 'fill-blank') {
-            // cái này đặt biệt hơn, nên sẻ xử lý ở hàm handleFillBlank
-          } else if (typeQuestion === 'draggable') {
-            // cái này đặt biệt hơn, nên sẻ xử lý ở hàm handleDraggable
-          }
-
-          $logger.info(answers, data.isSelected)
-          props.updateRightAnswer(answers)
-        }
-        data.listAnswersIsChange = false
-      }
-    )
     return {
       ...toRefs(data),
-      handleFillBlank,
     }
   },
   computed: {
-    ...mapGetters(['getListAnswer', 'getUpdateValueAnswer']),
+    ...mapGetters(['getListAnswer', 'getSelected']),
   },
   watch: {
-    listAnswers() {
-      console.log('listAnswer')
-      const typeQuestion = this.typeQuestion
-      if (typeQuestion === 'single-choice' || typeQuestion === 'right-wrong') {
-        this.activeSingleRightAnswer()
-      } else if (typeQuestion === 'multiple-choice') {
-        this.activeMultipleAnswer()
-      }
-      this.answers = this.listAnswers
+    getSelected() {
+      this.isSelected = this.getSelected
     },
   },
   onMouted() {
@@ -326,26 +210,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions(['addValueUpdateAnswer', 'deleteAnswer']),
-    activeSingleRightAnswer() {
-      const index = this.listAnswers.findIndex((item) => item.rightAnswer === 1)
-      if (index !== -1) {
-        this.listAnswersIsChange = true
-        this.isSelected = this.listAnswers[index].id
-      }
-    },
-    activeMultipleAnswer() {
-      // eslint-disable-next-line prefer-const
-      let listRightAnswer = []
-      this.listAnswers.forEach((element) => {
-        if (element.rightAnswer === 1) {
-          listRightAnswer.push(element.id)
-        }
-      })
-      if (listRightAnswer.length > 0) {
-        this.listAnswersIsChange = true
-        this.isSelected = listRightAnswer
-      }
-    },
   },
 })
 </script>
