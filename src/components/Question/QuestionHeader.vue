@@ -25,7 +25,7 @@
         <b-dropdown-item href="#">{{ $t('references') }}</b-dropdown-item>
 
         <b-dropdown-divider></b-dropdown-divider>
-        <b-dropdown-item href="#">{{ $t('Thống kê') }}</b-dropdown-item>
+        <b-dropdown-item href="#">{{ $t('statistic') }}</b-dropdown-item>
         <b-dropdown-item href="#">{{ $t('delete') }}</b-dropdown-item>
       </b-dropdown>
     </div>
