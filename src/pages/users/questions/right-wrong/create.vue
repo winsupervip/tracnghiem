@@ -283,12 +283,12 @@ export default defineComponent({
         })
         if (count === 0) {
           this.$toast
-            .show(this.$i18n.t('Chọn 1 câu trả lời đúng đi'))
+            .show(this.$i18n.t('youMustChoose1CorrectAnswer'))
             .goAway(1500)
           valid = false
         } else if (count > 1) {
           this.$toast
-            .show(this.$i18n.t('Loại câu hỏi ni có 1 đáp án thôi'))
+            .show(this.$i18n.t('thisTypeOfQuestionHasOnly1Answer'))
             .goAway(1500)
           valid = false
         } else {

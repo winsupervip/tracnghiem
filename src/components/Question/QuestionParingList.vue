@@ -101,13 +101,13 @@ export default defineComponent({
           plainText: 'Hệ bài tiết',
         }
       )
+      console.log(left)
       return { row_A: left, row_B: right }
     },
   },
 })
 </script>
 <style lang="scss">
-table,
 th,
 td {
   border: 1px solid black;

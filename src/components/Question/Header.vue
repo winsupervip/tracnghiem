@@ -2,7 +2,7 @@
   <div>
     <div>
       <p class="p-headerQuestion">
-        {{ $t('Ngân Hàng câu hỏi') }} > {{ questionType }}
+        {{ $t('questionBank') }} > {{ questionType }}
       </p>
       <!-- <ValidationProvider v-slot="{ errors }" rules="required">
         <input
@@ -30,7 +30,7 @@
           <b-form-tags
             id="tags-with-dropdown"
             v-model="value"
-            :label="$t('Gắn thẻ câu hỏi của bạn, tối đa 5 thẻ(*)')"
+            :label="$t('tagYourQuestion,UpTo5Tags(*)')"
             no-outer-focus
             class="mb-2"
           >
@@ -56,7 +56,7 @@
                 menu-class="w-100"
               >
                 <template #button-content>
-                  <b-icon icon="tag-fill"></b-icon> {{ $t('Chọn tag') }}
+                  <b-icon icon="tag-fill"></b-icon> {{ $t('selectTag') }}
                 </template>
                 <b-dropdown-form @submit.stop.prevent="() => {}">
                   <b-form-group
@@ -178,7 +178,7 @@ export default defineComponent({
     },
     searchDesc() {
       if (this.criteria && this.availableOptions.length === 0) {
-        return this.$i18n.t('There are no tags matching your search criteria')
+        return this.$i18n.t('thereAreNoTagsMatchingYourSearchCriteria')
       }
       return ''
     },

@@ -1,21 +1,21 @@
 <template>
   <div>
     <div :class="$style.addQuestionTitle">
-      <p style="font-weight: bold">{{ $t('Câu trả lời (*)') }}</p>
+      <p style="font-weight: bold">{{ $t('answer(*)') }}</p>
       <b-button
         v-b-modal.modal-1
         class="btnQuestion"
         variant="outline-primary"
-        >{{ $t('Thêm câu trả lời') }}</b-button
+        >{{ $t('addMoreAnswers') }}</b-button
       >
     </div>
     <b-modal
       id="modal-1"
       ref="modal-question"
       size="xl"
-      :title="$t('Thêm câu trả lời')"
+      :title="$t('addMoreAnswers')"
       :ok-only="okOnly"
-      :ok-title="$t('Đóng')"
+      :ok-title="$t('close')"
       hide-footer
       @shown="shown"
       @hide="hide"
@@ -47,7 +47,7 @@
                 type="checkbox"
                 :class="$style.checkBoxInput"
               />
-              <p :class="$style.checkBoxTitle">{{ $t('Cho phép xáo trộn') }}</p>
+              <p :class="$style.checkBoxTitle">{{ $t('allowShuffling') }}</p>
             </div>
             <div v-if="haveRightAnswer" :class="$style.checkBox">
               <input
@@ -55,7 +55,7 @@
                 type="checkbox"
                 :class="$style.checkBoxInput"
               />
-              <p :class="$style.checkBoxTitle">{{ $t('Câu trả lời đúng') }}</p>
+              <p :class="$style.checkBoxTitle">{{ $t('rightAnswer') }}</p>
             </div>
           </div>
           <b-button
@@ -64,8 +64,8 @@
             @click="handleAnswer"
             >{{
               updateValue.answerContent
-                ? $t('Cập nhập câu trả lời')
-                : $t('Thêm câu trả lời')
+                ? $t('updateAnswer')
+                : $t('addMoreAnswers')
             }}</b-button
           >
           <b-button

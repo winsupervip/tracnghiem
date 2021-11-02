@@ -268,10 +268,10 @@ export default defineComponent({
           }
         })
         if (count === 0) {
-          this.$toast.show('Chọn 1 câu trả lời đúng đi').goAway(1500)
+          this.$toast.show('youMustChoose1CorrectAnswer').goAway(1500)
           valid = false
         } else if (count > 1) {
-          this.$toast.show('Loại câu hỏi ni có 1 đáp án thôi').goAway(1500)
+          this.$toast.show('thisTypeOfQuestionHasOnly1Answer').goAway(1500)
           valid = false
         } else {
           this.errors.push(false)

@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <div class="page-header">
-      <a href="#">{{ $t('Ngân hàng câu hỏi') }}</a>
+      <a href="#">{{ $t('questionBank') }}</a>
       <button id="show-btn" @click="$bvModal.show('bv-modal-example')">
         {{ $t('Thêm') }}
       </button>
@@ -22,7 +22,7 @@
           class="text-center mt-3"
           block
           @click="$bvModal.hide('bv-modal-example')"
-          >{{ $t('Đóng') }}</b-button
+          >{{ $t('close') }}</b-button
         >
       </b-modal>
     </div>

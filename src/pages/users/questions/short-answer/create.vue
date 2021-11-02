@@ -17,10 +17,10 @@
         @add="addListAnswer"
       />
       <p>
-        {{ $t('short-answer-mo-ta-cach-tao-cau-hoi') }}
+        {{ $t('describeHowToCreateAShortAnswerQuestion') }}
       </p>
       <p>
-        {{ $t('short-answer-vi-du-cach-tao-cau-hoi') }}
+        {{ $t('exampleHowToCreateAShortAnswerQuestion') }}
       </p>
       <ListAnswer
         :list-answers="listAnswers"
