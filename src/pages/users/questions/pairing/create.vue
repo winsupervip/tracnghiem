@@ -3,6 +3,8 @@
     question-type="pairing"
     question-type-id="4"
     question-title="Thêm câu hỏi ghép đôi"
+    :have-right-answer="false"
+    :is-pairing="true"
   />
 </template>
 <script>

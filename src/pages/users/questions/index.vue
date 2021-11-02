@@ -156,7 +156,7 @@ export default defineComponent({
       { url: 'single-choice/create', title: 'Một lựa chọn' },
       { url: 'multiple-choice/create', title: 'Nhiều lựa chọn' },
       { url: 'right-wrong/create', title: 'Đúng sai' },
-      { url: '', title: 'Ghép đôi' },
+      { url: 'pairing/create', title: 'Ghép đôi' },
       { url: 'fill-blank/create', title: 'Điền vào chỗ trống' },
       { url: 'short-answer/create', title: 'Câu hỏi trả lời ngắn' },
       { url: 'draggable-fill-blank/create', title: 'Sắp thứ tự' },

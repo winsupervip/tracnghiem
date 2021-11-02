@@ -2,7 +2,13 @@
   <div class="p-question p-question--singleChoice">
     <div class="p-question__left">
       <Header :question-title="questionTitle" :errors="errors" />
-      <AddAnswer :errors="errors" />
+      <AddAnswer
+        :errors="errors"
+        :type-question="questionType"
+        :have-random-answer="haveRandomAnswer"
+        :have-right-answer="haveRightAnswer"
+        :is-pairing="isPairing"
+      />
 
       <ListAnswer :type-question="questionType" :errors="errors" />
       <CommentOrNote />
@@ -60,6 +66,18 @@ export default defineComponent({
     questionTitle: {
       type: String,
       required: true,
+    },
+    haveRightAnswer: {
+      type: Boolean,
+      default: true,
+    },
+    haveRandomAnswer: {
+      type: Boolean,
+      default: true,
+    },
+    isPairing: {
+      type: Boolean,
+      default: false,
     },
   },
 

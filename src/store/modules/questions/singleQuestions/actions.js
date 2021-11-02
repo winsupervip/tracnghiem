@@ -35,10 +35,13 @@ export default {
     commit('ADD_TITLE', data)
   },
   handleAddAnswer({ commit }, data) {
-    commit('HANDLE_ANSWER', data)
+    commit('HANDLE_ADD_ANSWER', data)
   },
   handleUpdateAnswer({ commit }, data) {
     commit('HANDLE_UPDATE_ANSWER', data)
+  },
+  handleUpdateDraggableAnswer({ commit }, data) {
+    commit('HANDLE_UPDATE_ANSWER_FOR_DRAGGABLE', data)
   },
   addValueUpdateAnswer({ commit }, data) {
     commit('ADD_VALUE_UPDATE_ANSWER', data)
