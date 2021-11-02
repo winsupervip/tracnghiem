@@ -29,21 +29,24 @@
 
     <div class="type-question">
       <div class="input-group">
-        <b-form-group class="mb-0">
+        <b-form-group class="mb-0 form-group">
           <b-form-input
             id="tag-search-input"
             v-model="search"
             type="search"
             :placeholder="$t('Tìm kiếm')"
-            :style="{ width: '22vw' }"
-          ></b-form-input>
-          <b-dropdown-item
-            v-for="(option, index) in availableOptions"
-            :key="index"
-            @click="inputSearch(option.label)"
           >
-            {{ option.label }}
-          </b-dropdown-item>
+          </b-form-input>
+          <ul>
+            <b-dropdown-item
+              v-for="(option, index) in availableOptions"
+              :key="index"
+              class="abc"
+              @click="inputSearch(option.label)"
+            >
+              {{ option.label }}
+            </b-dropdown-item>
+          </ul>
         </b-form-group>
       </div>
 
@@ -169,30 +172,30 @@ export default defineComponent({
         questionGroupId: null,
       },
     })
-
-    const { fetch } = useFetch(async () => {
-      $loader()
-      const { data: result1 } = await QuestionApi.getCategory()
-      const { data: result2 } = await QuestionApi.getTreeQuestionTypes()
-      const { data: result3 } = await QuestionApi.getListStatus()
-      const { data: result4 } = await QuestionApi.getLevel()
-
-      data.category = result1.object.items
-      data.treeQuestionTypes = result2.object.items
-      data.listStatus = result3.object.items
-      data.level = result4.object.items
-
-      $loader().close()
-    })
-
     const handleSearch = async () => {
       const result = await QuestionApi.getUserItemList(data.urlQuery)
 
       // data.total = Math.ceil(result.data.object?.total / data.urlQuery.pageSize)
       data.total = result.data.object?.total
       data.questionList = result.data.object.items
+      console.log('search', result.data.object)
       $logger.info(data.total)
     }
+    const { fetch } = useFetch(async () => {
+      $loader()
+      const { data: result1 } = await QuestionApi.getCategory()
+      const { data: result2 } = await QuestionApi.getTreeQuestionTypes()
+      const { data: result3 } = await QuestionApi.getListStatus()
+      const { data: result4 } = await QuestionApi.getLevel()
+      handleSearch()
+
+      data.category = result1.object.items
+      data.treeQuestionTypes = result2.object.items
+      data.listStatus = result3.object.items
+      data.level = result4.object.items
+      console.log('category', result1.object.items)
+      $loader().close()
+    })
 
     fetch()
 
@@ -291,3 +294,14 @@ export default defineComponent({
   },
 })
 </script>
+<style lang="scss" scoped>
+.form-group {
+  position: relative;
+}
+ul {
+  padding: 0;
+  position: absolute;
+  background-color: white;
+  width: 100%;
+}
+</style>
