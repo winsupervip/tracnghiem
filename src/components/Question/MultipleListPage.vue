@@ -2,28 +2,26 @@
   <div class="form-multiple-question">
     <div class="form-headline">
       <div class="headline-left">
-        <label for="">{{ $t('Thi tốt nghiệp THPT') }}</label>
-        <span>{{ $t('Cơ bản') }}</span>
+        <label for="">{{ $t('highSchoolGraduationExam') }}</label>
+        <span>{{ $t('basic') }}</span>
 
-        <span>{{ $t('Công khai') }}</span>
+        <span>{{ $t('public') }}</span>
       </div>
       <div class="headline-right">
-        <a href="">{{ $t('XEM TRÊN WEB') }}</a>
+        <a href="">{{ $t('WatchOnWeb') }}</a>
         <b-dropdown variant="link" toggle-class="text-decoration-none" no-caret>
           <template #button-content>
             <i class="fas fa-ellipsis-v"></i>
           </template>
-          <b-dropdown-item href="#">{{ $t('Cập nhật') }}</b-dropdown-item>
-          <b-dropdown-item href="#">{{ $t('Tạo bản sao') }}}</b-dropdown-item>
-          <b-dropdown-item href="#">{{ $t('Xuất bản') }}</b-dropdown-item>
-          <b-dropdown-item href="#">{{ $t('Chia sẻ') }}</b-dropdown-item>
-          <b-dropdown-item href="#">{{
-            $t('Tài liệu tham khảo')
-          }}</b-dropdown-item>
+          <b-dropdown-item href="#">{{ $t('update') }}</b-dropdown-item>
+          <b-dropdown-item href="#">{{ $t('copy') }}}</b-dropdown-item>
+          <b-dropdown-item href="#">{{ $t('publish') }}</b-dropdown-item>
+          <b-dropdown-item href="#">{{ $t('share') }}</b-dropdown-item>
+          <b-dropdown-item href="#">{{ $t('references') }}</b-dropdown-item>
 
           <b-dropdown-divider></b-dropdown-divider>
-          <b-dropdown-item href="#">{{ $t('Thống kê') }}</b-dropdown-item>
-          <b-dropdown-item href="#">{{ $t('Xóa') }}</b-dropdown-item>
+          <b-dropdown-item href="#">{{ $t('statistic') }}</b-dropdown-item>
+          <b-dropdown-item href="#">{{ $t('delete') }}</b-dropdown-item>
         </b-dropdown>
       </div>
     </div>

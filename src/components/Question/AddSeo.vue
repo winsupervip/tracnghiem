@@ -1,7 +1,7 @@
 <template>
   <div class="p-question__box">
     <p class="p-question__box__heading">
-      <strong>{{ $t('Cài đặt SEO*') }}</strong>
+      <strong>{{ $t('SEOsettings*') }}</strong>
     </p>
     <!-- <ValidationProvider v-slot="{ errors }" rules="required">
       <b-form-input
@@ -18,7 +18,7 @@
       <div class="p-question__box__body__item">
         <b-form-input
           v-model="seoTitle"
-          :placeholder="$t('Tiêu đề SEO (*)')"
+          :placeholder="$t('SEOtitle (*)')"
           :class="[$style.inputF]"
         ></b-form-input>
 
@@ -28,7 +28,7 @@
         <b-form-textarea
           id="textarea-default"
           v-model="seoDescription"
-          :placeholder="$t('Mô tả SEO (*)')"
+          :placeholder="$t('SEOdescription (*)')"
           :class="$style.inputF"
         ></b-form-textarea>
       </div>
@@ -37,13 +37,9 @@
 </template>
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
-
+import { mapActions } from 'vuex'
 export default defineComponent({
   props: {
-    getSeo: {
-      type: Function,
-      required: true,
-    },
     errors: {
       type: Array,
       required: true,
@@ -57,17 +53,14 @@ export default defineComponent({
   },
   watch: {
     seoTitle() {
-      this.getSeo({
-        seoTitle: this.seoTitle,
-        seoDescription: this.seoDescription,
-      })
+      this.addSeoTitle(this.seoTitle)
     },
     seoDescription() {
-      this.getSeo({
-        seoTitle: this.seoTitle,
-        seoDescription: this.seoDescription,
-      })
+      this.addSeoDescription(this.seoDescription)
     },
+  },
+  methods: {
+    ...mapActions(['addSeoTitle', 'addSeoDescription']),
   },
 })
 </script>

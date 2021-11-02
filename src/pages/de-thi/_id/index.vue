@@ -565,7 +565,11 @@
               </b-tab>
               <b-tab title="Danh sách câu hỏi">
                 <div class="tab-content-container">
-                  <b-card header="Chuyên đề" header-tag="header" class="mb-3">
+                  <b-card
+                    header="Danh sách câu hỏi"
+                    header-tag="header"
+                    class="mb-3"
+                  >
                     <div class="list-question mb-4">
                       <div class="question-item">
                         <div
@@ -940,7 +944,16 @@
                 <b-btn
                   variant="success"
                   block
+                  class="font-lmd mb-3 button-do-exam button-do-exam-sp"
+                  @click="$bvModal.show('modal-start-exam')"
+                >
+                  BẮT ĐẦU LÀM BÀI
+                </b-btn>
+                <b-btn
+                  variant="success"
+                  block
                   class="font-lmd mb-3 button-do-exam"
+                  @click="$bvModal.show('modal-start-exam')"
                 >
                   BẮT ĐẦU LÀM BÀI
                 </b-btn>
@@ -1111,6 +1124,19 @@
         </b-row>
       </b-container>
     </section>
+    <b-modal id="modal-start-exam" class="modal-common" hide-footer centered>
+      <div class="text-center mb-4">
+        <img class="mb-3" src="/images/bot-icon.svg" alt="bot" />
+        <div class="font-bold text-lmd mb-3">
+          Vui lòng xác nhận bạn không phải là robot
+        </div>
+        <img class="" src="/images/gcaptcha.png" alt="captcha" />
+      </div>
+      <div class="modal-footer-common">
+        <b-btn variant="outline" @click="hide()">Hủy bỏ</b-btn>
+        <b-btn variant="primary" @click="StartExam()">Bắt đầu</b-btn>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -1124,6 +1150,7 @@ export default defineComponent({
   setup() {},
   data() {
     return {
+      idExam: this.$route.params.id || null,
       breadcrumbs: [
         {
           text: 'Trang chủ',
@@ -1152,7 +1179,6 @@ export default defineComponent({
         { value: 'latest', text: 'Mới nhất' },
         { value: 'rating', text: 'Đánh giá cao nhất' },
       ],
-      visibleFilter: false,
       showFilterGroup1: true,
       selectedOptions1: [],
       options1: [
@@ -1202,6 +1228,13 @@ export default defineComponent({
         ],
       },
     }
+  },
+  methods: {
+    StartExam() {
+      this.$router.push({
+        path: `/de-thi/${this.idExam}/lam-bai`,
+      })
+    },
   },
 })
 </script>

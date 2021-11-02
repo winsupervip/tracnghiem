@@ -2,29 +2,17 @@
   <div>
     <div>
       <p class="p-headerQuestion">
-        {{ $t('questionBank') }} > {{ questionType }}
+        {{ $t('Ngân Hàng câu hỏi') }} > {{ questionTitle }}
       </p>
-      <!-- <ValidationProvider v-slot="{ errors }" rules="required">
-        <input
-          v-model="title"
-          type="text"
-          name="Tiêu Dề"
-          class="form-control"
-          placeholder="Tiêu Đề (*)"
-        />
-        <b-alert v-if="errors[0]" id="error" show variant="warning">{{
-          errors[0]
-        }}</b-alert>
-      </ValidationProvider> -->
+
       <b-form-input
         v-model="title"
         class="form-control"
-        :placeholder="$t('Tiêu Đề (*)')"
+        :placeholder="$t('title')"
       ></b-form-input>
       <b-alert v-if="errors[0]" id="error" show variant="warning">{{
         errors[0]
       }}</b-alert>
-
       <div class="marginTag">
         <b-form-group label-for="tags-with-dropdown">
           <b-form-tags
@@ -89,7 +77,7 @@
                   v-if="search.length > 0"
                   variant="success"
                   @click="userAddTag"
-                  >{{ $t('Thêm') }}</b-button
+                  >{{ $t('add') }}</b-button
                 >
               </b-dropdown>
             </template>
@@ -109,33 +97,18 @@
   </div>
 </template>
 <script>
-import {
-  defineComponent,
-  reactive,
-  toRefs,
-  watch,
-} from '@nuxtjs/composition-api'
+import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
+import { mapActions } from 'vuex'
 import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   name: 'Header',
   components: {},
   props: {
-    questionType: {
+    questionTitle: {
       type: String,
       required: true,
     },
-    getQuestion: {
-      type: Function,
-      required: true,
-    },
-    getTags: {
-      type: Function,
-      required: true,
-    },
-    getTitle: {
-      type: Function,
-      required: true,
-    },
+
     errors: {
       type: Array,
       required: true,
@@ -158,12 +131,6 @@ export default defineComponent({
       value: [],
       title: '',
     })
-    watch(
-      () => data.questionContent,
-      () => {
-        props.getQuestion(data.questionContent)
-      }
-    )
     return {
       ...toRefs(data),
     }
@@ -193,13 +160,17 @@ export default defineComponent({
       }
     },
     title() {
-      this.getTitle(this.title)
+      this.addTitle(this.title)
     },
     value() {
-      this.getTags(this.value)
+      this.addTags(this.value)
+    },
+    questionContent() {
+      this.addQuestionContent(this.questionContent)
     },
   },
   methods: {
+    ...mapActions(['addTags', 'addTitle', 'addQuestionContent']),
     shown() {
       this.doShow = true
     },

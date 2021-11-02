@@ -8,7 +8,7 @@
       :value-consists-of="valueConsistsOf"
     /> -->
     <p class="p-question__box__heading">
-      <strong>{{ $t('Mức độ (*)') }}</strong>
+      <strong>{{ $t('level') }}</strong>
     </p>
     <div class="p-question__box__body">
       <div class="p-question__box__body__item box--level">
@@ -26,19 +26,11 @@
 </template>
 
 <script>
-import {
-  defineComponent,
-  reactive,
-  toRefs,
-  watch,
-} from '@nuxtjs/composition-api'
+import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
+import { mapActions } from 'vuex'
 export default defineComponent({
   name: 'LevelForm',
   props: {
-    getLevelForm: {
-      type: Function,
-      required: true,
-    },
     errors: {
       type: Array,
       required: true,
@@ -70,15 +62,18 @@ export default defineComponent({
         },
       ],
     })
-    watch(
-      () => data.levelForm,
-      () => {
-        props.getLevelForm(data.levelForm)
-      }
-    )
+
     return {
       ...toRefs(data),
     }
+  },
+  watch: {
+    levelForm() {
+      this.addlevel(this.levelForm)
+    },
+  },
+  methods: {
+    ...mapActions(['addlevel']),
   },
 })
 </script>

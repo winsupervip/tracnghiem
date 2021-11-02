@@ -28,7 +28,7 @@
             <b-icon
               v-b-modal.modal-1
               icon="pencil-square"
-              @click="updateAnswer(answer.id)"
+              @click="addValueUpdateAnswer(answer.id)"
             ></b-icon>
             <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
           </div>
@@ -41,29 +41,11 @@
 <script>
 import draggable from 'vuedraggable'
 // const message = ['vue.draggable', 'draggable']
-
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'Hello',
   components: {
     draggable,
-  },
-  props: {
-    answers: {
-      type: Array,
-      required: true,
-    },
-    updateAnswer: {
-      type: Function,
-      required: true,
-    },
-    deleteAnswer: {
-      type: Function,
-      required: true,
-    },
-    handleDraggable: {
-      type: Function,
-      required: true,
-    },
   },
   data() {
     return {
@@ -71,6 +53,8 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['getListAnswer', 'getUpdateValueAnswer']),
+
     dragOptions() {
       return {
         animation: 0,
@@ -80,13 +64,19 @@ export default {
     },
   },
   watch: {
-    list() {
-      console.log('watch list chay')
-      this.handleDraggable(this.list)
+    getListAnswer() {
+      // console.log('answer', this.answers)
+      // const l = this.answers.length
+      // if (l > this.list.length) {
+      //   const answer = this.answers[l - 1]
+      //   answer.fixed = false
+      //   // this.list.push(answer)
+      // }
+      this.list = this.getListAnswer
     },
   },
   created() {
-    const data = this.answers.map((item) => {
+    const data = this.getListAnswer.map((item) => {
       item.fixed = false
       return item
     })
@@ -94,6 +84,7 @@ export default {
     this.list = data
   },
   methods: {
+    ...mapActions(['addValueUpdateAnswer', 'deleteAnswer']),
     orderList() {
       this.list = this.list.sort((one, two) => {
         return one.order - two.order

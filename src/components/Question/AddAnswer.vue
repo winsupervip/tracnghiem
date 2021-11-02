@@ -63,16 +63,16 @@
             variant="outline-primary"
             @click="handleAnswer"
             >{{
-              updateValue.answerContent
+              getUpdateValueAnswer.answerContent
                 ? $t('updateAnswer')
-                : $t('addMoreAnswers')
+                : $t('Thêm câu trả lời')
             }}</b-button
           >
           <b-button
             class="btnQuestion btnQuestion--close"
             variant="outline-primary"
             @click="hideModal"
-            >{{ $t('Đóng') }}</b-button
+            >{{ $t('close') }}</b-button
           >
         </div>
       </div>
@@ -82,8 +82,8 @@
 <script>
 import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
 import { uuid } from 'vue-uuid'
-import EventBus from '@/plugins/eventBus'
-
+import { mapActions, mapGetters } from 'vuex'
+// import EventBus from '@/plugins/eventBus'
 export default defineComponent({
   name: 'Header',
   props: {
@@ -91,22 +91,12 @@ export default defineComponent({
     //   type: Function,
     //   required: true,
     // },
-    updateValue: {
-      type: Object,
-      required: true,
-    },
-    updateAnswer: {
-      type: Function,
-      required: true,
-    },
+
     isPairing: {
       type: Boolean,
       default: false,
     },
-    indexAnswerUpdate: {
-      type: Number,
-      default: -1,
-    },
+
     haveRightAnswer: {
       type: Boolean,
       default: true,
@@ -134,30 +124,47 @@ export default defineComponent({
       ...toRefs(data),
     }
   },
+  computed: {
+    ...mapGetters(['getUpdateValueAnswer']),
+  },
   watch: {
-    updateValue() {
-      console.log('hoang', this.updateValue)
-      if (this.isPairing) {
-        this.answerContent = this.updateValue?.left?.answerContent
-          ? this.updateValue?.left?.answerContent
-          : ''
-        this.answerContentRight = this.updateValue?.right?.answerContent
-          ? this.updateValue?.right?.answerContent
-          : ''
-        // eslint-disable-next-line no-unneeded-ternary
-        this.isRandom = this.updateValue.random ? true : false
-      } else {
-        this.answerContent = this.updateValue?.answerContent
-          ? this.updateValue.answerContent
-          : ''
-        // eslint-disable-next-line no-unneeded-ternary
-        this.isRightAnswer = this.updateValue.rightAnswer === 1 ? true : false
-        // eslint-disable-next-line no-unneeded-ternary
-        this.isRandom = this.updateValue.random ? true : false
-      }
+    // getUpdateValueAnswer() {
+    //   console.log('hoang', this.updateValue)
+    //   if (this.isPairing) {
+    //     this.answerContent = this.updateValue?.left?.answerContent
+    //       ? this.updateValue?.left?.answerContent
+    //       : ''
+    //     this.answerContentRight = this.updateValue?.right?.answerContent
+    //       ? this.updateValue?.right?.answerContent
+    //       : ''
+    //     // eslint-disable-next-line no-unneeded-ternary
+    //     this.isRandom = this.updateValue.random ? true : false
+    //   } else {
+    //     this.answerContent = this.updateValue?.answerContent
+    //       ? this.updateValue.answerContent
+    //       : ''
+    //     // eslint-disable-next-line no-unneeded-ternary
+    //     this.isRightAnswer = this.updateValue.rightAnswer === 1 ? true : false
+    //     // eslint-disable-next-line no-unneeded-ternary
+    //     this.isRandom = this.updateValue.random ? true : false
+    //   }
+    // },
+    getUpdateValueAnswer() {
+      this.answerContent = this.getUpdateValueAnswer?.answerContent
+        ? this.getUpdateValueAnswer.answerContent
+        : ''
+      // eslint-disable-next-line no-unneeded-ternary
+      this.isRightAnswer = this.getUpdateValueAnswer.rightAnswer === 1
+      // eslint-disable-next-line no-unneeded-ternary
+      this.isRandom = this.getUpdateValueAnswer.random ? true : false
     },
   },
   methods: {
+    ...mapActions([
+      'handleAddAnswer',
+      'handleUpdateAnswer',
+      'removeValueUpdateAnswer',
+    ]),
     shown() {
       this.doShow = true
     },
@@ -172,9 +179,7 @@ export default defineComponent({
       if (this.answerContent === '') {
         // config: https://github.com/shakee93/vue-toasted
         // eslint-disable-next-line no-undef
-        this.$toast
-          .error(this.$i18n.t('Câu trả lời không được bỏ trống'))
-          .goAway(1500)
+        this.$toast.error(this.$i18n.t('answersCannotBeLeftBlank')).goAway(1500)
         return 0
       }
       let data = {}
@@ -182,15 +187,19 @@ export default defineComponent({
         data = {
           left: {
             id: uuid.v4(),
-            position: 1,
-            isRightAnswer: this.isRightAnswer ? 1 : 0,
+            position: 0,
+            hashId: '',
+            plainText: this.answerContent,
+            rightAnswer: this.isRightAnswer ? 1 : 0,
             isRandom: this.isRandom,
             answerContent: this.answerContent,
           },
           right: {
             id: uuid.v4(),
-            position: 2,
-            isRightAnswer: this.isRightAnswer ? 1 : 0,
+            position: 0,
+            hashId: '',
+            plainText: this.answerContent,
+            rightAnswer: this.isRightAnswer ? 1 : 0,
             isRandom: this.isRandom,
             answerContent: this.answerContentRight,
           },
@@ -200,7 +209,9 @@ export default defineComponent({
         data = {
           id: uuid.v4(),
           position: 0,
-          isRightAnswer: this.isRightAnswer ? 1 : 0,
+          hashId: '',
+          plainText: this.answerContent,
+          rightAnswer: this.isRightAnswer ? 1 : 0,
           isRandom: this.isRandom,
           answerContent: this.answerContent,
         }
@@ -210,13 +221,17 @@ export default defineComponent({
       this.answerContent = ''
       this.answerContentRight = ''
       if (
-        this.updateValue.answerContent ||
+        this.getUpdateValueAnswer.answerContent ||
         this.updateValue?.left?.answerContent
       ) {
-        data.index = this.indexAnswerUpdate
-        EventBus.$emit('updateListAnswer', data)
+        // data.index = this.indexAnswerUpdate
+        // EventBus.$emit('updateListAnswer', data)
+        data.id = this.getUpdateValueAnswer.id
+        this.handleUpdateAnswer(data)
+        this.removeValueUpdateAnswer()
       } else {
-        this.$emit('add', data)
+        this.handleAddAnswer(data)
+        this.$toast.show('Thêm câu trả lời thanh công').goAway(1500)
       }
     },
   },

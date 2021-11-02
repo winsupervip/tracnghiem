@@ -3,7 +3,7 @@
     <div class="page-header">
       <a href="#">{{ $t('questionBank') }}</a>
       <button id="show-btn" @click="$bvModal.show('bv-modal-example')">
-        {{ $t('Thêm') }}
+        {{ $t('add') }}
       </button>
 
       <b-modal id="bv-modal-example" hide-footer title="Câu hỏi:">
@@ -34,7 +34,7 @@
             id="tag-search-input"
             v-model="search"
             type="search"
-            :placeholder="$t('Tìm kiếm')"
+            :placeholder="$t('search')"
           >
           </b-form-input>
           <ul>
@@ -54,7 +54,7 @@
         v-b-toggle.collapse-1
         :style="{ margin: ' 0 30%', height: '50px' }"
         block
-        >{{ $t('Tìm kiếm') }}</b-button
+        >{{ $t('search') }}</b-button
       >
     </div>
     <b-collapse id="collapse-1" class="mt-2">
@@ -64,37 +64,37 @@
           :multiple="true"
           :options="category"
           :load-options="loadOptions"
-          :placeholder="$t('Danh mục')"
+          :placeholder="$t('category')"
         />
         <treeselect
           v-model="urlQuery.questionTypeId"
           :options="treeQuestionTypes"
           :load-options="loadOptions"
-          :placeholder="$t('Loại câu hỏi')"
+          :placeholder="$t('questionType')"
         />
         <treeselect
           v-model="urlQuery.statusId"
           :options="listStatus"
           :load-options="loadOptions"
-          :placeholder="$t('Trạng thái')"
+          :placeholder="$t('status')"
         />
         <treeselect
           v-model="urlQuery.levelId"
           :options="level"
           :load-options="loadOptions"
-          :placeholder="$t('Mức độ')"
+          :placeholder="$t('level')"
         />
         <treeselect
           :options="options"
           :load-options="loadOptions"
-          :placeholder="$t('Sắp xếp')"
+          :placeholder="$t('sort')"
         />
         <b-button
           v-b-toggle.collapse-1-inner
           class="mx-auto"
           :style="{ width: ' 10vw' }"
           @click="handleSearch"
-          >{{ $t('Áp dụng') }}</b-button
+          >{{ $t('apply') }}</b-button
         >
       </b-card>
     </b-collapse>

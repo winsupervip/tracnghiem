@@ -4,7 +4,11 @@
       v-if="typeQuestion === 'single-choice' || typeQuestion === 'right-wrong'"
       v-slot="{ ariaDescribedby }"
     >
-      <div v-for="(answer, index) in answers" :key="index" class="p-answerItem">
+      <div
+        v-for="(answer, index) in getListAnswer"
+        :key="index"
+        class="p-answerItem"
+      >
         <b-form-radio
           v-model="isSelected"
           :aria-describedby="ariaDescribedby"
@@ -24,7 +28,7 @@
           <b-icon
             v-b-modal.modal-1
             icon="pencil-square"
-            @click="updateAnswer(answer.id)"
+            @click="addValueUpdateAnswer(answer)"
           ></b-icon>
           <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
         </div>
@@ -42,7 +46,7 @@
         name="flavour-2"
       >
         <div
-          v-for="(answer, index) in answers"
+          v-for="(answer, index) in getListAnswer"
           :key="index"
           class="p-answerItem"
         >
@@ -57,8 +61,9 @@
             <b-icon
               v-b-modal.modal-1
               icon="pencil-square"
-              @click="updateAnswer(answer.id)"
+              @click="addValueUpdateAnswer(answer)"
             ></b-icon>
+
             <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
           </div>
         </div>
@@ -66,9 +71,13 @@
     </b-form-group>
 
     <div v-if="typeQuestion === 'short-answer'">
-      <div v-for="(answer, index) in answers" :key="index" class="p-answerItem">
+      <div
+        v-for="(answer, index) in getListAnswer"
+        :key="index"
+        class="p-answerItem"
+      >
         <div class="p-answerItem">
-          <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
+          <b>{{ index + 1 + '. ' }}</b>
           <div
             class="p-answerItem__content"
             v-html="answer.answerContent"
@@ -78,8 +87,34 @@
           <b-icon
             v-b-modal.modal-1
             icon="pencil-square"
-            @click="updateAnswer(answer.id)"
+            @click="addValueUpdateAnswer(answer)"
           ></b-icon>
+
+          <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="typeQuestion === 'pairing'">
+      <div
+        v-for="(answer, index) in getListAnswer"
+        :key="index"
+        class="p-answerItem"
+      >
+        <div class="p-answerItem">
+          <Pairing :answer="answer" />
+          <div
+            class="p-answerItem__content"
+            v-html="answer.answerContent"
+          ></div>
+        </div>
+        <div class="p-answerItem__func">
+          <b-icon
+            v-b-modal.modal-1
+            icon="pencil-square"
+            @click="addValueUpdateAnswer(answer)"
+          ></b-icon>
+
           <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
         </div>
       </div>
@@ -100,24 +135,13 @@
     </div>
 
     <div v-if="typeQuestion === 'fill-blank'">
-      <div v-for="(answer, index) in answers" :key="index" class="p-answerItem">
+      <div
+        v-for="(answer, index) in getListAnswer"
+        :key="index"
+        class="p-answerItem"
+      >
         <div class="p-answerItem">
-          <!-- <b-form-select v-model="isSelected" class="mb-3">
-            <b-form-select-option :value="null" disabled
-              >-- Chọn --</b-form-select-option
-            >
-            <b-form-select-option
-              v-for="i in answers.length"
-              :key="i"
-              :value="answer.id + 'index' + i"
-              >({{ i }})</b-form-select-option
-            >
-          </b-form-select> -->
-          <SelectForFillBlank
-            :answer="answer"
-            :length-answers="answers.length"
-            :handle-fill-blank="handleFillBlank"
-          />
+          <SelectForFillBlank :answer="answer" />
           <div
             class="p-answerItem__content"
             v-html="answer.answerContent"
@@ -127,22 +151,17 @@
           <b-icon
             v-b-modal.modal-1
             icon="pencil-square"
-            @click="updateAnswer(answer.id)"
+            @click="addValueUpdateAnswer(answer)"
           ></b-icon>
+
           <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
         </div>
       </div>
     </div>
 
     <div v-if="typeQuestion === 'draggable'">
-      <Draggable
-        :answers="answers"
-        :delete-answer="deleteAnswer"
-        :update-answer="updateAnswer"
-        :handle-draggable="handleDraggable"
-      />
+      <Draggable />
     </div>
-
     <b-alert v-if="errors[5]" id="error" show variant="warning">{{
       errors[5]
     }}</b-alert>
@@ -157,6 +176,7 @@ import {
   watch,
   useContext,
 } from '@nuxtjs/composition-api'
+import { mapGetters, mapActions } from 'vuex'
 import EventBus from '../../plugins/eventBus'
 import SelectForFillBlank from './SelectForFillBlank.vue'
 import Draggable from './Draggable.vue'
@@ -168,28 +188,12 @@ export default defineComponent({
     Draggable,
   },
   props: {
-    listAnswers: {
-      type: Array,
-      required: true,
-    },
     typeQuestion: {
       type: String,
       required: true,
     },
-    updateRightAnswer: {
-      type: Function,
-      required: true,
-    },
-    updateAnswer: {
-      type: Function,
-      required: true,
-    },
     errors: {
       type: Array,
-      required: true,
-    },
-    deleteAnswer: {
-      type: Function,
       required: true,
     },
   },
@@ -197,21 +201,21 @@ export default defineComponent({
     const { $logger } = useContext()
     const data = reactive({
       isSelected: [],
-      answers: props.listAnswers,
+      answers: [],
       listAnswersIsChange: false,
     })
     // hàm ni chạy cho câu hỏi đúng sai chỉ chạy 1 lần
-    const getRightAnswer = () => {
-      $logger.info('get')
-      const index = props.listAnswers.findIndex(
-        (item) => item.rightAnswer === 1
-      )
-      if (index !== -1) {
-        $logger.info('watch', props.listAnswers[index].id)
-        data.isSelected = props.listAnswers[index].id
-      }
-    }
-    getRightAnswer()
+    // const getRightAnswer = () => {
+    //   $logger.info('get')
+    //   const index = props.listAnswers.findIndex(
+    //     (item) => item.rightAnswer === 1
+    //   )
+    //   if (index !== -1) {
+    //     $logger.info('watch', props.listAnswers[index].id)
+    //     data.isSelected = props.listAnswers[index].id
+    //   }
+    // }
+    // getRightAnswer()
     const handleRightAnswerSingleChoice = () => {
       const answers = props.listAnswers.map((item) => {
         if (data.isSelected === item.id) {
@@ -250,9 +254,6 @@ export default defineComponent({
       console.log(listAnswer)
       props.updateRightAnswer(listAnswer)
     }
-    const handleDraggable = (value) => {
-      props.updateRightAnswer(value)
-    }
     watch(
       () => data.isSelected,
       () => {
@@ -281,8 +282,10 @@ export default defineComponent({
     return {
       ...toRefs(data),
       handleFillBlank,
-      handleDraggable,
     }
+  },
+  computed: {
+    ...mapGetters(['getListAnswer', 'getUpdateValueAnswer']),
   },
   watch: {
     listAnswers() {
@@ -295,6 +298,9 @@ export default defineComponent({
       }
       this.answers = this.listAnswers
     },
+  },
+  onMouted() {
+    this.answers = this.getListAnswer
   },
   created() {
     // eslint-disable-next-line no-undef
@@ -311,6 +317,7 @@ export default defineComponent({
     })
   },
   methods: {
+    ...mapActions(['addValueUpdateAnswer', 'deleteAnswer']),
     activeSingleRightAnswer() {
       const index = this.listAnswers.findIndex((item) => item.rightAnswer === 1)
       if (index !== -1) {

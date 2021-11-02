@@ -6,8 +6,8 @@
       <table>
         <div class="row_A">
           <tr>
-            <th>{{ $t('Cột A') }}</th>
-            <th>{{ $t('Cột B') }}</th>
+            <th>{{ $t('rowA') }}</th>
+            <th>{{ $t('rowB') }}</th>
           </tr>
           <tr v-for="answer in rowA" :key="answer.id">
             <td>

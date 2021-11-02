@@ -17,14 +17,14 @@
   "SEOsettings*": "Cài đặt SEO*",
   "SEOtitle (*)": "Tiêu đề SEO (*)",
   "SEOdescription (*)": "Mô tả SEO (*)",
-  "categories (*)": "Chuyên mục (*)",
+  "categories": "Chuyên mục (*)",
   "categoryForQuestions": "Chuyên mục cho câu hỏi",
   "Comment / Annotation": "Lời phê / Chú thích",
   "whenTheAnswerIsCorrect": "Khi trả lời đúng",
   "whenTheAnswerIsIncorrect": "Khi trả lời sai",
-  "title(*)": "Tiêu Đề (*)",
+  "title": "Tiêu Đề (*)",
   "add": "Thêm",
-  "level(*)": "Mức độ (*)",
+  "level": "Mức độ (*)",
   "highSchoolGraduationExam": "Thi tốt nghiệp THPT",
   "basic": "Cơ bản",
   "public": "Công khai",
@@ -38,38 +38,29 @@
   "delete": "Xóa",
   "search": "Tìm kiếm",
   "apply": "Áp dụng",
-  "publishQuestion (*)": "Xuất bản câu hỏi (*)",
-  "show:": "Hiển thị:",
-  "onlyYouCanSeeThisQuestion.": "Chỉ bạn mới thấy được câu hỏi này.",
+  "publishQuestion": "Xuất bản câu hỏi (*)",
+  "show": "Hiển thị:",
+  "onlyYouCanSeeThisQuestion": "Chỉ bạn mới thấy được câu hỏi này.",
   "saveDraft": "Lưu bản nháp",
   "saveQuestion": "Lưu câu hỏi",
   "-- choose --": "-- Chọn --",
   "anOption": "Một lựa chọn",
   "draft": "Bản nháp",
-  "addShortAnswerQuestions": "Thêm câu hỏi trả lời ngắn",
-  "youMustChoose1CorrectAnswer":"Bạn phải chọn 1 câu trả lời đúng",
-  "thisTypeOfQuestionHasOnly1Answer":"Loại câu hỏi này chỉ có 1 đáp án",
-  "addAnswerSuccess": "Thêm câu trả lời thành công",
-  "updateAnswerSuccess": "Cập nhập câu trả lời thanh công",
-  "titleIsRequire": "Tiêu đề là bắt buộc",
-  "youMustEnterTheQuestionText": "Bạn phải nhập vào nội dung câu hỏi",
-  "youMustAssignAtLeast1TagToTheQuestion": "Bạn phải gán ít nhất 1 tag cho câu hỏi",
-  "youHaveToChooseTheLevelForTheQuestion": "Bạn phải chọn level cho câu hỏi",
-  "youMustChoose1CategoryForTheQuestion": "Bạn phải chọn 1 danh mục cho câu hỏi",
-  "thisTypeOfQuestionMustHaveAtLeast1Answer": "Loại câu hỏi này phải có từ 1 câu trả lời",
- "DoYouWantToPublishTheQuestion": "Bạn có muốn xuất bản câu hỏi",
-  "youMustEnterSEO": "Bạn Phải nhập vào SEO",
-  "addSuccess": "Thêm Thành Công",
-  "anError Occurred": "Có lỗi xảy ra",
-  "addQuestionsToFillInTheBlanks": "Thêm câu hỏi điền vào chổ trống",
-  "fillPositionIsDuplicated": "Vị trí điền bị trùng lặp",
-  "addMultipleChoiceQuestions": "Thêm câu hỏi nhiều lựa chọn",
-  "thisTypeOfQuestionMustHave2OrMoreAnswers": "Loại câu hỏi này phải có từ 2 câu trả lời",
-  "addTrueFalseQuestions": "Thêm câu hỏi đúng sai",
-  "thisTypeOfQuestionMustHave2->3Answers": "Loại câu hỏi này phải có từ 2->3 câu trả lời",
-  "pleaseChoose1CorrectAnswerToTheQuestion": "Hãy chọn 1 câu trả lời đúng cho câu hỏi",
-  "thisTypeOfQuestionHas1Answer": "Loại câu hỏi ni có 1 đáp án",
-  "add1ChoiceQuestion": "Thêm câu hỏi 1 lựa chọn",
+  
+  
+  
+ 
+  
+ 
+  
+ 
+ 
+  
+ 
+ 
+  
+ 
+ 
 "category": "Danh mục","questionType": "Loại câu hỏi","status": "Trạng thái","level": "Mức độ","sort": "Sắp xếp",
 "rowA": "Cột A","rowB": "Cột B"
 

@@ -1,13 +1,13 @@
 <template>
   <section class="p-question__box">
     <p class="p-question__box__heading">
-      <strong>{{ $t('Xuất bản câu hỏi (*)') }}</strong>
+      <strong>{{ $t('publishQuestion') }}</strong>
     </p>
     <!-- <ValidationProvider v-slot="{ errors }" rules="required" name="choice"> -->
     <div class="p-question__box__body">
       <div class="p-question__box__body__item">
         <ul>
-          <b>{{ $t('Hiển thị:') }}</b>
+          <b>{{ $t('show') }}</b>
           <li v-for="option in listStatus" :key="option.id">
             <label
               ><input v-model="status" type="radio" :value="option.id" />{{
@@ -23,18 +23,18 @@
       </div>
       <div class="p-question__box__body__item">
         <p>
-          <b>{{ $t('Chỉ bạn mới thấy được câu hỏi này.') }}</b>
+          <b>{{ $t('onlyYouCanSeeThisQuestion') }}</b>
         </p>
         <div>
           <b-button variant="outline-primary" class="btnQuestion">{{
-            $t('Lưu bản nháp')
+            $t('saveDraft')
           }}</b-button
           ><br />
           <b-button
             variant="outline-primary"
             class="btnQuestion btn-save"
             @click="onSubmit"
-            >{{ $t('Lưu câu hỏi') }}</b-button
+            >{{ $t('saveQuestion') }}</b-button
           >
         </div>
       </div>
@@ -47,16 +47,12 @@ import {
   defineComponent,
   reactive,
   toRefs,
-  watch,
   useFetch,
 } from '@nuxtjs/composition-api'
+import { mapActions } from 'vuex'
 import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   props: {
-    getPublishQuestion: {
-      type: Function,
-      required: true,
-    },
     errors: {
       type: Array,
       required: true,
@@ -76,15 +72,17 @@ export default defineComponent({
       data.listStatus = result.object?.items
     })
     fetch()
-    watch(
-      () => data.status,
-      () => {
-        props.getPublishQuestion(data.status)
-      }
-    )
     return {
       ...toRefs(data),
     }
+  },
+  watch: {
+    status() {
+      this.addStatus(this.status)
+    },
+  },
+  methods: {
+    ...mapActions(['addStatus']),
   },
 })
 </script>

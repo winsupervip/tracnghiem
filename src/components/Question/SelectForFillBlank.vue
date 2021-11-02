@@ -1,10 +1,10 @@
 <template>
   <b-form-select v-model="isSelected" class="mb-3">
     <b-form-select-option :value="null" disabled>{{
-      $t('-- Chọn --')
+      $t('-- choose --')
     }}</b-form-select-option>
     <b-form-select-option
-      v-for="i in lengthAnswers"
+      v-for="i in getListAnswer.length"
       :key="i"
       :value="String(answer.id) + 'index' + i"
       >({{ i }})</b-form-select-option
@@ -13,21 +13,11 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
-  name: 'Simple',
-  display: 'Simple',
-  order: 0,
   props: {
-    lengthAnswers: {
-      type: Number,
-      required: true,
-    },
     answer: {
       type: Object,
-      required: true,
-    },
-    handleFillBlank: {
-      type: Function,
       required: true,
     },
   },
@@ -36,17 +26,23 @@ export default {
       isSelected: null,
     }
   },
+  computed: {
+    ...mapGetters(['getListAnswer', 'getUpdateValueAnswer']),
+  },
   watch: {
-    lengthAnswers() {
+    getListAnswer() {
       this.isSelected = null
     },
-    isSelected() {
-      console.log('a', this.isSelected)
-      if (this.isSelected) {
-        console.log('b', this.isSelected)
-        this.handleFillBlank(this.isSelected)
-      }
-    },
+    // isSelected() {
+    //   console.log('a', this.isSelected)
+    //   if (this.isSelected) {
+    //     console.log('b', this.isSelected)
+    //     this.handleFillBlank(this.isSelected)
+    //   }
+    // },
+  },
+  methods: {
+    ...mapActions(['addValueUpdateAnswer', 'deleteAnswer']),
   },
 }
 </script>
