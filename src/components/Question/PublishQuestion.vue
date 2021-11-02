@@ -47,16 +47,12 @@ import {
   defineComponent,
   reactive,
   toRefs,
-  watch,
   useFetch,
 } from '@nuxtjs/composition-api'
+import { mapActions } from 'vuex'
 import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   props: {
-    getPublishQuestion: {
-      type: Function,
-      required: true,
-    },
     errors: {
       type: Array,
       required: true,
@@ -76,15 +72,17 @@ export default defineComponent({
       data.listStatus = result.object?.items
     })
     fetch()
-    watch(
-      () => data.status,
-      () => {
-        props.getPublishQuestion(data.status)
-      }
-    )
     return {
       ...toRefs(data),
     }
+  },
+  watch: {
+    status() {
+      this.addStatus(this.status)
+    },
+  },
+  methods: {
+    ...mapActions(['addStatus']),
   },
 })
 </script>

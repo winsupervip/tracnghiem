@@ -1,8 +1,8 @@
 <template>
   <CreateSingleQuestion
-    question-type="multiple-choice"
-    question-type-id="2"
-    question-title="Thêm câu hỏi nhiều lựa chọn"
+    question-type="pairing"
+    question-type-id="4"
+    question-title="Thêm câu hỏi ghép đôi"
   />
 </template>
 <script>
