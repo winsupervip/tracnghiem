@@ -3,45 +3,41 @@
     <p v-html="questionlist.description"></p>
 
     <div class="answer-pairing">
-      <!-- <div class="row_A">
-        <p for="">Cột A</p>
-        <ul v-for="(answer, index) in convertPosition.row_A" :key="index">
-          <li>
-            <span
-              >{{ String.fromCharCode(65 + index) + '. ' }}
-              <p>{{ answer.answerContent }}</p></span
-            >
-          </li>
-        </ul>
-      </div>
-      <div class="row_B">
-        <p>Cột B</p>
-        <ul v-for="(answer, index) in convertPosition.row_B" :key="index">
-          <li>
-            {{ index + 1 + '. ' }}
-            <p>{{ answer.answerContent }}</p>
-          </li>
-        </ul>
-      </div> -->
       <table>
         <div class="row_A">
-          <th>{{ $t('Cột A') }}</th>
-          <tr v-for="(answer, index) in convertPosition.row_A" :key="index">
+          <tr>
+            <th>{{ $t('Cột A') }}</th>
+            <th>{{ $t('Cột B') }}</th>
+          </tr>
+          <tr v-for="answer in rowA" :key="answer.id">
             <td>
-              <span
-                >{{ String.fromCharCode(65 + index) + '. ' }}
+              <span>
                 <p>{{ answer.answerContent }}</p></span
               >
             </td>
-          </tr>
-        </div>
-        <div class="row_B">
-          <th>{{ $t('Cột B') }}</th>
-          <tr v-for="(answer, index) in convertPosition.row_B" :key="index">
             <td>
-              <span
-                >{{ index + 1 + '. ' }}
-                <p>{{ answer.answerContent }}</p></span
+              <span>
+                <p>
+                  {{
+                    rowB.find((x) => x.rightAnswer === answer.rightAnswer) &&
+                    answer.answerContent
+                  }}
+                </p></span
+              >
+            </td>
+          </tr>
+          <tr
+            v-for="answer in rowB.filter(
+              (x) => !rowA.find((a) => a.rightAnswer === x.rightAnswer)
+            )"
+            :key="answer.id"
+          >
+            <td></td>
+            <td>
+              <span>
+                <p>
+                  {{ answer.answerContent }}
+                </p></span
               >
             </td>
           </tr>
@@ -52,7 +48,7 @@
 </template>
 
 <script>
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
 import '../../node_modules/bootstrap/scss/bootstrap.scss'
 
 export default defineComponent({
@@ -64,44 +60,20 @@ export default defineComponent({
       required: true,
     },
   },
+  setup(props) {
+    const data = reactive({
+      rowA: props.questionlist.answers.filter((x) => x.position === 1),
+      rowB: props.questionlist.answers.filter((x) => x.position === 2),
+    })
+
+    return {
+      ...toRefs(data),
+    }
+  },
   computed: {
     convertPosition() {
-      const left = []
-      const right = []
-      this.questionlist.answers.forEach((e) => {
-        if (e.position === 1) {
-          left.push(e)
-        } else {
-          right.push(e)
-        }
-      })
-      right.push(
-        {
-          hashId: 'wmjyirukyl',
-          answerContent: 'Hệ',
-          rightAnswer: 8,
-          random: true,
-          position: 2,
-          plainText: 'Hệ bài tiết',
-        },
-        {
-          hashId: 'wmjyirukyl',
-          answerContent: 'Hệ',
-          rightAnswer: 8,
-          random: true,
-          position: 2,
-          plainText: 'Hệ bài tiết',
-        },
-        {
-          hashId: 'wmjyirukyl',
-          answerContent: '123',
-          rightAnswer: 8,
-          random: true,
-          position: 2,
-          plainText: 'Hệ bài tiết',
-        }
-      )
-      return { row_A: left, row_B: right }
+      this.questionlist.answers.map()
+      return 1
     },
   },
 })
@@ -115,7 +87,6 @@ td {
 table {
   display: flex;
 }
-
 .answer-pairing {
   display: flex;
   .row_A {
@@ -126,36 +97,6 @@ table {
       font-style: normal;
       font-weight: bold;
       font-size: 14px;
-    }
-    ul {
-      li {
-        span {
-          display: flex;
-        }
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        input {
-          width: 10%;
-          text-align: center;
-        }
-      }
-    }
-  }
-  .row_B {
-    width: 50%;
-
-    & > p {
-      text-align: center;
-      font-style: normal;
-      font-weight: bold;
-      font-size: 14px;
-      line-height: 20px;
-    }
-    ul {
-      li {
-        display: flex;
-      }
     }
   }
 }

@@ -1,7 +1,11 @@
 <template>
   <div class="form-headline">
     <div class="headline-left">
-      <label for="">{{ questions.categoryItems[0].categoryName }}</label>
+      <label
+        ><abbr :title="questions.title">
+          {{ questions.title }}
+        </abbr></label
+      >
 
       <span>{{ questions.levelName }}</span>
       <span>{{ questions.questionTypeName }}</span>
@@ -43,3 +47,8 @@ export default defineComponent({
   },
 })
 </script>
+<style lang="scss" scoped>
+abbr[title] {
+  text-decoration: none;
+}
+</style>
