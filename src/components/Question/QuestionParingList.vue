@@ -18,10 +18,7 @@
             <td>
               <span>
                 <p>
-                  {{
-                    rowB.find((x) => x.rightAnswer === answer.rightAnswer) &&
-                    answer.answerContent
-                  }}
+                  {{ findAnswer(answer.rightAnswer).answerContent }}
                 </p></span
               >
             </td>
@@ -65,9 +62,14 @@ export default defineComponent({
       rowA: props.questionlist.answers.filter((x) => x.position === 1),
       rowB: props.questionlist.answers.filter((x) => x.position === 2),
     })
+    const findAnswer = (rightAnswerA) => {
+      const answer = data.rowB.find((x) => x.rightAnswer === rightAnswerA)
+      return answer || ''
+    }
 
     return {
       ...toRefs(data),
+      findAnswer,
     }
   },
   computed: {
