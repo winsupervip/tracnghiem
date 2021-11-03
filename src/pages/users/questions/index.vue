@@ -41,7 +41,6 @@
             <b-dropdown-item
               v-for="(option, index) in availableOptions"
               :key="index"
-              class="abc"
               @click="inputSearch(option.label)"
             >
               {{ option.label }}
@@ -179,7 +178,7 @@ export default defineComponent({
       data.total = result.data.object?.total
       data.questionList = result.data.object.items
       console.log('search', result.data.object)
-      $logger.info(data.total)
+      $logger.info(data.urlQuery)
     }
     const { fetch } = useFetch(async () => {
       $loader()
@@ -209,7 +208,7 @@ export default defineComponent({
     const inputSearch = (e) => {
       data.search = e
       data.urlQuery.keyword = e
-      console.log('abc', data.urlQuery.categories)
+      console.log('abc', data.search)
     }
     return {
       ...toRefs(data),
@@ -218,16 +217,6 @@ export default defineComponent({
     }
   },
   data: () => ({
-    options: [
-      {
-        id: '1',
-        label: '1',
-      },
-      {
-        id: '2',
-        label: '2',
-      },
-    ],
     items: [
       { url: 'single-choice/create', title: 'Một lựa chọn' },
       { url: 'multiple-choice/create', title: 'Nhiều lựa chọn' },
@@ -241,12 +230,13 @@ export default defineComponent({
 
   computed: {
     availableOptions() {
+      console.log(this.options)
       return this.options
     },
   },
   watch: {
     search() {
-      if (this.search.length >= 2) {
+      if (this.search.length >= 3) {
         QuestionApi.getTagByKey(this.search, (response) => {
           this.options = response
           console.log(response)
@@ -294,14 +284,3 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="scss" scoped>
-.form-group {
-  position: relative;
-}
-ul {
-  padding: 0;
-  position: absolute;
-  background-color: white;
-  width: 100%;
-}
-</style>
