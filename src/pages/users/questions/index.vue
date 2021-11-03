@@ -34,149 +34,56 @@
     </b-modal>
 
     <b-tabs class="custom-tabs" content-class="mt-3">
-      <b-tab title="Danh sách câu đơn" active>
-        <div class="filter-bar">
-          <div class="row">
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <b-form-input placeholder="Tìm kiếm câu hỏi"></b-form-input>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <treeselect
-                :options="category"
-                :load-options="loadOptions"
-                placeholder="Danh mục"
-              />
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <treeselect
-                :multiple="true"
-                :options="treeQuestionTypes"
-                :load-options="loadOptions"
-                placeholder="Loại câu hỏi"
-              />
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <treeselect
-                :options="listStatus"
-                :load-options="loadOptions"
-                placeholder="Trạng thái"
-              />
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <treeselect
-                :options="level"
-                :load-options="loadOptions"
-                placeholder="Mức độ"
-              />
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <treeselect
-                :options="options"
-                :load-options="loadOptions"
-                placeholder="Sắp xếp"
-              />
-            </div>
+      <div class="filter-bar">
+        <div class="row">
+          <div class="col-6 col-md-4 col-lg-2 mb-3">
+            <b-form-input placeholder="Tìm kiếm câu hỏi"></b-form-input>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 mb-3">
+            <treeselect
+              :options="category"
+              :load-options="loadOptions"
+              placeholder="Danh mục"
+            />
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 mb-3">
+            <treeselect
+              :multiple="true"
+              :options="treeQuestionTypes"
+              :load-options="loadOptions"
+              placeholder="Loại câu hỏi"
+            />
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 mb-3">
+            <treeselect
+              :options="listStatus"
+              :load-options="loadOptions"
+              placeholder="Trạng thái"
+            />
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 mb-3">
+            <treeselect
+              :options="level"
+              :load-options="loadOptions"
+              placeholder="Mức độ"
+            />
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 mb-3">
+            <treeselect
+              :options="options"
+              :load-options="loadOptions"
+              placeholder="Sắp xếp"
+            />
           </div>
         </div>
+      </div>
+      <b-tab title="Danh sách câu đơn" active>
         <SingleQuestion />
       </b-tab>
       <b-tab title="Danh sách câu chùm">
-        <div class="type-question">
-          <div class="input-group">
-            <b-form-input
-              list="my-list-id"
-              placeholder="Tìm kiếm câu hỏi"
-              no-caret
-            ></b-form-input
-            ><datalist id="my-list-id">
-              <option v-for="(option, index) in options" :key="index">
-                {{ option }}
-              </option>
-            </datalist>
-          </div>
-          <treeselect
-            :options="category"
-            :load-options="loadOptions"
-            placeholder="Danh mục"
-          />
-          <treeselect
-            :multiple="true"
-            :options="treeQuestionTypes"
-            :load-options="loadOptions"
-            placeholder="Loại câu hỏi"
-          />
-          <treeselect
-            :options="listStatus"
-            :load-options="loadOptions"
-            placeholder="Trạng thái"
-          />
-          <treeselect
-            :options="level"
-            :load-options="loadOptions"
-            placeholder="Mức độ"
-          />
-          <treeselect
-            :options="options"
-            :load-options="loadOptions"
-            placeholder="Sắp xếp"
-          />
-        </div>
         <MultipleQuestion />
       </b-tab>
     </b-tabs>
-
-    <!-- <div class="type-list-question">
-      <button @click="showSingleQuestion = !showSingleQuestion">
-        Danh sách câu đơn
-      </button>
-
-      <span></span>
-      <button @click="showMultipleQuestion = !showMultipleQuestion">
-        Danh sách câu chùm
-      </button>
-    </div>
-    <div class="type-question">
-      <div class="input-group">
-        <b-form-input
-          list="my-list-id"
-          placeholder="Tìm kiếm câu hỏi"
-          no-caret
-        ></b-form-input
-        ><datalist id="my-list-id">
-          <option v-for="(option, index) in options" :key="index">
-            {{ option }}
-          </option>
-        </datalist>
-      </div>
-      <treeselect
-        :options="category"
-        :load-options="loadOptions"
-        placeholder="Danh mục"
-      />
-      <treeselect
-        :multiple="true"
-        :options="treeQuestionTypes"
-        :load-options="loadOptions"
-        placeholder="Loại câu hỏi"
-      />
-      <treeselect
-        :options="listStatus"
-        :load-options="loadOptions"
-        placeholder="Trạng thái"
-      />
-      <treeselect
-        :options="level"
-        :load-options="loadOptions"
-        placeholder="Mức độ"
-      />
-      <treeselect
-        :options="options"
-        :load-options="loadOptions"
-        placeholder="Sắp xếp"
-      />
-    </div>
-    <SingleQuestion v-if="showSingleQuestion" />
-    <MultipleQuestion v-show="showMultipleQuestion" /> -->
   </div>
 </template>
 
@@ -298,240 +205,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="scss">
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
-
-.page-container {
-  font-family: OpenSans, sans-serif;
-  font-style: normal;
-  margin-left: 20px;
-  margin: 0 auto;
-  .page-header {
-    display: flex;
-    justify-content: space-between;
-
-    a {
-      font-family: Open Sans;
-      font-style: normal;
-      font-weight: 600;
-      font-size: 16px;
-      line-height: 16px;
-
-      color: #000000;
-    }
-    button {
-      width: 119px;
-      height: 27px;
-      left: 1116px;
-      top: 12px;
-
-      background: #ffffff;
-      border: 1px solid #051e40;
-      box-sizing: border-box;
-      border-radius: 20px;
-      font-weight: bold;
-      font-size: 13px;
-      color: #051e40;
-    }
-  }
-  .type-list-question {
-    button {
-      font-weight: 600;
-      font-size: 16px;
-      margin: 30px 0;
-      background: transparent;
-      border: none;
-      color: #000000;
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-    span {
-      margin: 0 25px;
-      background-color: #000000;
-      border: 1px solid #000000;
-    }
-  }
-  .type-question {
-    display: grid;
-    grid-template-columns: auto auto auto auto auto auto;
-    grid-gap: 26px;
-  }
-  .form-single-question {
-    margin-top: 19px;
-
-    background: #ffffff;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    .form-headline {
-      display: flex;
-      padding: 22px 17px 11px 17px;
-      justify-content: space-between;
-      align-items: center;
-      .headline-left {
-        display: grid;
-        grid-template-columns: auto auto auto auto;
-        grid-gap: 15px;
-        label {
-          font-style: normal;
-          font-weight: bold;
-          font-size: 16px;
-          line-height: 30px;
-
-          color: #212529;
-        }
-        span {
-          display: flex;
-          align-items: center;
-          text-align: center;
-          background: #e7fff9;
-          border-radius: 20px;
-          font-style: normal;
-          font-weight: normal;
-          font-size: 12px;
-          padding: 4px 7px 3px 7px;
-          color: #27ae60;
-        }
-      }
-      .headline-right {
-        > a {
-          background: #ffffff;
-          border: 1px solid #051e40;
-          box-sizing: border-box;
-          border-radius: 20px;
-          padding: 6px 10px 5px 11px;
-          font-style: normal;
-          font-weight: bold;
-          font-size: 13px;
-          line-height: 16px;
-          color: #051e40;
-        }
-        button {
-          margin-left: 24px;
-          background: #ffffff;
-          border: 1px solid #000000;
-          box-sizing: border-box;
-        }
-      }
-    }
-
-    .line {
-      width: 100%;
-      height: 0px;
-      background-color: #dddddd;
-      border: 1px solid #dddddd;
-    }
-    .question {
-      padding: 22px 17px 11px 17px;
-      .question-hashtag {
-        a {
-          color: #0d6efd;
-        }
-      }
-    }
-    .answer {
-      margin: 13px 0;
-      ul {
-        li {
-          padding: 12px 0;
-        }
-      }
-    }
-  }
-
-  .form-multiple-question {
-    margin-top: 19px;
-
-    background: #ffffff;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    .form-headline {
-      display: flex;
-      padding: 22px 17px 11px 17px;
-      justify-content: space-between;
-      align-items: center;
-      .headline-left {
-        display: grid;
-        grid-template-columns: auto auto auto auto;
-        grid-gap: 15px;
-        label {
-          font-style: normal;
-          font-weight: bold;
-          font-size: 16px;
-          line-height: 30px;
-
-          color: #212529;
-        }
-        span {
-          display: flex;
-          align-items: center;
-          text-align: center;
-          background: #e7fff9;
-          border-radius: 20px;
-          font-style: normal;
-          font-weight: normal;
-          font-size: 12px;
-          padding: 4px 7px 3px 7px;
-          color: #27ae60;
-        }
-      }
-      .headline-right {
-        > a {
-          background: #ffffff;
-          border: 1px solid #051e40;
-          box-sizing: border-box;
-          border-radius: 20px;
-          padding: 6px 10px 5px 11px;
-          font-style: normal;
-          font-weight: bold;
-          font-size: 13px;
-          line-height: 16px;
-          color: #051e40;
-        }
-        button {
-          margin-left: 24px;
-          background: #ffffff;
-          border: 1px solid #000000;
-          box-sizing: border-box;
-        }
-      }
-    }
-
-    .line {
-      width: 100%;
-      height: 0px;
-      background-color: #dddddd;
-      border: 1px solid #dddddd;
-    }
-    .question {
-      padding: 22px 17px 11px 17px;
-      .question-hashtag {
-        a {
-          color: #0d6efd;
-        }
-      }
-    }
-    .answer {
-      margin: 13px 0;
-      ul {
-        li {
-          padding: 12px 0;
-          button {
-            float: right;
-            border: none;
-            background: transparent;
-          }
-        }
-      }
-    }
-  }
-  .pagination {
-    position: absolute;
-    width: 730px;
-    height: 66px;
-    left: 381px;
-    top: 1358px;
-
-    background: #ffffff;
-  }
-}
-</style>

@@ -1,63 +1,332 @@
 <template>
-  <div class="form-single-question">
-    <div class="form-headline">
-      <div class="headline-left">
-        <label for="">{{ $t('Thi tốt nghiệp THPT') }}</label>
-        <span>{{ $t('Cơ bản') }}</span>
-        <span>{{ $t('Một lựa chọn') }}</span>
-        <span>{{ $t('Bản nháp') }}}</span>
-      </div>
-      <div class="headline-right">
-        <a href="">{{ $t('XEM TRÊN WEB') }}</a>
+  <div class="list-single-question">
+    <div class="list-questions-user">
+      <b-card
+        class="card-question mb-3"
+        header-tag="header"
+        footer-tag="footer"
+      >
+        <template #header>
+          <div
+            class="
+              d-flex
+              align-items-center
+              justify-content-between
+              card-question-header
+            "
+          >
+            <div class="d-flex">
+              <div class="font-bold me-3">Thi tốt nghiệp THPT</div>
+              <div class="list-status-question">
+                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+                  $t('Cơ bản')
+                }}</span>
+                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+                  $t('Một lựa chọn')
+                }}</span>
+                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+                  $t('Bản nháp')
+                }}</span>
+              </div>
+            </div>
+            <div class="d-flex">
+              <a
+                href="#"
+                target="_blank"
+                class="btn btn-sm btn-outline-primary rounded-pill me-3"
+                >{{ $t('Xem trên web') }}</a
+              >
+              <b-dropdown
+                class="dropdown-button-circle"
+                variant="link"
+                toggle-class="text-decoration-none"
+                no-caret
+              >
+                <template #button-content>
+                  <b-icon icon="three-dots-vertical" />
+                </template>
+                <b-dropdown-item href="#">{{ $t('Cập nhật') }}</b-dropdown-item>
+                <b-dropdown-item href="#">{{
+                  $t('Tạo bản sao')
+                }}</b-dropdown-item>
+                <b-dropdown-item href="#">{{ $t('Xuất bản') }}</b-dropdown-item>
+                <b-dropdown-item href="#">{{ $t('Chia sẻ') }}</b-dropdown-item>
+                <b-dropdown-item href="#">{{
+                  $t('Tài liệu tham khảo')
+                }}</b-dropdown-item>
 
-        <b-dropdown variant="link" toggle-class="text-decoration-none" no-caret>
-          <template #button-content>
-            <i class="fas fa-ellipsis-v"></i>
-          </template>
-          <b-dropdown-item href="#">{{ $t('Cập nhật') }}</b-dropdown-item>
-          <b-dropdown-item href="#">{{ $t('Tạo bản sao') }}</b-dropdown-item>
-          <b-dropdown-item href="#">{{ $t('Xuất bản') }}</b-dropdown-item>
-          <b-dropdown-item href="#">{{ $t('Chia sẻ') }}</b-dropdown-item>
-          <b-dropdown-item href="#">{{
-            $t('Tài liệu tham khảo')
-          }}</b-dropdown-item>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item href="#">{{ $t('Thống kê') }}</b-dropdown-item>
+                <b-dropdown-item href="#">{{ $t('Xóa') }}</b-dropdown-item>
+              </b-dropdown>
+            </div>
+          </div>
+        </template>
+        <div class="list-question">
+          <div class="question-item">
+            <div class="question-content text-smd">
+              <p>
+                <a href="#" class="me-2">#Vật lý 12</a
+                ><a href="#" class="me-2">#Vật lý</a>
+              </p>
+              Which of the following lists all and only the appropriate
+              descriptions about a 32-bit CPU and a 64-bit CPU? I When a 32-bit
+              CPU and a 64-bit CPU are compared, a 64-bit CPU has a larger
+              theoretical maximum memory space.. II There is no 32-bit OS that
+              runs on a PC with a 64-bit CPU. III In terms of the read and write
+              speed of a USB memory, the speed of a PC with a 64-bit CPU is
+              twice as fast as that of a PC with a 32-bit CPU.
+            </div>
+            <div class="question-item-answer">
+              <div class="answer-head">
+                <span class="font-sm text-gray">câu trả lời</span>
+              </div>
+              <div class="list-answer">
+                <ul class="list-unstyled p-0 m-0">
+                  <li>
+                    <b>A.</b>
+                    Deciding one’s own strategy in a game according to the
+                    strategy of the opponent
+                  </li>
+                  <li>
+                    <b>B.</b>
+                    Deciding one’s own strategy in a game according to the
+                    strategy of the opponent
+                  </li>
+                  <li>
+                    <b>C.</b>
+                    Deciding one’s own strategy in a game according to the
+                    strategy of the opponent
+                  </li>
+                  <li>
+                    <b>D.</b>
+                    Deciding one’s own strategy in a game according to the
+                    strategy of the opponent
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </b-card>
+      <b-card
+        class="card-question mb-3"
+        header-tag="header"
+        footer-tag="footer"
+      >
+        <template #header>
+          <div
+            class="
+              d-flex
+              align-items-center
+              justify-content-between
+              card-question-header
+            "
+          >
+            <div class="d-flex">
+              <div class="font-bold me-3">Thi tốt nghiệp THPT</div>
+              <div class="list-status-question">
+                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+                  $t('Cơ bản')
+                }}</span>
+                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+                  $t('Một lựa chọn')
+                }}</span>
+                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+                  $t('Bản nháp')
+                }}</span>
+              </div>
+            </div>
+            <div class="d-flex">
+              <a
+                href="#"
+                target="_blank"
+                class="btn btn-sm btn-outline-primary rounded-pill me-3"
+                >{{ $t('Xem trên web') }}</a
+              >
+              <b-dropdown
+                class="dropdown-button-circle"
+                variant="link"
+                toggle-class="text-decoration-none"
+                no-caret
+              >
+                <template #button-content>
+                  <b-icon icon="three-dots-vertical" />
+                </template>
+                <b-dropdown-item href="#">{{ $t('Cập nhật') }}</b-dropdown-item>
+                <b-dropdown-item href="#">{{
+                  $t('Tạo bản sao')
+                }}</b-dropdown-item>
+                <b-dropdown-item href="#">{{ $t('Xuất bản') }}</b-dropdown-item>
+                <b-dropdown-item href="#">{{ $t('Chia sẻ') }}</b-dropdown-item>
+                <b-dropdown-item href="#">{{
+                  $t('Tài liệu tham khảo')
+                }}</b-dropdown-item>
 
-          <b-dropdown-divider></b-dropdown-divider>
-          <b-dropdown-item href="#">{{ $t('Thống kê') }}</b-dropdown-item>
-          <b-dropdown-item href="#">{{ $t('Xóa') }}</b-dropdown-item>
-        </b-dropdown>
-      </div>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item href="#">{{ $t('Thống kê') }}</b-dropdown-item>
+                <b-dropdown-item href="#">{{ $t('Xóa') }}</b-dropdown-item>
+              </b-dropdown>
+            </div>
+          </div>
+        </template>
+        <div class="list-question">
+          <div class="question-item">
+            <div class="question-content text-smd">
+              <p>
+                <a href="#" class="me-2">#Vật lý 12</a
+                ><a href="#" class="me-2">#Vật lý</a>
+              </p>
+              Which of the following lists all and only the appropriate
+              descriptions about a 32-bit CPU and a 64-bit CPU? I When a 32-bit
+              CPU and a 64-bit CPU are compared, a 64-bit CPU has a larger
+              theoretical maximum memory space.. II There is no 32-bit OS that
+              runs on a PC with a 64-bit CPU. III In terms of the read and write
+              speed of a USB memory, the speed of a PC with a 64-bit CPU is
+              twice as fast as that of a PC with a 32-bit CPU.
+            </div>
+            <div class="question-item-answer">
+              <div class="answer-head">
+                <span class="font-sm text-gray">câu trả lời</span>
+              </div>
+              <div class="list-answer">
+                <ul class="list-unstyled p-0 m-0">
+                  <li>
+                    <b>A.</b>
+                    Deciding one’s own strategy in a game according to the
+                    strategy of the opponent
+                  </li>
+                  <li>
+                    <b>B.</b>
+                    Deciding one’s own strategy in a game according to the
+                    strategy of the opponent
+                  </li>
+                  <li>
+                    <b>C.</b>
+                    Deciding one’s own strategy in a game according to the
+                    strategy of the opponent
+                  </li>
+                  <li>
+                    <b>D.</b>
+                    Deciding one’s own strategy in a game according to the
+                    strategy of the opponent
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </b-card>
+      <b-card
+        class="card-question mb-3"
+        header-tag="header"
+        footer-tag="footer"
+      >
+        <template #header>
+          <div
+            class="
+              d-flex
+              align-items-center
+              justify-content-between
+              card-question-header
+            "
+          >
+            <div class="d-flex">
+              <div class="font-bold me-3">Thi tốt nghiệp THPT</div>
+              <div class="list-status-question">
+                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+                  $t('Cơ bản')
+                }}</span>
+                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+                  $t('Một lựa chọn')
+                }}</span>
+                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+                  $t('Bản nháp')
+                }}</span>
+              </div>
+            </div>
+            <div class="d-flex">
+              <a
+                href="#"
+                target="_blank"
+                class="btn btn-sm btn-outline-primary rounded-pill me-3"
+                >{{ $t('Xem trên web') }}</a
+              >
+              <b-dropdown
+                class="dropdown-button-circle"
+                variant="link"
+                toggle-class="text-decoration-none"
+                no-caret
+              >
+                <template #button-content>
+                  <b-icon icon="three-dots-vertical" />
+                </template>
+                <b-dropdown-item href="#">{{ $t('Cập nhật') }}</b-dropdown-item>
+                <b-dropdown-item href="#">{{
+                  $t('Tạo bản sao')
+                }}</b-dropdown-item>
+                <b-dropdown-item href="#">{{ $t('Xuất bản') }}</b-dropdown-item>
+                <b-dropdown-item href="#">{{ $t('Chia sẻ') }}</b-dropdown-item>
+                <b-dropdown-item href="#">{{
+                  $t('Tài liệu tham khảo')
+                }}</b-dropdown-item>
+
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item href="#">{{ $t('Thống kê') }}</b-dropdown-item>
+                <b-dropdown-item href="#">{{ $t('Xóa') }}</b-dropdown-item>
+              </b-dropdown>
+            </div>
+          </div>
+        </template>
+        <div class="list-question">
+          <div class="question-item">
+            <div class="question-content text-smd">
+              <p>
+                <a href="#" class="me-2">#Vật lý 12</a
+                ><a href="#" class="me-2">#Vật lý</a>
+              </p>
+              Which of the following lists all and only the appropriate
+              descriptions about a 32-bit CPU and a 64-bit CPU? I When a 32-bit
+              CPU and a 64-bit CPU are compared, a 64-bit CPU has a larger
+              theoretical maximum memory space.. II There is no 32-bit OS that
+              runs on a PC with a 64-bit CPU. III In terms of the read and write
+              speed of a USB memory, the speed of a PC with a 64-bit CPU is
+              twice as fast as that of a PC with a 32-bit CPU.
+            </div>
+            <div class="question-item-answer">
+              <div class="answer-head">
+                <span class="font-sm text-gray">câu trả lời</span>
+              </div>
+              <div class="list-answer">
+                <ul class="list-unstyled p-0 m-0">
+                  <li>
+                    <b>A.</b>
+                    Deciding one’s own strategy in a game according to the
+                    strategy of the opponent
+                  </li>
+                  <li>
+                    <b>B.</b>
+                    Deciding one’s own strategy in a game according to the
+                    strategy of the opponent
+                  </li>
+                  <li>
+                    <b>C.</b>
+                    Deciding one’s own strategy in a game according to the
+                    strategy of the opponent
+                  </li>
+                  <li>
+                    <b>D.</b>
+                    Deciding one’s own strategy in a game according to the
+                    strategy of the opponent
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </b-card>
     </div>
-    <div class="line"></div>
-    <div class="question">
-      <div class="question-hashtag">
-        <a href="">#vật lý 12</a>
-        <a href="">#Luyện thi đại học</a>
-        <a href="">#Vật Lý</a>
-      </div>
-      <div class="question">
-        Which of the following lists all and only the appropriate descriptions
-        about a 32-bit CPU and a 64-bit CPU? I When a 32-bit CPU and a 64-bit
-        CPU are compared, a 64-bit CPU has a larger theoretical maximum memory
-        space.. II There is no 32-bit OS that runs on a PC with a 64-bit CPU.
-        III In terms of the read and write speed of a USB memory, the speed of a
-        PC with a 64-bit CPU is twice as fast as that of a PC with a 32-bit CPU.
-      </div>
-      <div class="answer">
-        <ul>
-          <li v-for="(answer, index) in 4" :key="index" type="A">
-            Deciding one’s own strategy in a game according to the strategy of
-            the opponent
-          </li>
-        </ul>
-      </div>
-    </div>
-    <b-pagination
-      class="pagination"
-      first-number
-      align="center"
-      size="lg"
-    ></b-pagination>
+    <b-pagination total-rows="50" align="right" />
   </div>
 </template>
 
