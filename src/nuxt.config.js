@@ -134,7 +134,7 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '~assets/css/main.css',
-    {src:'@/assets/scss/custom-bootstrap.scss', lang: 'sass'},
+    { src: '@/assets/scss/custom-bootstrap.scss', lang: 'sass' },
     '@/assets/scss/style.scss',
     '@/assets/scss/dashboard.scss',
     '@/assets/scss/question.scss',

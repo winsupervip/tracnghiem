@@ -6,6 +6,7 @@
       tag="ul"
       v-bind="dragOptions"
       :move="onMove"
+      @end="onEndMove"
     >
       <transition-group type="transition" :name="'flip-list'">
         <div
@@ -28,9 +29,9 @@
             <b-icon
               v-b-modal.modal-1
               icon="pencil-square"
-              @click="updateAnswer(answer.id)"
+              @click="addValueUpdateAnswer(answer)"
             ></b-icon>
-            <b-icon icon="trash" @click="handleDelate(answer.id)"></b-icon>
+            <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
           </div>
         </div>
       </transition-group>
@@ -41,29 +42,11 @@
 <script>
 import draggable from 'vuedraggable'
 // const message = ['vue.draggable', 'draggable']
-
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'Hello',
   components: {
     draggable,
-  },
-  props: {
-    answers: {
-      type: Array,
-      required: true,
-    },
-    updateAnswer: {
-      type: Function,
-      required: true,
-    },
-    deleteAnswer: {
-      type: Function,
-      required: true,
-    },
-    handleDraggable: {
-      type: Function,
-      required: true,
-    },
   },
   data() {
     return {
@@ -71,6 +54,8 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['getListAnswer', 'getUpdateValueAnswer']),
+
     dragOptions() {
       return {
         animation: 0,
@@ -80,21 +65,17 @@ export default {
     },
   },
   watch: {
-    answers() {
-      console.log('answer', this.answers)
-      const l = this.answers.length
-      if (l > this.list.length) {
-        const answer = this.answers[l - 1]
-        answer.fixed = false
-        this.list.push(answer)
+    getListAnswer() {
+      if (
+        this.getListAnswer.length > this.list.length ||
+        this.getListAnswer.length < this.list.length
+      ) {
+        this.list = this.getListAnswer
       }
-    },
-    list() {
-      this.handleDraggable(this.list)
     },
   },
   created() {
-    const data = this.answers.map((item) => {
+    const data = this.getListAnswer.map((item) => {
       item.fixed = false
       return item
     })
@@ -102,21 +83,28 @@ export default {
     this.list = data
   },
   methods: {
-    orderList() {
-      this.list = this.list.sort((one, two) => {
-        return one.order - two.order
-      })
-    },
+    ...mapActions([
+      'addValueUpdateAnswer',
+      'deleteAnswer',
+      'handleUpdateDraggableAnswer',
+    ]),
+
     onMove({ relatedContext, draggedContext }) {
-      console.log(relatedContext, draggedContext)
       const relatedElement = relatedContext.element
       const draggedElement = draggedContext.element
       return (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
     },
     handleDelate(id) {
-      const index = this.list.findIndex((item) => item.id === id)
-      this.list.splice(index, 1)
       this.deleteAnswer(id)
+    },
+    onEndMove({ newDraggableIndex, oldDraggableIndex }) {
+      if (newDraggableIndex !== oldDraggableIndex) {
+        // const data = {
+        //   oldDraggableIndex: this.list[oldDraggableIndex].id,
+        //   newDraggableIndex: this.list[newDraggableIndex].id,
+        // }
+        this.handleUpdateDraggableAnswer(this.list)
+      }
     },
   },
 }

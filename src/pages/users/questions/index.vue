@@ -109,7 +109,7 @@ export default defineComponent({
     MultipleQuestion: MultipleListPage,
   },
   layout: 'dashboard',
-  auth: false,
+  auth: true,
   setup() {
     const { $loader, $logger } = useContext()
     const route = useRoute()
@@ -156,13 +156,13 @@ export default defineComponent({
       },
     ],
     items: [
-      'Một lựa chọn',
-      'Nhiều lựa chọn',
-      'Đúng sai',
-      'Ghép đôi',
-      'Điền vào chỗ trống',
-      'Câu hỏi trả lời ngắn',
-      'Sắp thứ tự',
+      { url: 'single-choice/create', title: 'Một lựa chọn' },
+      { url: 'multiple-choice/create', title: 'Nhiều lựa chọn' },
+      { url: 'right-wrong/create', title: 'Đúng sai' },
+      { url: 'pairing/create', title: 'Ghép đôi' },
+      { url: 'fill-blank/create', title: 'Điền vào chỗ trống' },
+      { url: 'short-answer/create', title: 'Câu hỏi trả lời ngắn' },
+      { url: 'draggable-fill-blank/create', title: 'Sắp thứ tự' },
     ],
   }),
   methods: {

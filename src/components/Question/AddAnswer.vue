@@ -21,11 +21,24 @@
       @hide="hide"
     >
       <div>
-        <TinyEditor
-          v-if="doShow"
-          v-model="answerContent"
-          :options="optionsText"
-        />
+        <div class="wrapper">
+          <div class="wrapper-left">
+            <p v-if="isPairing">Vế Trái</p>
+            <TinyEditor
+              v-if="doShow"
+              v-model="answerContent"
+              :options="optionsText"
+            />
+          </div>
+          <div v-if="isPairing" class="wrapper-right">
+            <p>Vế Phải</p>
+            <TinyEditor
+              v-if="doShow"
+              v-model="answerContentRight"
+              :options="optionsText"
+            />
+          </div>
+        </div>
         <div>
           <div :class="$style.checkBoxView">
             <div v-if="haveRandomAnswer" :class="$style.checkBox">
@@ -50,7 +63,7 @@
             variant="outline-primary"
             @click="handleAnswer"
             >{{
-              updateValue.answerContent
+              getUpdateValueAnswer.id
                 ? $t('Cập nhập câu trả lời')
                 : $t('Thêm câu trả lời')
             }}</b-button
@@ -69,8 +82,8 @@
 <script>
 import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
 import { uuid } from 'vue-uuid'
-import EventBus from '@/plugins/eventBus'
-
+import { mapActions, mapGetters } from 'vuex'
+// import EventBus from '@/plugins/eventBus'
 export default defineComponent({
   name: 'Header',
   props: {
@@ -78,18 +91,15 @@ export default defineComponent({
     //   type: Function,
     //   required: true,
     // },
-    updateValue: {
-      type: Object,
+    typeQuestion: {
+      type: String,
       required: true,
     },
-    updateAnswer: {
-      type: Function,
-      required: true,
+    isPairing: {
+      type: Boolean,
+      default: false,
     },
-    indexAnswerUpdate: {
-      type: Number,
-      default: -1,
-    },
+
     haveRightAnswer: {
       type: Boolean,
       default: true,
@@ -99,13 +109,14 @@ export default defineComponent({
       default: true,
     },
   },
-  setup(props) {
+  setup() {
     const data = reactive({
       optionsText: {
         convert_urls: false,
         entity_encoding: 'raw',
       },
       answerContent: '',
+      answerContentRight: '',
       isRightAnswer: false,
       isRandom: false,
       isUpdate: -1,
@@ -116,50 +127,118 @@ export default defineComponent({
       ...toRefs(data),
     }
   },
+  computed: {
+    ...mapGetters(['getUpdateValueAnswer']),
+  },
   watch: {
-    updateValue() {
-      console.log(this.updateValue)
-      this.answerContent = this.updateValue?.answerContent
-        ? this.updateValue.answerContent
-        : ''
-      // eslint-disable-next-line no-unneeded-ternary
-      this.isRightAnswer = this.updateValue.rightAnswer === 1 ? true : false
-      // eslint-disable-next-line no-unneeded-ternary
-      this.isRandom = this.updateValue.random ? true : false
+    getUpdateValueAnswer() {
+      if (this.getUpdateValueAnswer.id) {
+        if (this.isPairing) {
+          this.answerContent = this.getUpdateValueAnswer?.left?.answerContent
+            ? this.getUpdateValueAnswer?.left.answerContent
+            : ''
+          // eslint-disable-next-line no-unneeded-ternary
+          this.answerContentRight = this.getUpdateValueAnswer?.right
+            ?.answerContent
+            ? this.getUpdateValueAnswer?.right.answerContent
+            : ''
+          // eslint-disable-next-line no-unneeded-ternary
+          this.isRandom = this.getUpdateValueAnswer?.left?.random
+        } else {
+          this.answerContent = this.getUpdateValueAnswer?.answerContent
+            ? this.getUpdateValueAnswer.answerContent
+            : ''
+          // eslint-disable-next-line no-unneeded-ternary
+          const isRight = this.getUpdateValueAnswer.rightAnswer === 1
+          this.isRightAnswer = isRight
+          // eslint-disable-next-line no-unneeded-ternary
+          this.isRandom = this.getUpdateValueAnswer.random ? true : false
+        }
+      }
     },
   },
   methods: {
+    ...mapActions([
+      'handleAddAnswer',
+      'handleUpdateAnswer',
+      'removeValueUpdateAnswer',
+    ]),
     shown() {
       this.doShow = true
     },
     hide() {
       this.doShow = false
-      this.updateAnswer('remove_data')
+      // this.updateAnswer('remove_data')
     },
     hideModal() {
       this.$refs['modal-question'].hide()
+      if (this.getUpdateValueAnswer?.id) {
+        this.removeValueUpdateAnswer()
+      }
     },
     handleAnswer() {
       if (this.answerContent === '') {
         // config: https://github.com/shakee93/vue-toasted
         // eslint-disable-next-line no-undef
-        this.$toast.error($t('Câu trả lời không được bỏ trống')).goAway(1500)
+        this.$toast
+          .error(this.$i18n.t('Câu trả lời không được bỏ trống'))
+          .goAway(1500)
         return 0
       }
-      const data = {
-        id: uuid.v4(),
-        isRightAnswer: this.isRightAnswer ? 1 : 0,
-        isRandom: this.isRandom,
-        answerContent: this.answerContent,
+      let data = {}
+      if (this.isPairing) {
+        data = {
+          answer: {
+            left: {
+              id: uuid.v4(),
+              position: 0,
+              hashId: '',
+              plainText: this.answerContent,
+              rightAnswer: this.isRightAnswer ? 1 : 0,
+              random: this.isRandom,
+              answerContent: this.answerContent,
+            },
+            right: {
+              id: uuid.v4(),
+              position: 0,
+              hashId: '',
+              plainText: this.answerContentRight,
+              rightAnswer: this.isRightAnswer ? 1 : 0,
+              random: this.isRandom,
+              answerContent: this.answerContentRight,
+            },
+            id: uuid.v4(),
+          },
+          typeQuestion: this.typeQuestion,
+        }
+      } else {
+        data = {
+          answer: {
+            id: uuid.v4(),
+            position: 0,
+            hashId: '',
+            plainText: this.answerContent,
+            rightAnswer: this.isRightAnswer || !this.haveRightAnswer ? 1 : 0,
+            random: this.isRandom,
+            answerContent: this.answerContent,
+          },
+          typeQuestion: this.typeQuestion,
+        }
       }
       this.isRightAnswer = false
       this.isRandom = false
       this.answerContent = ''
-      if (this.updateValue.answerContent) {
-        data.index = this.indexAnswerUpdate
-        EventBus.$emit('updateListAnswer', data)
+      this.answerContentRight = ''
+      if (this.getUpdateValueAnswer?.id) {
+        // data.index = this.indexAnswerUpdate
+        // EventBus.$emit('updateListAnswer', data)
+        data.answer.id = this.getUpdateValueAnswer.id
+
+        this.handleUpdateAnswer(data)
+        this.removeValueUpdateAnswer()
       } else {
-        this.$emit('add', data)
+        this.handleAddAnswer(data)
+        this.$toast.show('Thêm câu trả lời thanh công').goAway(1500)
       }
     },
   },
@@ -196,5 +275,9 @@ export default defineComponent({
 .btnQuestion--close {
   margin-left: 20px;
   width: auto;
+}
+.wrapper {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

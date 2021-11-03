@@ -27,17 +27,14 @@ import {
   defineComponent,
   reactive,
   toRefs,
-  watch,
+  // watch,
   useFetch,
   useContext,
 } from '@nuxtjs/composition-api'
+import { mapActions } from 'vuex'
 import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   props: {
-    getCategories: {
-      type: Function,
-      required: true,
-    },
     errors: {
       type: Array,
       required: true,
@@ -58,17 +55,18 @@ export default defineComponent({
       $loader().close()
     })
     fetch()
-    watch(
-      () => data.treeValue,
-      () => {
-        props.getCategories(data.treeValue)
-      }
-    )
+
     return {
       ...toRefs(data),
     }
   },
+  watch: {
+    treeValue() {
+      this.addCategory(this.treeValue)
+    },
+  },
   methods: {
+    ...mapActions(['addCategory']),
     loadOptions({ action, callback, instanceId }) {
       callback()
     },
