@@ -1,8 +1,8 @@
-@import "icons";
-@import "variables";
-@import "header";
-@import "footer";
-@import "section-search";
+@import 'icons';
+@import 'variables';
+@import 'header';
+@import 'footer';
+@import 'section-search';
 body {
   font-family: 'Open Sans', sans-serif;
   // padding-top: $headerHeight;
@@ -1414,6 +1414,10 @@ img {
     .modal-header {
       border-bottom: none;
       padding: 10px 12px;
+      .modal-title {
+        font-weight: bold;
+        font-size: 1.25rem;
+      }
       .close {
         border: none;
         outline: none;
