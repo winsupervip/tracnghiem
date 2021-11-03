@@ -52,4 +52,7 @@ export default {
   deleteAnswer({ commit }, data) {
     commit('DELETE_ANSWER', data)
   },
+  handleUserChooseRightAnswer({ commit }, data) {
+    commit('HANDLE_USER_CHOOSE_RIGHT_ANSWER', data)
+  },
 }

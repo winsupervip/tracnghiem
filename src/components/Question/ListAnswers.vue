@@ -15,6 +15,7 @@
           name="some-radios"
           :value="answer.id"
           :aria-checked="true"
+          @change="isChange(answer.id)"
           ><div class="p-answerItem">
             <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
             <div
@@ -50,7 +51,7 @@
           :key="index"
           class="p-answerItem"
         >
-          <b-form-checkbox :value="answer.id"
+          <b-form-checkbox :value="answer.id" @change="isChange(answer.id)"
             ><div class="p-answerItem">
               <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
               <p v-html="answer.answerContent"></p>
@@ -177,7 +178,6 @@ export default defineComponent({
     const data = reactive({
       isSelected: [],
       answers: [],
-      listAnswersIsChange: false,
     })
     return {
       ...toRefs(data),
@@ -190,6 +190,17 @@ export default defineComponent({
     getSelected() {
       this.isSelected = this.getSelected
     },
+    // isSelected(newValue, oldValue) {
+    //   for (let i = 0; i < newValue.length; i++) {
+    //     if (newValue[i] && oldValue[i] && newValue[i] === oldValue[i]) {
+    //       console.log('khong thay doi')
+    //     } else {
+    //       console.log('có thay đổi')
+    //     }
+    //   }
+    //   console.log(newValue, oldValue)
+    //   // this.handleUserChooseRightAnswer(this.isSelected)
+    // },
   },
   onMouted() {
     this.answers = this.getListAnswer
@@ -209,7 +220,22 @@ export default defineComponent({
     })
   },
   methods: {
-    ...mapActions(['addValueUpdateAnswer', 'deleteAnswer']),
+    ...mapActions([
+      'addValueUpdateAnswer',
+      'deleteAnswer',
+      'handleUserChooseRightAnswer',
+    ]),
+    isChange(id) {
+      if (this.typeQuestion === 'multiple-choice') {
+        if (this.isSelected.length > this.getSelected.length) {
+          this.handleUserChooseRightAnswer({ action: 'add', id })
+        } else {
+          this.handleUserChooseRightAnswer({ action: 'remove', id })
+        }
+      } else if (this.typeQuestion === 'single-choice') {
+        this.handleUserChooseRightAnswer({ action: 'change', id })
+      }
+    },
   },
 })
 </script>

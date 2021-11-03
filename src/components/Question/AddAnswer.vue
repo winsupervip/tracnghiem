@@ -238,7 +238,7 @@ export default defineComponent({
         this.removeValueUpdateAnswer()
       } else {
         this.handleAddAnswer(data)
-        this.$toast.show('Thêm câu trả lời thanh công').goAway(1500)
+        this.$toast.show('Thêm câu trả lời thành công').goAway(1500)
       }
     },
   },
