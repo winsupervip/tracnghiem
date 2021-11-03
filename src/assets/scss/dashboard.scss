@@ -387,3 +387,14 @@ body.dashboard {
     }
   }
 }
+
+.tag {
+  &:focus {
+    box-shadow: none;
+  }
+
+  &:hover {
+    background-color: #1c3988;
+    border-color: #1c3988;
+  }
+}
