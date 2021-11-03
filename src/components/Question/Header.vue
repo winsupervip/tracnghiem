@@ -24,7 +24,7 @@
       <b-alert v-if="errors[0]" id="error" show variant="warning">{{
         errors[0]
       }}</b-alert>
-      <div class="marginTag">
+      <div class="p-question__tagGroup">
         <b-form-group label-for="tags-with-dropdown">
           <b-form-tags
             id="tags-with-dropdown"
@@ -41,7 +41,7 @@
                 <li v-for="tag in tags" :key="tag" class="list-inline-item">
                   <b-form-tag
                     :title="tag"
-                    variant="info"
+                    variant="primary"
                     @remove="removeTag(tag)"
                     >{{ tag }}</b-form-tag
                   >
@@ -50,12 +50,13 @@
 
               <b-dropdown
                 size="sm"
-                variant="outline-secondary"
+                variant="outline-primary"
                 block
                 menu-class="w-100"
               >
                 <template #button-content>
-                  <b-icon icon="tag-fill"></b-icon> {{ $t('Chọn tag') }}
+                  <b-icon icon="tag-fill" class="tag"></b-icon>
+                  <span class="textTag">{{ $t('Chọn tag') }}</span>
                 </template>
                 <b-dropdown-form @submit.stop.prevent="() => {}">
                   <b-form-group
@@ -86,7 +87,8 @@
 
                 <b-button
                   v-if="search.length > 0"
-                  variant="success"
+                  variant="primary"
+                  class="p-question__btnAdd"
                   @click="userAddTag"
                   >{{ $t('Thêm') }}</b-button
                 >
