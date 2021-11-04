@@ -167,6 +167,7 @@ export default {
     { src: "@/plugins/validators", ssr: false },
     { src: '@/plugins/bootstrap-vue.js', ssr: true },
     { src: '@/plugins/uuid.js', ssr: true },
+    { src: '~/plugins/persistedState.js'},
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

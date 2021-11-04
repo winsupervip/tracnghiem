@@ -1,9 +1,16 @@
-export default function ({ $axios, $auth, $logger, redirect }, inject) {
+import { uuid } from 'vue-uuid'
+export default function ({ $axios, $auth, $logger, redirect, store }, inject) {
+  let uid = store.getters['user/getSessionId']
+  if (!uid) {
+    uid = uuid.v4()
+    store.dispatch('user/initSession', uid)
+  }
   const $http = $axios.create({
     timeout: 30000, // 30s
     headers: {
       'Content-Type': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest',
+      'X-SESSION-ID': uid,
+      'X-Xss-Protection': uuid.v4(),
     },
   })
 
