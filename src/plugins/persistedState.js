@@ -4,7 +4,7 @@ import cookie from 'cookie'
 
 export default ({ store, req }) => {
   createPersistedState({
-    key: 'tracnghiem',
+    key: 'app-store',
     storage: {
       getItem: (key) => {
         // See https://nuxtjs.org/guide/plugins/#using-process-flags
@@ -20,5 +20,6 @@ export default ({ store, req }) => {
         Cookies.set(key, value, { expires: 365, secure: false }),
       removeItem: (key) => Cookies.remove(key),
     },
+    paths: ['user'],
   })(store)
 }

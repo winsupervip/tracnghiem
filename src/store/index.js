@@ -1,7 +1,5 @@
 import { Store } from 'vuex'
 import { uuid } from 'vue-uuid'
-import createPersistedState from 'vuex-persistedstate'
-import * as Cookies from 'js-cookie'
 import user from './modules/user'
 import question from './modules/questions/singleQuestions/index'
 
@@ -25,18 +23,6 @@ const createStore = () => {
       user,
       question,
     },
-    plugins: [
-      createPersistedState({
-        storage: {
-          getItem: (key) => Cookies.get(key),
-          // Please see https://github.com/js-cookie/js-cookie#json, on how to handle JSON.
-          setItem: (key, value) =>
-            Cookies.set(key, value, { expires: 3, secure: true }),
-          removeItem: (key) => Cookies.remove(key),
-        },
-        paths: ['user'],
-      }),
-    ],
   })
 }
 
