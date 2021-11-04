@@ -33,24 +33,19 @@
     }
   }
 
-  .type-question {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 26px;
-    .input-group {
+  .form-group {
+    position: relative;
+    .tag-search-input {
       width: 100%;
       z-index: 1;
-      .form-group {
-        position: relative;
-      }
-      ul {
-        padding: 0;
-        position: absolute;
-        background-color: white;
-        width: 100%;
-        li {
-          list-style-type: none;
-        }
+    }
+    ul {
+      padding: 0;
+      position: absolute;
+      background-color: white;
+      width: 100%;
+      li {
+        list-style-type: none;
       }
     }
   }

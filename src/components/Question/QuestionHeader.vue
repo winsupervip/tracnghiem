@@ -9,7 +9,7 @@
 
       <span>{{ questions.levelName }}</span>
       <span>{{ questions.questionTypeName }}</span>
-      <span>{{ questions.statusId }}</span>
+      <span>{{ questions.statusName }}</span>
     </div>
     <div class="headline-right">
       <a href="">{{ $t('WatchOnWeb') }}</a>

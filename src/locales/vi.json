@@ -24,7 +24,6 @@
   "whenTheAnswerIsIncorrect": "Khi trả lời sai",
   "title": "Tiêu Đề (*)",
   "add": "Thêm",
-  "level": "Mức độ (*)",
   "highSchoolGraduationExam": "Thi tốt nghiệp THPT",
   "basic": "Cơ bản",
   "public": "Công khai",
@@ -46,21 +45,6 @@
   "-- choose --": "-- Chọn --",
   "anOption": "Một lựa chọn",
   "draft": "Bản nháp",
-  
-  
-  
- 
-  
- 
-  
- 
- 
-  
- 
- 
-  
- 
- 
 "category": "Danh mục","questionType": "Loại câu hỏi","status": "Trạng thái","level": "Mức độ","sort": "Sắp xếp",
 "rowA": "Cột A","rowB": "Cột B"
 
