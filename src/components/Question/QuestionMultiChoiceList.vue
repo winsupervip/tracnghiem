@@ -1,23 +1,27 @@
 <template>
   <div class="question-multiChoice">
     <p v-html="questionlist.description"></p>
-
-    <div class="answer-multiChoice">
-      <ul>
-        <li
-          v-for="(answer, index) in questionlist.answers"
-          :key="index"
-          type="none"
-        >
-          <span
-            :style="{ display: 'flex' }"
-            :class="answer.rightAnswer ? 'rightAnswer' : 'wrongAnswer'"
+    <div class="question-item-answer">
+      <div class="answer-head">
+        <span class="font-sm text-gray">câu trả lời</span>
+      </div>
+      <div class="answer-multiChoice">
+        <ul class="list-unstyled p-0 m-0">
+          <li
+            v-for="(answer, index) in questionlist.answers"
+            :key="index"
+            type="none"
           >
-            {{ String.fromCharCode(65 + index) + '. ' }}
-            <p v-html="answer.answerContent"></p>
-          </span>
-        </li>
-      </ul>
+            <span
+              :style="{ display: 'flex' }"
+              :class="answer.rightAnswer ? 'rightAnswer' : 'wrongAnswer'"
+            >
+              {{ String.fromCharCode(65 + index) + '. ' }}
+              <p v-html="answer.answerContent"></p>
+            </span>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>

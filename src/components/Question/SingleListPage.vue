@@ -1,42 +1,50 @@
 <template>
-  <div v-if="questions.itemType === 'question'">
-    <div class="form-single-question">
-      <QuestionHeader :questions="questions" />
-
-      <div class="line"></div>
-      <div class="question">
-        <div class="question-hashtag">
-          <QuestionTags :questiontags="questions" />
+  <div class="list-single-question">
+    <div class="list-questions-user">
+      <b-card
+        class="card-question mb-3"
+        header-tag="header"
+        footer-tag="footer"
+      >
+        <template #header>
+          <QuestionHeader :questions="questions" />
+        </template>
+        <div class="list-question">
+          <div class="question-item">
+            <div class="question-content text-smd">
+              <QuestionTags :questiontags="questions" />
+              <QuestionSingleChoiceList
+                v-if="questions.questionTypeName == 'Một lựa chọn'"
+                :questionlist="questions"
+              />
+              <QuestionMultiChoiceList
+                v-if="questions.questionTypeName == 'Nhiều lựa chọn'"
+                :questionlist="questions"
+              />
+              <QuestionRightWrongList
+                v-if="questions.questionTypeName == 'Đúng sai'"
+                :questionlist="questions"
+              />
+              <QuestionParingList
+                v-if="questions.questionTypeName == 'Ghép đôi'"
+                :questionlist="questions"
+              />
+              <QuestionFillBlankList
+                v-if="questions.questionTypeName == 'Điền vào chỗ trống'"
+                :questionlist="questions"
+              />
+              <QuestionShortAnswerList
+                v-if="questions.questionTypeName == 'Câu trả lời ngắn'"
+                :questionlist="questions"
+              />
+              <QuestionSortAnswerList
+                v-if="questions.questionTypeName == 'Sắp xếp thứ tự'"
+                :questionlist="questions"
+              />
+            </div>
+          </div>
         </div>
-        <QuestionSingleChoiceList
-          v-if="questions.questionTypeName == 'Một lựa chọn'"
-          :questionlist="questions"
-        />
-        <QuestionMultiChoiceList
-          v-if="questions.questionTypeName == 'Nhiều lựa chọn'"
-          :questionlist="questions"
-        />
-        <QuestionRightWrongList
-          v-if="questions.questionTypeName == 'Đúng sai'"
-          :questionlist="questions"
-        />
-        <QuestionParingList
-          v-if="questions.questionTypeName == 'Ghép đôi'"
-          :questionlist="questions"
-        />
-        <QuestionFillBlankList
-          v-if="questions.questionTypeName == 'Điền vào chỗ trống'"
-          :questionlist="questions"
-        />
-        <QuestionShortAnswerList
-          v-if="questions.questionTypeName == 'Câu trả lời ngắn'"
-          :questionlist="questions"
-        />
-        <QuestionSortAnswerList
-          v-if="questions.questionTypeName == 'Sắp xếp thứ tự'"
-          :questionlist="questions"
-        />
-      </div>
+      </b-card>
     </div>
   </div>
 </template>

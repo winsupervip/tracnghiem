@@ -1,21 +1,25 @@
 <template>
   <div class="question-fillblank">
     <p v-html="questionlist.description"></p>
-
-    <div class="answer-fillblank">
-      <ul>
-        <li
-          v-for="(answer, index) in questionlist.answers"
-          :key="index"
-          type="none"
-        >
-          <span :style="{ display: 'flex' }">
-            {{ String.fromCharCode(65 + index) + '. ' }}
-            <p v-html="answer.answerContent"></p
-          ></span>
-          <input type="text" :value="answer.rightAnswer" disabled />
-        </li>
-      </ul>
+    <div class="question-item-answer">
+      <div class="answer-head">
+        <span class="font-sm text-gray">câu trả lời</span>
+      </div>
+      <div class="answer-fillblank">
+        <ul>
+          <li
+            v-for="(answer, index) in questionlist.answers"
+            :key="index"
+            type="none"
+          >
+            <span :style="{ display: 'flex' }">
+              {{ String.fromCharCode(65 + index) + '. ' }}
+              <p v-html="answer.answerContent"></p
+            ></span>
+            <input type="text" :value="answer.rightAnswer" disabled />
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -37,6 +41,7 @@ export default defineComponent({
 <style lang="scss">
 .question-fillblank {
   text-align: center;
+
   .answer-fillblank {
     width: 100%;
 

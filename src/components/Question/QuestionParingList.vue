@@ -1,45 +1,49 @@
 <template>
   <div class="question-pairing">
     <p v-html="questionlist.description"></p>
-
-    <div class="answer-pairing">
-      <table>
-        <div class="row_A">
-          <tr>
-            <th>{{ $t('rowA') }}</th>
-            <th>{{ $t('rowB') }}</th>
-          </tr>
-          <tr v-for="answer in rowA" :key="answer.id">
-            <td>
-              <span>
-                <p>{{ answer.answerContent }}</p></span
-              >
-            </td>
-            <td>
-              <span>
-                <p>
-                  {{ findAnswer(answer.rightAnswer).answerContent }}
-                </p></span
-              >
-            </td>
-          </tr>
-          <tr
-            v-for="answer in rowB.filter(
-              (x) => !rowA.find((a) => a.rightAnswer === x.rightAnswer)
-            )"
-            :key="answer.id"
-          >
-            <td></td>
-            <td>
-              <span>
-                <p>
-                  {{ answer.answerContent }}
-                </p></span
-              >
-            </td>
-          </tr>
-        </div>
-      </table>
+    <div class="question-item-answer">
+      <div class="answer-head">
+        <span class="font-sm text-gray">câu trả lời</span>
+      </div>
+      <div class="answer-pairing">
+        <table>
+          <div class="row_A">
+            <tr>
+              <th>{{ $t('rowA') }}</th>
+              <th>{{ $t('rowB') }}</th>
+            </tr>
+            <tr v-for="answer in rowA" :key="answer.id">
+              <td>
+                <span>
+                  <p>{{ answer.answerContent }}</p></span
+                >
+              </td>
+              <td>
+                <span>
+                  <p>
+                    {{ findAnswer(answer.rightAnswer).answerContent }}
+                  </p></span
+                >
+              </td>
+            </tr>
+            <tr
+              v-for="answer in rowB.filter(
+                (x) => !rowA.find((a) => a.rightAnswer === x.rightAnswer)
+              )"
+              :key="answer.id"
+            >
+              <td></td>
+              <td>
+                <span>
+                  <p>
+                    {{ answer.answerContent }}
+                  </p></span
+                >
+              </td>
+            </tr>
+          </div>
+        </table>
+      </div>
     </div>
   </div>
 </template>

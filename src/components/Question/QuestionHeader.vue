@@ -1,20 +1,43 @@
-<template>
-  <div class="form-headline">
-    <div class="headline-left">
-      <label
-        ><abbr :title="questions.title">
+<template #header>
+  <div
+    class="
+      d-flex
+      align-items-center
+      justify-content-between
+      card-question-header
+    "
+  >
+    <div class="d-flex">
+      <div class="font-bold me-3">
+        <abbr :title="questions.title">
           {{ questions.title }}
-        </abbr></label
-      >
-
-      <span>{{ questions.levelName }}</span>
-      <span>{{ questions.questionTypeName }}</span>
-      <span>{{ questions.statusName }}</span>
+        </abbr>
+      </div>
+      <div class="list-status-question">
+        <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+          questions.levelName
+        }}</span>
+        <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+          questions.questionTypeName
+        }}</span>
+        <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+          questions.statusName
+        }}</span>
+      </div>
     </div>
-    <div class="headline-right">
-      <a href="">{{ $t('WatchOnWeb') }}</a>
-
-      <b-dropdown variant="light" toggle-class="text-decoration-none" no-caret>
+    <div class="d-flex">
+      <a
+        href="#"
+        target="_blank"
+        class="btn btn-sm btn-outline-primary rounded-pill me-3"
+        >{{ $t('WatchOnWeb') }}</a
+      >
+      <b-dropdown
+        class="dropdown-button-circle"
+        variant="link"
+        toggle-class="text-decoration-none"
+        no-caret
+      >
         <template #button-content>
           <i class="bi bi-three-dots-vertical"></i>
         </template>

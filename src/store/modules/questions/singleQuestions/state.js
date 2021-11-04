@@ -25,4 +25,5 @@ export default () => ({
   modalShow: false,
   updateValue: {},
   errors: [],
+  selected: [],
 })

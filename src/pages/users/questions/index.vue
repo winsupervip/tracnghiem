@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <div class="heading-page">
-      <h1 class="heading-title">Ngân hàng câu hỏi</h1>
+      <h1 class="heading-title">{{ $t('questionBank') }}</h1>
       <b-btn
         pill
         variant="primary"
@@ -9,7 +9,7 @@
         class="btn-rounded"
         @click="$bvModal.show('bv-modal-add-question')"
       >
-        Thêm mới
+        {{ $t('add') }}
       </b-btn>
     </div>
     <b-modal id="bv-modal-add-question" hide-footer title="Câu hỏi:">
@@ -28,90 +28,89 @@
           class="text-center"
           block
           @click="$bvModal.hide('bv-modal-add-question')"
-          >Đóng</b-button
+          >{{ $t('close') }}</b-button
         >
       </div>
     </b-modal>
 
     <b-tabs class="custom-tabs" content-class="mt-3">
-      <b-tab title="Danh sách câu đơn" active>
-        <div class="filter-bar">
-          <div class="row">
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <b-form-group class="mb-0 form-group">
-                <b-form-input
-                  id="tag-search-input"
-                  v-model="search"
-                  type="search"
-                  :placeholder="$t('search')"
+      <div class="filter-bar">
+        <div class="row">
+          <div class="col-6 col-md-4 col-lg-2 mb-3">
+            <b-form-group class="mb-0 form-group">
+              <b-form-input
+                id="tag-search-input"
+                v-model="search"
+                type="search"
+                :placeholder="$t('search')"
+              >
+              </b-form-input>
+              <b-button
+                :style="{ margin: ' 0 30%', height: '50px' }"
+                block
+                @click="handleSearch"
+                >{{ $t('search') }}</b-button
+              >
+              <ul>
+                <b-dropdown-item
+                  v-for="(option, index) in availableOptions"
+                  :key="index"
+                  class="abc"
+                  @click="inputSearch(option.label)"
                 >
-                </b-form-input>
-                <ul>
-                  <b-dropdown-item
-                    v-for="(option, index) in availableOptions"
-                    :key="index"
-                    @click="inputSearch(option.label)"
-                  >
-                    {{ option.label }}
-                  </b-dropdown-item>
-                </ul>
-              </b-form-group>
-            </div>
-
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <treeselect
-                v-model="urlQuery.categories"
-                :multiple="true"
-                :options="category"
-                :load-options="loadOptions"
-                :placeholder="$t('category')"
-              />
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <treeselect
-                v-model="urlQuery.questionTypeId"
-                :options="treeQuestionTypes"
-                :load-options="loadOptions"
-                :placeholder="$t('questionType')"
-              />
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <treeselect
-                v-model="urlQuery.statusId"
-                :options="listStatus"
-                :load-options="loadOptions"
-                :placeholder="$t('status')"
-              />
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <treeselect
-                v-model="urlQuery.levelId"
-                :options="level"
-                :load-options="loadOptions"
-                :placeholder="$t('level')"
-              />
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <treeselect
-                :options="options"
-                :load-options="loadOptions"
-                :placeholder="$t('sort')"
-              />
-            </div>
+                  {{ option.label }}
+                </b-dropdown-item>
+              </ul>
+            </b-form-group>
           </div>
-          <b-button
-            :style="{ margin: ' 0 30%', height: '50px' }"
-            block
-            @click="handleSearch"
-            >{{ $t('search') }}</b-button
-          >
+          <div class="col-6 col-md-4 col-lg-2 mb-3">
+            <treeselect
+              v-model="urlQuery.categories"
+              :multiple="true"
+              :options="category"
+              :load-options="loadOptions"
+              :placeholder="$t('category')"
+            />
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 mb-3">
+            <treeselect
+              v-model="urlQuery.questionTypeId"
+              :options="treeQuestionTypes"
+              :load-options="loadOptions"
+              :placeholder="$t('questionType')"
+            />
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 mb-3">
+            <treeselect
+              v-model="urlQuery.statusId"
+              :options="listStatus"
+              :load-options="loadOptions"
+              :placeholder="$t('status')"
+            />
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 mb-3">
+            <treeselect
+              v-model="urlQuery.levelId"
+              :options="level"
+              :load-options="loadOptions"
+              :placeholder="$t('level')"
+            />
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 mb-3">
+            <treeselect
+              :options="options"
+              :load-options="loadOptions"
+              :placeholder="$t('sort')"
+            />
+          </div>
         </div>
-
+      </div>
+      <b-tab title="Danh sách câu đơn" active>
         <SingleQuestion
           v-for="question in questionList"
           :key="question.id"
           :questions="question"
-        ></SingleQuestion>
+        />
 
         <b-pagination
           v-model="urlQuery.page"
@@ -120,91 +119,12 @@
           :per-page="urlQuery.pageSize"
         ></b-pagination>
       </b-tab>
-      <b-tab title="Danh sách câu chùm">
-        <div class="filter-bar">
-          <div class="row">
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <b-form-group class="mb-0 form-group">
-                <b-form-input
-                  id="tag-search-input"
-                  v-model="search"
-                  type="search"
-                  :placeholder="$t('search')"
-                >
-                </b-form-input>
-                <ul>
-                  <b-dropdown-item
-                    v-for="(option, index) in availableOptions"
-                    :key="index"
-                    @click="inputSearch(option.label)"
-                  >
-                    {{ option.label }}
-                  </b-dropdown-item>
-                </ul>
-              </b-form-group>
-            </div>
-
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <treeselect
-                v-model="urlQuery.categories"
-                :multiple="true"
-                :options="category"
-                :load-options="loadOptions"
-                :placeholder="$t('category')"
-              />
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <treeselect
-                v-model="urlQuery.questionTypeId"
-                :options="treeQuestionTypes"
-                :load-options="loadOptions"
-                :placeholder="$t('questionType')"
-              />
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <treeselect
-                v-model="urlQuery.statusId"
-                :options="listStatus"
-                :load-options="loadOptions"
-                :placeholder="$t('status')"
-              />
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <treeselect
-                v-model="urlQuery.levelId"
-                :options="level"
-                :load-options="loadOptions"
-                :placeholder="$t('level')"
-              />
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 mb-3">
-              <treeselect
-                :options="options"
-                :load-options="loadOptions"
-                :placeholder="$t('sort')"
-              />
-            </div>
-          </div>
-          <b-button
-            :style="{ margin: ' 0 30%', height: '50px' }"
-            block
-            @click="handleSearch"
-            >{{ $t('search') }}</b-button
-          >
-        </div>
-
+      <b-tab title="Danh sách câu chùm">
         <MultipleQuestion
           v-for="question in questionList"
           :key="question.id"
           :questions="question"
-        ></MultipleQuestion>
-
-        <b-pagination
-          v-model="urlQuery.page"
-          class="pagination"
-          :total-rows="total"
-          :per-page="urlQuery.pageSize"
-        ></b-pagination>
+        />
       </b-tab>
     </b-tabs>
   </div>
@@ -254,7 +174,9 @@ export default defineComponent({
       search: '',
       options: [],
       questionList: [],
-      a: [],
+      questionSingleList: [],
+      questionGroupList: [],
+
       urlQuery: {
         pageSize: 2,
         keyword: '',
@@ -269,11 +191,11 @@ export default defineComponent({
     })
     const handleSearch = async () => {
       const result = await QuestionApi.getUserItemList(data.urlQuery)
+      data.total = result.data?.object?.total
 
-      data.total = result.data.object?.total
+      data.questionList = result.data?.object?.items
 
-      data.questionList = result.data.object.items
-      $logger.info(data.urlQuery)
+      $logger.info('123', result.data?.object)
     }
     const { fetch } = useFetch(async () => {
       $loader()

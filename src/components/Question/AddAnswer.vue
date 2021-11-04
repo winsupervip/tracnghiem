@@ -63,8 +63,8 @@
             variant="outline-primary"
             @click="handleAnswer"
             >{{
-              getUpdateValueAnswer.answerContent
-                ? $t('updateAnswer')
+              getUpdateValueAnswer.id
+                ? $t('Cập nhập câu trả lời')
                 : $t('Thêm câu trả lời')
             }}</b-button
           >
@@ -91,7 +91,10 @@ export default defineComponent({
     //   type: Function,
     //   required: true,
     // },
-
+    typeQuestion: {
+      type: String,
+      required: true,
+    },
     isPairing: {
       type: Boolean,
       default: false,
@@ -106,7 +109,7 @@ export default defineComponent({
       default: true,
     },
   },
-  setup(props) {
+  setup() {
     const data = reactive({
       optionsText: {
         convert_urls: false,
@@ -128,35 +131,30 @@ export default defineComponent({
     ...mapGetters(['getUpdateValueAnswer']),
   },
   watch: {
-    // getUpdateValueAnswer() {
-    //   console.log('hoang', this.updateValue)
-    //   if (this.isPairing) {
-    //     this.answerContent = this.updateValue?.left?.answerContent
-    //       ? this.updateValue?.left?.answerContent
-    //       : ''
-    //     this.answerContentRight = this.updateValue?.right?.answerContent
-    //       ? this.updateValue?.right?.answerContent
-    //       : ''
-    //     // eslint-disable-next-line no-unneeded-ternary
-    //     this.isRandom = this.updateValue.random ? true : false
-    //   } else {
-    //     this.answerContent = this.updateValue?.answerContent
-    //       ? this.updateValue.answerContent
-    //       : ''
-    //     // eslint-disable-next-line no-unneeded-ternary
-    //     this.isRightAnswer = this.updateValue.rightAnswer === 1 ? true : false
-    //     // eslint-disable-next-line no-unneeded-ternary
-    //     this.isRandom = this.updateValue.random ? true : false
-    //   }
-    // },
     getUpdateValueAnswer() {
-      this.answerContent = this.getUpdateValueAnswer?.answerContent
-        ? this.getUpdateValueAnswer.answerContent
-        : ''
-      // eslint-disable-next-line no-unneeded-ternary
-      this.isRightAnswer = this.getUpdateValueAnswer.rightAnswer === 1
-      // eslint-disable-next-line no-unneeded-ternary
-      this.isRandom = this.getUpdateValueAnswer.random ? true : false
+      if (this.getUpdateValueAnswer.id) {
+        if (this.isPairing) {
+          this.answerContent = this.getUpdateValueAnswer?.left?.answerContent
+            ? this.getUpdateValueAnswer?.left.answerContent
+            : ''
+          // eslint-disable-next-line no-unneeded-ternary
+          this.answerContentRight = this.getUpdateValueAnswer?.right
+            ?.answerContent
+            ? this.getUpdateValueAnswer?.right.answerContent
+            : ''
+          // eslint-disable-next-line no-unneeded-ternary
+          this.isRandom = this.getUpdateValueAnswer?.left?.random
+        } else {
+          this.answerContent = this.getUpdateValueAnswer?.answerContent
+            ? this.getUpdateValueAnswer.answerContent
+            : ''
+          // eslint-disable-next-line no-unneeded-ternary
+          const isRight = this.getUpdateValueAnswer.rightAnswer === 1
+          this.isRightAnswer = isRight
+          // eslint-disable-next-line no-unneeded-ternary
+          this.isRandom = this.getUpdateValueAnswer.random ? true : false
+        }
+      }
     },
   },
   methods: {
@@ -174,6 +172,9 @@ export default defineComponent({
     },
     hideModal() {
       this.$refs['modal-question'].hide()
+      if (this.getUpdateValueAnswer?.id) {
+        this.removeValueUpdateAnswer()
+      }
     },
     handleAnswer() {
       if (this.answerContent === '') {
@@ -185,48 +186,52 @@ export default defineComponent({
       let data = {}
       if (this.isPairing) {
         data = {
-          left: {
+          answer: {
+            left: {
+              id: uuid.v4(),
+              position: 0,
+              hashId: '',
+              plainText: this.answerContent,
+              rightAnswer: this.isRightAnswer ? 1 : 0,
+              random: this.isRandom,
+              answerContent: this.answerContent,
+            },
+            right: {
+              id: uuid.v4(),
+              position: 0,
+              hashId: '',
+              plainText: this.answerContentRight,
+              rightAnswer: this.isRightAnswer ? 1 : 0,
+              random: this.isRandom,
+              answerContent: this.answerContentRight,
+            },
             id: uuid.v4(),
-            position: 0,
-            hashId: '',
-            plainText: this.answerContent,
-            rightAnswer: this.isRightAnswer ? 1 : 0,
-            isRandom: this.isRandom,
-            answerContent: this.answerContent,
           },
-          right: {
-            id: uuid.v4(),
-            position: 0,
-            hashId: '',
-            plainText: this.answerContent,
-            rightAnswer: this.isRightAnswer ? 1 : 0,
-            isRandom: this.isRandom,
-            answerContent: this.answerContentRight,
-          },
-          id: uuid.v4(),
+          typeQuestion: this.typeQuestion,
         }
       } else {
         data = {
-          id: uuid.v4(),
-          position: 0,
-          hashId: '',
-          plainText: this.answerContent,
-          rightAnswer: this.isRightAnswer ? 1 : 0,
-          isRandom: this.isRandom,
-          answerContent: this.answerContent,
+          answer: {
+            id: uuid.v4(),
+            position: 0,
+            hashId: '',
+            plainText: this.answerContent,
+            rightAnswer: this.isRightAnswer || !this.haveRightAnswer ? 1 : 0,
+            random: this.isRandom,
+            answerContent: this.answerContent,
+          },
+          typeQuestion: this.typeQuestion,
         }
       }
       this.isRightAnswer = false
       this.isRandom = false
       this.answerContent = ''
       this.answerContentRight = ''
-      if (
-        this.getUpdateValueAnswer.answerContent ||
-        this.updateValue?.left?.answerContent
-      ) {
+      if (this.getUpdateValueAnswer?.id) {
         // data.index = this.indexAnswerUpdate
         // EventBus.$emit('updateListAnswer', data)
-        data.id = this.getUpdateValueAnswer.id
+        data.answer.id = this.getUpdateValueAnswer.id
+
         this.handleUpdateAnswer(data)
         this.removeValueUpdateAnswer()
       } else {

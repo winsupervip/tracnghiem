@@ -2,7 +2,8 @@
   <CreateSingleQuestion
     question-type="draggable"
     question-type-id="7"
-    question-title="Thêm câu hỏi trả lời ngắn"
+    question-title="Thêm câu hỏi sắp xếp thứ tự"
+    :have-right-answer="false"
   />
 </template>
 <script>
