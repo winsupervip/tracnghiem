@@ -140,7 +140,11 @@ export default {
   },
 
   HANDLE_UPDATE_ANSWER_FOR_DRAGGABLE(state, data) {
-    state.answers = data
+    const answers = data.map((item, index) => {
+      item.rightAnswer = index + 1
+      return item
+    })
+    state.answers = answers
   },
 
   ADD_VALUE_UPDATE_ANSWER(state, data) {

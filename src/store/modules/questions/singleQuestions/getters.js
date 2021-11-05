@@ -1,82 +1,68 @@
 export default {
   getListAnswer: (state) => state.answers,
   getUpdateValueAnswer: (state) => state.updateValueAnswer,
-  isValid: (state) => {
-    const errors = []
+  isValid: (state, typeQuestion) => {
+    const errors = {}
     const data = state
     let valid = true
     if (data.question.title === '') {
-      errors.push('Tiêu đề là bắt buộc')
+      errors.title = 'Tiêu đề là bắt buộc'
       valid = false
     } else {
-      errors.push(false)
+      errors.title = false
     }
     // 1
 
     if (data.question.questionContent === '') {
-      errors.push('Bạn phải nhập vào nội dung câu hỏi')
+      errors.questionContent = 'Bạn phải nhập vào nội dung câu hỏi'
       valid = false
     } else {
-      errors.push(false)
+      errors.questionContent = false
     }
     // 2
 
     if (data.question.tags.length === 0) {
-      errors.push('Bạn phải gán ít nhất 1 tag cho câu hỏi')
+      errors.tags = 'Bạn phải gán ít nhất 1 tag cho câu hỏi'
       valid = false
     } else {
-      errors.push(false)
+      errors.tags = false
     }
     // 3
 
     if (!data.question.levelId) {
-      errors.push('Bạn phải chọn level cho câu hỏi')
+      errors.level = 'Bạn phải chọn level cho câu hỏi'
       valid = false
     } else {
-      errors.push(false)
+      errors.level = false
     }
     // 4
 
     if (data.question.categories.length === 0) {
-      errors.push('Bạn phải chọn 1 danh mục cho câu hỏi')
+      errors.categories = 'Bạn phải chọn 1 danh mục cho câu hỏi'
       valid = false
     } else {
-      errors.push(false)
+      errors.categories = false
     }
     // 5
 
     if (data.answers.length < 2) {
-      errors.push('Loại câu hỏi này phải có từ 2 câu trả lời trở lên')
+      errors.answers = []
+      errors.answers.push('Loại câu hỏi này phải có từ 2 câu trả lời trở lên')
       valid = false
-    } else {
-      let count = 0
-      data.answers.forEach((e) => {
-        if (e.rightAnswer === 1) {
-          count += 1
-        }
-      })
-      if (count === 0) {
-        errors.push('Hãy chọn 1 câu trả lời đúng')
-        valid = false
-      } else if (count > 1) {
-        errors.push('Loại câu hỏi này chỉ có 1 đáp án đúng')
-        valid = false
-      } else {
-        errors.push(false)
-      }
     }
+
     if (!data.question.statusId) {
-      errors.push('Bạn có muốn xuất bản câu hỏi')
+      errors.statusId = 'Bạn có muốn xuất bản câu hỏi'
       valid = false
     } else {
-      errors.push(false)
+      errors.statusId = false
     }
     if (data.question.seoTitle === '') {
-      errors.push('Bạn có muốn xuất bản câu hỏi')
+      errors.seoTitle = 'Bạn có muốn xuất bản câu hỏi'
       // eslint-disable-next-line no-unused-vars
       valid = false
     } else {
-      errors.push(false)
+      errors.seoTitle = false
     }
     return { isValid: valid, errors }
   },

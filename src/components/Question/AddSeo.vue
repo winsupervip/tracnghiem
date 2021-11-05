@@ -22,8 +22,8 @@
           :class="[$style.inputF]"
         ></b-form-input>
 
-        <b-alert v-if="errors[4]" id="error" show variant="warning">{{
-          errors[4]
+        <b-alert v-if="errors.seoTitle" id="error" show variant="warning">{{
+          errors.seoTitle
         }}</b-alert>
         <b-form-textarea
           id="textarea-default"
@@ -41,7 +41,7 @@ import { mapActions } from 'vuex'
 export default defineComponent({
   props: {
     errors: {
-      type: Array,
+      type: Object,
       required: true,
     },
   },

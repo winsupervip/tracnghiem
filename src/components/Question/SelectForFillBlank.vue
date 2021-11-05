@@ -1,12 +1,9 @@
 <template>
-  <b-form-select v-model="isSelected" class="mb-3">
+  <b-form-select v-model="isSelected" class="mb-3" @change="changeSelected">
     <b-form-select-option :value="null" disabled>{{
       $t('-- Chọn --')
     }}</b-form-select-option>
-    <b-form-select-option
-      v-for="i in getListAnswer.length"
-      :key="i"
-      :value="String(answer.id) + 'index' + i"
+    <b-form-select-option v-for="i in getListAnswer.length" :key="i" :value="i"
       >({{ i }})</b-form-select-option
     >
   </b-form-select>
@@ -30,19 +27,24 @@ export default {
     ...mapGetters(['getListAnswer', 'getUpdateValueAnswer']),
   },
   watch: {
-    getListAnswer() {
-      this.isSelected = null
-    },
-    // isSelected() {
-    //   console.log('a', this.isSelected)
-    //   if (this.isSelected) {
-    //     console.log('b', this.isSelected)
-    //     this.handleFillBlank(this.isSelected)
-    //   }
+    // getListAnswer() {
+    //   this.isSelected = null
     // },
   },
   methods: {
-    ...mapActions(['addValueUpdateAnswer', 'deleteAnswer']),
+    ...mapActions([
+      'addValueUpdateAnswer',
+      'deleteAnswer',
+      'handleUpdateAnswer',
+    ]),
+    changeSelected(index) {
+      const temp = this.answer
+      temp.rightAnswer = index
+      const data = {
+        answer: temp,
+      }
+      this.handleUpdateAnswer(data)
+    },
   },
 }
 </script>

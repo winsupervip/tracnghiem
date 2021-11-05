@@ -191,7 +191,7 @@ export default defineComponent({
           answer: {
             left: {
               id: uuid.v4(),
-              position: 0,
+              position: 1,
               hashId: '',
               plainText: this.answerContent,
               rightAnswer: this.isRightAnswer ? 1 : 0,
@@ -200,7 +200,7 @@ export default defineComponent({
             },
             right: {
               id: uuid.v4(),
-              position: 0,
+              position: 2,
               hashId: '',
               plainText: this.answerContentRight,
               rightAnswer: this.isRightAnswer ? 1 : 0,

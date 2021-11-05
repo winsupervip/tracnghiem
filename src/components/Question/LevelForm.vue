@@ -17,8 +17,8 @@
             option.name
           }}</label
         >
-        <b-alert v-if="errors[3]" id="error" show variant="warning">{{
-          errors[3]
+        <b-alert v-if="errors.level" id="error" show variant="warning">{{
+          errors.level
         }}</b-alert>
       </div>
     </div>
@@ -32,7 +32,7 @@ export default defineComponent({
   name: 'LevelForm',
   props: {
     errors: {
-      type: Array,
+      type: Object,
       required: true,
     },
   },

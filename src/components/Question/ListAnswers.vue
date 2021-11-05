@@ -145,9 +145,16 @@
     <div v-if="typeQuestion === 'draggable'">
       <Draggable />
     </div>
-    <b-alert v-if="errors[5]" id="error" show variant="warning">{{
-      errors[5]
-    }}</b-alert>
+    <div v-if="errors.answers">
+      <b-alert
+        v-for="(error, index) in errors.answers"
+        id="error"
+        :key="index"
+        show
+        variant="warning"
+        >{{ error }}</b-alert
+      >
+    </div>
   </div>
 </template>
 
@@ -170,7 +177,7 @@ export default defineComponent({
       required: true,
     },
     errors: {
-      type: Array,
+      type: Object,
       required: true,
     },
   },
@@ -190,17 +197,6 @@ export default defineComponent({
     getSelected() {
       this.isSelected = this.getSelected
     },
-    // isSelected(newValue, oldValue) {
-    //   for (let i = 0; i < newValue.length; i++) {
-    //     if (newValue[i] && oldValue[i] && newValue[i] === oldValue[i]) {
-    //       console.log('khong thay doi')
-    //     } else {
-    //       console.log('có thay đổi')
-    //     }
-    //   }
-    //   console.log(newValue, oldValue)
-    //   // this.handleUserChooseRightAnswer(this.isSelected)
-    // },
   },
   onMouted() {
     this.answers = this.getListAnswer

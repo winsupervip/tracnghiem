@@ -21,8 +21,8 @@
         class="form-control"
         :placeholder="$t('Tiêu Đề (*)')"
       ></b-form-input>
-      <b-alert v-if="errors[0]" id="error" show variant="warning">{{
-        errors[0]
+      <b-alert v-if="errors.title" id="error" show variant="warning">{{
+        errors.title
       }}</b-alert>
       <div class="p-question__tagGroup">
         <b-form-group label-for="tags-with-dropdown">
@@ -96,15 +96,19 @@
             </template>
           </b-form-tags>
         </b-form-group>
-        <b-alert v-if="errors[2]" id="error" show variant="warning">{{
-          errors[2]
+        <b-alert v-if="errors.tags" id="error" show variant="warning">{{
+          errors.tags
         }}</b-alert>
       </div>
       <div>
         <TinyEditor v-model="questionContent" />
-        <b-alert v-if="errors[1]" id="error" show variant="warning">{{
-          errors[1]
-        }}</b-alert>
+        <b-alert
+          v-if="errors.questionContent"
+          id="error"
+          show
+          variant="warning"
+          >{{ errors.questionContent }}</b-alert
+        >
       </div>
     </div>
   </div>
@@ -123,7 +127,7 @@ export default defineComponent({
     },
 
     errors: {
-      type: Array,
+      type: Object,
       required: true,
     },
   },

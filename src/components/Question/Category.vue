@@ -15,8 +15,8 @@
             :load-options="loadOptions"
           />
         </div>
-        <b-alert v-if="errors[4]" id="error" show variant="warning">{{
-          errors[4]
+        <b-alert v-if="errors.categories" id="error" show variant="warning">{{
+          errors.categories
         }}</b-alert>
       </div>
     </div>
@@ -36,7 +36,7 @@ import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   props: {
     errors: {
-      type: Array,
+      type: Object,
       required: true,
     },
   },

@@ -16,8 +16,8 @@
             >
           </li>
         </ul>
-        <b-alert v-if="errors[6]" id="error" show variant="warning">{{
-          errors[6]
+        <b-alert v-if="errors.statusId" id="error" show variant="warning">{{
+          errors.statusId
         }}</b-alert>
         <!-- </ValidationProvider> -->
       </div>
@@ -54,7 +54,7 @@ import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   props: {
     errors: {
-      type: Array,
+      type: Object,
       required: true,
     },
     onSubmit: {
