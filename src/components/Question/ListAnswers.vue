@@ -197,6 +197,17 @@ export default defineComponent({
     getSelected() {
       this.isSelected = this.getSelected
     },
+    // isSelected(newValue, oldValue) {
+    //   for (let i = 0; i < newValue.length; i++) {
+    //     if (newValue[i] && oldValue[i] && newValue[i] === oldValue[i]) {
+    //       console.log('khong thay doi')
+    //     } else {
+    //       console.log('có thay đổi')
+    //     }
+    //   }
+    //   console.log(newValue, oldValue)
+    //   // this.handleUserChooseRightAnswer(this.isSelected)
+    // },
   },
   onMouted() {
     this.answers = this.getListAnswer
