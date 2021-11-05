@@ -55,4 +55,7 @@ export default {
   handleUserChooseRightAnswer({ commit }, data) {
     commit('HANDLE_USER_CHOOSE_RIGHT_ANSWER', data)
   },
+  restAnswer({ commit }, data) {
+    commit('REST_ANSWERS')
+  },
 }

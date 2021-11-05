@@ -225,21 +225,19 @@ export default defineComponent({
           typeQuestion: this.typeQuestion,
         }
       }
-      this.isRightAnswer = false
-      this.isRandom = false
-      this.answerContent = ''
-      this.answerContentRight = ''
-      if (this.getUpdateValueAnswer?.id) {
-        // data.index = this.indexAnswerUpdate
-        // EventBus.$emit('updateListAnswer', data)
-        data.answer.id = this.getUpdateValueAnswer.id
 
+      if (this.getUpdateValueAnswer?.id) {
+        data.answer.id = this.getUpdateValueAnswer.id
         this.handleUpdateAnswer(data)
         this.removeValueUpdateAnswer()
       } else {
         this.handleAddAnswer(data)
-        this.$toast.show('Thêm câu trả lời thành công').goAway(1500)
+        this.$toast.show('Thêm câu trả lời thành công').goAway(1000)
       }
+      this.isRightAnswer = false
+      this.isRandom = false
+      this.answerContent = ''
+      this.answerContentRight = ''
     },
   },
 })

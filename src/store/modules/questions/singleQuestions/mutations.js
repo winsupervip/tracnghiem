@@ -183,4 +183,7 @@ export default {
     const index = state.answers.findIndex((item) => item.id === data)
     state.answers.splice(index, 1)
   },
+  REST_ANSWERS(state) {
+    state.answers = []
+  },
 }

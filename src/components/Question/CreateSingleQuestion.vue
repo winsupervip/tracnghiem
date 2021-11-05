@@ -26,7 +26,7 @@
 
 <script>
 import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import PublishQuestion from './PublishQuestion.vue'
 import LevelForm from './LevelForm.vue'
 import Category from './Category.vue'
@@ -96,20 +96,14 @@ export default defineComponent({
     ...mapGetters(['getQuestion']),
   },
   methods: {
-    removeAnswerId(value) {
-      const listAnswers = value.map((item) => {
-        delete item.id
-        return item
-      })
-      return listAnswers
-    },
+    ...mapActions(['restAnswer']),
 
     isValid(data) {
       let count = 0
       this.errors = {
         answers: [],
       }
-
+      console.log(data.answers)
       let validdateAnswers = []
       let valid = true
       if (data.question.title === '') {
@@ -153,9 +147,16 @@ export default defineComponent({
       }
       console.log(this.errors)
       if (data.answers.length < 2) {
-        this.errors.answers.push(
-          'Loại câu hỏi này phải có từ 2 câu trả lời trở lên'
-        )
+        if (this.questionType === 'short-answer') {
+          this.errors.answers.push(
+            'Loại câu hỏi này phải có ít nhất 1 câu trả lời'
+          )
+        } else {
+          this.errors.answers.push(
+            'Loại câu hỏi này phải có từ 2 câu trả lời trở lên'
+          )
+        }
+
         valid = false
       }
       if (
@@ -211,27 +212,32 @@ export default defineComponent({
           item.rightAnswer = index + 1
           return item
         })
-      } else if (this.questionType === 'paring') {
+      } else if (this.questionType === 'pairing') {
         data.answers.forEach((element) => {
-          delete element.id
-          if (element.answer?.left?.answerContent.length > 0) {
-            const left = element.answer?.left
+          console.log(element?.left?.answerContent.length > 0)
+          if (element?.id) {
+            delete element.id
+          }
+          if (element?.left?.answerContent.length > 0) {
+            const left = element?.left
             delete left.id
             validdateAnswers.push(left)
           }
-          if (element.answer?.right?.answerContent.length > 0) {
-            const right = element.answer?.right
+          if (element?.right?.answerContent.length > 0) {
+            const right = element?.right
             delete right.id
             validdateAnswers.push(right)
           }
         })
       }
-      console.log(this.errors)
+      console.log('validdateAnswers', validdateAnswers)
       data.answers = validdateAnswers
       return { valid, data }
     },
     onSubmit() {
-      const getValid = this.isValid(this.getQuestion)
+      console.log(this.getQuestion)
+      const getData = this.getQuestion
+      const getValid = this.isValid(getData)
       console.log('valid', getValid)
       if (getValid.valid) {
         const data = getValid.data
@@ -240,6 +246,7 @@ export default defineComponent({
         CauHoiApi.createQuestion(
           data,
           () => {
+            this.restAnswer()
             this.$toast.show('Thêm Thành Công').goAway(1500)
           },
           () => {

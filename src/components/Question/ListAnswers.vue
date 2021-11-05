@@ -195,6 +195,7 @@ export default defineComponent({
   },
   watch: {
     getSelected() {
+      console.log('chạy')
       this.isSelected = this.getSelected
     },
     // isSelected(newValue, oldValue) {
@@ -208,6 +209,9 @@ export default defineComponent({
     //   console.log(newValue, oldValue)
     //   // this.handleUserChooseRightAnswer(this.isSelected)
     // },
+    getListAnswer() {
+      console.log(this.getListAnswer)
+    },
   },
   onMouted() {
     this.answers = this.getListAnswer
@@ -233,13 +237,17 @@ export default defineComponent({
       'handleUserChooseRightAnswer',
     ]),
     isChange(id) {
+      console.log(id)
       if (this.typeQuestion === 'multiple-choice') {
         if (this.isSelected.length > this.getSelected.length) {
           this.handleUserChooseRightAnswer({ action: 'add', id })
         } else {
           this.handleUserChooseRightAnswer({ action: 'remove', id })
         }
-      } else if (this.typeQuestion === 'single-choice') {
+      } else if (
+        this.typeQuestion === 'single-choice' ||
+        this.typeQuestion === 'right-wrong'
+      ) {
         this.handleUserChooseRightAnswer({ action: 'change', id })
       }
     },

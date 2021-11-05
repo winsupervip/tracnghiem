@@ -11,7 +11,7 @@
       <transition-group type="transition" :name="'flip-list'">
         <div
           v-for="(answer, index) in list"
-          :key="answer.id"
+          :key="answer.id ? answer.id : index"
           class="p-answerItem list-group-item"
         >
           <div class="p-answerItem">
