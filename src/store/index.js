@@ -1,7 +1,7 @@
 import { Store } from 'vuex'
 import { uuid } from 'vue-uuid'
 import user from './modules/user'
-import question from './modules/questions/singleQuestions/index'
+import question from './modules/questions/singleQuestions'
 
 export const actions = {
   nuxtServerInit({ dispatch }) {

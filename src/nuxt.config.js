@@ -219,7 +219,7 @@ export default {
       { code: 'vi', iso: 'vi-VN', file: 'vi-VN.js' },
       { code: 'en', iso: 'en-US', file: 'en-US.js' },
     ],
-    defaultLocale: 'vi',
+    defaultLocale: 'en',
     lazy: true,
     langDir: 'locales/',
   },
