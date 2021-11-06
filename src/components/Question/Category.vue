@@ -5,19 +5,25 @@
     </p>
     <div class="p-question__box__body">
       <div class="p-question__box__body__item">
-        <div v-if="treeData.length > 0">
-          <treeselect
-            v-model="treeValue"
-            :multiple="true"
-            :always-open="alwaysOpen"
-            :options="treeData"
-            :placeholder="$t('categoryForQuestions')"
-            :load-options="loadOptions"
-          />
-        </div>
-        <b-alert v-if="errors[4]" id="error" show variant="warning">{{
-          errors[4]
-        }}</b-alert>
+        <ValidationProvider
+          v-slot="{ valid, errors }"
+          name="Danh mục câu hỏi"
+          rules="required"
+        >
+          <div v-if="treeData.length > 0">
+            <treeselect
+              v-model="treeValue"
+              :multiple="true"
+              :always-open="alwaysOpen"
+              :options="treeData"
+              :placeholder="$t('categoryForQuestions')"
+              :load-options="loadOptions"
+            />
+          </div>
+          <b-form-invalid-feedback :state="valid">{{
+            errors[0]
+          }}</b-form-invalid-feedback>
+        </ValidationProvider>
       </div>
     </div>
   </section>
@@ -34,12 +40,6 @@ import {
 import { mapActions } from 'vuex'
 import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
-  props: {
-    errors: {
-      type: Array,
-      required: true,
-    },
-  },
   setup(props) {
     const { $loader } = useContext()
     const data = reactive({

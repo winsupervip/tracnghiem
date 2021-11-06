@@ -3,28 +3,28 @@
     <p class="p-question__box__heading">
       <strong>{{ $t('SEOsettings*') }}</strong>
     </p>
-    <!-- <ValidationProvider v-slot="{ errors }" rules="required">
-      <b-form-input
-        v-model="seoTitle"
-        name="Tiêu dề SEO"
-        placeholder="Tiêu đề SEO *"
-        :class="[$style.container, $style.inputF]"
-      ></b-form-input>
-      <b-alert v-if="errors[0]" id="error" show variant="warning"
-        >Tiêu đề SEO là bắt buộc</b-alert
-      >
-    </ValidationProvider> -->
+
     <div class="p-question__box__body">
       <div class="p-question__box__body__item">
-        <b-form-input
-          v-model="seoTitle"
-          :placeholder="$t('SEOtitle (*)')"
-          :class="[$style.inputF]"
-        ></b-form-input>
-
-        <b-alert v-if="errors[4]" id="error" show variant="warning">{{
-          errors[4]
-        }}</b-alert>
+        <ValidationProvider rules="required" name="Tiêu Đề SEO">
+          <b-form-group
+            slot-scope="{ valid, errors }"
+            :label="$t('title')"
+            :label-for="$t('title')"
+          >
+            <b-form-input
+              v-model="seoTitle"
+              :class="[$style.container, $style.inputF]"
+              type="text"
+              :state="errors[0] ? false : valid ? true : null"
+              placeholder="Tiêu đề SEO *"
+            >
+            </b-form-input>
+            <b-form-invalid-feedback id="inputLiveFeedback">
+              {{ errors[0] }}
+            </b-form-invalid-feedback>
+          </b-form-group>
+        </ValidationProvider>
         <b-form-textarea
           id="textarea-default"
           v-model="seoDescription"
@@ -39,12 +39,6 @@
 import { defineComponent } from '@nuxtjs/composition-api'
 import { mapActions } from 'vuex'
 export default defineComponent({
-  props: {
-    errors: {
-      type: Array,
-      required: true,
-    },
-  },
   data() {
     return {
       seoTitle: '',

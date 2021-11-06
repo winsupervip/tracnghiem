@@ -3,40 +3,43 @@
     <p class="p-question__box__heading">
       <strong>{{ $t('publishQuestion') }}</strong>
     </p>
-    <!-- <ValidationProvider v-slot="{ errors }" rules="required" name="choice"> -->
+
     <div class="p-question__box__body">
       <div class="p-question__box__body__item">
-        <ul>
-          <b>{{ $t('show') }}</b>
-          <li v-for="option in listStatus" :key="option.id">
-            <label
-              ><input v-model="status" type="radio" :value="option.id" />{{
-                option.label
-              }}</label
+        <!-- <b>{{ $t('Hiển thị:') }}</b> -->
+        <ValidationProvider name="Trạng Thái câu hỏi" rules="required">
+          <b-form-radio-group v-model="status" slot-scope="{ valid, errors }">
+            <b-form-radio
+              v-for="status in listStatus"
+              :key="status.id"
+              :value="status.id"
+              >{{ status.label }}</b-form-radio
             >
-          </li>
-        </ul>
-        <b-alert v-if="errors[6]" id="error" show variant="warning">{{
-          errors[6]
-        }}</b-alert>
-        <!-- </ValidationProvider> -->
+            <b-form-invalid-feedback :state="valid">{{
+              errors[0]
+            }}</b-form-invalid-feedback>
+          </b-form-radio-group>
+        </ValidationProvider>
       </div>
       <div class="p-question__box__body__item">
         <p>
-          <b>{{ $t('onlyYouCanSeeThisQuestion') }}</b>
+          <!-- <b>{{ $t('Chỉ bạn mới thấy được câu hỏi này.') }}</b> -->
         </p>
         <div>
-          <b-button variant="outline-primary" class="btnQuestion">{{
-            $t('saveDraft')
+          <!-- <b-button variant="outline-primary" class="btnQuestion">{{
+            $t('Lưu bản nháp')
           }}</b-button
           ><br />
           <b-button
             variant="outline-primary"
             class="btnQuestion btn-save"
             @click="onSubmit"
-            >{{ $t('saveQuestion') }}</b-button
-          >
+            >{{ $t('Lưu câu hỏi') }}</b-button
+          > -->
         </div>
+        <b-button type="submit" variant="primary">{{
+          $t('saveQuestion')
+        }}</b-button>
       </div>
     </div>
   </section>
@@ -53,10 +56,6 @@ import { mapActions } from 'vuex'
 import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   props: {
-    errors: {
-      type: Array,
-      required: true,
-    },
     onSubmit: {
       type: Function,
       required: true,
@@ -65,7 +64,13 @@ export default defineComponent({
   setup(props) {
     const data = reactive({
       listStatus: [],
-      status: -1,
+      status: '',
+      value: null,
+      options: [
+        { text: 'First radio', value: 'first' },
+        { text: 'Second radio', value: 'second' },
+        { text: 'Third radio', value: 'third' },
+      ],
     })
     const { fetch } = useFetch(async () => {
       const { data: result } = await CauHoiApi.getListStatus()
@@ -75,6 +80,11 @@ export default defineComponent({
     return {
       ...toRefs(data),
     }
+  },
+  computed: {
+    state() {
+      return Boolean(this.value)
+    },
   },
   watch: {
     status() {

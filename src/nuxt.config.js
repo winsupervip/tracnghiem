@@ -167,6 +167,7 @@ export default {
     { src: "@/plugins/validators", ssr: false },
     { src: '@/plugins/bootstrap-vue.js', ssr: true },
     { src: '@/plugins/uuid.js', ssr: true },
+    { src: '~/plugins/persistedState.js'},
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -218,7 +219,7 @@ export default {
       { code: 'vi', iso: 'vi-VN', file: 'vi-VN.js' },
       { code: 'en', iso: 'en-US', file: 'en-US.js' },
     ],
-    defaultLocale: 'vi',
+    defaultLocale: 'en',
     lazy: true,
     langDir: 'locales/',
   },

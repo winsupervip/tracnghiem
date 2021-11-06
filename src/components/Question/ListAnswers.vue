@@ -15,6 +15,7 @@
           name="some-radios"
           :value="answer.id"
           :aria-checked="true"
+          @change="isChange(answer.id)"
           ><div class="p-answerItem">
             <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
             <div
@@ -50,7 +51,7 @@
           :key="index"
           class="p-answerItem"
         >
-          <b-form-checkbox :value="answer.id"
+          <b-form-checkbox :value="answer.id" @change="isChange(answer.id)"
             ><div class="p-answerItem">
               <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
               <p v-html="answer.answerContent"></p>
@@ -158,9 +159,16 @@
     <div v-if="typeQuestion === 'draggable'">
       <Draggable />
     </div>
-    <b-alert v-if="errors[5]" id="error" show variant="warning">{{
-      errors[5]
-    }}</b-alert>
+
+    <div v-if="errors.answers">
+      <b-form-invalid-feedback
+        v-for="(error, index) in errors.answers"
+        id="error"
+        :key="index"
+        :state="false"
+        >{{ error }}</b-form-invalid-feedback
+      >
+    </div>
   </div>
 </template>
 
@@ -183,7 +191,7 @@ export default defineComponent({
       required: true,
     },
     errors: {
-      type: Array,
+      type: Object,
       required: true,
     },
   },
@@ -191,7 +199,6 @@ export default defineComponent({
     const data = reactive({
       isSelected: [],
       answers: [],
-      listAnswersIsChange: false,
     })
     return {
       ...toRefs(data),
@@ -202,7 +209,22 @@ export default defineComponent({
   },
   watch: {
     getSelected() {
+      console.log('chạy')
       this.isSelected = this.getSelected
+    },
+    // isSelected(newValue, oldValue) {
+    //   for (let i = 0; i < newValue.length; i++) {
+    //     if (newValue[i] && oldValue[i] && newValue[i] === oldValue[i]) {
+    //       console.log('khong thay doi')
+    //     } else {
+    //       console.log('có thay đổi')
+    //     }
+    //   }
+    //   console.log(newValue, oldValue)
+    //   // this.handleUserChooseRightAnswer(this.isSelected)
+    // },
+    getListAnswer() {
+      console.log(this.getListAnswer)
     },
   },
   onMouted() {
@@ -223,7 +245,26 @@ export default defineComponent({
     })
   },
   methods: {
-    ...mapActions(['addValueUpdateAnswer', 'deleteAnswer']),
+    ...mapActions([
+      'addValueUpdateAnswer',
+      'deleteAnswer',
+      'handleUserChooseRightAnswer',
+    ]),
+    isChange(id) {
+      console.log(id)
+      if (this.typeQuestion === 'multiple-choice') {
+        if (this.isSelected.length > this.getSelected.length) {
+          this.handleUserChooseRightAnswer({ action: 'add', id })
+        } else {
+          this.handleUserChooseRightAnswer({ action: 'remove', id })
+        }
+      } else if (
+        this.typeQuestion === 'single-choice' ||
+        this.typeQuestion === 'right-wrong'
+      ) {
+        this.handleUserChooseRightAnswer({ action: 'change', id })
+      }
+    },
   },
 })
 </script>

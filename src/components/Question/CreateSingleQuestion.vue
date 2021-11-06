@@ -1,32 +1,36 @@
 <template>
-  <div class="p-question p-question--singleChoice">
-    <div class="p-question__left">
-      <Header :question-title="questionTitle" :errors="errors" />
-      <AddAnswer
-        :errors="errors"
-        :type-question="questionType"
-        :have-random-answer="haveRandomAnswer"
-        :have-right-answer="haveRightAnswer"
-        :is-pairing="isPairing"
-      />
+  <ValidationObserver v-slot="{ handleSubmit }">
+    <b-form @submit.prevent="handleSubmit(onSubmit)">
+      <div class="p-question p-question--singleChoice">
+        <div class="p-question__left">
+          <Header :question-title="questionTitle" :errors="errors" />
+          <AddAnswer
+            :errors="errors"
+            :type-question="questionType"
+            :have-random-answer="haveRandomAnswer"
+            :have-right-answer="haveRightAnswer"
+            :is-pairing="isPairing"
+          />
 
-      <ListAnswer :type-question="questionType" :errors="errors" />
-      <CommentOrNote />
-    </div>
-    <div class="p-question__right">
-      <PublishQuestion :errors="errors" :on-submit="onSubmit" />
-      <Category :errors="errors" />
-      <LevelForm :errors="errors" />
-      <!-- <UploadImage :get-image="getImage" /> -->
-      <Uploader :accept="'*/*'" :disabled="false"></Uploader>
-      <AddSeo :errors="errors" />
-    </div>
-  </div>
+          <ListAnswer :type-question="questionType" :errors="errors" />
+          <CommentOrNote />
+        </div>
+        <div class="p-question__right">
+          <PublishQuestion :errors="errors" :on-submit="onSubmit" />
+          <Category :errors="errors" />
+          <LevelForm :errors="errors" />
+          <!-- <UploadImage :get-image="getImage" /> -->
+          <Uploader :accept="'*/*'" :disabled="false"></Uploader>
+          <AddSeo :errors="errors" />
+        </div>
+      </div>
+    </b-form>
+  </ValidationObserver>
 </template>
 
 <script>
 import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import PublishQuestion from './PublishQuestion.vue'
 import LevelForm from './LevelForm.vue'
 import Category from './Category.vue'
@@ -83,7 +87,9 @@ export default defineComponent({
 
   setup() {
     const data = reactive({
-      errors: [],
+      errors: {
+        answers: [],
+      },
     })
 
     return {
@@ -91,26 +97,120 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['isValid', 'getQuestion']),
+    ...mapGetters(['getQuestion']),
   },
   methods: {
-    removeAnswerId(value) {
-      const listAnswers = value.map((item) => {
-        delete item.id
-        return item
-      })
-      return listAnswers
+    ...mapActions(['restAnswer']),
+
+    isValid(data) {
+      let count = 0
+      this.errors = {
+        answers: [],
+      }
+      console.log(data.answers)
+      let validdateAnswers = []
+      let valid = true
+
+      console.log(this.errors)
+      if (data.answers.length < 2) {
+        if (this.questionType === 'short-answer') {
+          this.errors.answers.push(
+            'Loại câu hỏi này phải có ít nhất 1 câu trả lời'
+          )
+        } else {
+          this.errors.answers.push(
+            'Loại câu hỏi này phải có từ 2 câu trả lời trở lên'
+          )
+        }
+
+        valid = false
+      }
+      if (
+        this.questionType === 'single-choice' ||
+        this.questionType === 'right-wrong'
+      ) {
+        validdateAnswers = data.answers.map((item) => {
+          item.id = undefined
+          if (item.rightAnswer === 1) {
+            count += 1
+          }
+          return item
+        })
+        if (count > 1) {
+          this.errors.answers.push('Loại câu hoi này chỉ có 1 đáp án đúng')
+          valid = false
+        } else if (count < 1) {
+          this.errors.answers.push('Bạn phỉa chọn 1 câu trả lời đúng')
+          valid = false
+        }
+      } else if (this.questionType === 'multiple-choice') {
+        validdateAnswers = data.answers.map((item) => {
+          item.id = undefined
+          if (item.rightAnswer === 1) {
+            count += 1
+          }
+          return item
+        })
+        if (count === 0) {
+          this.errors.answers.push('Bạn phỉa chọn 1 câu trả lời')
+          valid = false
+        }
+      } else if (this.questionType === 'short-answer') {
+        validdateAnswers = data.answers.map((item) => {
+          item.id = undefined
+          return item
+        })
+      } else if (this.questionType === 'fill-blank') {
+        let sumRight = 0
+        const checkSum = (data.answers.length + 1) * (data.answers.length / 2)
+        validdateAnswers = data.answers.map((item) => {
+          item.id = undefined
+          sumRight += item.rightAnswer
+          return item
+        })
+        if (sumRight !== checkSum) {
+          this.errors.answers.push('Ví trí điền đang bị trùng')
+          valid = false
+        }
+      } else if (this.questionType === 'draggable') {
+        validdateAnswers = data.answers.map((item, index) => {
+          item.id = undefined
+          item.rightAnswer = index + 1
+          return item
+        })
+      } else if (this.questionType === 'pairing') {
+        data.answers.forEach((element) => {
+          console.log(element?.left?.answerContent.length > 0)
+          if (element?.id) {
+            element.id = undefined
+          }
+          if (element?.left?.answerContent.length > 0) {
+            const left = element?.left
+            element.id = undefined
+            validdateAnswers.push(left)
+          }
+          if (element?.right?.answerContent.length > 0) {
+            const right = element?.right
+            element.id = undefined
+            validdateAnswers.push(right)
+          }
+        })
+      }
+      data.answers = validdateAnswers
+      return { valid, data }
     },
     onSubmit() {
-      const valid = this.isValid
-      this.errors = valid.errors
-      if (valid.isValid) {
-        const data = this.getQuestion
+      console.log('chay')
+      const getData = this.getQuestion
+      const getValid = this.isValid(getData)
+      if (getValid.valid) {
+        const data = getValid.data
+        console.log('í dâttr', data)
         data.question.questionTypeId = parseInt(this.questionTypeId)
-        data.answers = this.removeAnswerId(this.getQuestion.answers)
         CauHoiApi.createQuestion(
           data,
           () => {
+            // this.restAnswer()
             this.$toast.show('Thêm Thành Công').goAway(1500)
           },
           () => {

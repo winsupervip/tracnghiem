@@ -189,7 +189,7 @@ export default defineComponent({
           answer: {
             left: {
               id: uuid.v4(),
-              position: 0,
+              position: 1,
               hashId: '',
               plainText: this.answerContent,
               rightAnswer: this.isRightAnswer ? 1 : 0,
@@ -198,7 +198,7 @@ export default defineComponent({
             },
             right: {
               id: uuid.v4(),
-              position: 0,
+              position: 2,
               hashId: '',
               plainText: this.answerContentRight,
               rightAnswer: this.isRightAnswer ? 1 : 0,
@@ -223,21 +223,19 @@ export default defineComponent({
           typeQuestion: this.typeQuestion,
         }
       }
-      this.isRightAnswer = false
-      this.isRandom = false
-      this.answerContent = ''
-      this.answerContentRight = ''
-      if (this.getUpdateValueAnswer?.id) {
-        // data.index = this.indexAnswerUpdate
-        // EventBus.$emit('updateListAnswer', data)
-        data.answer.id = this.getUpdateValueAnswer.id
 
+      if (this.getUpdateValueAnswer?.id) {
+        data.answer.id = this.getUpdateValueAnswer.id
         this.handleUpdateAnswer(data)
         this.removeValueUpdateAnswer()
       } else {
         this.handleAddAnswer(data)
-        this.$toast.show('Thêm câu trả lời thanh công').goAway(1500)
+        this.$toast.show('Thêm câu trả lời thành công').goAway(1000)
       }
+      this.isRightAnswer = false
+      this.isRandom = false
+      this.answerContent = ''
+      this.answerContentRight = ''
     },
   },
 })

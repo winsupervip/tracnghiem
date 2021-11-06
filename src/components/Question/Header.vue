@@ -4,96 +4,117 @@
       <p class="p-headerQuestion">
         {{ $t('Ngân Hàng câu hỏi') }} > {{ questionTitle }}
       </p>
-
-      <b-form-input
-        v-model="title"
-        class="form-control"
-        :placeholder="$t('title')"
-      ></b-form-input>
-      <b-alert v-if="errors[0]" id="error" show variant="warning">{{
-        errors[0]
-      }}</b-alert>
-      <div class="p-question__tagGroup">
-        <b-form-group label-for="tags-with-dropdown">
-          <b-form-tags
-            id="tags-with-dropdown"
-            v-model="value"
-            :label="$t('tagYourQuestion,UpTo5Tags(*)')"
-            no-outer-focus
-            class="mb-2"
+      <ValidationProvider rules="required" name="Tiêu Đề">
+        <b-form-group
+          slot-scope="{ valid, errors }"
+          :label="$t('title')"
+          :label-for="$t('title')"
+        >
+          <b-form-input
+            v-model="title"
+            type="text"
+            :state="errors[0] ? false : valid ? true : null"
+            :placeholder="$t('title')"
           >
-            <template #default="{ tags, addTag, removeTag }">
-              <ul
-                v-if="tags.length > 0"
-                class="list-inline d-inline-block mb-2"
-              >
-                <li v-for="tag in tags" :key="tag" class="list-inline-item">
-                  <b-form-tag
-                    :title="tag"
-                    variant="primary"
-                    @remove="removeTag(tag)"
-                    >{{ tag }}</b-form-tag
-                  >
-                </li>
-              </ul>
-
-              <b-dropdown
-                size="sm"
-                variant="outline-primary"
-                block
-                menu-class="w-100"
-              >
-                <template #button-content>
-                  <b-icon icon="tag-fill" class="tag"></b-icon>
-                  <span class="textTag">{{ $t('Chọn tag') }}</span>
-                </template>
-                <b-dropdown-form @submit.stop.prevent="() => {}">
-                  <b-form-group
-                    label="Search tags"
-                    label-for="tag-search-input"
-                    label-cols-md="auto"
-                    class="mb-0"
-                    label-size="sm"
-                    :description="searchDesc"
-                  >
-                    <b-form-input
-                      id="tag-search-input"
-                      v-model="search"
-                      type="search"
-                      size="sm"
-                      autocomplete="off"
-                    ></b-form-input>
-                  </b-form-group>
-                </b-dropdown-form>
-                <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item-button
-                  v-for="(option, index) in availableOptions"
-                  :key="index"
-                  @click="onOptionClick({ option, addTag })"
-                >
-                  {{ option.label }}
-                </b-dropdown-item-button>
-
-                <b-button
-                  v-if="search.length > 0"
-                  variant="primary"
-                  class="p-question__btnAdd"
-                  @click="userAddTag"
-                  >{{ $t('add') }}</b-button
-                >
-              </b-dropdown>
-            </template>
-          </b-form-tags>
+          </b-form-input>
+          <b-form-invalid-feedback id="inputLiveFeedback">
+            {{ errors[0] }}
+          </b-form-invalid-feedback>
         </b-form-group>
-        <b-alert v-if="errors[2]" id="error" show variant="warning">{{
-          errors[2]
-        }}</b-alert>
+      </ValidationProvider>
+      <div class="p-question__tagGroup">
+        <ValidationProvider rules="required" name="Tags">
+          <b-form-group
+            slot-scope="{ valid, errors }"
+            :label-for="$t('Chọn tag')"
+          >
+            <b-form-tags
+              id="tags-with-dropdown"
+              v-model="value"
+              :label="$t('Gắn thẻ câu hỏi của bạn, tối đa 5 thẻ(*)')"
+              no-outer-focus
+              :state="errors[0] ? false : valid ? true : null"
+              class="mb-2"
+            >
+              <template #default="{ tags, addTag, removeTag }">
+                <ul
+                  v-if="tags.length > 0"
+                  class="list-inline d-inline-block mb-2"
+                >
+                  <li v-for="tag in tags" :key="tag" class="list-inline-item">
+                    <b-form-tag
+                      :title="tag"
+                      variant="primary"
+                      @remove="removeTag(tag)"
+                      >{{ tag }}</b-form-tag
+                    >
+                  </li>
+                </ul>
+
+                <b-dropdown
+                  size="sm"
+                  variant="outline-primary"
+                  block
+                  menu-class="w-100"
+                >
+                  <template #button-content>
+                    <b-icon icon="tag-fill" class="tag"></b-icon>
+                    <span class="textTag">{{ $t('Chọn tag') }}</span>
+                  </template>
+                  <b-dropdown-form @submit.stop.prevent="() => {}">
+                    <b-form-group
+                      label="Search tags"
+                      label-for="tag-search-input"
+                      label-cols-md="auto"
+                      class="mb-0"
+                      label-size="sm"
+                      :description="searchDesc"
+                    >
+                      <b-form-input
+                        id="tag-search-input"
+                        v-model="search"
+                        type="search"
+                        size="sm"
+                        autocomplete="off"
+                      ></b-form-input>
+                    </b-form-group>
+                  </b-dropdown-form>
+                  <b-dropdown-divider></b-dropdown-divider>
+                  <b-dropdown-item-button
+                    v-for="(option, index) in availableOptions"
+                    :key="index"
+                    @click="onOptionClick({ option, addTag })"
+                  >
+                    {{ option.label }}
+                  </b-dropdown-item-button>
+
+                  <b-button
+                    v-if="search.length > 0"
+                    variant="primary"
+                    class="p-question__btnAdd"
+                    @click="userAddTag"
+                    >{{ $t('Thêm') }}</b-button
+                  >
+                </b-dropdown>
+              </template>
+            </b-form-tags>
+            <b-form-invalid-feedback id="inputLiveFeedback">
+              {{ errors[0] }}
+            </b-form-invalid-feedback>
+          </b-form-group>
+        </ValidationProvider>
       </div>
       <div>
-        <TinyEditor v-model="questionContent" />
-        <b-alert v-if="errors[1]" id="error" show variant="warning">{{
-          errors[1]
-        }}</b-alert>
+        <ValidationProvider
+          v-slot="{ valid, errors }"
+          name="Nội dung câu hỏi"
+          rules="required"
+        >
+          <TinyEditor v-model="questionContent" />
+          <b-form-invalid-feedback :state="valid">{{
+            errors[0]
+          }}</b-form-invalid-feedback>
+        </ValidationProvider>
       </div>
     </div>
   </div>
@@ -108,11 +129,6 @@ export default defineComponent({
   props: {
     questionTitle: {
       type: String,
-      required: true,
-    },
-
-    errors: {
-      type: Array,
       required: true,
     },
   },
