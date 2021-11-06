@@ -41,6 +41,10 @@
                 v-if="questions.questionTypeName == 'Sắp xếp thứ tự'"
                 :questionlist="questions"
               />
+              <QuestionClusterList
+                v-if="questions.itemType == 'group'"
+                :questionlist="questions"
+              />
             </div>
           </div>
         </div>
@@ -59,7 +63,7 @@ import QuestionRightWrongList from './QuestionRightWrongList.vue'
 import QuestionParingList from './QuestionParingList.vue'
 import QuestionFillBlankList from './QuestionFillBlankList.vue'
 import QuestionShortAnswerList from './QuestionShortAnswerList.vue'
-
+import QuestionClusterList from './QuestionClusterList.vue'
 export default defineComponent({
   name: 'SingleListPage',
   components: {
@@ -71,6 +75,7 @@ export default defineComponent({
     QuestionParingList,
     QuestionFillBlankList,
     QuestionShortAnswerList,
+    QuestionClusterList,
   },
   props: {
     questions: {

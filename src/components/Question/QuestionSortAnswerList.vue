@@ -3,7 +3,7 @@
     <p v-html="questionlist.description"></p>
     <div class="question-item-answer">
       <div class="answer-head">
-        <span class="font-sm text-gray">câu trả lời</span>
+        <span class="font-sm text-gray">{{ $t('answer') }}</span>
       </div>
       <div class="answer-sortAnswer">
         <input
@@ -32,7 +32,7 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .question-sortAnswer {
   p {
     text-align: center;

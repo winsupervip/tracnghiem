@@ -33,100 +33,91 @@
       </div>
     </b-modal>
 
-    <b-tabs class="custom-tabs" content-class="mt-3">
-      <div class="filter-bar">
-        <div class="row">
-          <div class="col-6 col-md-4 col-lg-2 mb-3">
-            <b-form-group class="mb-0 form-group">
-              <b-form-input
-                id="tag-search-input"
-                v-model="search"
-                type="search"
-                :placeholder="$t('search')"
+    <div class="filter-bar">
+      <div class="row">
+        <div class="col-6 col-md-4 col-lg-3 mb-3">
+          <treeselect
+            v-model="urlQuery.categories"
+            :multiple="true"
+            :options="category"
+            :load-options="loadOptions"
+            :placeholder="$t('category')"
+          />
+        </div>
+        <div class="col-6 col-md-4 col-lg-3 mb-3">
+          <treeselect
+            v-model="urlQuery.questionTypeId"
+            :options="treeQuestionTypes"
+            :load-options="loadOptions"
+            :placeholder="$t('questionType')"
+          />
+        </div>
+        <div class="col-6 col-md-4 col-lg-3 mb-3">
+          <treeselect
+            v-model="urlQuery.statusId"
+            :options="listStatus"
+            :load-options="loadOptions"
+            :placeholder="$t('status')"
+          />
+        </div>
+        <div class="col-6 col-md-4 col-lg-3 mb-3">
+          <treeselect
+            v-model="urlQuery.levelId"
+            :options="level"
+            :load-options="loadOptions"
+            :placeholder="$t('level')"
+          />
+        </div>
+        <div class="col-6 col-md-4 col-lg-3 mb-3">
+          <treeselect
+            :options="options"
+            :load-options="loadOptions"
+            :placeholder="$t('sort')"
+          />
+        </div>
+        <div class="col-6 col-md-4 col-lg-3 mb-3">
+          <b-form-group class="mb-0 form-group">
+            <b-form-input
+              id="tag-search-input"
+              v-model="search"
+              type="search"
+              :placeholder="$t('search')"
+              autocomplete="off"
+            >
+            </b-form-input>
+
+            <ul>
+              <b-dropdown-item
+                v-for="(option, index) in availableOptions"
+                :key="index"
+                class="abc"
+                @click="inputSearch(option.label)"
               >
-              </b-form-input>
-              <b-button
-                :style="{ margin: ' 0 30%', height: '50px' }"
-                block
-                @click="handleSearch"
-                >{{ $t('search') }}</b-button
-              >
-              <ul>
-                <b-dropdown-item
-                  v-for="(option, index) in availableOptions"
-                  :key="index"
-                  class="abc"
-                  @click="inputSearch(option.label)"
-                >
-                  {{ option.label }}
-                </b-dropdown-item>
-              </ul>
-            </b-form-group>
-          </div>
-          <div class="col-6 col-md-4 col-lg-2 mb-3">
-            <treeselect
-              v-model="urlQuery.categories"
-              :multiple="true"
-              :options="category"
-              :load-options="loadOptions"
-              :placeholder="$t('category')"
-            />
-          </div>
-          <div class="col-6 col-md-4 col-lg-2 mb-3">
-            <treeselect
-              v-model="urlQuery.questionTypeId"
-              :options="treeQuestionTypes"
-              :load-options="loadOptions"
-              :placeholder="$t('questionType')"
-            />
-          </div>
-          <div class="col-6 col-md-4 col-lg-2 mb-3">
-            <treeselect
-              v-model="urlQuery.statusId"
-              :options="listStatus"
-              :load-options="loadOptions"
-              :placeholder="$t('status')"
-            />
-          </div>
-          <div class="col-6 col-md-4 col-lg-2 mb-3">
-            <treeselect
-              v-model="urlQuery.levelId"
-              :options="level"
-              :load-options="loadOptions"
-              :placeholder="$t('level')"
-            />
-          </div>
-          <div class="col-6 col-md-4 col-lg-2 mb-3">
-            <treeselect
-              :options="options"
-              :load-options="loadOptions"
-              :placeholder="$t('sort')"
-            />
-          </div>
+                {{ option.label }}
+              </b-dropdown-item>
+            </ul>
+          </b-form-group>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3 mb-3">
+          <b-button class="btn btn-primary" block @click="handleSearch">{{
+            $t('apply')
+          }}</b-button>
         </div>
       </div>
-      <b-tab title="Danh sách câu đơn" active>
-        <SingleQuestion
-          v-for="question in questionList"
-          :key="question.id"
-          :questions="question"
-        />
+    </div>
 
-        <b-pagination
-          v-model="urlQuery.page"
-          class="pagination"
-          :total-rows="total"
-          :per-page="urlQuery.pageSize"
-        ></b-pagination>
-      </b-tab>
-      <b-tab title="Danh sách câu chùm">
-        <MultipleQuestion
-          v-for="question in questionList"
-          :key="question.id"
-          :questions="question"
-        />
-      </b-tab>
-    </b-tabs>
+    <SingleQuestion
+      v-for="question in questionList"
+      :key="question.id"
+      :questions="question"
+    />
+
+    <b-pagination
+      v-model="urlQuery.page"
+      class="pagination"
+      :total-rows="total"
+      :per-page="urlQuery.pageSize"
+    ></b-pagination>
   </div>
 </template>
 
@@ -141,9 +132,9 @@ import {
   watch,
 } from '@nuxtjs/composition-api'
 import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
+import _ from 'lodash'
 import QuestionApi from '@/api/question-list-page'
 import SingleListPage from '@/components/Question/SingleListPage.vue'
-import MultipleListPage from '@/components/Question/MultipleListPage.vue'
 import '../../../assets/scss/single-question.scss'
 const simulateAsyncOperation = (fn) => {
   setTimeout(fn, 2000)
@@ -151,7 +142,6 @@ const simulateAsyncOperation = (fn) => {
 export default defineComponent({
   components: {
     SingleQuestion: SingleListPage,
-    MultipleQuestion: MultipleListPage,
   },
   layout: 'dashboard',
   auth: true,
@@ -174,9 +164,7 @@ export default defineComponent({
       search: '',
       options: [],
       questionList: [],
-      questionSingleList: [],
-      questionGroupList: [],
-
+      isCallApiGetTag: false,
       urlQuery: {
         pageSize: 2,
         keyword: '',
@@ -222,11 +210,14 @@ export default defineComponent({
         handleSearch()
       }
     )
-    const inputSearch = (e) => {
-      data.search = e
-      data.urlQuery.keyword = e
+    const inputSearch = (value) => {
+      data.isCallApiGetTag = false
+      data.search = value
+      data.urlQuery.keyword = value
       console.log('abc', data.search)
+      data.options = []
     }
+
     return {
       ...toRefs(data),
       inputSearch,
@@ -253,15 +244,22 @@ export default defineComponent({
   },
   watch: {
     search() {
-      if (this.search.length >= 3) {
-        QuestionApi.getTagByKey(this.search, (response) => {
-          this.options = response
-          console.log(response)
-        })
-      }
+      const that = this
+      this.checkSearch(that)
     },
   },
   methods: {
+    checkSearch: _.debounce((that) => {
+      if (that.search.length < 3 || !that.isCallApiGetTag) {
+        that.isCallApiGetTag = true
+        return
+      }
+      QuestionApi.getTagByKey(that.search, (response) => {
+        that.options = response
+        console.log('response', response)
+      })
+    }, 1000),
+
     loadOptions({ action, parentNode, callback }) {
       // Typically, do the AJAX stuff here.
       // Once the server has responded,

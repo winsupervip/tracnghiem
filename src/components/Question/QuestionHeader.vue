@@ -14,20 +14,31 @@
         </abbr>
       </div>
       <div class="list-status-question">
-        <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-          questions.levelName
-        }}</span>
-        <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-          questions.questionTypeName
-        }}</span>
-        <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-          questions.statusName
-        }}</span>
+        <div v-if="questions.itemType === 'question'">
+          <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+            questions.levelName
+          }}</span>
+          <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+            questions.questionTypeName
+          }}</span>
+          <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+            questions.statusName
+          }}</span>
+        </div>
+        <div v-if="questions.itemType === 'group'">
+          <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+            questions.levelName
+          }}</span>
+
+          <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+            questions.statusName
+          }}</span>
+        </div>
       </div>
     </div>
     <div class="d-flex">
       <a
-        href="#"
+        href="/home"
         target="_blank"
         class="btn btn-sm btn-outline-primary rounded-pill me-3"
         >{{ $t('WatchOnWeb') }}</a

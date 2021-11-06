@@ -3,7 +3,7 @@
     <p v-html="questionlist.description"></p>
     <div class="question-item-answer">
       <div class="answer-head">
-        <span class="font-sm text-gray">câu trả lời</span>
+        <span class="font-sm text-gray">{{ $t('answer') }}</span>
       </div>
       <div class="answer-pairing">
         <table>
@@ -84,24 +84,16 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="scss">
-th,
-td {
-  border: 1px solid black;
-}
-table {
-  display: flex;
-}
+<style lang="scss" scoped>
 .answer-pairing {
   display: flex;
-  .row_A {
-    width: 50%;
 
-    & > p {
-      text-align: center;
-      font-style: normal;
-      font-weight: bold;
-      font-size: 14px;
+  text-align: center;
+  justify-content: center;
+  .row_A {
+    th,
+    td {
+      border: 1px solid black;
     }
   }
 }

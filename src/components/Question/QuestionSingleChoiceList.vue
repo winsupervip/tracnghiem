@@ -3,7 +3,7 @@
     <p v-html="questionlist.description"></p>
     <div class="question-item-answer">
       <div class="answer-head">
-        <span class="font-sm text-gray">câu trả lời</span>
+        <span class="font-sm text-gray">{{ $t('answer') }}</span>
       </div>
       <div class="answer-singleChoice">
         <ul class="list-unstyled p-0 m-0">
@@ -40,7 +40,7 @@ export default defineComponent({
   },
 })
 </script>
-<style>
+<style lang="scss" scoped>
 .rightAnswer {
   color: #ff645a;
 }

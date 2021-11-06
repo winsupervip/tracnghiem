@@ -3,7 +3,7 @@
     <p v-html="questionlist.description"></p>
     <div class="question-item-answer">
       <div class="answer-head">
-        <span class="font-sm text-gray">câu trả lời</span>
+        <span class="font-sm text-gray">{{ $t('answer') }}</span>
       </div>
       <div class="answer-fillblank">
         <ul>

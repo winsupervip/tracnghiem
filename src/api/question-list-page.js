@@ -34,4 +34,6 @@ export default {
   },
   getUserQuestionGroupList: () =>
     global.$http.get('/api/v1/Question/get-user-question-group-list'),
+  deletedQuestionGroup: (hashId) =>
+    global.$http.delete(`/api/v1/Question/deleted-question-group/${hashId}`),
 }

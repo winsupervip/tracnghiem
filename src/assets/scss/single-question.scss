@@ -35,9 +35,9 @@
 
   .form-group {
     position: relative;
+    z-index: 1;
     .tag-search-input {
       width: 100%;
-      z-index: 1;
     }
     ul {
       padding: 0;
@@ -74,94 +74,6 @@
     }
   }
 
-  .form-multiple-question {
-    margin-top: 19px;
-
-    background: #ffffff;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    .form-headline {
-      display: flex;
-      padding: 22px 17px 11px 17px;
-      justify-content: space-between;
-      align-items: center;
-      .headline-left {
-        display: grid;
-        grid-template-columns: auto auto auto auto;
-        grid-gap: 15px;
-        label {
-          font-style: normal;
-          font-weight: bold;
-          font-size: 16px;
-          line-height: 30px;
-
-          color: #212529;
-        }
-        span {
-          display: flex;
-          align-items: center;
-          text-align: center;
-          background: #e7fff9;
-          border-radius: 20px;
-          font-style: normal;
-          font-weight: normal;
-          font-size: 12px;
-          padding: 4px 7px 3px 7px;
-          color: #27ae60;
-        }
-      }
-      .headline-right {
-        > a {
-          background: #ffffff;
-          border: 1px solid #051e40;
-          box-sizing: border-box;
-          border-radius: 20px;
-          padding: 6px 10px 5px 11px;
-          font-style: normal;
-          font-weight: bold;
-          font-size: 13px;
-          line-height: 16px;
-          color: #051e40;
-        }
-        button {
-          margin-left: 24px;
-          background: #ffffff;
-          border: 1px solid #000000;
-          box-sizing: border-box;
-        }
-      }
-    }
-
-    .line {
-      width: 100%;
-      height: 0px;
-      background-color: #dddddd;
-      border: 1px solid #dddddd;
-    }
-    .question {
-      padding: 22px 17px 11px 17px;
-
-      .question-hashtag {
-        display: flex;
-        a {
-          color: #0d6efd;
-        }
-      }
-    }
-    .answer {
-      margin: 13px 0;
-      ul {
-        li {
-          padding: 12px 0;
-
-          button {
-            float: right;
-            border: none;
-            background: transparent;
-          }
-        }
-      }
-    }
-  }
   .pagination {
     margin-top: 10px;
     display: flex;
