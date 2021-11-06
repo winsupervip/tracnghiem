@@ -16,7 +16,9 @@
       <div class="d-block">
         <ul>
           <li v-for="item in items" :key="item.message" type="1">
-            <a href="#" :style="{ fontWeight: 'bold' }">{{ item }}</a>
+            <a :href="item.url" :style="{ fontWeight: 'bold' }">{{
+              item.title
+            }}</a>
           </li>
         </ul>
         <div class="dropdown-divider"></div>
