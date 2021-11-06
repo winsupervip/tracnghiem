@@ -7,14 +7,14 @@
       <ValidationProvider rules="required" name="Tiêu Đề">
         <b-form-group
           slot-scope="{ valid, errors }"
-          :label="$t('Tiêu Đề (*)')"
-          :label-for="$t('Tiêu Đề (*)')"
+          :label="$t('title')"
+          :label-for="$t('title')"
         >
           <b-form-input
             v-model="title"
             type="text"
             :state="errors[0] ? false : valid ? true : null"
-            :placeholder="$t('Tiêu Đề (*)')"
+            :placeholder="$t('title')"
           >
           </b-form-input>
           <b-form-invalid-feedback id="inputLiveFeedback">
@@ -163,7 +163,7 @@ export default defineComponent({
     },
     searchDesc() {
       if (this.criteria && this.availableOptions.length === 0) {
-        return this.$i18n.t('There are no tags matching your search criteria')
+        return this.$i18n.t('thereAreNoTagsMatchingYourSearchCriteria')
       }
       return ''
     },

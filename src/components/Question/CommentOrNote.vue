@@ -1,7 +1,7 @@
 <template>
   <div class="card p-question__box">
     <p class="p-question__box__heading">
-      <strong>{{ $t('Lời phê / Chú thích') }}</strong>
+      <strong>{{ $t('Comment / Annotation') }}</strong>
     </p>
     <div class="p-question__box__body">
       <div class="p-question__box__body__item">
@@ -9,12 +9,12 @@
           id="textarea-default"
           v-model="explainationIfCorrect"
           class="mb-20"
-          :placeholder="$t('Khi trả lời đúng')"
+          :placeholder="$t('whenTheAnswerIsCorrect')"
         ></b-form-textarea>
         <b-form-textarea
           id="textarea-default"
           v-model="explainationIfIncorrect"
-          :placeholder="$t('Khi trả lời sai')"
+          :placeholder="$t('whenTheAnswerIsIncorrect')"
         ></b-form-textarea>
       </div>
     </div>

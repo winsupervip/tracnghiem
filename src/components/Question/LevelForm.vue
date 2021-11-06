@@ -8,7 +8,7 @@
       :value-consists-of="valueConsistsOf"
     /> -->
     <p class="p-question__box__heading">
-      <strong>{{ $t('Mức độ (*)') }}</strong>
+      <strong>{{ $t('level') }}</strong>
     </p>
     <div class="p-question__box__body">
       <div class="p-question__box__body__item box--level">

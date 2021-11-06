@@ -1,7 +1,7 @@
 <template>
   <b-form-select v-model="isSelected" class="mb-3" @change="changeSelected">
     <b-form-select-option :value="null" disabled>{{
-      $t('-- Chọn --')
+      $t('-- choose --')
     }}</b-form-select-option>
     <b-form-select-option v-for="i in getListAnswer.length" :key="i" :value="i"
       >({{ i }})</b-form-select-option
@@ -48,5 +48,4 @@ export default {
   },
 }
 </script>
-
-<style></style>
+<style lang="scss" scoped></style>
