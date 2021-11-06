@@ -12,56 +12,49 @@
     </p>
     <div class="p-question__box__body">
       <div class="p-question__box__body__item box--level">
-        <label v-for="option in listLevelRadio" :key="option.id"
-          ><input v-model="levelForm" type="radio" :value="option.id" />{{
-            option.name
-          }}</label
-        >
-        <b-alert v-if="errors.level" id="error" show variant="warning">{{
-          errors.level
-        }}</b-alert>
+        <ValidationProvider name="Độ khó câu hỏi" rules="required">
+          <b-form-radio-group
+            v-model="levelForm"
+            slot-scope="{ valid, errors }"
+          >
+            <b-form-radio
+              v-for="level in listLevelRadio"
+              :key="level.id"
+              :value="level.id"
+              >{{ level.label }}</b-form-radio
+            >
+            <b-form-invalid-feedback :state="valid">{{
+              errors[0]
+            }}</b-form-invalid-feedback>
+          </b-form-radio-group>
+        </ValidationProvider>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  useFetch,
+} from '@nuxtjs/composition-api'
 import { mapActions } from 'vuex'
+import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   name: 'LevelForm',
-  props: {
-    errors: {
-      type: Object,
-      required: true,
-    },
-  },
+
   setup(props) {
     const data = reactive({
-      levelForm: [],
-      listLevelRadio: [
-        {
-          id: 1,
-          value: false,
-          name: 'Cơ bản',
-        },
-        {
-          id: 2,
-          value: false,
-          name: 'Trung bình',
-        },
-        {
-          id: 3,
-          value: false,
-          name: 'Nâng cao',
-        },
-        {
-          id: 4,
-          value: false,
-          name: 'Khó',
-        },
-      ],
+      levelForm: '',
+      listLevelRadio: [],
     })
+    const { fetch } = useFetch(async () => {
+      const { data: result } = await CauHoiApi.getLevel()
+      data.listLevelRadio = result.object?.items
+    })
+    fetch()
 
     return {
       ...toRefs(data),

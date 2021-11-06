@@ -1,27 +1,31 @@
 <template>
-  <div class="p-question p-question--singleChoice">
-    <div class="p-question__left">
-      <Header :question-title="questionTitle" :errors="errors" />
-      <AddAnswer
-        :errors="errors"
-        :type-question="questionType"
-        :have-random-answer="haveRandomAnswer"
-        :have-right-answer="haveRightAnswer"
-        :is-pairing="isPairing"
-      />
+  <ValidationObserver v-slot="{ handleSubmit }">
+    <b-form @submit.prevent="handleSubmit(onSubmit)">
+      <div class="p-question p-question--singleChoice">
+        <div class="p-question__left">
+          <Header :question-title="questionTitle" :errors="errors" />
+          <AddAnswer
+            :errors="errors"
+            :type-question="questionType"
+            :have-random-answer="haveRandomAnswer"
+            :have-right-answer="haveRightAnswer"
+            :is-pairing="isPairing"
+          />
 
-      <ListAnswer :type-question="questionType" :errors="errors" />
-      <CommentOrNote />
-    </div>
-    <div class="p-question__right">
-      <PublishQuestion :errors="errors" :on-submit="onSubmit" />
-      <Category :errors="errors" />
-      <LevelForm :errors="errors" />
-      <!-- <UploadImage :get-image="getImage" /> -->
-      <Uploader :accept="'*/*'" :disabled="false"></Uploader>
-      <AddSeo :errors="errors" />
-    </div>
-  </div>
+          <ListAnswer :type-question="questionType" :errors="errors" />
+          <CommentOrNote />
+        </div>
+        <div class="p-question__right">
+          <PublishQuestion :errors="errors" :on-submit="onSubmit" />
+          <Category :errors="errors" />
+          <LevelForm :errors="errors" />
+          <!-- <UploadImage :get-image="getImage" /> -->
+          <Uploader :accept="'*/*'" :disabled="false"></Uploader>
+          <AddSeo :errors="errors" />
+        </div>
+      </div>
+    </b-form>
+  </ValidationObserver>
 </template>
 
 <script>
@@ -106,45 +110,7 @@ export default defineComponent({
       console.log(data.answers)
       let validdateAnswers = []
       let valid = true
-      if (data.question.title === '') {
-        this.errors.title = 'Tiêu đề là bắt buộc'
-        valid = false
-      }
-      // 1
 
-      if (data.question.questionContent === '') {
-        this.errors.questionContent = 'Bạn phải nhập vào nội dung câu hỏi'
-        valid = false
-      }
-      // 2
-
-      if (data.question.tags.length === 0) {
-        this.errors.tags = 'Bạn phải gán ít nhất 1 tag cho câu hỏi'
-        valid = false
-      }
-      // 3
-
-      if (!data.question.levelId) {
-        this.errors.level = 'Bạn phải chọn level cho câu hỏi'
-        valid = false
-      }
-      // 4
-
-      if (data.question.categories.length === 0) {
-        this.errors.categories = 'Bạn phải chọn 1 danh mục cho câu hỏi'
-        valid = false
-      }
-      // 5
-
-      if (!data.question.statusId) {
-        this.errors.statusId = 'Bạn có muốn xuất bản câu hỏi'
-        valid = false
-      }
-      if (data.question.seoTitle === '') {
-        this.errors.seoTitle = 'Bạn phải cài đặt Seo'
-        // eslint-disable-next-line no-unused-vars
-        valid = false
-      }
       console.log(this.errors)
       if (data.answers.length < 2) {
         if (this.questionType === 'short-answer') {
@@ -164,7 +130,7 @@ export default defineComponent({
         this.questionType === 'right-wrong'
       ) {
         validdateAnswers = data.answers.map((item) => {
-          delete item.id
+          item.id = undefined
           if (item.rightAnswer === 1) {
             count += 1
           }
@@ -179,7 +145,7 @@ export default defineComponent({
         }
       } else if (this.questionType === 'multiple-choice') {
         validdateAnswers = data.answers.map((item) => {
-          delete item.id
+          item.id = undefined
           if (item.rightAnswer === 1) {
             count += 1
           }
@@ -191,14 +157,14 @@ export default defineComponent({
         }
       } else if (this.questionType === 'short-answer') {
         validdateAnswers = data.answers.map((item) => {
-          delete item.id
+          item.id = undefined
           return item
         })
       } else if (this.questionType === 'fill-blank') {
         let sumRight = 0
         const checkSum = (data.answers.length + 1) * (data.answers.length / 2)
         validdateAnswers = data.answers.map((item) => {
-          delete item.id
+          item.id = undefined
           sumRight += item.rightAnswer
           return item
         })
@@ -208,7 +174,7 @@ export default defineComponent({
         }
       } else if (this.questionType === 'draggable') {
         validdateAnswers = data.answers.map((item, index) => {
-          delete item.id
+          item.id = undefined
           item.rightAnswer = index + 1
           return item
         })
@@ -216,29 +182,27 @@ export default defineComponent({
         data.answers.forEach((element) => {
           console.log(element?.left?.answerContent.length > 0)
           if (element?.id) {
-            delete element.id
+            element.id = undefined
           }
           if (element?.left?.answerContent.length > 0) {
             const left = element?.left
-            delete left.id
+            element.id = undefined
             validdateAnswers.push(left)
           }
           if (element?.right?.answerContent.length > 0) {
             const right = element?.right
-            delete right.id
+            element.id = undefined
             validdateAnswers.push(right)
           }
         })
       }
-      console.log('validdateAnswers', validdateAnswers)
       data.answers = validdateAnswers
       return { valid, data }
     },
     onSubmit() {
-      console.log(this.getQuestion)
+      console.log('chay')
       const getData = this.getQuestion
       const getValid = this.isValid(getData)
-      console.log('valid', getValid)
       if (getValid.valid) {
         const data = getValid.data
         console.log('í dâttr', data)
@@ -246,7 +210,7 @@ export default defineComponent({
         CauHoiApi.createQuestion(
           data,
           () => {
-            this.restAnswer()
+            // this.restAnswer()
             this.$toast.show('Thêm Thành Công').goAway(1500)
           },
           () => {

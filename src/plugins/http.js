@@ -1,4 +1,5 @@
 import { uuid } from 'vue-uuid'
+
 export default function ({ $axios, $auth, $logger, redirect, store }, inject) {
   let uid = store.getters['user/getSessionId']
   if (!uid) {
