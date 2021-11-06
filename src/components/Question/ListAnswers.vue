@@ -145,14 +145,14 @@
     <div v-if="typeQuestion === 'draggable'">
       <Draggable />
     </div>
+
     <div v-if="errors.answers">
-      <b-alert
+      <b-form-invalid-feedback
         v-for="(error, index) in errors.answers"
         id="error"
         :key="index"
-        show
-        variant="warning"
-        >{{ error }}</b-alert
+        :state="false"
+        >{{ error }}</b-form-invalid-feedback
       >
     </div>
   </div>
