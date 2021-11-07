@@ -1,6 +1,7 @@
 import { Store } from 'vuex'
 import { uuid } from 'vue-uuid'
 import user from './modules/user'
+import lang from './modules/lang'
 import question from './modules/questions/singleQuestions'
 
 export const actions = {
@@ -22,6 +23,7 @@ const createStore = () => {
     modules: {
       user,
       question,
+      lang,
     },
   })
 }

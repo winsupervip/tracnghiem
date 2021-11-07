@@ -156,6 +156,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: '@/plugins/i18n', ssr: true },
     { src: '@/plugins/bootstrapPlugin.js', ssr: false },
     { src: '@/plugins/polyfills.client.js', ssr: false },
     { src: '@/plugins/editor.js', ssr: false },
@@ -190,7 +191,6 @@ export default {
     '@nuxtjs/auth-next',
     'bootstrap-vue/nuxt',
     '@nuxtjs/toast',
-    '@nuxtjs/i18n',
   ],
   // https://github.com/nuxt-community/google-gtag-module
   'google-gtag': {

@@ -18,13 +18,13 @@ body {
 
 .pc {
   @media screen and (max-width: $sp) {
-    display: none;
+    display: none !important;
   }
 }
 
 .sp {
   @media screen and (min-width: $sm) {
-    display: none;
+    display: none !important;
   }
 }
 
