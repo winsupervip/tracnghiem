@@ -128,7 +128,6 @@ export default {
       this.$emit('input', this.editor.getContent())
     },
     onFocusin() {
-      console.log('focusin: ', event)
       if (
         event.target.closest(
           '.wrs_modal_dialogContainer, .wrs_formulaDisplayWrapper, .wrs_focusElementContainer, .wrs_focusElement'
