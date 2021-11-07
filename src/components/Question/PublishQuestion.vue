@@ -1,7 +1,7 @@
 <template>
   <section class="p-question__box">
     <p class="p-question__box__heading">
-      <strong>{{ $t('Xuất bản câu hỏi (*)') }}</strong>
+      <strong>{{ $t('publishQuestion') }}</strong>
     </p>
 
     <div class="p-question__box__body">
@@ -38,7 +38,7 @@
           > -->
         </div>
         <b-button type="submit" variant="primary">{{
-          $t('Lưu câu hỏi')
+          $t('saveQuestion')
         }}</b-button>
       </div>
     </div>

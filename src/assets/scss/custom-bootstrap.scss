@@ -11,8 +11,8 @@ $grid-breakpoints: (
 $enable-rounded: false;
 */
 
-@import 'variables';
-@import '~bootstrap/scss/bootstrap.scss';
+@import "variables";
+@import "~bootstrap/scss/bootstrap.scss";
 h6,
 .h6,
 h5,
@@ -237,7 +237,7 @@ a {
   border-color: $border;
   min-height: 44px;
   padding: 10px 15px;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   &::-webkit-input-placeholder {
     color: $placeholder;
   }
@@ -259,7 +259,7 @@ a {
   border: 1px solid $border;
   appearance: none;
   position: relative;
-  background-image: url('/images/icons/down.svg');
+  background-image: url("/images/icons/down.svg");
   background-repeat: no-repeat;
   background-position: calc(100% - 5px) center;
 }
@@ -296,12 +296,11 @@ a {
       width: 20px;
       height: 20px;
       pointer-events: none;
-      content: '';
+      content: "";
       background-color: $white !important;
       border: 1px solid $border !important;
       border-radius: 4px;
-      transition: background-color 0.15s ease-in-out,
-        border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
     &:after {
       position: absolute;
@@ -310,7 +309,7 @@ a {
       display: block;
       width: 20px;
       height: 20px;
-      content: '';
+      content: "";
       background-color: transparent;
     }
   }
@@ -475,4 +474,16 @@ hr {
 .btn-check:focus + .btn-outline-primary,
 .btn-outline-primary:focus {
   box-shadow: none;
+}
+
+// Button close in Modal
+.close {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .5;
+  background-color: transparent;
+  border: 0;
 }

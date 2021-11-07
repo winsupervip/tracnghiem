@@ -1,66 +1,13 @@
 <template>
   <div class="list-multiple-question">
-    <div class="list-questions-user">
+    <!-- <div class="list-questions-user">
       <b-card
         class="card-question mb-3"
         header-tag="header"
         footer-tag="footer"
       >
         <template #header>
-          <div
-            class="
-              d-flex
-              align-items-center
-              justify-content-between
-              card-question-header
-            "
-          >
-            <div class="d-flex">
-              <div class="font-bold me-3">Thi tốt nghiệp THPT</div>
-              <div class="list-status-question">
-                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                  $t('Cơ bản')
-                }}</span>
-                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                  $t('Một lựa chọn')
-                }}</span>
-                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                  $t('Bản nháp')
-                }}</span>
-              </div>
-            </div>
-            <div class="d-flex">
-              <a
-                href="#"
-                target="_blank"
-                class="btn btn-sm btn-outline-primary rounded-pill me-3"
-                >{{ $t('Xem trên web') }}</a
-              >
-              <b-dropdown
-                class="dropdown-button-circle"
-                variant="link"
-                toggle-class="text-decoration-none"
-                no-caret
-              >
-                <template #button-content>
-                  <b-icon icon="three-dots-vertical" />
-                </template>
-                <b-dropdown-item href="#">{{ $t('Cập nhật') }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{
-                  $t('Tạo bản sao')
-                }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{ $t('Xuất bản') }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{ $t('Chia sẻ') }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{
-                  $t('Tài liệu tham khảo')
-                }}</b-dropdown-item>
-
-                <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item href="#">{{ $t('Thống kê') }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{ $t('Xóa') }}</b-dropdown-item>
-              </b-dropdown>
-            </div>
-          </div>
+          <QuestionHeader :questions="questions" />
         </template>
         <div class="list-question">
           <div class="question-item">
@@ -277,10 +224,7 @@
         <div class="list-question">
           <div class="question-item">
             <div class="question-content text-smd">
-              <p>
-                <a href="#" class="me-2">#Vật lý 12</a
-                ><a href="#" class="me-2">#Vật lý</a>
-              </p>
+              <QuestionTags :questiontags="questions" />
               Which of the following lists all and only the appropriate
               descriptions about a 32-bit CPU and a 64-bit CPU? I When a 32-bit
               CPU and a 64-bit CPU are compared, a 64-bit CPU has a larger
@@ -320,19 +264,24 @@
         </div>
       </b-card>
     </div>
-    <b-pagination total-rows="50" align="right" />
+    <b-pagination total-rows="50" align="right" /> -->
   </div>
 </template>
 
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
-
+// import QuestionTags from './QuestionTags.vue'
+// import QuestionHeader from './QuestionHeader.vue'
 export default defineComponent({
   name: 'MultiListPage',
+  components: {
+    // QuestionHeader,
+    // QuestionTags,
+  },
   props: {
-    products: {
-      type: Array,
-      default: () => [],
+    questions: {
+      type: Object,
+      required: true,
     },
   },
 

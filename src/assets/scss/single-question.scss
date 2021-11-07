@@ -1,0 +1,83 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.1/font/bootstrap-icons.css");
+.page-container {
+  font-family: OpenSans, sans-serif;
+  font-style: normal;
+  margin-left: 20px;
+  margin: 0 auto;
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+
+    a {
+      font-family: Open Sans;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 16px;
+
+      color: #000000;
+    }
+    button {
+      width: 119px;
+      height: 27px;
+      left: 1116px;
+      top: 12px;
+
+      background: #ffffff;
+      border: 1px solid #051e40;
+      box-sizing: border-box;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 13px;
+      color: #051e40;
+    }
+  }
+
+  .form-group {
+    position: relative;
+    z-index: 1;
+    .tag-search-input {
+      width: 100%;
+    }
+    ul {
+      padding: 0;
+      position: absolute;
+      background-color: white;
+      width: 100%;
+      li {
+        list-style-type: none;
+      }
+    }
+  }
+  #collapse-1 {
+    .card-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-gap: 10px;
+    }
+  }
+  .list-single-question {
+    .list-questions-user {
+      .font-bold {
+        max-width: 30vw;
+        flex-grow: 1;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-word;
+        abbr {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+
+  .pagination {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    background: #ffffff;
+  }
+}

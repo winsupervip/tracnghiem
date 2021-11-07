@@ -104,7 +104,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .input-avata {
   display: none;
 }
