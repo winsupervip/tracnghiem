@@ -117,6 +117,20 @@
       </div>
     </div>
 
+    <div v-if="typeQuestion === 'pairing'">
+      <div v-for="(answer, index) in answers" :key="index" class="p-answerItem">
+        <Pairing :answer="answer" />
+        <div class="p-answerItem__func">
+          <b-icon
+            v-b-modal.modal-1
+            icon="pencil-square"
+            @click="updateAnswer(answer.id)"
+          ></b-icon>
+          <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+        </div>
+      </div>
+    </div>
+
     <div v-if="typeQuestion === 'fill-blank'">
       <div
         v-for="(answer, index) in getListAnswer"
@@ -168,8 +182,8 @@ import Pairing from './Pairing.vue'
 export default defineComponent({
   components: {
     SelectForFillBlank,
-    Draggable,
     Pairing,
+    Draggable,
   },
   props: {
     typeQuestion: {
@@ -266,8 +280,36 @@ p {
 .answersList {
   margin: 1rem;
 }
-
+.p-answerItem-pairing {
+  display: flex;
+  flex-direction: column;
+  &__top {
+    align-self: flex-end;
+  }
+}
 .p-answerItem {
+  display: flex;
+  justify-content: space-between;
+
+  b {
+    min-width: 20px;
+  }
+
+  &__content {
+    padding: 0 10px;
+  }
+
+  &__func {
+    svg {
+      cursor: pointer;
+
+      &:not(:last-child) {
+        margin-right: 15px;
+      }
+    }
+  }
+}
+.pairing-answerItem {
   display: flex;
   justify-content: space-between;
 

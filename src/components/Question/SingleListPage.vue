@@ -7,338 +7,80 @@
         footer-tag="footer"
       >
         <template #header>
-          <div
-            class="
-              d-flex
-              align-items-center
-              justify-content-between
-              card-question-header
-            "
-          >
-            <div class="d-flex">
-              <div class="font-bold me-3">Thi tốt nghiệp THPT</div>
-              <div class="list-status-question">
-                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                  $t('Cơ bản')
-                }}</span>
-                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                  $t('Một lựa chọn')
-                }}</span>
-                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                  $t('Bản nháp')
-                }}</span>
-              </div>
-            </div>
-            <div class="d-flex">
-              <a
-                href="#"
-                target="_blank"
-                class="btn btn-sm btn-outline-primary rounded-pill me-3"
-                >{{ $t('Xem trên web') }}</a
-              >
-              <b-dropdown
-                class="dropdown-button-circle"
-                variant="link"
-                toggle-class="text-decoration-none"
-                no-caret
-              >
-                <template #button-content>
-                  <b-icon icon="three-dots-vertical" />
-                </template>
-                <b-dropdown-item href="#">{{ $t('Cập nhật') }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{
-                  $t('Tạo bản sao')
-                }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{ $t('Xuất bản') }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{ $t('Chia sẻ') }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{
-                  $t('Tài liệu tham khảo')
-                }}</b-dropdown-item>
-
-                <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item href="#">{{ $t('Thống kê') }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{ $t('Xóa') }}</b-dropdown-item>
-              </b-dropdown>
-            </div>
-          </div>
+          <QuestionHeader :questions="questions" />
         </template>
         <div class="list-question">
           <div class="question-item">
             <div class="question-content text-smd">
-              <p>
-                <a href="#" class="me-2">#Vật lý 12</a
-                ><a href="#" class="me-2">#Vật lý</a>
-              </p>
-              Which of the following lists all and only the appropriate
-              descriptions about a 32-bit CPU and a 64-bit CPU? I When a 32-bit
-              CPU and a 64-bit CPU are compared, a 64-bit CPU has a larger
-              theoretical maximum memory space.. II There is no 32-bit OS that
-              runs on a PC with a 64-bit CPU. III In terms of the read and write
-              speed of a USB memory, the speed of a PC with a 64-bit CPU is
-              twice as fast as that of a PC with a 32-bit CPU.
-            </div>
-            <div class="question-item-answer">
-              <div class="answer-head">
-                <span class="font-sm text-gray">câu trả lời</span>
-              </div>
-              <div class="list-answer">
-                <ul class="list-unstyled p-0 m-0">
-                  <li>
-                    <b>A.</b>
-                    Deciding one’s own strategy in a game according to the
-                    strategy of the opponent
-                  </li>
-                  <li>
-                    <b>B.</b>
-                    Deciding one’s own strategy in a game according to the
-                    strategy of the opponent
-                  </li>
-                  <li>
-                    <b>C.</b>
-                    Deciding one’s own strategy in a game according to the
-                    strategy of the opponent
-                  </li>
-                  <li>
-                    <b>D.</b>
-                    Deciding one’s own strategy in a game according to the
-                    strategy of the opponent
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </b-card>
-      <b-card
-        class="card-question mb-3"
-        header-tag="header"
-        footer-tag="footer"
-      >
-        <template #header>
-          <div
-            class="
-              d-flex
-              align-items-center
-              justify-content-between
-              card-question-header
-            "
-          >
-            <div class="d-flex">
-              <div class="font-bold me-3">Thi tốt nghiệp THPT</div>
-              <div class="list-status-question">
-                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                  $t('Cơ bản')
-                }}</span>
-                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                  $t('Một lựa chọn')
-                }}</span>
-                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                  $t('Bản nháp')
-                }}</span>
-              </div>
-            </div>
-            <div class="d-flex">
-              <a
-                href="#"
-                target="_blank"
-                class="btn btn-sm btn-outline-primary rounded-pill me-3"
-                >{{ $t('Xem trên web') }}</a
-              >
-              <b-dropdown
-                class="dropdown-button-circle"
-                variant="link"
-                toggle-class="text-decoration-none"
-                no-caret
-              >
-                <template #button-content>
-                  <b-icon icon="three-dots-vertical" />
-                </template>
-                <b-dropdown-item href="#">{{ $t('Cập nhật') }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{
-                  $t('Tạo bản sao')
-                }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{ $t('Xuất bản') }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{ $t('Chia sẻ') }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{
-                  $t('Tài liệu tham khảo')
-                }}</b-dropdown-item>
-
-                <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item href="#">{{ $t('Thống kê') }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{ $t('Xóa') }}</b-dropdown-item>
-              </b-dropdown>
-            </div>
-          </div>
-        </template>
-        <div class="list-question">
-          <div class="question-item">
-            <div class="question-content text-smd">
-              <p>
-                <a href="#" class="me-2">#Vật lý 12</a
-                ><a href="#" class="me-2">#Vật lý</a>
-              </p>
-              Which of the following lists all and only the appropriate
-              descriptions about a 32-bit CPU and a 64-bit CPU? I When a 32-bit
-              CPU and a 64-bit CPU are compared, a 64-bit CPU has a larger
-              theoretical maximum memory space.. II There is no 32-bit OS that
-              runs on a PC with a 64-bit CPU. III In terms of the read and write
-              speed of a USB memory, the speed of a PC with a 64-bit CPU is
-              twice as fast as that of a PC with a 32-bit CPU.
-            </div>
-            <div class="question-item-answer">
-              <div class="answer-head">
-                <span class="font-sm text-gray">câu trả lời</span>
-              </div>
-              <div class="list-answer">
-                <ul class="list-unstyled p-0 m-0">
-                  <li>
-                    <b>A.</b>
-                    Deciding one’s own strategy in a game according to the
-                    strategy of the opponent
-                  </li>
-                  <li>
-                    <b>B.</b>
-                    Deciding one’s own strategy in a game according to the
-                    strategy of the opponent
-                  </li>
-                  <li>
-                    <b>C.</b>
-                    Deciding one’s own strategy in a game according to the
-                    strategy of the opponent
-                  </li>
-                  <li>
-                    <b>D.</b>
-                    Deciding one’s own strategy in a game according to the
-                    strategy of the opponent
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </b-card>
-      <b-card
-        class="card-question mb-3"
-        header-tag="header"
-        footer-tag="footer"
-      >
-        <template #header>
-          <div
-            class="
-              d-flex
-              align-items-center
-              justify-content-between
-              card-question-header
-            "
-          >
-            <div class="d-flex">
-              <div class="font-bold me-3">Thi tốt nghiệp THPT</div>
-              <div class="list-status-question">
-                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                  $t('Cơ bản')
-                }}</span>
-                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                  $t('Một lựa chọn')
-                }}</span>
-                <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                  $t('Bản nháp')
-                }}</span>
-              </div>
-            </div>
-            <div class="d-flex">
-              <a
-                href="#"
-                target="_blank"
-                class="btn btn-sm btn-outline-primary rounded-pill me-3"
-                >{{ $t('Xem trên web') }}</a
-              >
-              <b-dropdown
-                class="dropdown-button-circle"
-                variant="link"
-                toggle-class="text-decoration-none"
-                no-caret
-              >
-                <template #button-content>
-                  <b-icon icon="three-dots-vertical" />
-                </template>
-                <b-dropdown-item href="#">{{ $t('Cập nhật') }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{
-                  $t('Tạo bản sao')
-                }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{ $t('Xuất bản') }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{ $t('Chia sẻ') }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{
-                  $t('Tài liệu tham khảo')
-                }}</b-dropdown-item>
-
-                <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item href="#">{{ $t('Thống kê') }}</b-dropdown-item>
-                <b-dropdown-item href="#">{{ $t('Xóa') }}</b-dropdown-item>
-              </b-dropdown>
-            </div>
-          </div>
-        </template>
-        <div class="list-question">
-          <div class="question-item">
-            <div class="question-content text-smd">
-              <p>
-                <a href="#" class="me-2">#Vật lý 12</a
-                ><a href="#" class="me-2">#Vật lý</a>
-              </p>
-              Which of the following lists all and only the appropriate
-              descriptions about a 32-bit CPU and a 64-bit CPU? I When a 32-bit
-              CPU and a 64-bit CPU are compared, a 64-bit CPU has a larger
-              theoretical maximum memory space.. II There is no 32-bit OS that
-              runs on a PC with a 64-bit CPU. III In terms of the read and write
-              speed of a USB memory, the speed of a PC with a 64-bit CPU is
-              twice as fast as that of a PC with a 32-bit CPU.
-            </div>
-            <div class="question-item-answer">
-              <div class="answer-head">
-                <span class="font-sm text-gray">câu trả lời</span>
-              </div>
-              <div class="list-answer">
-                <ul class="list-unstyled p-0 m-0">
-                  <li>
-                    <b>A.</b>
-                    Deciding one’s own strategy in a game according to the
-                    strategy of the opponent
-                  </li>
-                  <li>
-                    <b>B.</b>
-                    Deciding one’s own strategy in a game according to the
-                    strategy of the opponent
-                  </li>
-                  <li>
-                    <b>C.</b>
-                    Deciding one’s own strategy in a game according to the
-                    strategy of the opponent
-                  </li>
-                  <li>
-                    <b>D.</b>
-                    Deciding one’s own strategy in a game according to the
-                    strategy of the opponent
-                  </li>
-                </ul>
-              </div>
+              <QuestionTags :questiontags="questions" />
+              <QuestionSingleChoiceList
+                v-if="questions.questionTypeName == 'Một lựa chọn'"
+                :questionlist="questions"
+              />
+              <QuestionMultiChoiceList
+                v-if="questions.questionTypeName == 'Nhiều lựa chọn'"
+                :questionlist="questions"
+              />
+              <QuestionRightWrongList
+                v-if="questions.questionTypeName == 'Đúng sai'"
+                :questionlist="questions"
+              />
+              <QuestionParingList
+                v-if="questions.questionTypeName == 'Ghép đôi'"
+                :questionlist="questions"
+              />
+              <QuestionFillBlankList
+                v-if="questions.questionTypeName == 'Điền vào chỗ trống'"
+                :questionlist="questions"
+              />
+              <QuestionShortAnswerList
+                v-if="questions.questionTypeName == 'Câu trả lời ngắn'"
+                :questionlist="questions"
+              />
+              <QuestionSortAnswerList
+                v-if="questions.questionTypeName == 'Sắp xếp thứ tự'"
+                :questionlist="questions"
+              />
+              <QuestionClusterList
+                v-if="questions.itemType == 'group'"
+                :questionlist="questions"
+              />
             </div>
           </div>
         </div>
       </b-card>
     </div>
-    <b-pagination total-rows="50" align="right" />
   </div>
 </template>
 
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
-
+import QuestionTags from './QuestionTags.vue'
+import QuestionHeader from './QuestionHeader.vue'
+import QuestionSingleChoiceList from './QuestionSingleChoiceList.vue'
+import QuestionMultiChoiceList from './QuestionMultiChoiceList.vue'
+import QuestionRightWrongList from './QuestionRightWrongList.vue'
+import QuestionParingList from './QuestionParingList.vue'
+import QuestionFillBlankList from './QuestionFillBlankList.vue'
+import QuestionShortAnswerList from './QuestionShortAnswerList.vue'
+import QuestionClusterList from './QuestionClusterList.vue'
 export default defineComponent({
   name: 'SingleListPage',
+  components: {
+    QuestionHeader,
+    QuestionTags,
+    QuestionSingleChoiceList,
+    QuestionMultiChoiceList,
+    QuestionRightWrongList,
+    QuestionParingList,
+    QuestionFillBlankList,
+    QuestionShortAnswerList,
+    QuestionClusterList,
+  },
   props: {
-    products: {
-      type: Array,
-      default: () => [],
+    questions: {
+      type: Object,
+      required: true,
     },
   },
 
