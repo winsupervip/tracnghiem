@@ -21,7 +21,8 @@
       @hide="hide"
     >
       <div>
-        <div class="wrapper">
+        <div>
+          <!-- class="wrapper" -->
           <div class="wrapper-left">
             <p v-if="isPairing">Vế Trái</p>
             <TinyEditor
