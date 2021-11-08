@@ -1,8 +1,10 @@
 @import 'icons';
+@import 'font-awesome';
 @import 'variables';
 @import 'header';
 @import 'footer';
 @import 'section-search';
+
 body {
   font-family: 'Open Sans', sans-serif;
   // padding-top: $headerHeight;
@@ -1319,6 +1321,13 @@ img {
   .question-item {
     border-bottom: 1px solid $border;
     margin-bottom: 1rem;
+    .question-hashtag {
+      display: flex;
+      margin-bottom: 1rem;
+      p {
+        margin: 0 0.5rem 0 0;
+      }
+    }
     &:last-child {
       border-bottom: 0;
       margin-bottom: 0;
@@ -1341,6 +1350,17 @@ img {
           left: 8px;
           background: #ffffff;
           padding: 0 4px;
+        }
+      }
+      ul {
+        li {
+          margin-bottom: 0.5rem;
+          p {
+            margin-bottom: 0;
+          }
+          &:last-child {
+            margin-bottom: 0;
+          }
         }
       }
       .list-answer {
