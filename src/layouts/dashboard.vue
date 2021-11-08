@@ -200,7 +200,7 @@
                 <h2 class="one-line">Công cụ chung</h2>
                 <ul>
                   <li>
-                    <nuxt-link to="#">
+                    <nuxt-link to="/users/questions/">
                       <div>
                         <img
                           src="~/assets/img/dashboard/bx_bx-network-chart.svg"
@@ -211,7 +211,7 @@
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="">
+                    <nuxt-link to="/users/questions/">
                       <div>
                         <img
                           src="~/assets/img/dashboard/carbon_notification.svg"
