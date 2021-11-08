@@ -185,7 +185,7 @@ export default defineComponent({
 
       data.questionList = result.data?.object?.items
 
-      $logger.info('123', result.data?.object)
+      // $logger.info('123', result.data?.object)
     }
     const { fetch } = useFetch(async () => {
       $loader()
@@ -199,7 +199,7 @@ export default defineComponent({
       data.treeQuestionTypes = result2.object.items
       data.listStatus = result3.object.items
       data.level = result4.object.items
-      $logger.debug('category', result1.object.items)
+      // $logger.debug('category', result1.object.items)
       $loader().close()
     })
 
