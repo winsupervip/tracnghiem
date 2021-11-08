@@ -15,27 +15,27 @@
     background-color: transparent !important;
     box-shadow: none !important;
     display: none;
-    .icon-bar{
+    .icon-bar {
       display: block;
-      width: 28px;
+      width: 24px;
       height: 2px;
       border-radius: 0;
       transition: 0.5s;
       background: $primary;
     }
-    .icon-bar+.icon-bar {
+    .icon-bar + .icon-bar {
       margin-top: 6px;
     }
-    &:not(.collapsed){
-      .icon-bar{
+    &:not(.collapsed) {
+      .icon-bar {
         &:nth-child(1) {
-          transform: rotate(45deg) translate(6px,5px);
+          transform: rotate(45deg) translate(6px, 5px);
         }
         &:nth-child(2) {
           opacity: 0;
         }
         &:nth-child(3) {
-          transform: rotate(-45deg) translate(7px,-5px);
+          transform: rotate(-45deg) translate(7px, -5px);
         }
       }
     }
@@ -44,7 +44,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    @media screen and (max-width: $md){
+    @media screen and (max-width: $md) {
       .navbar-toggler {
         display: block;
       }
@@ -61,7 +61,7 @@
         display: flex;
         li {
           margin-right: 2.25rem;
-          @media screen and (max-width: $lg){
+          @media screen and (max-width: $lg) {
             margin-right: 1.5rem;
           }
           a {
@@ -81,11 +81,101 @@
     }
     .menu-action {
       .btn {
-        @media screen and (max-width: $lg){
+        @media screen and (max-width: $lg) {
           padding: 0.5rem 1.25rem;
         }
         &:last-child {
           margin-left: 0.75rem;
+        }
+      }
+    }
+    .menu-logined {
+      display: flex;
+      .dropdown-menu {
+        font-size: 0.875rem;
+        padding-top: 0;
+        border: none;
+        box-shadow: 0 4px 15px rgba(#4764c3, 0.1);
+        border-radius: 0.5rem;
+        .user-info {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          margin-bottom: 0.5rem;
+          background-color: rgba($border, 0.5);
+          border-radius: 0.5rem 0.5rem 0 0;
+          .avatar {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+          }
+          div {
+            width: calc(100% - 60px);
+            * {
+              overflow: hidden;
+              display: -webkit-box;
+              -webkit-line-clamp: 1;
+              -webkit-box-orient: vertical;
+              word-break: break-word;
+            }
+          }
+        }
+        .dropdown-item {
+          padding: 0.5rem 1rem;
+          &:focus,
+          &:active {
+            i {
+              color: $white !important;
+            }
+          }
+          i {
+            width: 16px;
+            margin-right: 5px;
+          }
+        }
+      }
+      .user-info-dropdown {
+        margin-left: 0.5rem;
+        .dropdown-toggle {
+          background-color: transparent;
+          border: none;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          padding: 0;
+          img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+        }
+        .dropdown-menu {
+          min-width: 250px;
+        }
+      }
+      .user-create {
+        .dropdown-toggle {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: rgba($secondary, 0.3);
+          border: none;
+          color: $text;
+          font-size: 1.125rem;
+          &:hover,
+          &:active,
+          &:focus {
+            color: $white !important;
+            background-color: $primary;
+            i {
+              color: $white !important;
+            }
+          }
         }
       }
     }
@@ -111,7 +201,7 @@
           }
         }
       }
-      @media screen and (max-width: $md){
+      @media screen and (max-width: $md) {
         position: fixed;
         z-index: 99;
         top: 0;
@@ -121,10 +211,13 @@
         background-color: #ffffff;
         justify-content: flex-start;
         flex-direction: column;
-        box-shadow: -2px 0 6px rgba(#000000,0.1);
+        box-shadow: -2px 0 6px rgba(#000000, 0.1);
         padding: 0;
         overflow: auto;
         transition: all 0.2s;
+        .menu-logined {
+          display: none !important;
+        }
         &.open {
           transition: all 0.2s;
           right: 0;
@@ -168,10 +261,10 @@
       z-index: 98;
       top: 0;
       left: 0;
-      background-color: rgba(#000000,0.6);
+      background-color: rgba(#000000, 0.6);
       display: none;
       &.active {
-        @media screen and (max-width: $md){
+        @media screen and (max-width: $md) {
           display: block;
         }
       }
