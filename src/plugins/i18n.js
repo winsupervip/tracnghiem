@@ -9,7 +9,7 @@ export default function ({ app, store }) {
     fallbackLocale: 'vi',
     messages: {
       en: require('~/locales/en.json'),
-      ja: require('~/locales/vi.json'),
+      vi: require('~/locales/vi.json'),
     },
   })
 

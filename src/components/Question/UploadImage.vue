@@ -88,14 +88,14 @@ export default {
     createImage(file) {
       const reader = new FileReader()
       const vm = this
-      console.log(reader)
+      this.$logger.debug(reader)
       reader.onload = (e) => {
-        console.log(e)
+        vm.$logger.debug(e)
         vm.image = e.target.result
-        console.log(vm.image)
+        vm.$logger.debug(vm.image)
       }
       const a = reader.readAsDataURL(file)
-      console.log(a)
+      this.$logger.debug(a)
     },
     removeImage(e) {
       this.image = ''

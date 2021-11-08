@@ -97,21 +97,21 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['getQuestion']),
+    ...mapGetters({ getQuestion: 'questions/getQuestion' }),
   },
   methods: {
-    ...mapActions(['restAnswer']),
+    ...mapActions({ restAnswer: 'questions/restAnswer' }),
 
     isValid(data) {
       let count = 0
       this.errors = {
         answers: [],
       }
-      console.log(data.answers)
+      this.$logger.debug(data.answers)
       let validdateAnswers = []
       let valid = true
 
-      console.log(this.errors)
+      this.$logger.debug(this.errors)
       if (data.answers.length < 2) {
         if (this.questionType === 'short-answer') {
           this.errors.answers.push(
@@ -180,7 +180,6 @@ export default defineComponent({
         })
       } else if (this.questionType === 'pairing') {
         data.answers.forEach((element) => {
-          console.log(element?.left?.answerContent.length > 0)
           if (element?.id) {
             element.id = undefined
           }
@@ -200,12 +199,12 @@ export default defineComponent({
       return { valid, data }
     },
     onSubmit() {
-      console.log('chay')
+      this.$logger.debug('chay')
       const getData = this.getQuestion
       const getValid = this.isValid(getData)
       if (getValid.valid) {
         const data = getValid.data
-        console.log('í dâttr', data)
+        this.$logger.debug('í dâttr', data)
         data.question.questionTypeId = parseInt(this.questionTypeId)
         CauHoiApi.createQuestion(
           data,

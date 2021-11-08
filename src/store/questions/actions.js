@@ -3,7 +3,7 @@ export default {
     commit('ADD_CATEGORY', data)
   },
   addTags({ commit }, data) {
-    commit('ADD_TAGS', data)
+    commit('ADD_TAGS', [...data])
   },
   addQuestionContent({ commit }, data) {
     commit('ADD_QUESTION_CONTENT', data)

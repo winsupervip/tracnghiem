@@ -205,11 +205,14 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['getListAnswer', 'getSelected']),
+    ...mapGetters({
+      getListAnswer: 'questions/getListAnswer',
+      getSelected: 'questions/getSelected',
+    }),
   },
   watch: {
     getSelected() {
-      console.log('chạy')
+      this.$logger.debug('chạy')
       this.isSelected = this.getSelected
     },
     // isSelected(newValue, oldValue) {
@@ -224,7 +227,7 @@ export default defineComponent({
     //   // this.handleUserChooseRightAnswer(this.isSelected)
     // },
     getListAnswer() {
-      console.log(this.getListAnswer)
+      this.$logger.debug(this.getListAnswer)
     },
   },
   onMouted() {
@@ -235,8 +238,8 @@ export default defineComponent({
     const that = this
     EventBus.$on('updateListAnswer', function (item) {
       // that.$emit('updateListAnswer', item)
-      console.log('item', item)
-      console.log('an', that.answers)
+      this.$logger.debug('item', item)
+      this.$logger.debug('an', that.answers)
       const answer = that.answers[item.index]
       answer.answerContent = item.answerContent
       answer.random = item.isRandom
@@ -245,13 +248,13 @@ export default defineComponent({
     })
   },
   methods: {
-    ...mapActions([
-      'addValueUpdateAnswer',
-      'deleteAnswer',
-      'handleUserChooseRightAnswer',
-    ]),
+    ...mapActions({
+      addValueUpdateAnswer: 'questions/addValueUpdateAnswer',
+      deleteAnswer: 'questions/deleteAnswer',
+      handleUserChooseRightAnswer: 'questions/handleUserChooseRightAnswer',
+    }),
     isChange(id) {
-      console.log(id)
+      this.$logger.debug(id)
       if (this.typeQuestion === 'multiple-choice') {
         if (this.isSelected.length > this.getSelected.length) {
           this.handleUserChooseRightAnswer({ action: 'add', id })

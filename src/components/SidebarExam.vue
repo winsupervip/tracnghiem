@@ -258,7 +258,7 @@ export default {
     },
     selectSuggestion(value) {
       this.inputKeyword = value
-      console.log(value)
+      this.$logger.debug(value)
     },
   },
 }

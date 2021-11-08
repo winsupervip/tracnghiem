@@ -54,7 +54,10 @@ export default defineComponent({
     },
   },
   methods: {
-    ...mapActions(['addSeoTitle', 'addSeoDescription']),
+    ...mapActions({
+      addSeoTitle: 'questions/addSeoTitle',
+      addSeoDescription: 'questions/addSeoDescription',
+    }),
   },
 })
 </script>

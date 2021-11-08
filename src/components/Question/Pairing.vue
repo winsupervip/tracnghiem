@@ -19,7 +19,7 @@ export default {
     return {}
   },
   created() {
-    console.log('pairing', this.answer)
+    this.$logger.debug('pairing', this.answer)
   },
 }
 </script>

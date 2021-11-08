@@ -199,7 +199,7 @@ export default defineComponent({
       data.treeQuestionTypes = result2.object.items
       data.listStatus = result3.object.items
       data.level = result4.object.items
-      console.log('category', result1.object.items)
+      $logger.debug('category', result1.object.items)
       $loader().close()
     })
 
@@ -216,7 +216,7 @@ export default defineComponent({
       data.isCallApiGetTag = false
       data.search = value
       data.urlQuery.keyword = value
-      console.log('abc', data.search)
+      $logger.debug('abc', data.search)
       data.options = []
     }
 
@@ -231,7 +231,7 @@ export default defineComponent({
       { url: 'single-choice/create', title: 'Một lựa chọn' },
       { url: 'multiple-choice/create', title: 'Nhiều lựa chọn' },
       { url: 'right-wrong/create', title: 'Đúng sai' },
-      { url: 'pairing/create', title: 'Ghép đôi' },
+      { url: 'matching/create', title: 'Ghép đôi' },
       { url: 'fill-blank/create', title: 'Điền vào chỗ trống' },
       { url: 'short-answer/create', title: 'Câu hỏi trả lời ngắn' },
       { url: 'draggable-fill-blank/create', title: 'Sắp thứ tự' },
@@ -240,7 +240,7 @@ export default defineComponent({
 
   computed: {
     availableOptions() {
-      console.log(this.options)
+      this.$logger.debug('computed', this.options)
       return this.options
     },
   },
@@ -258,7 +258,7 @@ export default defineComponent({
       }
       QuestionApi.getTagByKey(that.search, (response) => {
         that.options = response
-        console.log('response', response)
+        that.$logger.debug('response', response)
       })
     }, 1000),
 
