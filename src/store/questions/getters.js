@@ -5,7 +5,7 @@ export default {
   getQuestion: (state) => {
     return {
       question: state.question,
-      answers: [...state.answers],
+      answers: state.answers,
     }
   },
   getSelected: (state) => state.selected,

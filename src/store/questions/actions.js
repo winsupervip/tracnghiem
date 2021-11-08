@@ -58,4 +58,7 @@ export default {
   restAnswer({ commit }, data) {
     commit('REST_ANSWERS')
   },
+  setNullAnswerId({ commit }, answerIndex) {
+    commit('SET_NULL_ID_ANSWER', answerIndex)
+  },
 }
