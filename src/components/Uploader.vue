@@ -163,7 +163,7 @@ export default {
     this.reset()
   },
   methods: {
-    ...mapActions(['addSeoAvatar']),
+    ...mapActions({ addSeoAvatar: 'questions/addSeoAvatar' }),
     reup() {
       this.$emit('reupload')
       this.reset()
@@ -218,7 +218,6 @@ export default {
 
       // append the files to FormData
       Array.from(Array(fileList.length).keys()).map((x) => {
-        console.log(fieldName, fileList[x], fileList[x].name)
         formData.append(fieldName, fileList[x], fileList[x].name)
         return 0
       })

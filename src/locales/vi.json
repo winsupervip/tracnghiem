@@ -8,7 +8,7 @@
   "describeHowToCreateAShortAnswerQuestion": "- Với loại câu hỏi này bạn sẽ phải thêm vào tất cả những đáp án có khả năng đúng",
   "exampleHowToCreateAShortAnswerQuestion": "- Ví dụ: 1m = 1 mét (đây là 2 nội dụng khác nhau nhưng kết quả đúng)",
   "answer(*)": "Câu trả lời (*)",
-"answer": "câu trả lời",
+  "answer": "câu trả lời",
   "addMoreAnswers": "Thêm câu trả lời",
   "allowShuffling": "Cho phép xáo trộn",
   "rightAnswer": "Câu trả lời đúng",
@@ -46,8 +46,14 @@
   "-- choose --": "-- Chọn --",
   "anOption": "Một lựa chọn",
   "draft": "Bản nháp",
-"category": "Danh mục","questionType": "Loại câu hỏi","status": "Trạng thái","level": "Mức độ","sort": "Sắp xếp",
-"rowA": "Cột A","rowB": "Cột B"
-
-  
+  "category": "Danh mục",
+  "questionType": "Loại câu hỏi",
+  "status": "Trạng thái",
+  "level": "Mức độ",
+  "sort": "Sắp xếp",
+  "rowA": "Cột A",
+  "rowB": "Cột B",
+  "AddAnswer": {
+    "answer": "Câu trả lời"
+  }
 }

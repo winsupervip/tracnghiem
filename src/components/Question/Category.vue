@@ -66,7 +66,7 @@ export default defineComponent({
     },
   },
   methods: {
-    ...mapActions(['addCategory']),
+    ...mapActions({ addCategory: 'questions/addCategory' }),
     loadOptions({ action, callback, instanceId }) {
       callback()
     },

@@ -24,7 +24,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getListAnswer', 'getUpdateValueAnswer']),
+    ...mapGetters({
+      getListAnswer: 'questions/getListAnswer',
+      getUpdateValueAnswer: 'questions/getUpdateValueAnswer',
+    }),
   },
   watch: {
     // getListAnswer() {
@@ -32,11 +35,11 @@ export default {
     // },
   },
   methods: {
-    ...mapActions([
-      'addValueUpdateAnswer',
-      'deleteAnswer',
-      'handleUpdateAnswer',
-    ]),
+    ...mapActions({
+      addValueUpdateAnswer: 'questions/addValueUpdateAnswer',
+      deleteAnswer: 'questions/deleteAnswer',
+      handleUpdateAnswer: 'questions/handleUpdateAnswer',
+    }),
     changeSelected(index) {
       const temp = this.answer
       temp.rightAnswer = index

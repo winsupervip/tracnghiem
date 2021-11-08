@@ -1,7 +1,7 @@
 <template>
   <div>
     <div :class="$style.addQuestionTitle">
-      <p style="font-weight: bold">{{ $t('answer(*)') }}</p>
+      <p style="font-weight: bold">{{ $t('AddAnswer.answer') }}(*)</p>
       <b-button
         v-b-modal.modal-1
         class="btnQuestion"
@@ -129,7 +129,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['getUpdateValueAnswer']),
+    ...mapGetters({ getUpdateValueAnswer: 'questions/getUpdateValueAnswer' }),
   },
   watch: {
     getUpdateValueAnswer() {
@@ -159,11 +159,11 @@ export default defineComponent({
     },
   },
   methods: {
-    ...mapActions([
-      'handleAddAnswer',
-      'handleUpdateAnswer',
-      'removeValueUpdateAnswer',
-    ]),
+    ...mapActions({
+      handleAddAnswer: 'questions/handleAddAnswer',
+      handleUpdateAnswer: 'questions/handleUpdateAnswer',
+      removeValueUpdateAnswer: 'questions/removeValueUpdateAnswer',
+    }),
     shown() {
       this.doShow = true
     },

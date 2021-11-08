@@ -92,7 +92,7 @@ export default defineComponent({
     },
   },
   methods: {
-    ...mapActions(['addStatus']),
+    ...mapActions({ addStatus: 'questions/addStatus' }),
   },
 })
 </script>

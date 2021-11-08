@@ -66,7 +66,7 @@ export default defineComponent({
     },
   },
   methods: {
-    ...mapActions(['addlevel']),
+    ...mapActions({ addlevel: 'questions/addlevel' }),
   },
 })
 </script>

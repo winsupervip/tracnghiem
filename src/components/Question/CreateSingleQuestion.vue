@@ -97,22 +97,25 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['getQuestion']),
+    ...mapGetters({ getQuestion: 'questions/getQuestion' }),
   },
   methods: {
-    ...mapActions(['restAnswer']),
+    ...mapActions({
+      restAnswer: 'questions/restAnswer',
+      setNullAnswerId: 'questions/setNullAnswerId',
+    }),
 
-    isValid(data) {
+    isValid(question) {
       let count = 0
       this.errors = {
         answers: [],
       }
-      console.log(data.answers)
+      this.$logger.debug(question.answers)
       let validdateAnswers = []
       let valid = true
 
-      console.log(this.errors)
-      if (data.answers.length < 2) {
+      this.$logger.debug(this.errors)
+      if (question.answers.length < 2) {
         if (this.questionType === 'short-answer') {
           this.errors.answers.push(
             'Loại câu hỏi này phải có ít nhất 1 câu trả lời'
@@ -129,8 +132,9 @@ export default defineComponent({
         this.questionType === 'single-choice' ||
         this.questionType === 'right-wrong'
       ) {
-        validdateAnswers = data.answers.map((item) => {
-          item.id = undefined
+        validdateAnswers = question.answers.map((item, index) => {
+          // item.id = undefined
+          this.setNullAnswerId(index)
           if (item.rightAnswer === 1) {
             count += 1
           }
@@ -144,8 +148,9 @@ export default defineComponent({
           valid = false
         }
       } else if (this.questionType === 'multiple-choice') {
-        validdateAnswers = data.answers.map((item) => {
-          item.id = undefined
+        validdateAnswers = question.answers.map((item, index) => {
+          // item.id = undefined
+          this.setNullAnswerId(index)
           if (item.rightAnswer === 1) {
             count += 1
           }
@@ -156,15 +161,18 @@ export default defineComponent({
           valid = false
         }
       } else if (this.questionType === 'short-answer') {
-        validdateAnswers = data.answers.map((item) => {
-          item.id = undefined
+        validdateAnswers = question.answers.map((item, index) => {
+          // item.id = undefined
+          this.setNullAnswerId(index)
           return item
         })
       } else if (this.questionType === 'fill-blank') {
         let sumRight = 0
-        const checkSum = (data.answers.length + 1) * (data.answers.length / 2)
-        validdateAnswers = data.answers.map((item) => {
-          item.id = undefined
+        const checkSum =
+          (question.answers.length + 1) * (question.answers.length / 2)
+        validdateAnswers = question.answers.map((item, index) => {
+          // item.id = undefined
+          this.setNullAnswerId(index)
           sumRight += item.rightAnswer
           return item
         })
@@ -173,42 +181,45 @@ export default defineComponent({
           valid = false
         }
       } else if (this.questionType === 'draggable') {
-        validdateAnswers = data.answers.map((item, index) => {
-          item.id = undefined
+        validdateAnswers = question.answers.map((item, index) => {
+          // item.id = undefined
+          this.setNullAnswerId(index)
           item.rightAnswer = index + 1
           return item
         })
       } else if (this.questionType === 'pairing') {
-        data.answers.forEach((element) => {
-          console.log(element?.left?.answerContent.length > 0)
+        question.answers.forEach((element, index) => {
           if (element?.id) {
-            element.id = undefined
+            // element.id = undefined
+            this.setNullAnswerId(index)
           }
           if (element?.left?.answerContent.length > 0) {
             const left = element?.left
-            element.id = undefined
+            // element.id = undefined
+            this.setNullAnswerId(index)
             validdateAnswers.push(left)
           }
           if (element?.right?.answerContent.length > 0) {
             const right = element?.right
-            element.id = undefined
+            // element.id = undefined
+            this.setNullAnswerId(index)
             validdateAnswers.push(right)
           }
         })
       }
-      data.answers = validdateAnswers
-      return { valid, data }
+      question.answers = validdateAnswers
+      return { valid, question }
     },
     onSubmit() {
-      console.log('chay')
-      const getData = this.getQuestion
-      const getValid = this.isValid(getData)
-      if (getValid.valid) {
-        const data = getValid.data
-        console.log('í dâttr', data)
-        data.question.questionTypeId = parseInt(this.questionTypeId)
+      this.$logger.debug('chay')
+      const questionData = this.getQuestion
+      const validState = this.isValid(questionData)
+      if (validState.valid) {
+        const question = validState.question
+        this.$logger.debug('í dâttr', question)
+        question.question.questionTypeId = parseInt(this.questionTypeId)
         CauHoiApi.createQuestion(
-          data,
+          question,
           () => {
             // this.restAnswer()
             this.$toast.show('Thêm Thành Công').goAway(1500)

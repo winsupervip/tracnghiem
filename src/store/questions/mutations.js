@@ -186,4 +186,7 @@ export default {
   REST_ANSWERS(state) {
     state.answers = []
   },
+  SET_NULL_ID_ANSWER(state, aIndex) {
+    state.answers[aIndex].id = undefined
+  },
 }

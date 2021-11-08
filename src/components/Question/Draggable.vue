@@ -54,7 +54,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getListAnswer', 'getUpdateValueAnswer']),
+    ...mapGetters({
+      getListAnswer: 'questions/getListAnswer',
+      getUpdateValueAnswer: 'questions/getUpdateValueAnswer',
+    }),
 
     dragOptions() {
       return {
@@ -79,15 +82,15 @@ export default {
       item.fixed = false
       return item
     })
-    console.log(data)
+    this.$logger.debug(data)
     this.list = data
   },
   methods: {
-    ...mapActions([
-      'addValueUpdateAnswer',
-      'deleteAnswer',
-      'handleUpdateDraggableAnswer',
-    ]),
+    ...mapActions({
+      addValueUpdateAnswer: 'questions/addValueUpdateAnswer',
+      deleteAnswer: 'questions/deleteAnswer',
+      handleUpdateDraggableAnswer: 'questions/handleUpdateDraggableAnswer',
+    }),
 
     onMove({ relatedContext, draggedContext }) {
       const relatedElement = relatedContext.element
