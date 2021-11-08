@@ -295,7 +295,7 @@ export default {
           token: 'https://dev-api.tracnghiem.vn/api/Account/token',
           logout:
             'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/logout?redirect_uri=' +
-            encodeURIComponent(String('/home'))
+            encodeURIComponent(process.env.BASE_URL || 'http://localhost:3000')
         },
         token: {
           property: 'access_token',
@@ -316,7 +316,7 @@ export default {
     },
     redirect: {
       login: '/login',
-      logout: encodeURIComponent(process.env.BASE_URL || 'http://localhost:3000'),
+      logout: '/',
       home: '/'
     }
   }

@@ -97,11 +97,11 @@
               <template #button-content>
                 <i class="fa fa-pencil text-primary" />
               </template>
-              <b-dropdown-item href="#">
+              <b-dropdown-item href="/users/exam">
                 <i class="icon-clock text-primary" />
                 Tạo đề thi
               </b-dropdown-item>
-              <b-dropdown-item href="#">
+              <b-dropdown-item href="/users/questions">
                 <i class="icon-exam text-primary" />
                 Tạo câu hỏi
               </b-dropdown-item>
@@ -131,7 +131,7 @@
                 <i class="icon-exam text-primary" />
                 Đề thi của bạn
               </b-dropdown-item>
-              <b-dropdown-item href="#">
+              <b-dropdown-item href="/users/questions">
                 <i class="icon-question text-primary" />
                 Ngân hàng câu hỏi
               </b-dropdown-item>
