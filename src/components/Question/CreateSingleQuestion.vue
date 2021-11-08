@@ -3,7 +3,10 @@
     <b-form @submit.prevent="handleSubmit(onSubmit)">
       <div class="p-question p-question--singleChoice">
         <div class="p-question__left">
-          <Header :question-title="questionTitle" :errors="errors" />
+          <HeaderOfSingleQuestion
+            :question-title="questionTitle"
+            :errors="errors"
+          />
           <AddAnswer
             :errors="errors"
             :type-question="questionType"
@@ -34,7 +37,7 @@ import { mapGetters, mapActions } from 'vuex'
 import PublishQuestion from './PublishQuestion.vue'
 import LevelForm from './LevelForm.vue'
 import Category from './Category.vue'
-import Header from './Header.vue'
+import HeaderOfSingleQuestion from './HeaderOfSingleQuestion.vue'
 import ListAnswer from './ListAnswers.vue'
 import UploadImage from './UploadImage.vue'
 import AddSeo from './AddSeo.vue'
@@ -45,7 +48,7 @@ import CauHoiApi from '@/api/cauHoi'
 import Uploader from '@/components/Uploader'
 export default defineComponent({
   components: {
-    Header,
+    HeaderOfSingleQuestion,
     PublishQuestion,
     LevelForm,
     Category,

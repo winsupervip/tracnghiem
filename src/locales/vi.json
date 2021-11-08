@@ -2,7 +2,7 @@
   "login": "Đăng nhập",
   "register": "Đăng ký",
   "questionBank": "Ngân Hàng câu hỏi",
-  "tagYourQuestion,UpTo5Tags(*)": "Gắn thẻ câu hỏi của bạn, tối đa 5 thẻ(*)",
+  "tagYourQuestionUpTo5Tags": "Gắn thẻ câu hỏi của bạn, tối đa 5 thẻ(*)",
   "selectTag": "Chọn thẻ",
   "thereAreNoTagsMatchingYourSearchCriteria": "Không tồn tại thẻ bạn vừa nhập, nhấn thêm để thêm mới",
   "describeHowToCreateAShortAnswerQuestion": "- Với loại câu hỏi này bạn sẽ phải thêm vào tất cả những đáp án có khả năng đúng",
@@ -55,5 +55,6 @@
   "rowB": "Cột B",
   "AddAnswer": {
     "answer": "Câu trả lời"
-  }
+  },
+  "addTags": "Thêm thẻ"
 }

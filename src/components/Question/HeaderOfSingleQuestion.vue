@@ -2,7 +2,7 @@
   <div>
     <div>
       <p class="p-headerQuestion">
-        {{ $t('Ngân Hàng câu hỏi') }} > {{ questionTitle }}
+        {{ $t('questionBank') }} > {{ questionTitle }}
       </p>
       <ValidationProvider rules="required" name="Tiêu Đề">
         <b-form-group
@@ -26,12 +26,12 @@
         <ValidationProvider rules="required" name="Tags">
           <b-form-group
             slot-scope="{ valid, errors }"
-            :label-for="$t('Chọn tag')"
+            :label-for="$t('addTags')"
           >
             <b-form-tags
               id="tags-with-dropdown"
               v-model="tags"
-              :label="$t('Gắn thẻ câu hỏi của bạn, tối đa 5 thẻ(*)')"
+              :label="$t('tagYourQuestionUpTo5Tags')"
               no-outer-focus
               :state="errors[0] ? false : valid ? true : null"
               class="mb-2"
@@ -59,7 +59,7 @@
                 >
                   <template #button-content>
                     <b-icon icon="tag-fill" class="tag"></b-icon>
-                    <span class="textTag">{{ $t('Chọn tag') }}</span>
+                    <span class="textTag">{{ $t('addTags') }}</span>
                   </template>
                   <b-dropdown-form @submit.stop.prevent="() => {}">
                     <b-form-group
@@ -93,7 +93,7 @@
                     variant="primary"
                     class="p-question__btnAdd"
                     @click="userAddTag"
-                    >{{ $t('Thêm') }}</b-button
+                    >{{ $t('add') }}</b-button
                   >
                 </b-dropdown>
               </template>

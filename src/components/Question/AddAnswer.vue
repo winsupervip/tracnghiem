@@ -65,8 +65,8 @@
             @click="handleAnswer"
             >{{
               getUpdateValueAnswer.id
-                ? $t('Cập nhập câu trả lời')
-                : $t('Thêm câu trả lời')
+                ? $t('updateAnswer')
+                : $t('addMoreAnswers')
             }}</b-button
           >
           <b-button
