@@ -92,7 +92,7 @@
           </div>
         </div>
         <div class="action-mobile d-flex align-items-center">
-          <div v-if="isLogin" class="menu-logined me-2">
+          <div v-if="isLogin" class="d-lg-none menu-logined me-2">
             <b-dropdown variant="" class="user-create" no-caret>
               <template #button-content>
                 <i class="fa fa-pencil text-primary" />
