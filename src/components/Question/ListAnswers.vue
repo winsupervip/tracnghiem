@@ -160,15 +160,9 @@
       <Draggable />
     </div>
 
-    <div v-if="errors.answers">
-      <b-form-invalid-feedback
-        v-for="(error, index) in errors.answers"
-        id="error"
-        :key="index"
-        :state="false"
-        >{{ error }}</b-form-invalid-feedback
-      >
-    </div>
+    <b-form-invalid-feedback id="error" :state="false">{{
+      errors
+    }}</b-form-invalid-feedback>
   </div>
 </template>
 
@@ -191,7 +185,7 @@ export default defineComponent({
       required: true,
     },
     errors: {
-      type: Object,
+      type: String,
       required: true,
     },
   },

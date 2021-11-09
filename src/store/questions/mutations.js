@@ -1,3 +1,5 @@
+import { uuid } from 'vue-uuid'
+
 export default {
   ADD_CATEGORY(state, data) {
     state.question.categories = data
@@ -175,6 +177,10 @@ export default {
       state.answers = answers
     }
   },
+  HANDLE_UPDATE_SELECT_FOR_FILL_BLANK(state, data) {
+    const index = state.answers.findIndex((item) => item.id === data.id)
+    state.answers[index].rightAnswer = data.index
+  },
   REMOVE_VALUE_UPDATE_ANSWER(state) {
     state.updateValueAnswer = {}
   },
@@ -188,5 +194,28 @@ export default {
   },
   SET_NULL_ID_ANSWER(state, aIndex) {
     state.answers[aIndex].id = undefined
+  },
+  SEED_DATA_FOR_RIGHT_WRONG_ANSWER(state) {
+    state.answers = [
+      {
+        id: uuid.v4(),
+        position: 0,
+        hashId: '',
+        plainText: 'Đúng',
+        rightAnswer: 1,
+        random: true,
+        answerContent: '<p>Đúng</p>',
+      },
+      {
+        id: uuid.v4(),
+        position: 0,
+        hashId: '',
+        plainText: 'Sai',
+        rightAnswer: 0,
+        random: true,
+        answerContent: '<p>sai</p>',
+      },
+    ]
+    state.selected = state.answers[0].id
   },
 }

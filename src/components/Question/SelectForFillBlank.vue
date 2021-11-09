@@ -38,15 +38,15 @@ export default {
     ...mapActions({
       addValueUpdateAnswer: 'questions/addValueUpdateAnswer',
       deleteAnswer: 'questions/deleteAnswer',
-      handleUpdateAnswer: 'questions/handleUpdateAnswer',
+      handleUpdateSelectForFillBlank:
+        'questions/handleUpdateSelectForFillBlank',
     }),
     changeSelected(index) {
-      const temp = this.answer
-      temp.rightAnswer = index
       const data = {
-        answer: temp,
+        id: this.answer.id,
+        index,
       }
-      this.handleUpdateAnswer(data)
+      this.handleUpdateSelectForFillBlank(data)
     },
   },
 }
