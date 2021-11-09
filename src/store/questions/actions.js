@@ -40,6 +40,9 @@ export default {
   handleUpdateAnswer({ commit }, data) {
     commit('HANDLE_UPDATE_ANSWER', data)
   },
+  handleUpdateSelectForFillBlank({ commit }, data) {
+    commit('HANDLE_UPDATE_SELECT_FOR_FILL_BLANK', data)
+  },
   handleUpdateDraggableAnswer({ commit }, data) {
     commit('HANDLE_UPDATE_ANSWER_FOR_DRAGGABLE', data)
   },
@@ -60,5 +63,8 @@ export default {
   },
   setNullAnswerId({ commit }, answerIndex) {
     commit('SET_NULL_ID_ANSWER', answerIndex)
+  },
+  seedDataForRightWrongAnswer({ commit }) {
+    commit('SEED_DATA_FOR_RIGHT_WRONG_ANSWER')
   },
 }

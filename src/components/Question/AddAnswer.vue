@@ -65,8 +65,8 @@
             @click="handleAnswer"
             >{{
               getUpdateValueAnswer.id
-                ? $t('Cập nhập câu trả lời')
-                : $t('Thêm câu trả lời')
+                ? $t('updateAnswer')
+                : $t('addMoreAnswers')
             }}</b-button
           >
           <b-button
@@ -119,7 +119,7 @@ export default defineComponent({
       answerContent: '',
       answerContentRight: '',
       isRightAnswer: false,
-      isRandom: false,
+      isRandom: true,
       isUpdate: -1,
       doShow: false,
       okOnly: true,
@@ -129,7 +129,10 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters({ getUpdateValueAnswer: 'questions/getUpdateValueAnswer' }),
+    ...mapGetters({
+      getUpdateValueAnswer: 'questions/getUpdateValueAnswer',
+      getListAnswer: 'questions/getListAnswer',
+    }),
   },
   watch: {
     getUpdateValueAnswer() {
@@ -178,12 +181,13 @@ export default defineComponent({
       }
     },
     handleAnswer() {
-      if (this.answerContent === '') {
+      if (this.answerContent === '' && this.answerContentRight === '') {
         // config: https://github.com/shakee93/vue-toasted
         // eslint-disable-next-line no-undef
         this.$toast.error(this.$i18n.t('answersCannotBeLeftBlank')).goAway(1500)
         return 0
       }
+
       let data = {}
       if (this.isPairing) {
         data = {
@@ -230,13 +234,22 @@ export default defineComponent({
         this.handleUpdateAnswer(data)
         this.removeValueUpdateAnswer()
       } else {
+        console.log(this.getListAnswer.length, this.typeQuestion)
+        if (
+          this.getListAnswer.length >= 3 &&
+          this.typeQuestion === 'right-wrong'
+        ) {
+          this.$toast
+            .error('Không được quá 3 câu trả lời cho loại câu hỏi này')
+            .goAway(1000)
+          return 0
+        }
         this.handleAddAnswer(data)
-        this.$toast.show('Thêm câu trả lời thành công').goAway(1000)
+        this.$toast.success('Thêm câu trả lời thành công').goAway(1000)
+        this.isRightAnswer = false
+        this.answerContent = ''
+        this.answerContentRight = ''
       }
-      this.isRightAnswer = false
-      this.isRandom = false
-      this.answerContent = ''
-      this.answerContentRight = ''
     },
   },
 })
