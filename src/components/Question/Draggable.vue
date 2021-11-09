@@ -143,15 +143,13 @@ export default {
 .p-answerItem {
   display: flex;
   justify-content: space-between;
-  box-shadow: 0 4px 15px rgba(#4764c3, 0.1);
+  // box-shadow: 0 4px 15px rgba(#4764c3, 0.1);
   transition: all 0.2s;
 
   transition: all 0.2s;
   border-radius: 0.5rem;
   border-radius: 0.5rem;
-  &:hover {
-    box-shadow: 0 4px 20px rgba(#4764c3, 0.2);
-  }
+
   b {
     min-width: 20px;
   }

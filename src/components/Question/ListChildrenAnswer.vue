@@ -165,10 +165,6 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    errors: {
-      type: Array,
-      required: true,
-    },
   },
   setup() {
     const data = reactive({

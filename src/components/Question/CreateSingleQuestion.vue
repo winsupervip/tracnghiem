@@ -5,12 +5,13 @@
         <div class="p-question__left">
           <HeaderOfSingleQuestion :question-title="questionTitle" />
           <AddAnswer
+            v-if="questionType !== 'short-answer'"
             :type-question="questionType"
             :have-random-answer="haveRandomAnswer"
             :have-right-answer="haveRightAnswer"
             :is-pairing="isPairing"
           />
-
+          <strong v-else>Nhập Câu trả lời (*)</strong>
           <ListAnswer :type-question="questionType" :errors="errors" />
           <CommentOrNote />
         </div>
@@ -133,6 +134,9 @@ export default defineComponent({
           () => {
             // this.restAnswer()
             this.$toast.success('Thêm Thành Công').goAway(1500)
+            setTimeout(() => {
+              this.$router.push({ path: '/users/questions/' })
+            }, 500)
           },
           () => {
             this.$toast.show('Có lỗi xảy ra').goAway(1500)

@@ -67,4 +67,14 @@ export default {
   seedDataForRightWrongAnswer({ commit }) {
     commit('SEED_DATA_FOR_RIGHT_WRONG_ANSWER')
   },
+  // question group ///
+  addChildQuestion({ commit }, data) {
+    commit('ADD_CHILD_QUESTION', data)
+  },
+  addAnswerInChildQuestion({ commit }, data) {
+    commit('ADD_ANSWER_IN_CHILD_QUESTION', data)
+  },
+  isRandom({ commit }, data) {
+    commit('IS_RANDOM', data)
+  },
 }
