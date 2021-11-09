@@ -1,7 +1,7 @@
 <template>
   <div class="p-question p-question--singleChoice">
     <div class="p-question__left">
-      <Header question-title="câu hỏi chùm" :errors="errors" />
+      <HeaderOfSingleQuestion question-title="câu hỏi chùm" :errors="errors" />
       <AddChildrenAnswer />
       <ListChildrenAnswer :type-question="questionType" :errors="errors" />
     </div>
@@ -22,7 +22,7 @@ import PublishQuestion from '../../../../components/Question/PublishQuestion.vue
 import AddSeo from '../../../../components/Question/AddSeo.vue'
 import LevelForm from '../../../../components/Question/LevelForm.vue'
 import Category from '../../../../components/Question/Category.vue'
-import Header from '../../../../components/Question/Header.vue'
+import HeaderOfSingleQuestion from '../../../../components/Question/HeaderOfSingleQuestion.vue'
 import ListChildrenAnswer from '../../../../components/Question/ListAnswers.vue'
 import UploadImage from '../../../../components/Question/UploadImage.vue'
 import AddChildrenAnswer from '../../../../components/Question/AddChildrenAnswer.vue'
@@ -31,7 +31,7 @@ import CauHoiApi from '../../../../api/cauHoi'
 import Uploader from '../../../../components/Uploader.vue'
 export default defineComponent({
   components: {
-    Header,
+    HeaderOfSingleQuestion,
     PublishQuestion,
     LevelForm,
     Category,
