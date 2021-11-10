@@ -169,6 +169,7 @@ export default {
     { src: '@/plugins/bootstrap-vue.js', ssr: true },
     { src: '@/plugins/uuid.js', ssr: true },
     { src: '~/plugins/persistedState.js'},
+    { src: '@/plugins/WIRISplugins.js', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
