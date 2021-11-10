@@ -20,7 +20,7 @@
             <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
             <div
               class="p-answerItem__content"
-              v-html="answer.answerContent"
+              v-html="mathTypeDisplay(answer.answerContent)"
             ></div>
           </div>
         </b-form-radio>
@@ -141,7 +141,7 @@
           <SelectForFillBlank :answer="answer" />
           <div
             class="p-answerItem__content"
-            v-html="answer.answerContent"
+            v-html="mathTypeDisplay(answer.answerContent)"
           ></div>
         </div>
         <div class="p-answerItem__func">
@@ -173,12 +173,15 @@ import EventBus from '../../plugins/eventBus'
 import SelectForFillBlank from './SelectForFillBlank.vue'
 import Draggable from './Draggable.vue'
 import Pairing from './Pairing.vue'
+import mathType from '@/extensions/mathType'
+
 export default defineComponent({
   components: {
     SelectForFillBlank,
     Pairing,
     Draggable,
   },
+  mixins: [mathType],
   props: {
     typeQuestion: {
       type: String,
