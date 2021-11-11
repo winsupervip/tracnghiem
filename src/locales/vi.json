@@ -56,5 +56,18 @@
   "AddAnswer": {
     "answer": "Câu trả lời"
   },
-  "addTags": "Thêm thẻ"
+  "addTags": "Thêm thẻ",
+  "exam":{
+    "dashboard": "Trang tổng quan",
+    "exam_title": "Ngân hàng đề thi",
+    "categories": "Danh mục đề thi",
+    "paymentTypes": "Loại đề thi",
+    "searchTitle": "Tìm kiếm đề thi",
+    "status": "Trạng thái",
+    "levels": "Mức độ",
+    "sortby":"Sắp xếp",
+    "filter":"Áp dụng",
+    "add":"Thêm mới",
+    "title":"Danh sách đề thi"
+  }
 }
