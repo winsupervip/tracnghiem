@@ -317,7 +317,7 @@ export default {
     },
     redirect: {
       login: '/login',
-      logout: '/',
+      logout: encodeURIComponent(process.env.BASE_URL || 'http://localhost:3000'),
       home: '/'
     }
   }
