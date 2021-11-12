@@ -1,7 +1,6 @@
 export default {
   getListAnswer: (state) => state.answers,
   getUpdateValueAnswer: (state) => state.updateValueAnswer,
-
   getQuestion: (state) => {
     return {
       question: state.question,
@@ -9,4 +8,5 @@ export default {
     }
   },
   getSelected: (state) => state.selected,
+  getChildQuestion: (state) => state.childQuestions,
 }

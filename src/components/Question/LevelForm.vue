@@ -45,7 +45,7 @@ import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   name: 'LevelForm',
 
-  setup(props) {
+  setup() {
     const data = reactive({
       levelForm: '',
       listLevelRadio: [],

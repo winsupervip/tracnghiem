@@ -2,10 +2,6 @@ export default () => ({
   question: {
     questionContent: '',
     plainText: '',
-    options: {
-      convert_urls: false,
-      entity_encoding: 'raw',
-    },
     isRandom: false,
     indexDataUpdate: -1,
     categories: [],
@@ -21,6 +17,7 @@ export default () => ({
     position: 0,
   },
   answers: [],
+  childQuestions: [],
   updateValueAnswer: {},
   modalShow: false,
   updateValue: {},

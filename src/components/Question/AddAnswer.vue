@@ -88,10 +88,10 @@ import { mapActions, mapGetters } from 'vuex'
 export default defineComponent({
   name: 'Header',
   props: {
-    // addOrUpdateAnswer: {
-    //   type: Function,
-    //   required: true,
-    // },
+    groupQuestion: {
+      type: Boolean,
+      default: false,
+    },
     typeQuestion: {
       type: String,
       required: true,
@@ -108,6 +108,10 @@ export default defineComponent({
     haveRandomAnswer: {
       type: Boolean,
       default: true,
+    },
+    childQuestionId: {
+      type: String,
+      default: '',
     },
   },
   setup() {
@@ -166,6 +170,7 @@ export default defineComponent({
       handleAddAnswer: 'questions/handleAddAnswer',
       handleUpdateAnswer: 'questions/handleUpdateAnswer',
       removeValueUpdateAnswer: 'questions/removeValueUpdateAnswer',
+      addAnswerInChildQuestion: 'questions/addAnswerInChildQuestion',
     }),
     shown() {
       this.doShow = true
@@ -228,11 +233,28 @@ export default defineComponent({
           typeQuestion: this.typeQuestion,
         }
       }
-
+      if (this.groupQuestion) {
+        this.addAnswerInChildQuestion({
+          id: this.childQuestionId,
+          answer: data?.answer,
+        })
+        this.$toast.success('Thêm câu trả lời thành công').goAway(1000)
+        this.isRightAnswer = false
+        this.answerContent = ''
+        this.answerContentRight = ''
+        return
+      }
       if (this.getUpdateValueAnswer?.id) {
         data.answer.id = this.getUpdateValueAnswer.id
         this.handleUpdateAnswer(data)
+        this.$toast.success('Cập nhập câu trả lời thành công').goAway(1000)
         this.removeValueUpdateAnswer()
+        this.isRightAnswer = false
+        this.answerContent = ''
+        this.answerContentRight = ''
+        setTimeout(() => {
+          this.hideModal()
+        }, 200)
       } else {
         console.log(this.getListAnswer.length, this.typeQuestion)
         if (

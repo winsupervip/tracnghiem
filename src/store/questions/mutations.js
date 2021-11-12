@@ -218,4 +218,22 @@ export default {
     ]
     state.selected = state.answers[0].id
   },
+  // question group //
+  ADD_CHILD_QUESTION(state, data) {
+    state.childQuestions.push(data)
+  },
+  ADD_ANSWER_IN_CHILD_QUESTION(state, data) {
+    const index = state.childQuestions.findIndex((item) => item.id === data.id)
+    state.childQuestions[index].answers.push(data.answer)
+  },
+  IS_RANDOM(state, data) {
+    const index = state.answers.findIndex((item) => item.id === data)
+    const value = state.answers[index]
+    if (value?.left) {
+      state.answers[index].left.random = !state.answers[index].left.random
+      state.answers[index].right.random = !state.answers[index].right.random
+    } else {
+      state.answers[index].random = !state.answers[index].random
+    }
+  },
 }
