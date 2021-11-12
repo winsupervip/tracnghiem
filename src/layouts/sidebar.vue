@@ -1,27 +1,8 @@
 <template>
-  <div>
-    <header ref="headerDashboard" class="header--dashboardTheme">
-      <nuxt-link v-b-toggle.sidebar-1 to="" class="toggle--sp">
-        <svg width="24" height="24" viewBox="0 0 24 24" role="presentation">
-          <path
-            d="M5 15h14v2H5zm0-8h14v2H5zm0 4h14v2H5z"
-            fill="currentColor"
-            fill-rule="evenodd"
-          ></path>
-        </svg>
-      </nuxt-link>
-    </header>
-    <div ref="dashboard" class="l-dashboard">
-      <b-sidebar
-        id="sidebar-1"
-        ref="bSidebar"
-        :visible="visible"
-        no-header
-        :backdrop-variant="variant"
-        :backdrop="backdrop"
-        shadow
-      >
-        <div ref="nav" class="l-dashboard__nav">
+  <div class="container-fluid">
+    <div class="row flex-nowrap">
+      <div class="col-auto px-0">
+        <div class="border-end bg-sidebar sidebar-container">
           <div class="l-dashboard__nav__global">
             <div class="l-dashboard__nav__global__inner">
               <div class="p-nav__icons">
@@ -142,7 +123,10 @@
               </div>
             </div>
           </div>
-          <div class="l-dashboard__nav__menu">
+          <div
+            id="sidebar"
+            class="l-dashboard__nav__menu collapse collapse-horizontal show"
+          >
             <div
               v-if="isDisplayMenu || isDisplayMenuSp"
               class="p-navMenu__logo"
@@ -248,22 +232,25 @@
             </a>
           </div>
         </div>
-      </b-sidebar>
-      <div class="l-dashboard__content">
-        <button v-b-toggle.sidebar-1>open menu</button>
-        <Nuxt />
       </div>
+      <main class="col ps-md-2 pt-2">
+        <a
+          href="#"
+          data-bs-target="#sidebar"
+          data-bs-toggle="collapse"
+          class="border rounded-3 p-1 text-decoration-none"
+          ><i class="bi bi-list bi-lg py-2 p-1"></i> Menu</a
+        >
+        <Nuxt />
+      </main>
     </div>
   </div>
 </template>
-
 <script>
 import $ from 'jquery/dist/jquery.slim'
-import { defineComponent } from '@vue/composition-api'
 import _ from 'lodash'
 
-export default defineComponent({
-  name: 'Dashboard',
+export default {
   data() {
     return {
       backdrop: false,
@@ -272,35 +259,6 @@ export default defineComponent({
       isDisplayMenu: true,
       isDisplayMenuSp: false,
     }
-  },
-  watch: {
-    visible(val) {
-      console.log('visible ' + val)
-    },
-  },
-  created() {
-    if (process.browser) {
-      // eslint-disable-next-line nuxt/no-globals-in-created
-      if (window.innerWidth < 991) {
-        console.log('created 991')
-        this.visible = false
-      } else {
-        this.visible = true
-      }
-    }
-  },
-  beforeMount() {
-    window.addEventListener('resize', this.handleWindowResize)
-  },
-  mounted() {
-    console.log('mounted')
-    this.handleWindowResize()
-    document.body.classList.add('dashboard')
-    this.toggleItemMenu()
-  },
-  destroyed() {
-    document.body.classList.remove('dashboard')
-    window.removeEventListener('resize', this.handleWindowResize)
   },
   methods: {
     toggleSidebar() {
@@ -368,7 +326,7 @@ export default defineComponent({
       })
     },
   },
-})
+}
 </script>
 
 <style lang="scss">

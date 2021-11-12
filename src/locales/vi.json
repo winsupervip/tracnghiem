@@ -57,7 +57,7 @@
     "answer": "Câu trả lời"
   },
   "addTags": "Thêm thẻ",
-  "exam":{
+  "exam": {
     "dashboard": "Trang tổng quan",
     "exam_title": "Ngân hàng đề thi",
     "categories": "Danh mục đề thi",
@@ -65,9 +65,42 @@
     "searchTitle": "Tìm kiếm đề thi",
     "status": "Trạng thái",
     "levels": "Mức độ",
-    "sortby":"Sắp xếp",
-    "filter":"Áp dụng",
-    "add":"Thêm mới",
-    "title":"Danh sách đề thi"
+    "sortby": "Sắp xếp",
+    "filter": "Áp dụng",
+    "add": "Thêm mới",
+    "title": "Danh sách đề thi",
+    "form": {
+      "title": "Tiêu đề",
+      "description": "Mô tả",
+      "tags": "Gắn thẻ",
+      "setting": "Cài đặt",
+      "suffleQuestions": "Câu hỏi",
+      "suffleAnswers": "Đáp án",
+      "checkAnswersWhileTest": "Trong khi làm bài",
+      "checkAnswersAfterTest": "Sau khi làm bài",
+      "nonExamTime": "Không tính thời gian",
+      "examTime": "Hoặc số phút",
+      "maximumTest": "Số lượt thi tối đa / user",
+      "maximumTestHelper": "Nhập 0 để không giới hạn",
+      "numberQuestionsTest": "Số câu hỏi / lượt thi",
+      "allowChangeSettings": "Cho phép thi sinh thay đổi cài đặt",
+      "numberQuestionsTestHelp": "Số câu hỏi tối đa mà thí sinh được phép thi",
+      "allowChangeSettingsHelp": "Thí sinh được điều chỉnh các cài đặt để tạo đề theo mong muốn",
+      "submitPublish": "Xuất bản",
+      "submitPrivate": "Xuất bản",
+      "submitDraft": "Lưu bản nháp",
+      "display": "Hiển thị",
+      "categoryTitle": "Chuyên mục",
+      "level": "Mức độ",
+      "avatar": "Ảnh đại diện",
+      "seoTitle": "Tiêu đề",
+      "seoDescription": "Mô tả",
+      "seoSetting": "Cài đặt SEO",
+      "categorySelect": "Chọn hoặc nhập tên danh mục",
+      "publish": "Mọi người có thể thấy post.",
+      "private": "Chỉ những người có liên kết đến post này, mới có thể xem được.",
+      "draft": "Chỉ có bạn mới có thể xem post này.",
+      "slug": "Đường dẫn"
+    }
   }
 }

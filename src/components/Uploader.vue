@@ -1,5 +1,5 @@
 <template>
-  <div class="p-question__box">
+  <div>
     <form
       v-if="(isInitial || isSaving) && image.length === 0"
       class="wrapper-img"
@@ -36,12 +36,7 @@
       </div>
     </form>
     <div v-else class="wrapper-img">
-      <b-icon
-        class="wrapper-icon"
-        icon="card-image"
-        aria-hidden="true"
-      ></b-icon>
-      <img :src="image" class="card" />
+      <img :src="image" class="img-fluid" style="width: 100%" />
     </div>
     <!--PROCESS-->
     <div v-if="isProcess" class="text-center">
@@ -55,13 +50,13 @@
       </button>
     </div>
     <!--SUCCESS-->
-    <div v-if="isSuccess" class="text-center">
+    <!-- <div v-if="isSuccess" class="text-center">
       <h2>Tải tệp tin thành công</h2>
       <div v-if="accept"></div>
       <p>
         <a href="javascript:void(0)" @click="reup()">Tải tệp tin khác</a>
       </p>
-    </div>
+    </div> -->
     <!--FAILED-->
     <div v-if="isFailed" class="text-center">
       <h2>Tải tệp tin thất bại</h2>
@@ -75,21 +70,25 @@
         <p>
           <b>Vui lòng sử dụng hình ảnh chất lượng cao để thu hút người dùng</b>
         </p>
-        <div class="wrapper">
+        <div class="wrapper d-flex justify-content-between">
           <b-button
             v-b-modal.modal-prevent-closing
-            class="btn btn-outline-primary btn_transparent"
+            class="btn btn-sm btn-outline-primary btn_transparent"
             ><b-icon icon="link45deg" aria-hidden="true" class="icon"></b-icon
             >Link ảnh</b-button
           >
-          <label class="btn btn-outline-primary" @click="reset()"
-            ><b-icon
+          <button
+            class="btn btn-sm btn-outline-primary"
+            type="button"
+            @click="reup()"
+          >
+            <b-icon
               icon="cloud-upload"
               aria-hidden="true"
               class="icon"
             ></b-icon>
-            Tải lại</label
-          >
+            Tải lại
+          </button>
           <b-modal id="modal-prevent-closing" ref="modal" title="Link ảnh">
             <form ref="form">
               <b-form-group
@@ -122,6 +121,10 @@ export default {
   // middleware: "isAdmin",
   components: {},
   props: {
+    value: {
+      type: String,
+      required: true,
+    },
     accept: {
       type: String,
       required: true,
@@ -159,8 +162,11 @@ export default {
       this.addSeoAvatar(this.image)
     },
   },
+  created() {
+    this.image = this.value
+  },
   mounted() {
-    this.reset()
+    // this.reset()
   },
   methods: {
     ...mapActions({ addSeoAvatar: 'questions/addSeoAvatar' }),
@@ -185,7 +191,7 @@ export default {
         const { data } = await fileApi.upload(formData)
         if (data.state) {
           this.currentStatus = STATUS_SUCCESS
-          // this.$emit('input', data.object)
+          this.$emit('input', data.object.url)
           this.image = data.object.url
         } else {
           // console.log("upload fail");
@@ -248,54 +254,5 @@ export default {
 }
 .dropzone {
   position: relative;
-}
-.input-avata {
-  display: none;
-}
-.wrapper {
-  display: flex;
-  padding-top: 0.5rem;
-  justify-content: space-between;
-  align-items: flex-end;
-  p {
-    margin: 0;
-  }
-}
-
-.wrapper-img {
-  // padding-top: 0.5rem;
-  // border-top: 1px solid #aaa;
-  position: relative;
-  min-height: 200px;
-
-  .wrapper-icon {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-}
-
-.icon {
-  margin-right: 5px;
-}
-
-.btn {
-  @media screen and (max-width: 374px) {
-    padding: 10px;
-  }
-
-  @media screen and (max-width: 1200px) and (min-width: 769px) {
-    padding: 10px;
-  }
 }
 </style>
