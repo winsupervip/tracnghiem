@@ -36,12 +36,7 @@
       </div>
     </form>
     <div v-else class="wrapper-img">
-      <b-icon
-        class="wrapper-icon"
-        icon="card-image"
-        aria-hidden="true"
-      ></b-icon>
-      <img :src="image" class="card" />
+      <img :src="image" class="img-fluid" style="width: 100%" />
     </div>
     <!--PROCESS-->
     <div v-if="isProcess" class="text-center">
@@ -55,13 +50,13 @@
       </button>
     </div>
     <!--SUCCESS-->
-    <div v-if="isSuccess" class="text-center">
+    <!-- <div v-if="isSuccess" class="text-center">
       <h2>Tải tệp tin thành công</h2>
       <div v-if="accept"></div>
       <p>
         <a href="javascript:void(0)" @click="reup()">Tải tệp tin khác</a>
       </p>
-    </div>
+    </div> -->
     <!--FAILED-->
     <div v-if="isFailed" class="text-center">
       <h2>Tải tệp tin thất bại</h2>
@@ -75,14 +70,18 @@
         <p>
           <b>Vui lòng sử dụng hình ảnh chất lượng cao để thu hút người dùng</b>
         </p>
-        <div class="wrapper">
+        <div class="wrapper d-flex justify-content-between">
           <b-button
             v-b-modal.modal-prevent-closing
             class="btn btn-sm btn-outline-primary btn_transparent"
             ><b-icon icon="link45deg" aria-hidden="true" class="icon"></b-icon
             >Link ảnh</b-button
           >
-          <button class="btn btn-sm btn-outline-primary" @click="reset()">
+          <button
+            class="btn btn-sm btn-outline-primary"
+            type="button"
+            @click="reup()"
+          >
             <b-icon
               icon="cloud-upload"
               aria-hidden="true"
@@ -122,6 +121,10 @@ export default {
   // middleware: "isAdmin",
   components: {},
   props: {
+    value: {
+      type: String,
+      required: true,
+    },
     accept: {
       type: String,
       required: true,
@@ -159,8 +162,11 @@ export default {
       this.addSeoAvatar(this.image)
     },
   },
+  created() {
+    this.image = this.value
+  },
   mounted() {
-    this.reset()
+    // this.reset()
   },
   methods: {
     ...mapActions({ addSeoAvatar: 'questions/addSeoAvatar' }),

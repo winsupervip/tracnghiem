@@ -126,6 +126,8 @@ export default {
         this.isTyping = false
       }, 700)
       this.$emit('input', this.editor.getContent())
+
+      this.$emit('text', this.editor.getContent({ format: 'text' }))
     },
     onFocusin() {
       if (

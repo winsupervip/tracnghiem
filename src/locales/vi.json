@@ -96,7 +96,11 @@
       "seoTitle": "Tiêu đề",
       "seoDescription": "Mô tả",
       "seoSetting": "Cài đặt SEO",
-      "categorySelect": "Chọn hoặc nhập tên danh mục"
+      "categorySelect": "Chọn hoặc nhập tên danh mục",
+      "publish": "Mọi người có thể thấy post.",
+      "private": "Chỉ những người có liên kết đến post này, mới có thể xem được.",
+      "draft": "Chỉ có bạn mới có thể xem post này.",
+      "slug": "Đường dẫn"
     }
   }
 }
