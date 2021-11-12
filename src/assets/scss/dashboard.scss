@@ -402,3 +402,12 @@ body.dashboard {
     border-color: #1c3988;
   }
 }
+.bg-sidebar {
+  background-color: #0747a6;
+}
+.sidebar-container {
+  display: flex;
+  flex-wrap: nowrap;
+  min-height: 100vh;
+  position: relative;
+}

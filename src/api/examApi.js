@@ -6,7 +6,7 @@ export default {
 
     if (urlQuery.categories && urlQuery.categories.length > 0) {
       const categoryUrl = urlQuery.categories.join('&categories=')
-      url = '&categories=' + categoryUrl
+      url += '&categories=' + categoryUrl
     }
 
     if (urlQuery.tags && urlQuery.tags.length > 0) {

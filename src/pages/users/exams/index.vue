@@ -88,13 +88,21 @@
               :placeholder="$t('exam.sortby')"
             />
           </b-form-group>
-          <div class="col-12 col-md-3 mb-3 d-flex justify-content-around">
-            <b-button variant="outline-primary" type="submit">
+          <div
+            class="
+              col-12 col-md-3
+              mb-3
+              d-flex
+              justify-content-around
+              align-items-end
+            "
+          >
+            <b-button variant="outline-primary" @click="fetch()">
               <b-icon-filter></b-icon-filter> {{ $t('exam.filter') }}
             </b-button>
-            <b-button variant="primary">
+            <nuxt-link class="btn btn-primary" to="/users/exams/add">
               <b-icon-plus></b-icon-plus> {{ $t('exam.add') }}
-            </b-button>
+            </nuxt-link>
           </div>
         </b-form-row>
       </b-form>
@@ -138,7 +146,7 @@ import EmptyData from '@/components/EmptyData.vue'
 
 export default defineComponent({
   components: { ExamItem, EmptyData },
-  layout: 'dashboard',
+  layout: 'sidebar',
   auth: true,
   setup() {
     const { app, $loader, $logger } = useContext()
@@ -215,6 +223,7 @@ export default defineComponent({
 
     return {
       ...toRefs(data),
+      fetch,
     }
   },
   methods: {
