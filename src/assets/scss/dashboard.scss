@@ -411,3 +411,61 @@ body.dashboard {
   min-height: 100vh;
   position: relative;
 }
+/*      Custom Dropzone      */
+.dropzone {
+  padding: 15px 10px 20px !important;
+  border: 2px dashed rgba(0, 0, 0, 0.13) !important;
+  background: transparent !important;
+  text-align: center;
+}
+.dropzone:hover {
+  background: #fafafa !important;
+  transition: all 0.5s !important;
+}
+.dropzone .dz-message .icon {
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+.dropzone .dz-message .message {
+  font-size: 16px;
+  font-weight: 200;
+}
+.dropzone .dz-message .note {
+  font-size: 16px;
+  margin-top: 18px;
+  font-weight: 300;
+}
+.exam-form {
+  label {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  h2 {
+    font-size: 15px;
+    font-weight: bold;
+  }
+  h3 {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .custom-control-label {
+    font-size: 14px;
+    font-weight: normal;
+  }
+  button {
+    font-size: 14px;
+  }
+  p {
+    font-size: 13px;
+  }
+  .vue-treeselect__label {
+    font-weight: normal;
+  }
+  .tree-select-container {
+    min-height: 215px;
+
+    .vue-treeselect__control {
+      border-radius: unset;
+    }
+  }
+}

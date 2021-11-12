@@ -1,5 +1,5 @@
 <template>
-  <div class="p-question__box">
+  <div>
     <form
       v-if="(isInitial || isSaving) && image.length === 0"
       class="wrapper-img"
@@ -78,18 +78,18 @@
         <div class="wrapper">
           <b-button
             v-b-modal.modal-prevent-closing
-            class="btn btn-outline-primary btn_transparent"
+            class="btn btn-sm btn-outline-primary btn_transparent"
             ><b-icon icon="link45deg" aria-hidden="true" class="icon"></b-icon
             >Link ảnh</b-button
           >
-          <label class="btn btn-outline-primary" @click="reset()"
-            ><b-icon
+          <button class="btn btn-sm btn-outline-primary" @click="reset()">
+            <b-icon
               icon="cloud-upload"
               aria-hidden="true"
               class="icon"
             ></b-icon>
-            Tải lại</label
-          >
+            Tải lại
+          </button>
           <b-modal id="modal-prevent-closing" ref="modal" title="Link ảnh">
             <form ref="form">
               <b-form-group
@@ -185,7 +185,7 @@ export default {
         const { data } = await fileApi.upload(formData)
         if (data.state) {
           this.currentStatus = STATUS_SUCCESS
-          // this.$emit('input', data.object)
+          this.$emit('input', data.object.url)
           this.image = data.object.url
         } else {
           // console.log("upload fail");
@@ -248,54 +248,5 @@ export default {
 }
 .dropzone {
   position: relative;
-}
-.input-avata {
-  display: none;
-}
-.wrapper {
-  display: flex;
-  padding-top: 0.5rem;
-  justify-content: space-between;
-  align-items: flex-end;
-  p {
-    margin: 0;
-  }
-}
-
-.wrapper-img {
-  // padding-top: 0.5rem;
-  // border-top: 1px solid #aaa;
-  position: relative;
-  min-height: 200px;
-
-  .wrapper-icon {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-}
-
-.icon {
-  margin-right: 5px;
-}
-
-.btn {
-  @media screen and (max-width: 374px) {
-    padding: 10px;
-  }
-
-  @media screen and (max-width: 1200px) and (min-width: 769px) {
-    padding: 10px;
-  }
 }
 </style>

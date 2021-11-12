@@ -5,7 +5,7 @@
       <b-form>
         <b-form-row class="row">
           <b-form-group
-            label="Từ khóa"
+            :label="$t('keyword')"
             label-for="keyword"
             class="col-12 col-md-6 mb-3"
           >
@@ -97,10 +97,10 @@
               align-items-end
             "
           >
-            <b-button variant="outline-primary" @click="fetch()">
+            <b-button variant="outline-primary btn-sm" @click="fetch()">
               <b-icon-filter></b-icon-filter> {{ $t('exam.filter') }}
             </b-button>
-            <nuxt-link class="btn btn-primary" to="/users/exams/add">
+            <nuxt-link class="btn btn-sm btn-primary" to="/users/exams/add">
               <b-icon-plus></b-icon-plus> {{ $t('exam.add') }}
             </nuxt-link>
           </div>
