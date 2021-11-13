@@ -57,6 +57,7 @@
     "answer": "Câu trả lời"
   },
   "addTags": "Thêm thẻ",
+  "keyword": "Từ khóa",
   "exam": {
     "dashboard": "Trang tổng quan",
     "exam_title": "Ngân hàng đề thi",
@@ -93,8 +94,8 @@
       "categoryTitle": "Chuyên mục",
       "level": "Mức độ",
       "avatar": "Ảnh đại diện",
-      "seoTitle": "Tiêu đề",
-      "seoDescription": "Mô tả",
+      "seoTitle": "Tiêu đề SEO",
+      "seoDescription": "Mô tả SEO",
       "seoSetting": "Cài đặt SEO",
       "categorySelect": "Chọn hoặc nhập tên danh mục",
       "publish": "Mọi người có thể thấy post.",

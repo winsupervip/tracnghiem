@@ -16,6 +16,7 @@ Vue.filter('formatDurationDay', function (value) {
 })
 
 Vue.filter('slugify', function (value, separator = '-') {
+  if (!value) return ''
   return value
     .toString()
     .normalize('NFD') // split an accented letter in the base letter and the acent

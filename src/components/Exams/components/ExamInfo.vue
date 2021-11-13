@@ -1,12 +1,9 @@
 <template>
   <div>
-    <ValidationProvider
-      v-slot="{ valid, errors }"
-      rules="required"
-      :name="$t('exam.form.title')"
-    >
+    <ValidationProvider :name="$t('exam.form.title')" rules="required">
       <b-form-group
-        :label="$t('exam.form.title')"
+        slot-scope="{ valid, errors }"
+        :label="$t('exam.form.title') + ' (*)'"
         label-for="title"
         class="col-12 mb-3"
       >
@@ -16,19 +13,16 @@
           trim
           :state="errors[0] ? false : valid ? true : null"
         ></b-form-input>
-        <b-form-invalid-feedback id="titleFeedback">
+        <b-form-invalid-feedback>
           {{ errors[0] }}
         </b-form-invalid-feedback>
       </b-form-group>
     </ValidationProvider>
 
-    <ValidationProvider
-      v-slot="{ valid, errors }"
-      rules="required"
-      :name="$t('exam.form.tags')"
-    >
+    <ValidationProvider rules="required" :name="$t('exam.form.tags')">
       <b-form-group
-        :label="$t('exam.form.tags')"
+        slot-scope="{ valid, errors }"
+        :label="$t('exam.form.tags') + ' (*)'"
         label-for="tags"
         class="col-12 mb-3"
       >
@@ -43,13 +37,10 @@
       </b-form-group>
     </ValidationProvider>
 
-    <ValidationProvider
-      v-slot="{ valid, errors }"
-      rules="required"
-      :name="$t('exam.form.description')"
-    >
+    <ValidationProvider rules="required" :name="$t('exam.form.description')">
       <b-form-group
-        :label="$t('exam.form.description')"
+        slot-scope="{ valid, errors }"
+        :label="$t('exam.form.description') + ' (*)'"
         label-for="description"
         class="col-12 mb-3"
       >
@@ -64,6 +55,7 @@
 <script>
 import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
 import { mapGetters, mapActions } from 'vuex'
+import _ from 'lodash'
 export default defineComponent({
   setup() {
     const data = reactive({
@@ -95,19 +87,20 @@ export default defineComponent({
     this.title = this.examInfo.title
     this.description = this.examInfo.description
     this.tags = this.examInfo.tags
+    console.log(this.title)
   },
   methods: {
     ...mapActions({
       setExamInfo: 'exams/setExamInfo',
       setSeoDescription: 'exams/setSeoDescription',
     }),
-    commitData() {
+    commitData: _.debounce(function () {
       this.setExamInfo({
         title: this.title,
         description: this.description,
         tags: this.tags,
       })
-    },
+    }, 200),
     getText(val) {
       if (val) {
         let description = ''

@@ -21,7 +21,7 @@
       </div>
       <div class="list-group-item">
         <p>{{ statusMessage }}</p>
-        <b-button variant="outline-primary" @click="submit()">
+        <b-button variant="outline-primary" type="submit">
           <b-icon-file-earmark-check></b-icon-file-earmark-check>
           {{ $t('exam.form.submitDraft') }}
         </b-button>

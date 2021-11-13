@@ -25,11 +25,6 @@ export default defineComponent({
   created() {
     this.dataForm = Object.assign({}, this.exam)
   },
-  methods: {
-    async submit() {
-      console.log('submit')
-      await this.setExam(Object.assign({}, this.dataForm))
-    },
-  },
+  methods: {},
 })
 </script>
