@@ -4,16 +4,13 @@
       <div class="p-question p-question--singleChoice">
         <div class="p-question__left">
           <HeaderOfSingleQuestion :question-title="questionTitle" />
-          <AddAnswer
-            v-if="questionType !== 'short-answer'"
-            :type-question="questionType"
-            :have-random-answer="haveRandomAnswer"
-            :have-right-answer="haveRightAnswer"
-            :is-pairing="isPairing"
-          />
-          <strong v-else>Nhập Câu trả lời (*)</strong>
-          <ListAnswer :type-question="questionType" :errors="errors" />
-          <CommentOrNote />
+          <AddChildrenAnswer />
+          <!-- <CommentOrNote /> -->
+          <!-- <QuestionChild
+            v-for="question in getChildQuestion"
+            :key="question.id"
+            :question="question"
+          /> -->
         </div>
         <div class="p-question__right">
           <PublishQuestion :on-submit="onSubmit" />
@@ -31,67 +28,37 @@
 <script>
 import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
 import { mapGetters, mapActions } from 'vuex'
-import PublishQuestion from './PublishQuestion.vue'
-import LevelForm from './LevelForm.vue'
-import Category from './Category.vue'
-import HeaderOfSingleQuestion from './HeaderOfSingleQuestion.vue'
-import ListAnswer from './ListAnswers.vue'
-import UploadImage from './UploadImage.vue'
-import AddSeo from './AddSeo.vue'
-import CommentOrNote from './CommentOrNote.vue'
-import AddAnswer from './AddAnswer.vue'
-import CauHoiApi from '@/api/cauHoi'
+import PublishQuestion from '../../../../components/Question/PublishQuestion.vue'
+import AddSeo from '../../../../components/Question/AddSeo.vue'
+import LevelForm from '../../../../components/Question/LevelForm.vue'
+import Category from '../../../../components/Question/Category.vue'
+import HeaderOfSingleQuestion from '../../../../components/Question/HeaderOfSingleQuestion.vue'
+// import ListChildrenAnswer from '../../../../components/Question/ListAnswers.vue'
+import UploadImage from '../../../../components/Question/UploadImage.vue'
+import AddChildrenAnswer from '../../../../components/Question/AddChildrenAnswer.vue'
+import CauHoiApi from '../../../../api/cauHoi'
 // eslint-disable-next-line import/no-unresolved
-import Uploader from '@/components/Uploader'
+import Uploader from '../../../../components/Uploader.vue'
 export default defineComponent({
   components: {
     HeaderOfSingleQuestion,
     PublishQuestion,
     LevelForm,
     Category,
-    ListAnswer,
+    // ListChildrenAnswer,
     // eslint-disable-next-line vue/no-unused-components
     UploadImage,
     AddSeo,
-    CommentOrNote,
     Uploader,
-    AddAnswer,
+    AddChildrenAnswer,
   },
-
-  props: {
-    questionType: {
-      type: String,
-      required: true,
-    },
-    questionTypeId: {
-      type: String,
-      required: true,
-    },
-    questionTitle: {
-      type: String,
-      required: true,
-    },
-    haveRightAnswer: {
-      type: Boolean,
-      default: true,
-    },
-    haveRandomAnswer: {
-      type: Boolean,
-      default: true,
-    },
-    isPairing: {
-      type: Boolean,
-      default: false,
-    },
-    handleAnswer: {
-      type: Function,
-      required: true,
-    },
-  },
+  layout: 'dashboard',
+  auth: true,
 
   setup() {
     const data = reactive({
       errors: '',
+      questionTitle: 'Câu hỏi chùm',
     })
 
     return {
@@ -99,8 +66,12 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters({ getQuestion: 'questions/getQuestion' }),
+    ...mapGetters({
+      getQuestion: 'questions/getQuestion',
+      getChildQuestion: 'questions/getChildQuestion',
+    }),
   },
+
   methods: {
     ...mapActions({
       restAnswer: 'questions/restAnswer',
@@ -134,9 +105,6 @@ export default defineComponent({
           () => {
             // this.restAnswer()
             this.$toast.success('Thêm Thành Công').goAway(1500)
-            setTimeout(() => {
-              this.$router.push({ path: '/users/questions/' })
-            }, 500)
           },
           () => {
             this.$toast.show('Có lỗi xảy ra').goAway(1500)
