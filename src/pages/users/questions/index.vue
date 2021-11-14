@@ -112,6 +112,7 @@
       v-for="question in questionList"
       :key="question.id"
       :questions="question"
+      :delete-question="deleteQuestion"
     />
 
     <b-pagination
@@ -261,6 +262,12 @@ export default defineComponent({
         console.log('response', response)
       })
     }, 1000),
+    deleteQuestion(value) {
+      const index = this.questionList.findIndex(
+        (item) => item.hashId === value.hashId
+      )
+      this.questionList.splice(index, 1)
+    },
 
     loadOptions({ action, parentNode, callback }) {
       // Typically, do the AJAX stuff here.

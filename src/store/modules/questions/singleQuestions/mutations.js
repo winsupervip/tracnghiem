@@ -186,4 +186,10 @@ export default {
   REST_ANSWERS(state) {
     state.answers = []
   },
+  COPY_QUESTIONS(state, data) {
+    const question = data.question
+    const answers = data.answers
+    state.question = question
+    state.answers = answers
+  },
 }

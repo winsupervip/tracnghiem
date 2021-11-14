@@ -23,14 +23,24 @@
                     </div>
                     <div class="d-flex">
                       <b-button-group>
-                        <b-button variant="info" size="sm" class="px-2">
-                          <b-icon icon="pencil-square" />
+                        <b-button
+                          variant="info"
+                          size="sm"
+                          class="px-2"
+                          @click="
+                            $bvModal.show('bv-modal-update-child-question')
+                          "
+                        >
+                          <b-icon
+                            icon="pencil-square"
+                            @click="updateQuestion(question)"
+                          />
                         </b-button>
                         <b-button
                           variant="danger"
                           size="sm"
                           class="px-2"
-                          @click="deletedGroupQuestion(questionlist)"
+                          @click="deletedQuestion(question)"
                         >
                           <b-icon icon="trash" />
                         </b-button>
@@ -38,6 +48,29 @@
                     </div>
                   </div>
                 </li>
+                <b-modal
+                  id="bv-modal-update-child-question"
+                  ref="modal-question"
+                  size="xl"
+                  :title="$t('addMoreAnswers')"
+                  hide-footer
+                  @shown="shown"
+                  @hide="hide"
+                >
+                  <TinyEditor
+                    v-model="questionContent"
+                    :options="optionsText"
+                  />
+                  <b-button class="btnQuestion" variant="outline-primary">{{
+                    $t('Cập nhập câu trả lời')
+                  }}</b-button>
+                  <b-button
+                    class="btnQuestion btnQuestion--close"
+                    variant="outline-primary"
+                    @click="hideModal"
+                    >{{ $t('close') }}</b-button
+                  >
+                </b-modal>
               </ul>
             </div>
           </div>
@@ -48,7 +81,12 @@
 </template>
 
 <script>
-import { defineComponent, useContext } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  useContext,
+  reactive,
+  toRefs,
+} from '@nuxtjs/composition-api'
 import QuestionApi from '@/api/question-list-page'
 export default defineComponent({
   name: 'MultiListPage',
@@ -60,18 +98,47 @@ export default defineComponent({
     },
   },
 
-  setup: () => {
+  setup: (props) => {
     const { $logger } = useContext()
-    const deletedGroupQuestion = async (value) => {
-      const result = await QuestionApi.deletedQuestionGroup(value.hashId)
-
-      $logger.info('123', value)
-      $logger.info('1234', result)
+    const deletedQuestion = async (question) => {
+      const result = await QuestionApi.deletedQuestion(question.hashId)
+      $logger.info('deleted', result)
+    }
+    const data = reactive({
+      questionContent: '',
+      optionsText: {
+        convert_urls: false,
+        entity_encoding: 'raw',
+      },
+      doShow: false,
+      okOnly: true,
+    })
+    const updateQuestion = (question) => {
+      // const questionTitle = props.questionlist.questions.filter(
+      //   (question) => question.hashId === hashId
+      // )
+      // console.log(questionTitle)
+      // data.questionContent = questionTitle[0].questionContent
+      $logger.info('update', question)
     }
 
     return {
-      deletedGroupQuestion,
+      ...toRefs(data),
+      deletedQuestion,
+      updateQuestion,
     }
+  },
+  methods: {
+    shown() {
+      this.doShow = true
+    },
+    hide() {
+      this.doShow = false
+      // this.updateAnswer('remove_data')
+    },
+    hideModal() {
+      this.$refs['modal-question'].hide()
+    },
   },
 })
 </script>

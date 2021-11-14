@@ -58,4 +58,7 @@ export default {
   restAnswer({ commit }, data) {
     commit('REST_ANSWERS')
   },
+  copyQuestion({ commit }, data) {
+    commit('COPY_QUESTIONS', data)
+  },
 }
