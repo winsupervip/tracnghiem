@@ -18,7 +18,7 @@ import ExamForm from '@/components/Exams/ExamForm.vue'
 
 export default defineComponent({
   components: { ExamForm },
-  layout: 'sidebar',
+  layout: 'dashboard',
   auth: true,
   setup() {
     const { app } = useContext()

@@ -267,6 +267,8 @@ export default {
     transpile: [/@nuxtjs[\\/]composition-api/],
     extend(config, ctx) {
       if (ctx.isDev) {
+        config.mode = 'development'
+      } else {
         config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
       }
     },
