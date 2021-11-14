@@ -3,7 +3,7 @@ export default {
     commit('ADD_CATEGORY', data)
   },
   addTags({ commit }, data) {
-    commit('ADD_TAGS', data)
+    commit('ADD_TAGS', [...data])
   },
   addQuestionContent({ commit }, data) {
     commit('ADD_QUESTION_CONTENT', data)
@@ -40,6 +40,9 @@ export default {
   handleUpdateAnswer({ commit }, data) {
     commit('HANDLE_UPDATE_ANSWER', data)
   },
+  handleUpdateSelectForFillBlank({ commit }, data) {
+    commit('HANDLE_UPDATE_SELECT_FOR_FILL_BLANK', data)
+  },
   handleUpdateDraggableAnswer({ commit }, data) {
     commit('HANDLE_UPDATE_ANSWER_FOR_DRAGGABLE', data)
   },
@@ -60,5 +63,21 @@ export default {
   },
   copyQuestion({ commit }, data) {
     commit('COPY_QUESTIONS', data)
+  },
+  setNullAnswerId({ commit }, answerIndex) {
+    commit('SET_NULL_ID_ANSWER', answerIndex)
+  },
+  seedDataForRightWrongAnswer({ commit }) {
+    commit('SEED_DATA_FOR_RIGHT_WRONG_ANSWER')
+  },
+  // question group ///
+  addChildQuestion({ commit }, data) {
+    commit('ADD_CHILD_QUESTION', data)
+  },
+  addAnswerInChildQuestion({ commit }, data) {
+    commit('ADD_ANSWER_IN_CHILD_QUESTION', data)
+  },
+  isRandom({ commit }, data) {
+    commit('IS_RANDOM', data)
   },
 }

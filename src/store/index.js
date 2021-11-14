@@ -1,29 +1,30 @@
-import { Store } from 'vuex'
 import { uuid } from 'vue-uuid'
-import user from './modules/user'
-import question from './modules/questions/singleQuestions'
-
+import * as Cookies from 'js-cookie'
+import cookie from 'cookie'
 export const actions = {
-  nuxtServerInit({ dispatch }) {
-    console.log('store index dispath')
-    let uid = user.state.getSessionId
-    console.log(uid)
+  async nuxtServerInit({ dispatch }, { req }) {
+    const key = 'app-store'
+    let cookieValue = ''
+    if (process.server) {
+      try {
+        const parsedCookies = cookie.parse(req.headers.cookie)
+        cookieValue = parsedCookies[key]
+      } catch (err) {
+        console.log(err)
+        cookieValue = ''
+      }
+    } else {
+      cookieValue = Cookies.get(key)
+    }
+    let uid = ''
+    if (cookieValue) {
+      const jsonData = JSON.parse(cookieValue)
+      uid = jsonData?.user?.userSessionId
+    }
     if (!uid) {
       uid = uuid.v4()
-      console.log(uid)
-      return Promise.all([dispatch('user/initSession', uid)])
     }
+    console.log('uid in nuxtServerInit')
+    await dispatch('user/initSession', uid)
   },
 }
-
-const createStore = () => {
-  return new Store({
-    namespaced: true,
-    modules: {
-      user,
-      question,
-    },
-  })
-}
-
-export default createStore

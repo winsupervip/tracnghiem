@@ -156,6 +156,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: '@/plugins/i18n', ssr: true },
     { src: '@/plugins/bootstrapPlugin.js', ssr: false },
     { src: '@/plugins/polyfills.client.js', ssr: false },
     { src: '@/plugins/editor.js', ssr: false },
@@ -168,6 +169,7 @@ export default {
     { src: '@/plugins/bootstrap-vue.js', ssr: true },
     { src: '@/plugins/uuid.js', ssr: true },
     { src: '~/plugins/persistedState.js'},
+    { src: '@/plugins/WIRISplugins.js', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -190,7 +192,6 @@ export default {
     '@nuxtjs/auth-next',
     'bootstrap-vue/nuxt',
     '@nuxtjs/toast',
-    '@nuxtjs/i18n',
   ],
   // https://github.com/nuxt-community/google-gtag-module
   'google-gtag': {
@@ -295,7 +296,7 @@ export default {
           token: 'https://dev-api.tracnghiem.vn/api/Account/token',
           logout:
             'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/logout?redirect_uri=' +
-            encodeURIComponent(String('/home'))
+            encodeURIComponent(process.env.BASE_URL || 'http://localhost:3000')
         },
         token: {
           property: 'access_token',
@@ -316,7 +317,7 @@ export default {
     },
     redirect: {
       login: '/login',
-      logout: '/',
+      logout: encodeURIComponent(process.env.BASE_URL || 'http://localhost:3000'),
       home: '/'
     }
   }

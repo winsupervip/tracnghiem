@@ -39,7 +39,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['addExplainationIfCorrect', 'addExplainationIfInCorrect']),
+    ...mapActions({
+      addExplainationIfCorrect: 'questions/addExplainationIfCorrect',
+      addExplainationIfInCorrect: 'questions/addExplainationIfInCorrect',
+    }),
   },
 }
 </script>

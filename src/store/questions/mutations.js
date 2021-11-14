@@ -1,3 +1,5 @@
+import { uuid } from 'vue-uuid'
+
 export default {
   ADD_CATEGORY(state, data) {
     state.question.categories = data
@@ -175,6 +177,10 @@ export default {
       state.answers = answers
     }
   },
+  HANDLE_UPDATE_SELECT_FOR_FILL_BLANK(state, data) {
+    const index = state.answers.findIndex((item) => item.id === data.id)
+    state.answers[index].rightAnswer = data.index
+  },
   REMOVE_VALUE_UPDATE_ANSWER(state) {
     state.updateValueAnswer = {}
   },
@@ -187,9 +193,53 @@ export default {
     state.answers = []
   },
   COPY_QUESTIONS(state, data) {
-    const question = data.question
-    const answers = data.answers
+    const question = data.object.question
+    const answers = data.object.answers
     state.question = question
     state.answers = answers
+  },
+  SET_NULL_ID_ANSWER(state, aIndex) {
+    state.answers[aIndex].id = undefined
+  },
+  SEED_DATA_FOR_RIGHT_WRONG_ANSWER(state) {
+    state.answers = [
+      {
+        id: uuid.v4(),
+        position: 0,
+        hashId: '',
+        plainText: 'Đúng',
+        rightAnswer: 1,
+        random: true,
+        answerContent: '<p>Đúng</p>',
+      },
+      {
+        id: uuid.v4(),
+        position: 0,
+        hashId: '',
+        plainText: 'Sai',
+        rightAnswer: 0,
+        random: true,
+        answerContent: '<p>sai</p>',
+      },
+    ]
+    state.selected = state.answers[0].id
+  },
+  // question group //
+  ADD_CHILD_QUESTION(state, data) {
+    state.childQuestions.push(data)
+  },
+  ADD_ANSWER_IN_CHILD_QUESTION(state, data) {
+    const index = state.childQuestions.findIndex((item) => item.id === data.id)
+    state.childQuestions[index].answers.push(data.answer)
+  },
+  IS_RANDOM(state, data) {
+    const index = state.answers.findIndex((item) => item.id === data)
+    const value = state.answers[index]
+    if (value?.left) {
+      state.answers[index].left.random = !state.answers[index].left.random
+      state.answers[index].right.random = !state.answers[index].right.random
+    } else {
+      state.answers[index].random = !state.answers[index].random
+    }
   },
 }

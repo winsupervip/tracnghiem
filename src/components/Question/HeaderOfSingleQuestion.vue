@@ -2,7 +2,7 @@
   <div>
     <div>
       <p class="p-headerQuestion">
-        {{ $t('Ngân Hàng câu hỏi') }} > {{ questionTitle }}
+        {{ $t('questionBank') }} > {{ questionTitle }}
       </p>
       <ValidationProvider rules="required" name="Tiêu Đề">
         <b-form-group
@@ -26,12 +26,12 @@
         <ValidationProvider rules="required" name="Tags">
           <b-form-group
             slot-scope="{ valid, errors }"
-            :label-for="$t('Chọn tag')"
+            :label-for="$t('addTags')"
           >
             <b-form-tags
               id="tags-with-dropdown"
-              v-model="value"
-              :label="$t('Gắn thẻ câu hỏi của bạn, tối đa 5 thẻ(*)')"
+              v-model="tags"
+              :label="$t('tagYourQuestionUpTo5Tags')"
               no-outer-focus
               :state="errors[0] ? false : valid ? true : null"
               class="mb-2"
@@ -59,7 +59,7 @@
                 >
                   <template #button-content>
                     <b-icon icon="tag-fill" class="tag"></b-icon>
-                    <span class="textTag">{{ $t('Chọn tag') }}</span>
+                    <span class="textTag">{{ $t('addTags') }}</span>
                   </template>
                   <b-dropdown-form @submit.stop.prevent="() => {}">
                     <b-form-group
@@ -93,7 +93,7 @@
                     variant="primary"
                     class="p-question__btnAdd"
                     @click="userAddTag"
-                    >{{ $t('Thêm') }}</b-button
+                    >{{ $t('add') }}</b-button
                   >
                 </b-dropdown>
               </template>
@@ -146,7 +146,7 @@ export default defineComponent({
       okOnly: true,
       options: [],
       search: '',
-      value: [],
+      tags: [],
       title: '',
     })
     return {
@@ -173,22 +173,25 @@ export default defineComponent({
       if (this.search.length >= 2) {
         CauHoiApi.getTagByKey(this.search, (response) => {
           this.options = response
-          console.log(response)
         })
       }
     },
     title() {
       this.addTitle(this.title)
     },
-    value() {
-      this.addTags(this.value)
+    tags() {
+      this.addTags(this.tags)
     },
     questionContent() {
       this.addQuestionContent(this.questionContent)
     },
   },
   methods: {
-    ...mapActions(['addTags', 'addTitle', 'addQuestionContent']),
+    ...mapActions({
+      addTags: 'questions/addTags',
+      addTitle: 'questions/addTitle',
+      addQuestionContent: 'questions/addQuestionContent',
+    }),
     shown() {
       this.doShow = true
     },
@@ -196,7 +199,7 @@ export default defineComponent({
       this.doShow = false
     },
     onOptionClick({ option, addTag }) {
-      if (this.value.length >= 5) {
+      if (this.tags.length >= 5) {
         this.$toast.error(this.$18n.t('Tối đa 5 tags')).goAway(1500)
         return
       }
@@ -204,11 +207,15 @@ export default defineComponent({
       this.search = ''
     },
     userAddTag() {
-      if (this.value.length >= 5) {
-        this.$toast.error('Tối đa 5 tags').goAway(1500)
-        return
+      try {
+        if (this.tags.length >= 5) {
+          this.$toast.error('Tối đa 5 tags').goAway(1500)
+          return
+        }
+        this.tags.push(this.search)
+      } catch (ex) {
+        this.$logger.debug(ex)
       }
-      this.value.push(this.search)
     },
   },
 })

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div :class="$style.addQuestionTitle">
-      <p style="font-weight: bold">{{ $t('answer(*)') }}</p>
+      <p style="font-weight: bold">{{ $t('AddAnswer.answer') }}(*)</p>
       <b-button
         v-b-modal.modal-1
         class="btnQuestion"
@@ -21,7 +21,8 @@
       @hide="hide"
     >
       <div>
-        <div class="wrapper">
+        <div>
+          <!-- class="wrapper" -->
           <div class="wrapper-left">
             <p v-if="isPairing">Vế Trái</p>
             <TinyEditor
@@ -64,8 +65,8 @@
             @click="handleAnswer"
             >{{
               getUpdateValueAnswer.id
-                ? $t('Cập nhập câu trả lời')
-                : $t('Thêm câu trả lời')
+                ? $t('updateAnswer')
+                : $t('addMoreAnswers')
             }}</b-button
           >
           <b-button
@@ -87,10 +88,10 @@ import { mapActions, mapGetters } from 'vuex'
 export default defineComponent({
   name: 'Header',
   props: {
-    // addOrUpdateAnswer: {
-    //   type: Function,
-    //   required: true,
-    // },
+    groupQuestion: {
+      type: Boolean,
+      default: false,
+    },
     typeQuestion: {
       type: String,
       required: true,
@@ -108,6 +109,10 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    childQuestionId: {
+      type: String,
+      default: '',
+    },
   },
   setup() {
     const data = reactive({
@@ -118,7 +123,7 @@ export default defineComponent({
       answerContent: '',
       answerContentRight: '',
       isRightAnswer: false,
-      isRandom: false,
+      isRandom: true,
       isUpdate: -1,
       doShow: false,
       okOnly: true,
@@ -128,7 +133,10 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['getUpdateValueAnswer']),
+    ...mapGetters({
+      getUpdateValueAnswer: 'questions/getUpdateValueAnswer',
+      getListAnswer: 'questions/getListAnswer',
+    }),
   },
   watch: {
     getUpdateValueAnswer() {
@@ -158,11 +166,12 @@ export default defineComponent({
     },
   },
   methods: {
-    ...mapActions([
-      'handleAddAnswer',
-      'handleUpdateAnswer',
-      'removeValueUpdateAnswer',
-    ]),
+    ...mapActions({
+      handleAddAnswer: 'questions/handleAddAnswer',
+      handleUpdateAnswer: 'questions/handleUpdateAnswer',
+      removeValueUpdateAnswer: 'questions/removeValueUpdateAnswer',
+      addAnswerInChildQuestion: 'questions/addAnswerInChildQuestion',
+    }),
     shown() {
       this.doShow = true
     },
@@ -177,12 +186,13 @@ export default defineComponent({
       }
     },
     handleAnswer() {
-      if (this.answerContent === '') {
+      if (this.answerContent === '' && this.answerContentRight === '') {
         // config: https://github.com/shakee93/vue-toasted
         // eslint-disable-next-line no-undef
         this.$toast.error(this.$i18n.t('answersCannotBeLeftBlank')).goAway(1500)
         return 0
       }
+
       let data = {}
       if (this.isPairing) {
         data = {
@@ -223,19 +233,45 @@ export default defineComponent({
           typeQuestion: this.typeQuestion,
         }
       }
-
+      if (this.groupQuestion) {
+        this.addAnswerInChildQuestion({
+          id: this.childQuestionId,
+          answer: data?.answer,
+        })
+        this.$toast.success('Thêm câu trả lời thành công').goAway(1000)
+        this.isRightAnswer = false
+        this.answerContent = ''
+        this.answerContentRight = ''
+        return
+      }
       if (this.getUpdateValueAnswer?.id) {
         data.answer.id = this.getUpdateValueAnswer.id
         this.handleUpdateAnswer(data)
+        this.$toast.success('Cập nhập câu trả lời thành công').goAway(1000)
         this.removeValueUpdateAnswer()
+        this.isRightAnswer = false
+        this.answerContent = ''
+        this.answerContentRight = ''
+        setTimeout(() => {
+          this.hideModal()
+        }, 200)
       } else {
+        console.log(this.getListAnswer.length, this.typeQuestion)
+        if (
+          this.getListAnswer.length >= 3 &&
+          this.typeQuestion === 'right-wrong'
+        ) {
+          this.$toast
+            .error('Không được quá 3 câu trả lời cho loại câu hỏi này')
+            .goAway(1000)
+          return 0
+        }
         this.handleAddAnswer(data)
-        this.$toast.show('Thêm câu trả lời thành công').goAway(1000)
+        this.$toast.success('Thêm câu trả lời thành công').goAway(1000)
+        this.isRightAnswer = false
+        this.answerContent = ''
+        this.answerContentRight = ''
       }
-      this.isRightAnswer = false
-      this.isRandom = false
-      this.answerContent = ''
-      this.answerContentRight = ''
     },
   },
 })

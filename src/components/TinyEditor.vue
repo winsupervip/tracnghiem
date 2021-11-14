@@ -75,10 +75,12 @@ export default {
   },
   mounted() {
     this.content = this.value
+    document.addEventListener('focusin', this.onFocusin)
     this.init()
   },
   beforeDestroy() {
     this.editor.destroy()
+    document.removeEventListener('focusin', this.onFocusin)
   },
   methods: {
     init() {
@@ -124,6 +126,17 @@ export default {
         this.isTyping = false
       }, 700)
       this.$emit('input', this.editor.getContent())
+
+      this.$emit('text', this.editor.getContent({ format: 'text' }))
+    },
+    onFocusin() {
+      if (
+        event.target.closest(
+          '.wrs_modal_dialogContainer, .wrs_formulaDisplayWrapper, .wrs_focusElementContainer, .wrs_focusElement'
+        ) !== null
+      ) {
+        event.stopImmediatePropagation()
+      }
     },
   },
 }

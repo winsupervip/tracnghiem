@@ -1,11 +1,51 @@
 <template>
   <div class="answersList">
     <b-form-group
-      v-if="typeQuestion === 'single-choice' || typeQuestion === 'right-wrong'"
+      v-if="typeQuestion === 'single-choice'"
       v-slot="{ ariaDescribedby }"
     >
       <div
-        v-for="(answer, index) in getListAnswer"
+        v-for="(answer, index) in compareListAnswer"
+        :key="index"
+        class="p-answerItem"
+      >
+        <b-form-radio
+          v-model="isSelected"
+          :aria-describedby="ariaDescribedby"
+          name="some-radios"
+          :value="answer.id"
+          :aria-checked="true"
+          @change="isChange(answer.id)"
+          ><div class="p-answerItem">
+            <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
+            <div
+              class="p-answerItem__content"
+              v-html="mathTypeDisplay(answer.answerContent)"
+            ></div>
+          </div>
+        </b-form-radio>
+        <div class="p-answerItem__func">
+          <b-icon
+            :variant="answer.random ? 'success' : 'dark'"
+            icon="shuffle"
+            @click="isRandom(answer.id)"
+          ></b-icon>
+          <b-icon
+            v-b-modal.modal-1
+            icon="pencil-square"
+            @click="addValueUpdateAnswer(answer)"
+          ></b-icon>
+          <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+        </div>
+      </div>
+    </b-form-group>
+
+    <b-form-group
+      v-if="typeQuestion === 'right-wrong'"
+      v-slot="{ ariaDescribedby }"
+    >
+      <div
+        v-for="(answer, index) in compareListAnswer"
         :key="index"
         class="p-answerItem"
       >
@@ -25,13 +65,22 @@
           </div>
         </b-form-radio>
         <div class="p-answerItem__func">
-          <b-icon icon="shuffle"></b-icon>
+          <b-icon
+            :variant="answer.random ? 'success' : 'dark'"
+            icon="shuffle"
+            @click="isRandom(answer.id)"
+          ></b-icon>
           <b-icon
             v-b-modal.modal-1
             icon="pencil-square"
             @click="addValueUpdateAnswer(answer)"
           ></b-icon>
-          <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+          <b-icon
+            v-if="index !== 0 && index !== 1"
+            icon="trash"
+            @click="deleteAnswer(answer.id)"
+          ></b-icon>
+          <b-icon v-else></b-icon>
         </div>
       </div>
     </b-form-group>
@@ -47,7 +96,7 @@
         name="flavour-2"
       >
         <div
-          v-for="(answer, index) in getListAnswer"
+          v-for="(answer, index) in compareListAnswer"
           :key="index"
           class="p-answerItem"
         >
@@ -58,7 +107,11 @@
             </div>
           </b-form-checkbox>
           <div class="p-answerItem__func">
-            <b-icon icon="shuffle"></b-icon>
+            <b-icon
+              :variant="answer.random ? 'success' : 'dark'"
+              icon="shuffle"
+              @click="isRandom(answer.id)"
+            ></b-icon>
             <b-icon
               v-b-modal.modal-1
               icon="pencil-square"
@@ -72,68 +125,57 @@
     </b-form-group>
 
     <div v-if="typeQuestion === 'short-answer'">
-      <div
-        v-for="(answer, index) in getListAnswer"
-        :key="index"
-        class="p-answerItem"
-      >
-        <div class="p-answerItem">
-          <b>{{ index + 1 + '. ' }}</b>
-          <div
-            class="p-answerItem__content"
-            v-html="answer.answerContent"
-          ></div>
-        </div>
-        <div class="p-answerItem__func">
-          <b-icon
-            v-b-modal.modal-1
-            icon="pencil-square"
-            @click="addValueUpdateAnswer(answer)"
-          ></b-icon>
-
-          <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
-        </div>
-      </div>
+      <b-container>
+        <ShortAnswer
+          v-for="(answer, index) in compareListAnswer"
+          :key="answer.id"
+          :type-question="typeQuestion"
+          :num-index="index + 1"
+          :answer="answer"
+        />
+      </b-container>
+      <ShortAnswerInput :type-question="typeQuestion" />
     </div>
 
     <div v-if="typeQuestion === 'pairing'">
-      <div
-        v-for="(answer, index) in getListAnswer"
-        :key="index"
-        class="p-answerItem"
-      >
-        <div class="p-answerItem">
-          <Pairing :answer="answer" />
-        </div>
-        <div class="p-answerItem__func">
-          <b-icon
-            v-b-modal.modal-1
-            icon="pencil-square"
-            @click="addValueUpdateAnswer(answer)"
-          ></b-icon>
+      <b-container>
+        <b-row
+          v-for="(answer, index) in compareListAnswer"
+          :key="index"
+          class="p-answerItem"
+        >
+          <b-col
+            cols="5"
+            class="boderMatching"
+            v-html="answer.left.answerContent"
+          ></b-col>
+          <b-col
+            cols="5"
+            class="boderMatching"
+            v-html="answer.right.answerContent"
+          ></b-col>
+          <!-- <Pairing :answer="answer" /> -->
 
-          <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
-        </div>
-      </div>
-    </div>
-
-    <div v-if="typeQuestion === 'pairing'">
-      <div v-for="(answer, index) in answers" :key="index" class="p-answerItem">
-        <Pairing :answer="answer" />
-        <div class="p-answerItem__func">
-          <b-icon
-            v-b-modal.modal-1
-            icon="pencil-square"
-            @click="updateAnswer(answer.id)"
-          ></b-icon>
-          <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
-        </div>
-      </div>
+          <b-col cols="2" class="matching_style">
+            <b-icon
+              :variant="answer.left.random ? 'success' : 'dark'"
+              icon="shuffle"
+              @click="isRandom(answer.id)"
+            ></b-icon>
+            <b-icon
+              v-b-modal.modal-1
+              icon="pencil-square"
+              @click="updateAnswer(answer.id)"
+            ></b-icon>
+            <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+          </b-col>
+        </b-row>
+      </b-container>
     </div>
 
     <div v-if="typeQuestion === 'fill-blank'">
       <div
-        v-for="(answer, index) in getListAnswer"
+        v-for="(answer, index) in compareListAnswer"
         :key="index"
         class="p-answerItem"
       >
@@ -141,10 +183,15 @@
           <SelectForFillBlank :answer="answer" />
           <div
             class="p-answerItem__content"
-            v-html="answer.answerContent"
+            v-html="mathTypeDisplay(answer.answerContent)"
           ></div>
         </div>
         <div class="p-answerItem__func">
+          <b-icon
+            :variant="answer.random ? 'success' : 'dark'"
+            icon="shuffle"
+            @click="isRandom(answer.id)"
+          ></b-icon>
           <b-icon
             v-b-modal.modal-1
             icon="pencil-square"
@@ -160,15 +207,9 @@
       <Draggable />
     </div>
 
-    <div v-if="errors.answers">
-      <b-form-invalid-feedback
-        v-for="(error, index) in errors.answers"
-        id="error"
-        :key="index"
-        :state="false"
-        >{{ error }}</b-form-invalid-feedback
-      >
-    </div>
+    <b-form-invalid-feedback id="error" :state="false">{{
+      errors
+    }}</b-form-invalid-feedback>
   </div>
 </template>
 
@@ -178,65 +219,70 @@ import { mapGetters, mapActions } from 'vuex'
 import EventBus from '../../plugins/eventBus'
 import SelectForFillBlank from './SelectForFillBlank.vue'
 import Draggable from './Draggable.vue'
-import Pairing from './Pairing.vue'
+import ShortAnswer from './ShortAnswer.vue'
+import ShortAnswerInput from './ShortAnswerInput.vue'
+import mathType from '@/extensions/mathType'
 export default defineComponent({
   components: {
     SelectForFillBlank,
-    Pairing,
+    // Pairing,
     Draggable,
+    ShortAnswer,
+    ShortAnswerInput,
   },
+  mixins: [mathType],
   props: {
     typeQuestion: {
       type: String,
       required: true,
     },
+    groupQuestion: {
+      type: Boolean,
+      default: false,
+    },
+    // eslint-disable-next-line vue/require-default-prop
+    listChildAnswer: {
+      type: Array,
+      // eslint-disable-next-line vue/require-valid-default-prop
+    },
     errors: {
-      type: Object,
+      type: String,
       required: true,
     },
   },
   setup() {
     const data = reactive({
       isSelected: [],
-      answers: [],
     })
     return {
       ...toRefs(data),
     }
   },
   computed: {
-    ...mapGetters(['getListAnswer', 'getSelected']),
+    ...mapGetters({
+      getListAnswer: 'questions/getListAnswer',
+      getSelected: 'questions/getSelected',
+    }),
+    compareListAnswer() {
+      if (this.groupQuestion) {
+        return this.listChildAnswer
+      }
+      return this.getListAnswer
+    },
   },
   watch: {
     getSelected() {
-      console.log('chạy')
+      this.$logger.debug('chạy')
       this.isSelected = this.getSelected
     },
-    // isSelected(newValue, oldValue) {
-    //   for (let i = 0; i < newValue.length; i++) {
-    //     if (newValue[i] && oldValue[i] && newValue[i] === oldValue[i]) {
-    //       console.log('khong thay doi')
-    //     } else {
-    //       console.log('có thay đổi')
-    //     }
-    //   }
-    //   console.log(newValue, oldValue)
-    //   // this.handleUserChooseRightAnswer(this.isSelected)
-    // },
-    getListAnswer() {
-      console.log(this.getListAnswer)
-    },
-  },
-  onMouted() {
-    this.answers = this.getListAnswer
   },
   created() {
     // eslint-disable-next-line no-undef
     const that = this
     EventBus.$on('updateListAnswer', function (item) {
       // that.$emit('updateListAnswer', item)
-      console.log('item', item)
-      console.log('an', that.answers)
+      this.$logger.debug('item', item)
+      this.$logger.debug('an', that.answers)
       const answer = that.answers[item.index]
       answer.answerContent = item.answerContent
       answer.random = item.isRandom
@@ -245,13 +291,14 @@ export default defineComponent({
     })
   },
   methods: {
-    ...mapActions([
-      'addValueUpdateAnswer',
-      'deleteAnswer',
-      'handleUserChooseRightAnswer',
-    ]),
+    ...mapActions({
+      addValueUpdateAnswer: 'questions/addValueUpdateAnswer',
+      deleteAnswer: 'questions/deleteAnswer',
+      handleUserChooseRightAnswer: 'questions/handleUserChooseRightAnswer',
+      isRandom: 'questions/isRandom',
+    }),
     isChange(id) {
-      console.log(id)
+      this.$logger.debug(id)
       if (this.typeQuestion === 'multiple-choice') {
         if (this.isSelected.length > this.getSelected.length) {
           this.handleUserChooseRightAnswer({ action: 'add', id })
@@ -269,10 +316,17 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
+.matching_style {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
 p {
   margin-bottom: 0;
 }
-
+.boderMatching {
+  border: 1px solid;
+}
 .action {
   display: flex;
   padding: 5px;

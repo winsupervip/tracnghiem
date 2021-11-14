@@ -79,7 +79,6 @@ import { defineComponent, useContext } from '@nuxtjs/composition-api'
 
 import QuestionApi from '@/api/question-list-page'
 export default defineComponent({
-  name: 'QuestionHeader',
   auth: false,
   props: {
     question: {

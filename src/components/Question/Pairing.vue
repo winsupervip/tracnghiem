@@ -1,9 +1,7 @@
 <template>
   <div>
-    <div class="wrapper">
-      <div class="left" v-html="answer.left.answerContent"></div>
-      <div class="right" v-html="answer.right.answerContent"></div>
-    </div>
+    <b-col v-html="answer.left.answerContent"></b-col>
+    <b-col v-html="answer.right.answerContent"></b-col>
   </div>
 </template>
 
@@ -19,7 +17,7 @@ export default {
     return {}
   },
   created() {
-    console.log('pairing', this.answer)
+    this.$logger.debug('pairing', this.answer)
   },
 }
 </script>

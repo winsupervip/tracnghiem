@@ -54,7 +54,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getListAnswer', 'getUpdateValueAnswer']),
+    ...mapGetters({
+      getListAnswer: 'questions/getListAnswer',
+      getUpdateValueAnswer: 'questions/getUpdateValueAnswer',
+    }),
 
     dragOptions() {
       return {
@@ -79,15 +82,15 @@ export default {
       item.fixed = false
       return item
     })
-    console.log(data)
+    this.$logger.debug(data)
     this.list = data
   },
   methods: {
-    ...mapActions([
-      'addValueUpdateAnswer',
-      'deleteAnswer',
-      'handleUpdateDraggableAnswer',
-    ]),
+    ...mapActions({
+      addValueUpdateAnswer: 'questions/addValueUpdateAnswer',
+      deleteAnswer: 'questions/deleteAnswer',
+      handleUpdateDraggableAnswer: 'questions/handleUpdateDraggableAnswer',
+    }),
 
     onMove({ relatedContext, draggedContext }) {
       const relatedElement = relatedContext.element
@@ -140,15 +143,13 @@ export default {
 .p-answerItem {
   display: flex;
   justify-content: space-between;
-  box-shadow: 0 4px 15px rgba(#4764c3, 0.1);
+  // box-shadow: 0 4px 15px rgba(#4764c3, 0.1);
   transition: all 0.2s;
 
   transition: all 0.2s;
   border-radius: 0.5rem;
   border-radius: 0.5rem;
-  &:hover {
-    box-shadow: 0 4px 20px rgba(#4764c3, 0.2);
-  }
+
   b {
     min-width: 20px;
   }

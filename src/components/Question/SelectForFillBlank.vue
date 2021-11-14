@@ -24,7 +24,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getListAnswer', 'getUpdateValueAnswer']),
+    ...mapGetters({
+      getListAnswer: 'questions/getListAnswer',
+      getUpdateValueAnswer: 'questions/getUpdateValueAnswer',
+    }),
   },
   watch: {
     // getListAnswer() {
@@ -32,18 +35,18 @@ export default {
     // },
   },
   methods: {
-    ...mapActions([
-      'addValueUpdateAnswer',
-      'deleteAnswer',
-      'handleUpdateAnswer',
-    ]),
+    ...mapActions({
+      addValueUpdateAnswer: 'questions/addValueUpdateAnswer',
+      deleteAnswer: 'questions/deleteAnswer',
+      handleUpdateSelectForFillBlank:
+        'questions/handleUpdateSelectForFillBlank',
+    }),
     changeSelected(index) {
-      const temp = this.answer
-      temp.rightAnswer = index
       const data = {
-        answer: temp,
+        id: this.answer.id,
+        index,
       }
-      this.handleUpdateAnswer(data)
+      this.handleUpdateSelectForFillBlank(data)
     },
   },
 }
