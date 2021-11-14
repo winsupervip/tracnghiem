@@ -47,7 +47,7 @@
         </b-form-checkbox>
         <ValidationProvider
           v-slot="{ valid, errors }"
-          rules="required"
+          rules="required|min_value:0|max_value:1000"
           :name="$t('exam.form.examTime')"
         >
           <b-form-group
@@ -71,7 +71,7 @@
       <div class="col-12 col-md-6">
         <ValidationProvider
           v-slot="{ valid, errors }"
-          rules="required"
+          rules="required|min_value:0|max_value:1000"
           :name="$t('exam.form.maximumTest')"
         >
           <b-form-group
@@ -95,7 +95,7 @@
       <div class="col-12 col-md-6">
         <ValidationProvider
           v-slot="{ valid, errors }"
-          rules="required"
+          rules="required|min_value:0|max_value:1000"
           :name="$t('exam.form.numberQuestionsTest')"
         >
           <b-form-group

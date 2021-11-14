@@ -84,7 +84,7 @@
       "maximumTest": "Số lượt thi tối đa / user",
       "maximumTestHelper": "Nhập 0 để không giới hạn",
       "numberQuestionsTest": "Số câu hỏi / lượt thi",
-      "allowChangeSettings": "Cho phép thi sinh thay đổi cài đặt",
+      "allowChangeSettings": "Cho phép thí sinh thay đổi cài đặt",
       "numberQuestionsTestHelp": "Số câu hỏi tối đa mà thí sinh được phép thi",
       "allowChangeSettingsHelp": "Thí sinh được điều chỉnh các cài đặt để tạo đề theo mong muốn",
       "submitPublish": "Xuất bản",
@@ -98,10 +98,12 @@
       "seoDescription": "Mô tả SEO",
       "seoSetting": "Cài đặt SEO",
       "categorySelect": "Chọn hoặc nhập tên danh mục",
-      "publish": "Mọi người có thể thấy post.",
-      "private": "Chỉ những người có liên kết đến post này, mới có thể xem được.",
-      "draft": "Chỉ có bạn mới có thể xem post này.",
-      "slug": "Đường dẫn"
+      "publish": "Mọi người có thể thấy đề thi.",
+      "private": "Chỉ những người có liên kết đến đề thi này, mới có thể xem được.",
+      "draft": "Chỉ có bạn mới có thể xem đề thi này.",
+      "slug": "Đường dẫn",
+      "tagHelper": "Nhập tối thiểu 1 thẻ, tối đa 5 thẻ",
+      "tagHolder": "Nhập ít nhất 2 ký tự"
     }
   }
 }

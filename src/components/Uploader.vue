@@ -255,4 +255,10 @@ export default {
 .dropzone {
   position: relative;
 }
+.wrapper-img {
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+.p-question__box__body {
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
 </style>
