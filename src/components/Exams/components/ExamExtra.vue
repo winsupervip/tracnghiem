@@ -21,21 +21,25 @@
       </div>
       <div class="list-group-item">
         <p>{{ statusMessage }}</p>
-        <b-button variant="outline-primary" @click="submit()">
+        <b-button variant="outline-primary" type="submit">
           <b-icon-file-earmark-check></b-icon-file-earmark-check>
           {{ $t('exam.form.submitDraft') }}
         </b-button>
       </div>
     </div>
-    <div class="list-group mt-3">
-      <div class="list-group-item disabled border-bottom-0">
-        <h3>{{ $t('exam.form.categoryTitle') }} (*):</h3>
-      </div>
-      <div class="list-group-item tree-select-container border-0 p-0 m-0">
-        <ValidationProvider
-          :name="$t('exam.form.categoryTitle')"
-          rules="required"
-        >
+    <ValidationProvider
+      v-slot="{ valid, errors, validate }"
+      :name="$t('exam.form.categoryTitle')"
+      rules="required"
+    >
+      <div class="list-group mt-3">
+        <b-form-invalid-feedback :state="valid">
+          {{ errors ? errors[0] : '' }}
+        </b-form-invalid-feedback>
+        <div class="list-group-item disabled border-bottom-0">
+          <h3>{{ $t('exam.form.categoryTitle') }} (*):</h3>
+        </div>
+        <div class="list-group-item tree-select-container border-0 p-0 m-0">
           <treeselect
             id="categories"
             v-model="categories"
@@ -44,10 +48,11 @@
             :load-options="loadOptions"
             :always-open="true"
             :placeholder="$t('exam.form.categorySelect')"
+            @input="validate"
           />
-        </ValidationProvider>
+        </div>
       </div>
-    </div>
+    </ValidationProvider>
     <div class="list-group mt-3">
       <div class="list-group-item disabled">
         <h3>{{ $t('exam.form.level') }}:</h3>
@@ -81,7 +86,10 @@
         <h3>{{ $t('exam.form.seoSetting') }}:</h3>
       </div>
       <div class="list-group-item">
-        <ValidationProvider :name="$t('exam.form.seoTitle')" rules="required">
+        <ValidationProvider
+          :name="$t('exam.form.seoTitle')"
+          rules="required|max:255"
+        >
           <b-form-group
             slot-scope="{ valid, errors }"
             :label="$t('exam.form.seoTitle')"
@@ -99,7 +107,10 @@
           </b-form-group>
         </ValidationProvider>
 
-        <ValidationProvider :name="$t('exam.form.slug')" rules="required">
+        <ValidationProvider
+          :name="$t('exam.form.slug')"
+          rules="required|max:255"
+        >
           <b-form-group
             slot-scope="{ valid, errors }"
             :label="$t('exam.form.slug')"
@@ -119,7 +130,7 @@
 
         <ValidationProvider
           :name="$t('exam.form.seoDescription')"
-          rules="required"
+          rules="required|max:1000"
         >
           <b-form-group
             slot-scope="{ valid, errors }"

@@ -1,9 +1,11 @@
 <template>
   <div>
     <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
-    <b-form class="exam-form">
-      <ExamForm />
-    </b-form>
+    <ValidationObserver v-slot="{ handleSubmit }">
+      <b-form class="exam-form" @submit.prevent="handleSubmit(onSubmit)">
+        <ExamForm />
+      </b-form>
+    </ValidationObserver>
   </div>
 </template>
 <script>
@@ -41,6 +43,11 @@ export default defineComponent({
     return {
       ...toRefs(data),
     }
+  },
+  methods: {
+    onSubmit() {
+      alert('ahihi')
+    },
   },
 })
 </script>
