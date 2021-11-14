@@ -3,7 +3,7 @@
     <div class="exam-header">
       <div class="exam-header-left">
         <h3>
-          {{ getCategoryName(exam.categoryItems) }}
+          {{ exam.categoryItem.categoryName }}
         </h3>
         <b-badge pill class="rounded-pill bg-success">{{
           exam.levelName
@@ -23,7 +23,9 @@
           <template #button-content>
             <b-icon-three-dots-vertical></b-icon-three-dots-vertical>
           </template>
-          <b-dropdown-item>First Action</b-dropdown-item>
+          <b-dropdown-item :to="'/users/exams/' + exam.hashId">
+            <b-icon-pencil-square></b-icon-pencil-square> {{ $t('exam.edit') }}
+          </b-dropdown-item>
           <b-dropdown-item>Second Action</b-dropdown-item>
           <b-dropdown-item>Third Action</b-dropdown-item>
           <b-dropdown-divider></b-dropdown-divider>

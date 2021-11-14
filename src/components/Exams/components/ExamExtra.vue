@@ -42,7 +42,7 @@
         <div class="list-group-item tree-select-container border-0 p-0 m-0">
           <treeselect
             id="categories"
-            v-model="categories"
+            v-model="categoryId"
             :multiple="false"
             :options="categoryItems"
             :load-options="loadOptions"
@@ -182,7 +182,7 @@ export default defineComponent({
       seoTitle: '',
       seoDescription: '',
       slug: '',
-      categories: [],
+      categoryId: null,
       categoryItems: [],
       paymentTypes: [],
       listStatus: [],
@@ -253,7 +253,7 @@ export default defineComponent({
     seoDescription() {
       this.commitData()
     },
-    categories() {
+    categoryId() {
       this.commitData()
     },
     getTitle() {
@@ -263,17 +263,22 @@ export default defineComponent({
     getDescription() {
       this.seoDescription = this.getDescription
     },
+    slug() {
+      this.commitData()
+    },
+    examExtra() {
+      console.log(this.image)
+      this.image = this.examExtra.image
+      this.payementTypeId = this.examExtra.payementTypeId
+      this.statusId = this.examExtra.statusId
+      this.levelId = this.examExtra.levelId
+      this.seoTitle = this.examExtra.seoTitle
+      this.seoDescription = this.examExtra.seoDescription
+      this.categoryId = this.examExtra.categoryId
+      this.slug = this.examExtra.slug
+    },
   },
-  created() {
-    this.image = this.examExtra.image
-    this.payementTypeId = this.examExtra.payementTypeId
-    this.statusId = this.examExtra.statusId
-    this.levelId = this.examExtra.levelId
-    this.seoTitle = this.examExtra.seoTitle
-    this.seoDescription = this.examExtra.seoDescription
-    this.categories = this.examExtra.categories
-    this.slug = this.examExtra.slug
-  },
+  created() {},
   methods: {
     ...mapActions({
       setExamExtra: 'exams/setExamExtra',
@@ -288,9 +293,15 @@ export default defineComponent({
         seoTitle: this.seoTitle,
         seoDescription: this.seoDescription,
         slug: this.slug,
-        categories: this.categories,
+        categoryId: this.categoryId,
       })
     }, 200),
   },
 })
 </script>
+<style scoped lang="scss">
+.vue-treeselect__menu,
+.vue-treeselect__menu-container {
+  position: relative !important;
+}
+</style>

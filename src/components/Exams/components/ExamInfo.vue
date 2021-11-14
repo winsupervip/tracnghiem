@@ -105,13 +105,13 @@ export default defineComponent({
     tag() {
       this.initItems()
     },
+    examInfo() {
+      this.title = this.examInfo.title
+      this.description = this.examInfo.description
+      this.tags = this.examInfo.tags
+    },
   },
-  created() {
-    this.title = this.examInfo.title
-    this.description = this.examInfo.description
-    this.tags = this.examInfo.tags
-    console.log(this.title)
-  },
+  created() {},
   methods: {
     ...mapActions({
       setExamInfo: 'exams/setExamInfo',
@@ -137,7 +137,7 @@ export default defineComponent({
     },
     update(newTags) {
       this.autocompleteItems = []
-      this.tags = newTags
+      this.tags = newTags.map((x) => x.text)
     },
     initItems() {
       if (this.tag.length < 2) return

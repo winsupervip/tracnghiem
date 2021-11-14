@@ -14,8 +14,12 @@ import {
   useContext,
   reactive,
   toRefs,
+  useRoute,
+  computed,
+  useAsync,
+  useStore,
 } from '@nuxtjs/composition-api'
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import ExamForm from '@/components/Exams/ExamForm.vue'
 import examApi from '@/api/examApi'
 export default defineComponent({
@@ -23,7 +27,8 @@ export default defineComponent({
   layout: 'dashboard',
   auth: true,
   setup() {
-    const { app } = useContext()
+    const { app, $loader, $logger } = useContext()
+    const store = useStore()
     const data = reactive({
       breadcrumbs: [
         {
@@ -35,10 +40,27 @@ export default defineComponent({
           href: '/users/exams',
         },
         {
-          text: app.i18n.t('exam.add'),
+          text: app.i18n.t('exam.edit'),
           active: true,
         },
       ],
+    })
+
+    const route = useRoute()
+    const id = computed(() => route.value.params.id)
+    const hashId = id.value
+    useAsync(async () => {
+      $loader()
+      $logger.info('load exam detail', hashId)
+      try {
+        const { data: examData } = await examApi.getUserExamById(hashId)
+        store.dispatch('exams/setExam', examData.object)
+      } catch (err) {
+        app.$handleError(err, () => {
+          $logger.info(err)
+        })
+      }
+      $loader().close()
     })
     return {
       ...toRefs(data),
@@ -55,7 +77,7 @@ export default defineComponent({
     }),
     async onSubmit() {
       try {
-        const { data } = await examApi.addExam({ exam: this.examData })
+        const { data } = await examApi.editExam({ exam: this.examData })
         this.$handleError(data)
         await this.resetExam()
         this.$router.push('/users/exams')

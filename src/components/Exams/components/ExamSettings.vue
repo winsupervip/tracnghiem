@@ -187,18 +187,19 @@ export default defineComponent({
     allowChangeSettings() {
       this.commitData()
     },
+    examSettings() {
+      this.nonExamTime = this.examSettings.nonExamTime
+      this.examTime = this.examSettings.examTime
+      this.maximumTest = this.examSettings.maximumTest
+      this.numberQuestionsTest = this.examSettings.numberQuestionsTest
+      this.suffleQuestions = this.examSettings.suffleQuestions
+      this.suffleAnswers = this.examSettings.suffleAnswers
+      this.checkAnswersWhileTest = this.examSettings.checkAnswersWhileTest
+      this.checkAnswersAfterTest = this.examSettings.checkAnswersAfterTest
+      this.allowChangeSettings = this.examSettings.allowChangeSettings
+    },
   },
-  created() {
-    this.nonExamTime = this.examSettings.nonExamTime
-    this.examTime = this.examSettings.examTime
-    this.maximumTest = this.examSettings.maximumTest
-    this.numberQuestionsTest = this.examSettings.numberQuestionsTest
-    this.suffleQuestions = this.examSettings.suffleQuestions
-    this.suffleAnswers = this.examSettings.suffleAnswers
-    this.checkAnswersWhileTest = this.examSettings.checkAnswersWhileTest
-    this.checkAnswersAfterTest = this.examSettings.checkAnswersAfterTest
-    this.allowChangeSettings = this.examSettings.allowChangeSettings
-  },
+  created() {},
   methods: {
     ...mapActions({
       setExamSettings: 'exams/setExamSettings',

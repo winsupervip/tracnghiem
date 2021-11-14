@@ -171,7 +171,7 @@
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="">
+                    <nuxt-link to="/users/exams/">
                       <div>
                         <img
                           src="~/assets/img/dashboard/icon_dethi.svg"

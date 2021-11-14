@@ -170,7 +170,8 @@ export default {
     { src: '@/plugins/uuid.js', ssr: true },
     { src: '~/plugins/persistedState.js'},
     { src: '@/plugins/WIRISplugins.js', ssr: false },
-    { src: '~/plugins/vue-tags-input', ssr: false }
+    { src: '~/plugins/vue-tags-input', ssr: false },
+    { src: '@/plugins/handle-error', }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
