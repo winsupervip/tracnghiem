@@ -16,6 +16,7 @@
         id="sidebar-1"
         ref="bSidebar"
         :visible="visible"
+        :no-close-on-route-change="true"
         no-header
         :backdrop-variant="variant"
         :backdrop="backdrop"
@@ -250,7 +251,6 @@
         </div>
       </b-sidebar>
       <div class="l-dashboard__content">
-        <button v-b-toggle.sidebar-1>open menu</button>
         <Nuxt />
       </div>
     </div>
