@@ -14,4 +14,29 @@ export default {
   setSeoDescription({ commit }, description) {
     commit('SET_SEO_DESCRIPTION', description)
   },
+  resetExam({ commit }) {
+    commit('SET_EXAM', {
+      hashId: '',
+      payementTypeId: 1,
+      title: '',
+      image: 'https://storage.tracnghiem.vn/tracnghiem-dev/exam-avatar.png',
+      description: '',
+      nonExamTime: true,
+      examTime: 0,
+      maximumTest: 0,
+      numberQuestionsTest: 60,
+      suffleQuestions: true,
+      suffleAnswers: true,
+      checkAnswersWhileTest: false,
+      checkAnswersAfterTest: true,
+      allowChangeSettings: true,
+      statusId: 1,
+      levelId: 1,
+      seoTitle: '',
+      seoDescription: '',
+      slug: '',
+      categories: null,
+      tags: [],
+    })
+  },
 }

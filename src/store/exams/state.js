@@ -19,7 +19,7 @@ export default () => ({
     seoTitle: '',
     seoDescription: '',
     slug: '',
-    categories: null,
+    categoryId: null,
     tags: [],
   },
 })
