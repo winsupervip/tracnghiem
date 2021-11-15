@@ -35,7 +35,7 @@
             icon="pencil-square"
             @click="addValueUpdateAnswer(answer)"
           ></b-icon>
-          <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+          <b-icon icon="trash" @click="handleDeleteAnswer(answer.id)"></b-icon>
         </div>
       </div>
     </b-form-group>
@@ -78,7 +78,7 @@
           <b-icon
             v-if="index !== 0 && index !== 1"
             icon="trash"
-            @click="deleteAnswer(answer.id)"
+            @click="handleDeleteAnswer(answer.id)"
           ></b-icon>
           <b-icon v-else></b-icon>
         </div>
@@ -118,7 +118,10 @@
               @click="addValueUpdateAnswer(answer)"
             ></b-icon>
 
-            <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+            <b-icon
+              icon="trash"
+              @click="handleDeleteAnswer(answer.id)"
+            ></b-icon>
           </div>
         </div>
       </b-form-checkbox-group>
@@ -132,9 +135,15 @@
           :type-question="typeQuestion"
           :num-index="index + 1"
           :answer="answer"
+          :group-question="groupQuestion"
+          :child-question-id="childQuestionId"
         />
       </b-container>
-      <ShortAnswerInput :type-question="typeQuestion" />
+      <ShortAnswerInput
+        :type-question="typeQuestion"
+        :group-question="groupQuestion"
+        :child-question-id="childQuestionId"
+      />
     </div>
 
     <div v-if="typeQuestion === 'pairing'">
@@ -167,7 +176,10 @@
               icon="pencil-square"
               @click="updateAnswer(answer.id)"
             ></b-icon>
-            <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+            <b-icon
+              icon="trash"
+              @click="handleDeleteAnswer(answer.id)"
+            ></b-icon>
           </b-col>
         </b-row>
       </b-container>
@@ -198,13 +210,17 @@
             @click="addValueUpdateAnswer(answer)"
           ></b-icon>
 
-          <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+          <b-icon icon="trash" @click="handleDeleteAnswer(answer.id)"></b-icon>
         </div>
       </div>
     </div>
 
     <div v-if="typeQuestion === 'draggable'">
-      <Draggable />
+      <Draggable
+        :group-question="groupQuestion"
+        :child-question-id="childQuestionId"
+        :list-answer="compareListAnswer"
+      />
     </div>
 
     <b-form-invalid-feedback id="error" :state="false">{{
@@ -216,7 +232,6 @@
 <script>
 import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
 import { mapGetters, mapActions } from 'vuex'
-import EventBus from '../../plugins/eventBus'
 import SelectForFillBlank from './SelectForFillBlank.vue'
 import Draggable from './Draggable.vue'
 import ShortAnswer from './ShortAnswer.vue'
@@ -225,7 +240,6 @@ import mathType from '@/extensions/mathType'
 export default defineComponent({
   components: {
     SelectForFillBlank,
-    // Pairing,
     Draggable,
     ShortAnswer,
     ShortAnswerInput,
@@ -248,6 +262,10 @@ export default defineComponent({
     errors: {
       type: String,
       required: true,
+    },
+    childQuestionId: {
+      type: String,
+      default: '',
     },
   },
   setup() {
@@ -272,23 +290,8 @@ export default defineComponent({
   },
   watch: {
     getSelected() {
-      this.$logger.debug('chạy')
       this.isSelected = this.getSelected
     },
-  },
-  created() {
-    // eslint-disable-next-line no-undef
-    const that = this
-    EventBus.$on('updateListAnswer', function (item) {
-      // that.$emit('updateListAnswer', item)
-      this.$logger.debug('item', item)
-      this.$logger.debug('an', that.answers)
-      const answer = that.answers[item.index]
-      answer.answerContent = item.answerContent
-      answer.random = item.isRandom
-      answer.plainText = item.answerContent
-      answer.rightAnswer = item.isRightAnswer
-    })
   },
   methods: {
     ...mapActions({
@@ -296,9 +299,9 @@ export default defineComponent({
       deleteAnswer: 'questions/deleteAnswer',
       handleUserChooseRightAnswer: 'questions/handleUserChooseRightAnswer',
       isRandom: 'questions/isRandom',
+      deleteAnswerOfChildQuestion: 'questions/deleteAnswerOfChildQuestion',
     }),
     isChange(id) {
-      this.$logger.debug(id)
       if (this.typeQuestion === 'multiple-choice') {
         if (this.isSelected.length > this.getSelected.length) {
           this.handleUserChooseRightAnswer({ action: 'add', id })
@@ -312,15 +315,20 @@ export default defineComponent({
         this.handleUserChooseRightAnswer({ action: 'change', id })
       }
     },
+    handleDeleteAnswer(id) {
+      if (this.childQuestionId !== '') {
+        this.deleteAnswerOfChildQuestion({
+          questionChildId: this.childQuestionId,
+          answerId: id,
+        })
+      } else {
+        this.deleteAnswer(id)
+      }
+    },
   },
 })
 </script>
 <style lang="scss" scoped>
-.matching_style {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
 p {
   margin-bottom: 0;
 }

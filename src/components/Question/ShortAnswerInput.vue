@@ -16,6 +16,14 @@ export default {
       type: String,
       required: true,
     },
+    groupQuestion: {
+      type: Boolean,
+      default: false,
+    },
+    childQuestionId: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -26,6 +34,7 @@ export default {
     ...mapActions({
       handleAddAnswer: 'questions/handleAddAnswer',
       deleteAnswer: 'questions/deleteAnswer',
+      addAnswerInChildQuestion: 'questions/addAnswerInChildQuestion',
     }),
     onSubmit() {
       const data = {
@@ -40,9 +49,17 @@ export default {
         },
         typeQuestion: this.typeQuestion,
       }
-      this.answerContent = ''
 
-      this.handleAddAnswer(data)
+      if (this.groupQuestion) {
+        this.addAnswerInChildQuestion({
+          id: this.childQuestionId,
+          answer: data?.answer,
+        })
+      } else {
+        this.handleAddAnswer(data)
+      }
+      this.answerContent = ''
+      this.$toast.success('Thêm câu trả lời thành công').goAway(1000)
     },
   },
 }

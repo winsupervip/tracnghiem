@@ -221,10 +221,18 @@ export default {
   // question group //
   ADD_CHILD_QUESTION(state, data) {
     state.childQuestions.push(data)
+    const isSelected = {
+      id: data.id,
+      selected: [],
+    }
+    state.selectedGroup.push(isSelected)
   },
   ADD_ANSWER_IN_CHILD_QUESTION(state, data) {
     const index = state.childQuestions.findIndex((item) => item.id === data.id)
     state.childQuestions[index].answers.push(data.answer)
+    if (data.answer.rightAnswer === 1) {
+      state.selected = data.answer.id
+    }
   },
   IS_RANDOM(state, data) {
     const index = state.answers.findIndex((item) => item.id === data)
@@ -235,5 +243,91 @@ export default {
     } else {
       state.answers[index].random = !state.answers[index].random
     }
+  },
+  // group question
+  ADD_CHILD_QUESTION_CONTENT(state, data) {
+    const index = state.childQuestions.findIndex((item) => item.id === data.id)
+    state.childQuestions[index].question.questionContent = data.value
+  },
+  DELETE_CHILD_QUESTION(state, data) {
+    const index = state.childQuestions.findIndex((item) => item.id === data)
+    state.childQuestions.splice(index, 1)
+  },
+  UPDATE_ANSWER_QUESTION_CHILD(state, data) {
+    const index = state.childQuestions.findIndex((item) => item.id === data.id)
+    const typeQuestion = state.childQuestions[index].typeQuestion
+    const indexAnswer = state.childQuestions[index].answers.findIndex(
+      (item) => item.id === data.answer.id
+    )
+    const indexSelectedQuestion = state.selectedGroup.findIndex(
+      (item) => item.id === data.id
+    )
+    if (typeQuestion === 'single-choice' || typeQuestion === 'right-wrong') {
+      // when user update a answer update(right-wrong, single-choice, multiple-choice)
+      // case 1. atribute rightAnswer is true and the value update is false
+      //          set value of select = ''
+      // case 2.  atribute rightAnswer is false and the value update is true
+      //          set value of select = id of update value
+
+      if (data.answer.rightAnswer === 1) {
+        state.selectedGroup[index].selected = data.answer.id
+        const answers = state.childQuestions[index].answers.map((item) => {
+          item.rightAnswer = 0
+          return item
+        })
+        state.answers = answers
+      }
+      if (
+        state.childQuestions[index].answers[indexAnswer].rightAnswer === 1 &&
+        data.answer.rightAnswer === 0
+      ) {
+        state.selectedGroup[indexSelectedQuestion].selected = ''
+      }
+    } else if (typeQuestion === 'multiple-choice') {
+      if (data.answer.rightAnswer === 1) {
+        state.selectedGroup[indexSelectedQuestion].selected.push(data.answer.id)
+      }
+      if (
+        state.answers[index].rightAnswer === 1 &&
+        data.answer.rightAnswer === 0
+      ) {
+        const indexAnswerOfQuestion = state.selectedGroup[
+          index
+        ].answers.findIndex((item) => item === data.answer.id)
+        state.selectedGroup[index].answers.splice(indexAnswerOfQuestion, 1)
+      }
+    } else if (typeQuestion === 'pairing') {
+      try {
+        state.answers[index].left.plainText = data.answer?.left.plainText
+        state.answers[index].left.answerContent =
+          data.answer?.left.answerContent
+        state.answers[index].left.random = data.answer?.left.random
+
+        state.answers[index].right.plainText = data.answer?.right.plainText
+        state.answers[index].right.answerContent =
+          data.answer?.right.answerContent
+        state.answers[index].right.random = data.answer?.right.random
+      } catch (error) {
+        console.log(error)
+      }
+
+      return 0
+    }
+    state.childQuestions[index].answers[indexAnswer].plainText =
+      data.answer.plainText
+    state.childQuestions[index].answers[indexAnswer].rightAnswer =
+      data.answer.rightAnswer
+    state.childQuestions[index].answers[indexAnswer].random = data.answer.random
+    state.childQuestions[index].answers[indexAnswer].answerContent =
+      data.answer.answerContent
+  },
+  DELETE_ANSWER_OF_CHILD_QUESTION(state, data) {
+    const index = state.childQuestions.findIndex(
+      (item) => item.id === data.questionChildId
+    )
+    const answerIndex = state.childQuestions[index].answers.findIndex(
+      (item) => item.id === data.answerId
+    )
+    state.childQuestions[index].answers.splice(answerIndex, 1)
   },
 }

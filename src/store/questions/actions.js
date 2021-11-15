@@ -77,4 +77,16 @@ export default {
   isRandom({ commit }, data) {
     commit('IS_RANDOM', data)
   },
+  addChildQuestionContent({ commit }, data) {
+    commit('ADD_CHILD_QUESTION_CONTENT', data)
+  },
+  deleteChildQuestion({ commit }, data) {
+    commit('DELETE_CHILD_QUESTION', data)
+  },
+  updateAnswerQuestionChild({ commit }, data) {
+    commit('UPDATE_ANSWER_QUESTION_CHILD', data)
+  },
+  deleteAnswerOfChildQuestion({ commit }, data) {
+    commit('DELETE_ANSWER_OF_CHILD_QUESTION', data)
+  },
 }

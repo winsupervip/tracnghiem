@@ -48,6 +48,20 @@ export default {
   components: {
     draggable,
   },
+  props: {
+    groupQuestion: {
+      type: Boolean,
+      default: false,
+    },
+    childQuestionId: {
+      type: String,
+      default: '',
+    },
+    listAnswer: {
+      type: Array,
+      required: true,
+    },
+  },
   data() {
     return {
       list: [],
@@ -68,17 +82,18 @@ export default {
     },
   },
   watch: {
-    getListAnswer() {
+    listAnswer() {
+      console.log(this.listAnswer)
       if (
-        this.getListAnswer.length > this.list.length ||
-        this.getListAnswer.length < this.list.length
+        this.listAnswer.length > this.list.length ||
+        this.listAnswer.length < this.list.length
       ) {
-        this.list = this.getListAnswer
+        this.list = this.listAnswer
       }
     },
   },
   created() {
-    const data = this.getListAnswer.map((item) => {
+    const data = this.listAnswer.map((item) => {
       item.fixed = false
       return item
     })
@@ -102,10 +117,6 @@ export default {
     },
     onEndMove({ newDraggableIndex, oldDraggableIndex }) {
       if (newDraggableIndex !== oldDraggableIndex) {
-        // const data = {
-        //   oldDraggableIndex: this.list[oldDraggableIndex].id,
-        //   newDraggableIndex: this.list[newDraggableIndex].id,
-        // }
         this.handleUpdateDraggableAnswer(this.list)
       }
     },

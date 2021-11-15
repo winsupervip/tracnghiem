@@ -4,14 +4,48 @@
       <div class="p-question p-question--singleChoice">
         <div class="p-question__left">
           <HeaderOfSingleQuestion :question-title="questionTitle" />
-          <AddChildrenAnswer />
+          <AddChildrenQuestion />
           <!-- <CommentOrNote /> -->
           <!-- <QuestionChild
             v-for="question in getChildQuestion"
             :key="question.id"
             :question="question"
           /> -->
+          <div>
+            <b-container>
+              <b-row
+                v-for="(question, index) in getChildQuestion"
+                :key="question.id"
+                :class="$style.question_child"
+              >
+                <b-col cols="1">
+                  <h6>Câu {{ String.fromCharCode(65 + index) + '. ' }}</h6>
+                </b-col>
+                <b-col
+                  cols="9"
+                  v-html="question.question.questionContent"
+                ></b-col>
+                <b-col cols="2" class="matching_style">
+                  <b-icon icon="shuffle"></b-icon>
+                  <b-icon
+                    v-b-modal.update-child-question
+                    icon="pencil-square"
+                    @click="openUpdate(question)"
+                  ></b-icon>
+                  <b-icon
+                    icon="trash"
+                    @click="deleteQuestion(question.id)"
+                  ></b-icon>
+                </b-col>
+              </b-row>
+            </b-container>
+          </div>
+          <QuestionChild
+            :question-child="dataUpdate"
+            modal-id="update-child-question"
+          />
         </div>
+
         <div class="p-question__right">
           <PublishQuestion :on-submit="onSubmit" />
           <Category />
@@ -33,9 +67,8 @@ import AddSeo from '../../../../components/Question/AddSeo.vue'
 import LevelForm from '../../../../components/Question/LevelForm.vue'
 import Category from '../../../../components/Question/Category.vue'
 import HeaderOfSingleQuestion from '../../../../components/Question/HeaderOfSingleQuestion.vue'
-// import ListChildrenAnswer from '../../../../components/Question/ListAnswers.vue'
-import UploadImage from '../../../../components/Question/UploadImage.vue'
-import AddChildrenAnswer from '../../../../components/Question/AddChildrenAnswer.vue'
+import QuestionChild from '../../../../components/Question/QuestionChild.vue'
+import AddChildrenQuestion from '../../../../components/Question/AddChildrenQuestion.vue'
 import CauHoiApi from '../../../../api/cauHoi'
 // eslint-disable-next-line import/no-unresolved
 import Uploader from '../../../../components/Uploader.vue'
@@ -45,12 +78,10 @@ export default defineComponent({
     PublishQuestion,
     LevelForm,
     Category,
-    // ListChildrenAnswer,
-    // eslint-disable-next-line vue/no-unused-components
-    UploadImage,
     AddSeo,
     Uploader,
-    AddChildrenAnswer,
+    AddChildrenQuestion,
+    QuestionChild,
   },
   layout: 'dashboard',
   auth: true,
@@ -59,6 +90,8 @@ export default defineComponent({
     const data = reactive({
       errors: '',
       questionTitle: 'Câu hỏi chùm',
+      dataUpdate: {},
+      isUpdate: false,
     })
 
     return {
@@ -76,8 +109,18 @@ export default defineComponent({
     ...mapActions({
       restAnswer: 'questions/restAnswer',
       setNullAnswerId: 'questions/setNullAnswerId',
+      deleteChildQuestion: 'questions/deleteChildQuestion',
     }),
-
+    openUpdate(data) {
+      this.dataUpdate = data
+      this.isUpdate = true
+    },
+    closeUpdate() {
+      this.isUpdate = false
+    },
+    deleteQuestion(id) {
+      this.deleteChildQuestion(id)
+    },
     isValidAnswer(answers) {
       this.errors = ''
       let validateAnswers = []
@@ -115,3 +158,9 @@ export default defineComponent({
   },
 })
 </script>
+<style module>
+.question_child {
+  margin: 1rem;
+  border-bottom: 1px solid;
+}
+</style>
