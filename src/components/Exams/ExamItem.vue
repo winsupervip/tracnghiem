@@ -2,18 +2,9 @@
   <div class="exam-item border-bottom mb-3 pb-2">
     <div class="exam-header">
       <div class="exam-header-left">
-        <h3>
-          {{ exam.categoryItem.categoryName }}
+        <h3 class="exam-title">
+          {{ exam.title }}
         </h3>
-        <b-badge pill class="rounded-pill bg-success">{{
-          exam.levelName
-        }}</b-badge>
-        <b-badge pill class="rounded-pill bg-success">{{
-          exam.paymentName
-        }}</b-badge>
-        <b-badge pill class="rounded-pill bg-success">{{
-          exam.statusName
-        }}</b-badge>
       </div>
       <div class="exam-header-right">
         <a href="#" target="_blank" class="btn btn-sm btn-outline-primary">
@@ -39,6 +30,9 @@
     </div>
     <div class="exam-body">
       <ul class="list-inline exam-tags">
+        <li class="list-inline-item">
+          <b-icon-tags></b-icon-tags>
+        </li>
         <li
           v-for="(tag, index) in exam.tags"
           :key="index"
@@ -49,9 +43,19 @@
           </nuxt-link>
         </li>
       </ul>
-      <h3 class="exam-title">
-        {{ exam.title }}
+      <h3>
+        <b-icon-journal-bookmark></b-icon-journal-bookmark>
+        {{ exam.categoryItem.categoryName }}
       </h3>
+      <b-badge pill class="rounded-pill bg-success">{{
+        exam.levelName
+      }}</b-badge>
+      <b-badge pill class="rounded-pill bg-success">{{
+        exam.paymentName
+      }}</b-badge>
+      <b-badge pill :class="'rounded-pill ' + getStatusColor(exam.statusId)">{{
+        exam.statusName
+      }}</b-badge>
     </div>
   </div>
 </template>
@@ -71,6 +75,17 @@ export default defineComponent({
       const names = categories.map((c) => c.categoryName)
       return names.join(', ')
     },
+    getStatusColor(statusId) {
+      switch (statusId) {
+        case 1:
+          return 'bg-success'
+        case 2:
+          return 'bg-info'
+        case 3:
+          return 'bg-warning'
+      }
+      return 'bg-primary'
+    },
   },
 })
 </script>
@@ -78,7 +93,6 @@ export default defineComponent({
 .exam-header {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px dotted #ddd;
   margin-bottom: 10px;
 }
 .exam-header-left {
@@ -101,6 +115,11 @@ export default defineComponent({
 .exam-tags {
   a {
     font-size: 13px;
+  }
+}
+.exam-body {
+  h3 {
+    font-size: 14px;
   }
 }
 </style>
