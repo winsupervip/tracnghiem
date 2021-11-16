@@ -66,8 +66,10 @@
     "searchTitle": "Tìm kiếm đề thi",
     "status": "Trạng thái",
     "levels": "Mức độ",
+    "questionType": "Loại câu hỏi",
     "sortby": "Sắp xếp",
     "filter": "Áp dụng",
+    "filterBy": "Tạo bởi",
     "add": "Thêm mới",
     "title": "Danh sách đề thi",
     "form": {
@@ -105,9 +107,19 @@
       "tagHelper": "Nhập tối thiểu 1 thẻ, tối đa 5 thẻ",
       "tagHolder": "Nhập ít nhất 2 ký tự"
     },
-    "edit":"Cập nhật"
+    "edit": "Cập nhật",
+    "questions": {
+      "title": "Danh sách câu hỏi",
+      "search": "Tìm kiếm câu hỏi"
+    }
   },
-  "errors":{
+  "modalQToExam": {
+    "questionBank": "Ngân hàng câu hỏi",
+    "questionSaved": "Câu hỏi đã lưu",
+    "questionWishlist": "Câu hỏi yêu thích",
+    "questionAddNew": "Thêm mới"
+  },
+  "errors": {
     "00000000": "Thành công",
     "00000001": "Email đã tồn tại",
     "00000010": "Vai trò không tồn tại",

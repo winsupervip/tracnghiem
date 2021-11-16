@@ -29,7 +29,6 @@ export default {
     if (urlQuery.orderBy && urlQuery.orderBy > 0) {
       url += '&orderBy=' + urlQuery.orderBy
     }
-    console.log(url)
     return global.$http.get(url)
   },
   addExam: (data) => global.$http.post('/api/v1/Exam/add-exam', data),
