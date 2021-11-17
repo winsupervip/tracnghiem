@@ -37,7 +37,7 @@ import {
   useFetch,
   useContext,
 } from '@nuxtjs/composition-api'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   setup(props) {
@@ -60,10 +60,18 @@ export default defineComponent({
       ...toRefs(data),
     }
   },
+  computed: {
+    ...mapGetters({
+      getQuestion: 'questions/getQuestion',
+    }),
+  },
   watch: {
     treeValue() {
       this.addCategory(this.treeValue)
     },
+  },
+  mounted() {
+    this.treeValue = this.getQuestion?.question?.categories
   },
   methods: {
     ...mapActions({ addCategory: 'questions/addCategory' }),

@@ -22,6 +22,7 @@ import {
   toRefs,
   useStore,
 } from '@nuxtjs/composition-api'
+import { uuid } from 'vue-uuid'
 import QuestionApi from '@/api/question-list-page'
 import handler from '@/utils/question/handleAnswer.js'
 import CreateSingleQuestion from '@/components/Question/CreateSingleQuestion.vue'
@@ -91,7 +92,145 @@ export default defineComponent({
     useAsync(async () => {
       const { data } = await QuestionApi.getUserQuestionDetails(questionId)
       data.questionData = data
-      console.log(data.questionData)
+      const answers = data.questionData.object.answers
+      let listAnswer = []
+      console.log('answers', answers)
+      if (data.questionData.object.question.questionTypeId === 4) {
+        const lefts = answers.filter((answer) => answer.position === 1)
+        const rights = answers.filter((answer) => answer.position === 2)
+        const convertLeft = lefts.map((left) => {
+          const right = rights.find((x) => x.rightAnswer === left.rightAnswer)
+          return {
+            id: uuid.v4(),
+            left: {
+              id: uuid.v4(),
+              position: 1,
+              hashId: '',
+              plainText: left.plainText,
+              rightAnswer: left.rightAnswer,
+              random: left.random,
+              answerContent: left.answerContent,
+            },
+            right: {
+              id: uuid.v4(),
+              position: 2,
+              hashId: '',
+              plainText: right?.plainText || '',
+              rightAnswer: right?.rightAnswer || '',
+              random: right?.random || false,
+              answerContent: right?.answerContent || '',
+            },
+          }
+        })
+        const convertRight = rights
+          .filter((x) => !lefts.find((l) => l.rightAnswer === x.rightAnswer))
+          .map((x) => ({
+            id: uuid.v4(),
+            left: {
+              id: uuid.v4(),
+              position: 1,
+              hashId: '',
+              plainText: '',
+              rightAnswer: '',
+              random: false,
+              answerContent: '',
+            },
+            right: {
+              id: uuid.v4(),
+              position: 2,
+              hashId: '',
+              plainText: x.plainText,
+              rightAnswer: x.rightAnswer,
+              random: x.random,
+              answerContent: x.answerContent,
+            },
+          }))
+        listAnswer = [...convertLeft, ...convertRight]
+        // answers.forEach((answer) => {
+        //   let isMap = false
+        //   let answerItem = {}
+        //   answers.forEach((a) => {
+        //     if (
+        //       answer.rightAnswer === a.rightAnswer &&
+        //       answer.hashId !== a.hashId
+        //     ) {
+        //       isMap = true
+        //       answerItem = {
+        //         left: {
+        //           id: uuid.v4(),
+        //           position: 1,
+        //           hashId: '',
+        //           plainText: answer.plainText,
+        //           rightAnswer: answer.rightAnswer,
+        //           random: answer.random,
+        //           answerContent: answer.answerContent,
+        //         },
+        //         right: {
+        //           id: uuid.v4(),
+        //           position: 2,
+        //           hashId: '',
+        //           plainText: a.plainText,
+        //           rightAnswer: a.rightAnswer,
+        //           random: a.random,
+        //           answerContent: a.answerContent,
+        //         },
+        //         id: uuid.v4(),
+        //       }
+        //     }
+        //   })
+        //   if (!isMap) {
+        //     if (answer.position === 1) {
+        //       answerItem = {
+        //         left: {
+        //           id: uuid.v4(),
+        //           position: 1,
+        //           hashId: '',
+        //           plainText: answer.plainText,
+        //           rightAnswer: answer.rightAnswer,
+        //           random: answer.random,
+        //           answerContent: answer.answerContent,
+        //         },
+        //         right: {
+        //           id: uuid.v4(),
+        //           position: 2,
+        //           hashId: '',
+        //           plainText: '',
+        //           rightAnswer: answer.rightAnswer,
+        //           random: answer.random,
+        //           answerContent: '',
+        //         },
+        //         id: uuid.v4(),
+        //       }
+        //     } else {
+        //       answerItem = {
+        //         left: {
+        //           id: uuid.v4(),
+        //           position: 1,
+        //           hashId: '',
+        //           plainText: '',
+        //           rightAnswer: answer.rightAnswer,
+        //           random: answer.random,
+        //           answerContent: '',
+        //         },
+        //         right: {
+        //           id: uuid.v4(),
+        //           position: 2,
+        //           hashId: '',
+        //           plainText: answer.plainText,
+        //           rightAnswer: answer.rightAnswer,
+        //           random: answer.random,
+        //           answerContent: answer.answerContent,
+        //         },
+        //         id: uuid.v4(),
+        //       }
+        //     }
+        //   }
+        //   listAnswer.push(answerItem)
+        // })
+      }
+
+      data.questionData.object.answers = listAnswer
+
       store.dispatch('questions/copyQuestion', data.questionData)
       checkQuestionType(data.object.question)
     })

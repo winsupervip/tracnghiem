@@ -110,7 +110,7 @@
 </template>
 <script>
 // eslint-disable-next-line import/no-unresolved
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import fileApi from '@/api/fileApi'
 const STATUS_INITIAL = 0
 const STATUS_SAVING = 1
@@ -156,7 +156,11 @@ export default {
     isProcess() {
       return this.currentStatus === STATUS_IMPORT
     },
+    ...mapGetters({
+      getQuestion: 'questions/getQuestion',
+    }),
   },
+
   watch: {
     image() {
       this.addSeoAvatar(this.image)
@@ -165,9 +169,11 @@ export default {
   created() {
     this.image = this.value
   },
+
   mounted() {
-    // this.reset()
+    this.image = this.getQuestion?.question?.seoAvatar
   },
+
   methods: {
     ...mapActions({ addSeoAvatar: 'questions/addSeoAvatar' }),
     reup() {
