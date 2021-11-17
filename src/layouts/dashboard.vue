@@ -15,11 +15,12 @@
       <b-sidebar
         id="sidebar-1"
         ref="bSidebar"
+        :visible="visible"
+        :no-close-on-route-change="true"
         no-header
         :backdrop-variant="variant"
         :backdrop="backdrop"
         shadow
-        :visible="visible"
       >
         <div ref="nav" class="l-dashboard__nav">
           <div class="l-dashboard__nav__global">
@@ -170,7 +171,7 @@
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="">
+                    <nuxt-link to="/users/exams/">
                       <div>
                         <img
                           src="~/assets/img/dashboard/icon_dethi.svg"
@@ -263,7 +264,6 @@ import _ from 'lodash'
 
 export default defineComponent({
   name: 'Dashboard',
-  layout: 'dashboard',
   data() {
     return {
       backdrop: false,
@@ -273,11 +273,19 @@ export default defineComponent({
       isDisplayMenuSp: false,
     }
   },
+  watch: {
+    visible(val) {
+      console.log('visible ' + val)
+    },
+  },
   created() {
     if (process.browser) {
       // eslint-disable-next-line nuxt/no-globals-in-created
       if (window.innerWidth < 991) {
+        console.log('created 991')
         this.visible = false
+      } else {
+        this.visible = true
       }
     }
   },
@@ -307,11 +315,13 @@ export default defineComponent({
     handleWindowResize() {
       console.log('handleWindowResize')
       if ($(window).innerWidth() < 991) {
+        console.log('handleWindowResize 991')
         this.visible = false
         this.backdrop = true
         this.variant = 'dark'
         this.isDisplayMenuSp = true
       } else {
+        console.log('handleWindowResize >= 991')
         this.visible = true
         this.backdrop = false
         this.variant = 'transparent'
@@ -319,6 +329,7 @@ export default defineComponent({
       }
     },
     toggleItemMenu() {
+      console.log('toggleItemMenu')
       // window.addEventListener('resize', this.handleWindowResize)
       $('.p-navItem--dropdown__inner__icon').click(function () {
         const menu = $(this.closest('.p-navItem--dropdown__inner')).find(

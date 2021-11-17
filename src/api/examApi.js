@@ -6,7 +6,7 @@ export default {
 
     if (urlQuery.categories && urlQuery.categories.length > 0) {
       const categoryUrl = urlQuery.categories.join('&categories=')
-      url = '&categories=' + categoryUrl
+      url += '&categories=' + categoryUrl
     }
 
     if (urlQuery.tags && urlQuery.tags.length > 0) {
@@ -32,4 +32,8 @@ export default {
     console.log(url)
     return global.$http.get(url)
   },
+  addExam: (data) => global.$http.post('/api/v1/Exam/add-exam', data),
+  getUserExamById: (hashId) =>
+    global.$http.get(`/api/v1/Exam/get-exam-details/${hashId}`),
+  editExam: (data) => global.$http.put('/api/v1/Exam/update-exam', data),
 }

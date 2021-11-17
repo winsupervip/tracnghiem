@@ -1,0 +1,31 @@
+export default {
+  getExam: (state) => state.exam,
+  getExamInfo: (state) => ({
+    title: state.exam.title,
+    description: state.exam.description,
+    tags: state.exam.tags,
+  }),
+  getExamSettings: (state) => ({
+    nonExamTime: state.exam.nonExamTime,
+    examTime: state.exam.examTime,
+    maximumTest: state.exam.maximumTest,
+    numberQuestionsTest: state.exam.numberQuestionsTest,
+    suffleQuestions: state.exam.suffleQuestions,
+    suffleAnswers: state.exam.suffleAnswers,
+    checkAnswersWhileTest: state.exam.checkAnswersWhileTest,
+    checkAnswersAfterTest: state.exam.checkAnswersAfterTest,
+    allowChangeSettings: state.exam.allowChangeSettings,
+  }),
+  getExamExtra: (state) => ({
+    image: state.exam.image,
+    payementTypeId: 1, // state.exam.payementTypeId,
+    statusId: state.exam.statusId,
+    levelId: state.exam.levelId,
+    seoTitle: state.exam.seoTitle,
+    seoDescription: state.exam.seoDescription,
+    slug: state.exam.slug,
+    categoryId: state.exam.categoryId,
+  }),
+  getTitle: (state) => state.exam.title,
+  getDescription: (state) => state.exam.seoDescription,
+}

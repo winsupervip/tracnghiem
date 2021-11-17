@@ -5,7 +5,7 @@
       <b-form>
         <b-form-row class="row">
           <b-form-group
-            label="Từ khóa"
+            :label="$t('keyword')"
             label-for="keyword"
             class="col-12 col-md-6 mb-3"
           >
@@ -88,13 +88,21 @@
               :placeholder="$t('exam.sortby')"
             />
           </b-form-group>
-          <div class="col-12 col-md-3 mb-3 d-flex justify-content-around">
-            <b-button variant="outline-primary" type="submit">
+          <div
+            class="
+              col-12 col-md-3
+              mb-3
+              d-flex
+              justify-content-around
+              align-items-end
+            "
+          >
+            <b-button variant="outline-primary btn-sm" @click="fetch()">
               <b-icon-filter></b-icon-filter> {{ $t('exam.filter') }}
             </b-button>
-            <b-button variant="primary">
+            <nuxt-link class="btn btn-sm btn-primary" to="/users/exams/add">
               <b-icon-plus></b-icon-plus> {{ $t('exam.add') }}
-            </b-button>
+            </nuxt-link>
           </div>
         </b-form-row>
       </b-form>
@@ -215,6 +223,7 @@ export default defineComponent({
 
     return {
       ...toRefs(data),
+      fetch,
     }
   },
   methods: {
