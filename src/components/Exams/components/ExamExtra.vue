@@ -27,27 +27,32 @@
         </b-button>
       </div>
     </div>
-    <div class="list-group mt-3">
-      <div class="list-group-item disabled border-bottom-0">
-        <h3>{{ $t('exam.form.categoryTitle') }} (*):</h3>
-      </div>
-      <div class="list-group-item tree-select-container border-0 p-0 m-0">
-        <ValidationProvider
-          :name="$t('exam.form.categoryTitle')"
-          rules="required"
-        >
+    <ValidationProvider
+      v-slot="{ valid, errors, validate }"
+      :name="$t('exam.form.categoryTitle')"
+      rules="required"
+    >
+      <div class="list-group mt-3">
+        <b-form-invalid-feedback :state="valid">
+          {{ errors ? errors[0] : '' }}
+        </b-form-invalid-feedback>
+        <div class="list-group-item disabled border-bottom-0">
+          <h3>{{ $t('exam.form.categoryTitle') }} (*):</h3>
+        </div>
+        <div class="list-group-item tree-select-container border-0 p-0 m-0">
           <treeselect
             id="categories"
-            v-model="categories"
+            v-model="categoryId"
             :multiple="false"
             :options="categoryItems"
             :load-options="loadOptions"
             :always-open="true"
             :placeholder="$t('exam.form.categorySelect')"
+            @input="validate"
           />
-        </ValidationProvider>
+        </div>
       </div>
-    </div>
+    </ValidationProvider>
     <div class="list-group mt-3">
       <div class="list-group-item disabled">
         <h3>{{ $t('exam.form.level') }}:</h3>
@@ -81,7 +86,10 @@
         <h3>{{ $t('exam.form.seoSetting') }}:</h3>
       </div>
       <div class="list-group-item">
-        <ValidationProvider :name="$t('exam.form.seoTitle')" rules="required">
+        <ValidationProvider
+          :name="$t('exam.form.seoTitle')"
+          rules="required|max:255"
+        >
           <b-form-group
             slot-scope="{ valid, errors }"
             :label="$t('exam.form.seoTitle')"
@@ -99,7 +107,10 @@
           </b-form-group>
         </ValidationProvider>
 
-        <ValidationProvider :name="$t('exam.form.slug')" rules="required">
+        <ValidationProvider
+          :name="$t('exam.form.slug')"
+          rules="required|max:255"
+        >
           <b-form-group
             slot-scope="{ valid, errors }"
             :label="$t('exam.form.slug')"
@@ -119,7 +130,7 @@
 
         <ValidationProvider
           :name="$t('exam.form.seoDescription')"
-          rules="required"
+          rules="required|max:1000"
         >
           <b-form-group
             slot-scope="{ valid, errors }"
@@ -171,7 +182,7 @@ export default defineComponent({
       seoTitle: '',
       seoDescription: '',
       slug: '',
-      categories: [],
+      categoryId: null,
       categoryItems: [],
       paymentTypes: [],
       listStatus: [],
@@ -242,7 +253,7 @@ export default defineComponent({
     seoDescription() {
       this.commitData()
     },
-    categories() {
+    categoryId() {
       this.commitData()
     },
     getTitle() {
@@ -252,17 +263,22 @@ export default defineComponent({
     getDescription() {
       this.seoDescription = this.getDescription
     },
+    slug() {
+      this.commitData()
+    },
+    examExtra() {
+      console.log(this.image)
+      this.image = this.examExtra.image
+      this.payementTypeId = this.examExtra.payementTypeId
+      this.statusId = this.examExtra.statusId
+      this.levelId = this.examExtra.levelId
+      this.seoTitle = this.examExtra.seoTitle
+      this.seoDescription = this.examExtra.seoDescription
+      this.categoryId = this.examExtra.categoryId
+      this.slug = this.examExtra.slug
+    },
   },
-  created() {
-    this.image = this.examExtra.image
-    this.payementTypeId = this.examExtra.payementTypeId
-    this.statusId = this.examExtra.statusId
-    this.levelId = this.examExtra.levelId
-    this.seoTitle = this.examExtra.seoTitle
-    this.seoDescription = this.examExtra.seoDescription
-    this.categories = this.examExtra.categories
-    this.slug = this.examExtra.slug
-  },
+  created() {},
   methods: {
     ...mapActions({
       setExamExtra: 'exams/setExamExtra',
@@ -277,9 +293,15 @@ export default defineComponent({
         seoTitle: this.seoTitle,
         seoDescription: this.seoDescription,
         slug: this.slug,
-        categories: this.categories,
+        categoryId: this.categoryId,
       })
     }, 200),
   },
 })
 </script>
+<style scoped lang="scss">
+.vue-treeselect__menu,
+.vue-treeselect__menu-container {
+  position: relative !important;
+}
+</style>

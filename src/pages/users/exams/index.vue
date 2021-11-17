@@ -146,7 +146,7 @@ import EmptyData from '@/components/EmptyData.vue'
 
 export default defineComponent({
   components: { ExamItem, EmptyData },
-  layout: 'sidebar',
+  layout: 'dashboard',
   auth: true,
   setup() {
     const { app, $loader, $logger } = useContext()

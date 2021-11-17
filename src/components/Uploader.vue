@@ -36,7 +36,7 @@
       </div>
     </form>
     <div v-else class="wrapper-img">
-      <img :src="image" class="img-fluid" style="width: 100%" />
+      <img :src="value" class="img-fluid" style="width: 100%" />
     </div>
     <!--PROCESS-->
     <div v-if="isProcess" class="text-center">
@@ -163,6 +163,7 @@ export default {
 
   watch: {
     image() {
+      console.log('watch', this.image)
       this.addSeoAvatar(this.image)
     },
   },
@@ -260,5 +261,11 @@ export default {
 }
 .dropzone {
   position: relative;
+}
+.wrapper-img {
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+.p-question__box__body {
+  border: 1px solid rgba(0, 0, 0, 0.125);
 }
 </style>

@@ -25,7 +25,8 @@ export default {
     state.exam.levelId = examExtra.levelId
     state.exam.seoTitle = examExtra.seoTitle
     state.exam.seoDescription = examExtra.seoDescription
-    state.exam.categories = examExtra.categories
+    state.exam.categoryId = examExtra.categoryId
+    state.exam.slug = examExtra.slug
   },
   SET_SEO_DESCRIPTION(state, seoDescription) {
     console.log('SET_SEO_DESCRIPTION', seoDescription)

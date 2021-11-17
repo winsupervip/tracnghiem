@@ -32,4 +32,8 @@ export default {
     console.log(url)
     return global.$http.get(url)
   },
+  addExam: (data) => global.$http.post('/api/v1/Exam/add-exam', data),
+  getUserExamById: (hashId) =>
+    global.$http.get(`/api/v1/Exam/get-exam-details/${hashId}`),
+  editExam: (data) => global.$http.put('/api/v1/Exam/update-exam', data),
 }
