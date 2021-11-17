@@ -1,10 +1,5 @@
 <template>
   <div>
-    <div>
-      <b-button @click="showHide()">
-        <b-icon-columns-gap></b-icon-columns-gap>
-      </b-button>
-    </div>
     <div class="row flex-nowrap">
       <div
         id="left-menu"
@@ -57,7 +52,7 @@
           </li>
         </ul>
       </div>
-      <div class="col">
+      <div class="col question-container">
         <b-form>
           <b-form-row class="row">
             <b-form-group
@@ -153,7 +148,7 @@
                 align-items-end
               "
             >
-              <b-button variant="outline-primary" @click="fetch()">
+              <b-button variant="outline-primary" @click="searchHandler()">
                 <b-icon-filter></b-icon-filter> {{ $t('exam.filter') }}
               </b-button>
             </div>
@@ -165,6 +160,18 @@
             <EmptyData />
           </div>
           <div v-else>
+            <SingleListPage
+              v-for="question in items"
+              :key="question.id"
+              :questions="question"
+            >
+              <template #header>
+                <button class="btn btn-sm btn-primary">
+                  <b-icon-clipboard-plus></b-icon-clipboard-plus> Thêm vào đề
+                  thi
+                </button>
+              </template>
+            </SingleListPage>
             <div class="mt-2">
               <b-pagination
                 v-if="total > urlQuery.pageSize"
@@ -177,6 +184,10 @@
             </div>
           </div>
         </div>
+        <div class="btn-hide-menu" @click="showHide()">
+          <b-icon-arrow-left-circle v-if="isShow"></b-icon-arrow-left-circle>
+          <b-icon-arrow-right-circle v-if="!isShow"></b-icon-arrow-right-circle>
+        </div>
       </div>
     </div>
   </div>
@@ -188,12 +199,16 @@ import {
   reactive,
   toRefs,
   useAsync,
+  useFetch,
+  watch,
 } from '@nuxtjs/composition-api'
 import QuestionApi from '@/api/question-list-page'
 import catalogApi from '@/api/catalogApi'
+import examApi from '@/api/examApi'
 import EmptyData from '@/components/EmptyData.vue'
+import SingleListPage from '@/components/Question/SingleListPage.vue'
 export default defineComponent({
-  components: { EmptyData },
+  components: { EmptyData, SingleListPage },
   layout: 'dashboard',
   auth: true,
   setup() {
@@ -246,8 +261,32 @@ export default defineComponent({
       }
       $loader().close()
     })
+
+    const { fetch } = useFetch(async () => {
+      $loader()
+      const { data: response } = await examApi.getItemsAddExam(data.urlQuery)
+      data.items = response.object.items
+      data.total = response.object.total
+      $loader().close()
+    })
+
+    fetch()
+
+    watch(
+      () => data.urlQuery.page,
+      () => {
+        fetch()
+      }
+    )
+
+    const searchHandler = () => {
+      data.urlQuery.page = 1
+      fetch()
+    }
+
     return {
       ...toRefs(data),
+      searchHandler,
     }
   },
   methods: {
@@ -280,5 +319,20 @@ export default defineComponent({
 }
 #left-menu {
   transition: 2s all;
+}
+.question-container {
+  position: relative;
+}
+.btn-hide-menu {
+  position: absolute;
+  left: -10px;
+  top: -27px;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #0747a6;
+  text-align: center;
+  line-height: 25px;
+  color: #ffffff;
 }
 </style>

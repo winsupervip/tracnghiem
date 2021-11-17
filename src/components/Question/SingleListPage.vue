@@ -6,6 +6,7 @@
         header-tag="header"
         footer-tag="footer"
       >
+        <slot name="header"></slot>
         <template #header>
           <QuestionHeader :questions="questions" />
         </template>

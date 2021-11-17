@@ -35,4 +35,32 @@ export default {
   getUserExamById: (hashId) =>
     global.$http.get(`/api/v1/Exam/get-exam-details/${hashId}`),
   editExam: (data) => global.$http.put('/api/v1/Exam/update-exam', data),
+  getItemsAddExam: (urlQuery) => {
+    let url = `/api/v1/Exam/get-item-list-add-to-exam?Page=${
+      urlQuery.page
+    }&PageSize=${urlQuery.pageSize}&Keyword=${encodeURIComponent(
+      urlQuery.keyword
+    )}`
+
+    if (urlQuery.categories && urlQuery.categories.length > 0) {
+      const categoryUrl = urlQuery.categories.join('&categories=')
+      url += '&categories=' + categoryUrl
+    }
+
+    if (urlQuery.levelId && urlQuery.levelId > 0) {
+      url += '&levelId=' + urlQuery.levelId
+    }
+    if (urlQuery.questionTypeId && urlQuery.questionTypeId > 0) {
+      url += '&questionTypeId=' + urlQuery.questionTypeId
+    }
+
+    if (urlQuery.filterBy != null) {
+      url += '&filterBy=' + urlQuery.filterBy
+    }
+
+    if (urlQuery.orderBy && urlQuery.orderBy > 0) {
+      url += '&orderBy=' + urlQuery.orderBy
+    }
+    return global.$http.get(url)
+  },
 }
