@@ -102,7 +102,7 @@
       hide-footer
       :title="$t('exam.questions.search')"
     >
-      <ModalQuestionForAdd />
+      <ModalQuestionForAdd :exam-hash-id="examHashId" />
     </b-modal>
   </div>
 </template>
@@ -157,11 +157,12 @@ export default defineComponent({
       },
       items: [],
       total: 0,
+      examHashId: '',
     })
 
     const route = useRoute()
     const id = computed(() => route.value.params.id)
-    const hashId = id.value
+    data.examHashId = id.value
     useAsync(async () => {
       $loader()
       try {
@@ -174,7 +175,7 @@ export default defineComponent({
           QuestionApi.getLevel(),
           catalogApi.getExamSortBy(),
           QuestionApi.getTreeQuestionTypes(),
-          examApi.getUserExamById(hashId),
+          examApi.getUserExamById(data.examHashId),
         ])
         data.levels = levels.object.items
         data.sortBy = sortBy.object.items
@@ -183,7 +184,7 @@ export default defineComponent({
         data.examInfo = examData.object
         data.breadcrumbs.splice(2, 0, {
           text: data.examInfo.title,
-          href: '/users/exams/' + hashId,
+          href: '/users/exams/' + data.examHashId,
         })
       } catch (err) {
         app.$handleError(err, () => {

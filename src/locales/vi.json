@@ -117,7 +117,26 @@
     "questionBank": "Ngân hàng câu hỏi",
     "questionSaved": "Câu hỏi đã lưu",
     "questionWishlist": "Câu hỏi yêu thích",
-    "questionAddNew": "Thêm mới"
+    "questionAddNew": "Thêm mới",
+    "position": "Vị trí thêm",
+    "point": "Số điểm",
+    "setting": "Cài đặt câu hỏi",
+    "save": "Lưu",
+    "close": "Hủy",
+    "totalQuestion": "Số câu hỏi",
+    "select": "Chọn",
+    "addToExam":"Thêm vào đề thi",
+    "errors": {
+      "questionEmpty": "Vui lòng chọn ít nhất 1 câu hỏi"
+    }
+  },
+  "section":{
+    "title": "Chuyên mục",
+    "add": "Thêm mới chuyên mục",
+    "addDesc": "Vui lòng thêm mới nếu không tìm thấy chuyên mục",
+    "position":"Vị trí thêm",
+    "numberQuestionsTest": "Số câu hỏi / đề thi",
+    "description": "Mô tả"
   },
   "errors": {
     "00000000": "Thành công",

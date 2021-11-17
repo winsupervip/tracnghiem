@@ -151,6 +151,10 @@
               <b-button variant="outline-primary" @click="searchHandler()">
                 <b-icon-filter></b-icon-filter> {{ $t('exam.filter') }}
               </b-button>
+              <b-button variant="outline-primary" @click="onSelectQuestions()">
+                <b-icon-clipboard-plus></b-icon-clipboard-plus>
+                {{ $t('modalQToExam.addToExam') }}
+              </b-button>
             </div>
           </b-form-row>
         </b-form>
@@ -166,10 +170,22 @@
               :questions="question"
             >
               <template #header>
-                <button class="btn btn-sm btn-primary">
-                  <b-icon-clipboard-plus></b-icon-clipboard-plus> Thêm vào đề
-                  thi
+                <button
+                  class="btn btn-sm btn-primary"
+                  @click="onSelectQuestion(question)"
+                >
+                  <b-icon-clipboard-plus></b-icon-clipboard-plus>
+                  {{ $t('modalQToExam.addToExam') }}
                 </button>
+                <div class="mt-3">
+                  <b-form-checkbox
+                    v-model="selectedItems"
+                    :value="question"
+                    name="question"
+                  >
+                    {{ $t('modalQToExam.select') }}
+                  </b-form-checkbox>
+                </div>
               </template>
             </SingleListPage>
             <div class="mt-2">
@@ -190,6 +206,18 @@
         </div>
       </div>
     </div>
+    <b-modal
+      id="modal-selected"
+      hide-footer
+      :title="$t('modalQToExam.setting')"
+    >
+      <ModalSelectedQuestion
+        :exam-hash-id="examHashId"
+        :questions="selectedQuestions"
+        :item-type="itemType"
+        @add-questions="onAddQuestions"
+      />
+    </b-modal>
   </div>
 </template>
 <script>
@@ -207,11 +235,21 @@ import catalogApi from '@/api/catalogApi'
 import examApi from '@/api/examApi'
 import EmptyData from '@/components/EmptyData.vue'
 import SingleListPage from '@/components/Question/SingleListPage.vue'
+import ModalSelectedQuestion from '@/components/Exams/components/ModalSelectedQuestion.vue'
 export default defineComponent({
-  components: { EmptyData, SingleListPage },
-  layout: 'dashboard',
+  components: {
+    EmptyData,
+    SingleListPage,
+    ModalSelectedQuestion,
+  },
   auth: true,
-  setup() {
+  props: {
+    examHashId: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
     const { app, $loader, $logger } = useContext()
     const data = reactive({
       levels: [],
@@ -232,6 +270,10 @@ export default defineComponent({
       },
       items: [],
       total: 0,
+      questionHashId: '',
+      itemType: '',
+      selectedQuestions: [],
+      selectedItems: [],
     })
     useAsync(async () => {
       $loader()
@@ -264,7 +306,10 @@ export default defineComponent({
 
     const { fetch } = useFetch(async () => {
       $loader()
-      const { data: response } = await examApi.getItemsAddExam(data.urlQuery)
+      const { data: response } = await examApi.getItemsAddExam(
+        data.urlQuery,
+        props.examHashId
+      )
       data.items = response.object.items
       data.total = response.object.total
       $loader().close()
@@ -293,6 +338,19 @@ export default defineComponent({
     loadOptions({ action, parentNode, callback }) {},
     showHide() {
       this.isShow = !this.isShow
+    },
+    onSelectQuestion(question) {
+      this.selectedQuestions = []
+      this.selectedQuestions.push(question)
+      this.$bvModal.show('modal-selected')
+    },
+    onSelectQuestions() {
+      this.selectedQuestions = this.selectedItems
+      this.$bvModal.show('modal-selected')
+    },
+    onAddQuestions() {
+      this.$bvModal.hide('modal-selected')
+      this.searchHandler()
     },
   },
 })

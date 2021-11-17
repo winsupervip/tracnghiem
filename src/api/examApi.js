@@ -35,12 +35,12 @@ export default {
   getUserExamById: (hashId) =>
     global.$http.get(`/api/v1/Exam/get-exam-details/${hashId}`),
   editExam: (data) => global.$http.put('/api/v1/Exam/update-exam', data),
-  getItemsAddExam: (urlQuery) => {
+  getItemsAddExam: (urlQuery, examHashId) => {
     let url = `/api/v1/Exam/get-item-list-add-to-exam?Page=${
       urlQuery.page
     }&PageSize=${urlQuery.pageSize}&Keyword=${encodeURIComponent(
       urlQuery.keyword
-    )}`
+    )}&examHashId=${examHashId}`
 
     if (urlQuery.categories && urlQuery.categories.length > 0) {
       const categoryUrl = urlQuery.categories.join('&categories=')
@@ -62,5 +62,15 @@ export default {
       url += '&orderBy=' + urlQuery.orderBy
     }
     return global.$http.get(url)
+  },
+  getSectionsByExam: (hashId) => {
+    const url = `/api/v1/Exam/get-list-exam-section/${hashId}`
+    return global.$http.get(url)
+  },
+  addExamSection(data) {
+    return global.$http.post('/api/v1/Exam/add-exam-section', data)
+  },
+  addExamQuestions(data) {
+    return global.$http.post('/api/v1/Exam/add-questions-to-exam', data)
   },
 }

@@ -5,4 +5,6 @@ export default {
     global.$http.get(`/api/v1/Catalog/auto-complete-tag?keyword=${key}`),
   getQuestionFilterBy: () =>
     global.$http.get('/api/v1/Catalog/question-filter-by'),
+  getItemSortTypeInExam: () =>
+    global.$http.get('/api/v1/Catalog/item-order-type-in-exam'),
 }
