@@ -56,6 +56,47 @@
   "AddAnswer": {
     "answer": "Câu trả lời"
   },
+  "PersonalInfo": {
+    "personal":"Thông tin cá nhân"
+  },
+  "userInfo": {
+    "change":"Thay đổi",
+    "introduce":"Giới thiệu"
+  },
+  "info":{
+    "logOut":"Đăng xuất",
+    "btnUpdate":"Cập nhật",
+    "activityHistory":"Lịch sử hoạt động",
+    "codeIntroduce":"Mã giới thiệu",
+    "note":"Lưu ý: Chỉ được cập nhật mã người giới thiệu 1 lần duy nhất",
+    "introduce":"Người giới thiệu bạn",
+    "changePassword":"Đổi mật khẩu",
+    "success":"Cập nhật thành công",
+    "error":"Có lỗi xảy ra"
+  },
+  "formAffiliate":{
+    "createIntroduce":"Bạn chưa có mã giới thiệu? Bấm tạo mã và chia sẻ ngay với bạn bè",
+    "noteCase":"Lưu ý: Mã giới thiệu chỉ bao gồm các ký tự từ a-z, A-Z và các ký tự số",
+    "btnCreateCode": "Tạo mã",
+    "code":"Mã"
+  },
+  "formInfo":{
+    "textUpdateUser":"Cập nhật thông tin cá nhân",
+    "male":"Nam",
+    "aboutYourself":"Giới thiệu bản thân",
+    "female":"Nữ",
+    "firstName":"Họ đệm",
+    "lastName":"Tên",
+    "displayName":"Tên hiển thị",
+    "birthday":"Ngày sinh ",
+    "gender":"Giới tính",
+    "other":"khác",
+    "phoneNumber":"Điện thoại",
+    "address":"Địa chỉ",
+    "workAt": "Đơn vị công tác",
+    "updateUser":"Cập nhật thành công",
+    "error":"Có lỗi xảy ra"
+  },
   "addTags": "Thêm thẻ",
   "keyword": "Từ khóa",
   "exam": {

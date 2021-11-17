@@ -124,9 +124,12 @@
                       </div>
                       <div class="p-navItem--dropdown__inner__menu__child">
                         <div class="item item__heading">Settings</div>
-                        <nuxt-link class="item item__link" to="">
+                        <a
+                          :href="'/users/questions/personal'"
+                          class="item item__link"
+                        >
                           Personal settings
-                        </nuxt-link>
+                        </a>
                         <nuxt-link class="item item__link" to="">
                           Labs
                         </nuxt-link>
@@ -201,7 +204,7 @@
                 <h2 class="one-line">Công cụ chung</h2>
                 <ul>
                   <li>
-                    <nuxt-link to="/users/questions/">
+                    <a :href="'/users/questions/affiliate'">
                       <div>
                         <img
                           src="~/assets/img/dashboard/bx_bx-network-chart.svg"
@@ -209,7 +212,7 @@
                         />
                       </div>
                       <span>Affiliate</span>
-                    </nuxt-link>
+                    </a>
                   </li>
                   <li>
                     <nuxt-link to="/users/questions/">
