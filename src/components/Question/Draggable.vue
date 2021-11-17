@@ -5,7 +5,6 @@
       class="list-group"
       tag="ul"
       v-bind="dragOptions"
-      :move="onMove"
       @end="onEndMove"
     >
       <transition-group type="transition" :name="'flip-list'">
@@ -16,9 +15,7 @@
         >
           <div class="p-answerItem">
             <i
-              :class="
-                answer.fixed ? 'fa fa-anchor' : 'glyphicon glyphicon-pushpin'
-              "
+              :class="'glyphicon glyphicon-pushpin'"
               aria-hidden="true"
               @click="answer.fixed = !answer.fixed"
               v-html="answer.answerContent"
@@ -64,7 +61,7 @@ export default {
   },
   data() {
     return {
-      list: [],
+      list: this.listAnswer,
     }
   },
   computed: {
@@ -92,32 +89,42 @@ export default {
       }
     },
   },
-  created() {
-    const data = this.listAnswer.map((item) => {
-      item.fixed = false
-      return item
-    })
-    this.$logger.debug(data)
-    this.list = data
-  },
   methods: {
     ...mapActions({
       addValueUpdateAnswer: 'questions/addValueUpdateAnswer',
       deleteAnswer: 'questions/deleteAnswer',
       handleUpdateDraggableAnswer: 'questions/handleUpdateDraggableAnswer',
+      handleUpdateDraggableAnswerForGroupQuestion:
+        'questions/handleUpdateDraggableAnswerForGroupQuestion',
+      deleteAnswerOfChildQuestion: 'questions/deleteAnswerOfChildQuestion',
     }),
 
-    onMove({ relatedContext, draggedContext }) {
-      const relatedElement = relatedContext.element
-      const draggedElement = draggedContext.element
-      return (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
-    },
+    // onMove({ relatedContext, draggedContext }) {
+    //   const relatedElement = relatedContext.element
+    //   const draggedElement = draggedContext.element8
+    //   return (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
+    // },
     handleDelate(id) {
-      this.deleteAnswer(id)
+      if (this.groupQuestion) {
+        this.deleteAnswerOfChildQuestion({
+          questionChildId: this.childQuestionId,
+          answerId: id,
+        })
+      } else {
+        this.deleteAnswer(id)
+      }
     },
     onEndMove({ newDraggableIndex, oldDraggableIndex }) {
       if (newDraggableIndex !== oldDraggableIndex) {
-        this.handleUpdateDraggableAnswer(this.list)
+        if (this.groupQuestion) {
+          console.log('aa343434')
+          this.handleUpdateDraggableAnswerForGroupQuestion({
+            questionId: this.childQuestionId,
+            answers: this.list,
+          })
+        } else {
+          this.handleUpdateDraggableAnswer(this.list)
+        }
       }
     },
   },

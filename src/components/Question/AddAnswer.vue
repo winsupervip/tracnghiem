@@ -24,7 +24,6 @@
         <div>
           <!-- class="wrapper" -->
           <div class="wrapper-left">
-            <p>{{ isPairing }}</p>
             <TinyEditor
               v-if="doShow"
               v-model="answerContent"

@@ -83,7 +83,8 @@ export default {
       if (
         this.questionChild.typeQuestion === 'fill-blank' ||
         this.questionChild.typeQuestion === 'short-answer' ||
-        this.questionChild.typeQuestion === 'draggable'
+        this.questionChild.typeQuestion === 'draggable' ||
+        this.questionChild.typeQuestion === 'pairing'
       ) {
         return false
       }

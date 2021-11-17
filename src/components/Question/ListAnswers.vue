@@ -174,7 +174,7 @@
             <b-icon
               v-b-modal.modal-1
               icon="pencil-square"
-              @click="updateAnswer(answer.id)"
+              @click="addValueUpdateAnswer(answer)"
             ></b-icon>
             <b-icon
               icon="trash"
@@ -192,7 +192,12 @@
         class="p-answerItem"
       >
         <div class="p-answerItem">
-          <SelectForFillBlank :answer="answer" />
+          <SelectForFillBlank
+            :answer="answer"
+            :group-question="groupQuestion"
+            :child-question-id="childQuestionId"
+            :list-answer="compareListAnswer"
+          />
           <div
             class="p-answerItem__content"
             v-html="mathTypeDisplay(answer.answerContent)"
@@ -280,6 +285,7 @@ export default defineComponent({
     ...mapGetters({
       getListAnswer: 'questions/getListAnswer',
       getSelected: 'questions/getSelected',
+      getGroupSelected: 'questions/getGroupSelected',
     }),
     compareListAnswer() {
       if (this.groupQuestion) {
@@ -292,16 +298,48 @@ export default defineComponent({
     getSelected() {
       this.isSelected = this.getSelected
     },
+    getGroupSelected() {
+      console.log('ok')
+    },
   },
   methods: {
     ...mapActions({
       addValueUpdateAnswer: 'questions/addValueUpdateAnswer',
       deleteAnswer: 'questions/deleteAnswer',
       handleUserChooseRightAnswer: 'questions/handleUserChooseRightAnswer',
+      handleUserChooseRightAnswerOfChildQuestion:
+        'questions/handleUserChooseRightAnswerOfChildQuestion',
       isRandom: 'questions/isRandom',
       deleteAnswerOfChildQuestion: 'questions/deleteAnswerOfChildQuestion',
     }),
     isChange(id) {
+      if (this.groupQuestion) {
+        if (this.typeQuestion === 'multiple-choice') {
+          if (this.isSelected.length > this.getSelected.length) {
+            this.handleUserChooseRightAnswerOfChildQuestion({
+              action: 'add',
+              questionChildId: this.childQuestionId,
+              answerId: id,
+            })
+          } else {
+            this.handleUserChooseRightAnswerOfChildQuestion({
+              action: 'remove',
+              questionChildId: this.childQuestionId,
+              answerId: id,
+            })
+          }
+        } else if (
+          this.typeQuestion === 'single-choice' ||
+          this.typeQuestion === 'right-wrong'
+        ) {
+          this.handleUserChooseRightAnswerOfChildQuestion({
+            action: 'change',
+            questionChildId: this.childQuestionId,
+            answerId: id,
+          })
+        }
+        return 0
+      }
       if (this.typeQuestion === 'multiple-choice') {
         if (this.isSelected.length > this.getSelected.length) {
           this.handleUserChooseRightAnswer({ action: 'add', id })

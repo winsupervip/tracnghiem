@@ -288,7 +288,7 @@ export default {
         state.selectedGroup[indexSelectedQuestion].selected.push(data.answer.id)
       }
       if (
-        state.answers[index].rightAnswer === 1 &&
+        state.childQuestions[index].answers[indexAnswer].rightAnswer === 1 &&
         data.answer.rightAnswer === 0
       ) {
         const indexAnswerOfQuestion = state.selectedGroup[
@@ -298,15 +298,19 @@ export default {
       }
     } else if (typeQuestion === 'pairing') {
       try {
-        state.answers[index].left.plainText = data.answer?.left.plainText
-        state.answers[index].left.answerContent =
+        state.childQuestions[index].answers[indexAnswer].left.plainText =
+          data.answer?.left.plainText
+        state.childQuestions[index].answers[indexAnswer].left.answerContent =
           data.answer?.left.answerContent
-        state.answers[index].left.random = data.answer?.left.random
+        state.childQuestions[index].answers[indexAnswer].left.random =
+          data.answer?.left.random
 
-        state.answers[index].right.plainText = data.answer?.right.plainText
-        state.answers[index].right.answerContent =
+        state.childQuestions[index].answers[indexAnswer].right.plainText =
+          data.answer?.right.plainText
+        state.childQuestions[index].answers[indexAnswer].right.answerContent =
           data.answer?.right.answerContent
-        state.answers[index].right.random = data.answer?.right.random
+        state.childQuestions[index].answers[indexAnswer].right.random =
+          data.answer?.right.random
       } catch (error) {
         console.log(error)
       }
@@ -329,5 +333,47 @@ export default {
       (item) => item.id === data.answerId
     )
     state.childQuestions[index].answers.splice(answerIndex, 1)
+  },
+  HANDLE_UPDATE_DRAGGBLE_ANSWER_FOR_QUESTION(state, data) {
+    const index = state.childQuestions.findIndex(
+      (item) => item.id === data.questionId
+    )
+    state.childQuestions[index].answers = data.answers
+  },
+  HANDLE_USER_CHOOSE_RIGHT_ANSWER_OF_CHILD_QUESTION(state, data) {
+    // action change => single-choice and right-wrong
+    // action add and remvoe => multiple-choice
+
+    const indexChildQuestion = state.childQuestions.findIndex(
+      (item) => item.id === data.questionChildId
+    )
+    const indexAnswerOfChildQuestion = state.childQuestions[
+      indexChildQuestion
+    ].answers.findIndex((item) => item.id === data.answerId)
+    if (data.action === 'add') {
+      state.childQuestions[indexChildQuestion].answers[
+        indexAnswerOfChildQuestion
+      ].rightAnswer = 1
+      // state.selected.push(data.id)
+    } else if (data.action === 'remove') {
+      // const indexSelected = state.selected.findIndex((item) => item === data.id)
+      // state.selected.splice(indexSelected, 1)
+      state.childQuestions[indexChildQuestion].answers[
+        indexAnswerOfChildQuestion
+      ].rightAnswer = 1
+    } else if (data.action === 'change') {
+      const answers = state.childQuestions[indexChildQuestion].answers?.map(
+        (item) => {
+          if (item.id !== data.answerId) {
+            item.rightAnswer = 0
+          } else {
+            item.rightAnswer = 1
+          }
+          return item
+        }
+      )
+      // state.selected = data.id
+      state.childQuestions[indexChildQuestion].answers = answers
+    }
   },
 }

@@ -18,11 +18,11 @@
                 :key="question.id"
                 :class="$style.question_child"
               >
-                <b-col cols="1">
-                  <h6>Câu {{ String.fromCharCode(65 + index) + '. ' }}</h6>
+                <b-col cols="2">
+                  <strong>Câu {{ index + 1 }}</strong>
                 </b-col>
                 <b-col
-                  cols="9"
+                  cols="8 "
                   v-html="question.question.questionContent"
                 ></b-col>
                 <b-col cols="2" class="matching_style">
@@ -161,6 +161,5 @@ export default defineComponent({
 <style module>
 .question_child {
   margin: 1rem;
-  border-bottom: 1px solid;
 }
 </style>

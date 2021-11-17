@@ -89,4 +89,10 @@ export default {
   deleteAnswerOfChildQuestion({ commit }, data) {
     commit('DELETE_ANSWER_OF_CHILD_QUESTION', data)
   },
+  handleUpdateDraggableAnswerForGroupQuestion({ commit }, data) {
+    commit('HANDLE_UPDATE_DRAGGBLE_ANSWER_FOR_QUESTION', data)
+  },
+  handleUserChooseRightAnswerOfChildQuestion({ commit }, data) {
+    commit('HANDLE_USER_CHOOSE_RIGHT_ANSWER_OF_CHILD_QUESTION', data)
+  },
 }
