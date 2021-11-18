@@ -192,6 +192,12 @@ export default {
   REST_ANSWERS(state) {
     state.answers = []
   },
+  COPY_QUESTIONS(state, data) {
+    const question = data.object.question
+    const answers = data.object.answers
+    state.question = question
+    state.answers = answers
+  },
   SET_NULL_ID_ANSWER(state, aIndex) {
     state.answers[aIndex].id = undefined
   },

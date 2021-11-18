@@ -61,6 +61,9 @@ export default {
   restAnswer({ commit }, data) {
     commit('REST_ANSWERS')
   },
+  copyQuestion({ commit }, data) {
+    commit('COPY_QUESTIONS', data)
+  },
   setNullAnswerId({ commit }, answerIndex) {
     commit('SET_NULL_ID_ANSWER', answerIndex)
   },

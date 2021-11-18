@@ -22,13 +22,18 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   data() {
     return {
       explainationIfCorrect: '',
       explainationIfIncorrect: '',
     }
+  },
+  computed: {
+    ...mapGetters({
+      getQuestion: 'questions/getQuestion',
+    }),
   },
   watch: {
     explainationIfCorrect() {
@@ -38,6 +43,14 @@ export default {
       this.addExplainationIfInCorrect(this.explainationIfIncorrect)
     },
   },
+
+  mounted() {
+    this.explainationIfIncorrect =
+      this.getQuestion?.question?.explainationIfIncorrect
+    this.explainationIfCorrect =
+      this.getQuestion?.question?.explainationIfCorrect
+  },
+
   methods: {
     ...mapActions({
       addExplainationIfCorrect: 'questions/addExplainationIfCorrect',

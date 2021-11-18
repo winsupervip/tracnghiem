@@ -291,6 +291,7 @@ export default defineComponent({
       if (this.groupQuestion) {
         return this.listChildAnswer
       }
+      console.log('this question nè', this.getListAnswer)
       return this.getListAnswer
     },
   },
@@ -302,6 +303,14 @@ export default defineComponent({
       console.log('ok')
     },
   },
+  mounted() {
+    this.getListAnswer.left = this.getListAnswer.filter((x) => x.position === 1)
+    this.getListAnswer.right = this.getListAnswer.filter(
+      (x) => x.position === 2
+    )
+    console.log('left ', this.getListAnswer)
+  },
+
   methods: {
     ...mapActions({
       addValueUpdateAnswer: 'questions/addValueUpdateAnswer',

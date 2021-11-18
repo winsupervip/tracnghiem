@@ -37,13 +37,18 @@
 </template>
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default defineComponent({
   data() {
     return {
       seoTitle: '',
       seoDescription: '',
     }
+  },
+  computed: {
+    ...mapGetters({
+      getQuestion: 'questions/getQuestion',
+    }),
   },
   watch: {
     seoTitle() {
@@ -52,6 +57,10 @@ export default defineComponent({
     seoDescription() {
       this.addSeoDescription(this.seoDescription)
     },
+  },
+  mounted() {
+    this.seoTitle = this.getQuestion?.question?.seoTitle
+    this.seoDescription = this.getQuestion?.question?.seoDescription
   },
   methods: {
     ...mapActions({

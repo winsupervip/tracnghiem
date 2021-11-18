@@ -34,6 +34,26 @@ export default {
   },
   getUserQuestionGroupList: () =>
     global.$http.get('/api/v1/Question/get-user-question-group-list'),
+  deletedQuestion: (hashId) =>
+    global.$http.delete(`/api/v1/Question/deleted-question/${hashId}`),
   deletedQuestionGroup: (hashId) =>
     global.$http.delete(`/api/v1/Question/deleted-question-group/${hashId}`),
+  createQuestion: async (data) => {
+    await global.$http.post('/api/v1/Question/add-question', data)
+  },
+  createQuestionGroup: async (data) => {
+    await global.$http.post('/api/v1/Question/add-question-group', data)
+  },
+  getUserQuestionDetails: (hashId) =>
+    global.$http.get(`/api/v1/Question/get-user-question-details/${hashId}`),
+  getUserQuestionGroupDetails: async (hashId) =>
+    await global.$http.get(
+      `/api/v1/Question/get-user-question-group-details/${hashId}`
+    ),
+
+  updateStateQuestion: async (hashId) => {
+    await global.$http.put(
+      `/api/v1/Question/update-state-question/${hashId}?statusId=1`
+    )
+  },
 }
