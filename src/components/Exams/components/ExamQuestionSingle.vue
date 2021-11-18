@@ -5,15 +5,8 @@
     </h3>
     {{ questions.hashId }}
     <div class="list-questions-user">
-      <b-card
-        class="card-question mb-3"
-        header-tag="header"
-        footer-tag="footer"
-      >
+      <div class="card-question mb-3" header-tag="header" footer-tag="footer">
         <slot name="header"></slot>
-        <template #header>
-          <QuestionHeader :questions="questions" />
-        </template>
         <div class="list-question">
           <div class="question-item">
             <div class="question-content text-smd">
@@ -49,7 +42,7 @@
             </div>
           </div>
         </div>
-      </b-card>
+      </div>
     </div>
   </div>
 </template>
@@ -57,7 +50,6 @@
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
 import QuestionTags from '@/components/Question/QuestionTags.vue'
-import QuestionHeader from '@/components/Question/QuestionHeader.vue'
 import QuestionSingleChoiceList from '@/components/Question/QuestionSingleChoiceList.vue'
 import QuestionMultiChoiceList from '@/components/Question/QuestionMultiChoiceList.vue'
 import QuestionRightWrongList from '@/components/Question/QuestionRightWrongList.vue'
@@ -67,7 +59,6 @@ import QuestionShortAnswerList from '@/components/Question/QuestionShortAnswerLi
 export default defineComponent({
   name: 'ExamQuestionSingle',
   components: {
-    QuestionHeader,
     QuestionTags,
     QuestionSingleChoiceList,
     QuestionMultiChoiceList,

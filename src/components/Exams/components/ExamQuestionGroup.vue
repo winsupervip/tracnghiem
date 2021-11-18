@@ -10,9 +10,7 @@
         footer-tag="footer"
       >
         <slot name="header"></slot>
-        <template #header>
-          <QuestionHeader :questions="itemData.item" />
-        </template>
+        <template #header> </template>
         <div class="list-question">
           <div class="question-item">
             <div class="question-content text-smd">
@@ -28,13 +26,11 @@
 
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
-import QuestionHeader from '@/components/Question/QuestionHeader.vue'
 import QuestionClusterList from '@/components/Question/QuestionClusterList.vue'
 import QuestionTags from '@/components/Question/QuestionTags.vue'
 export default defineComponent({
   name: 'SingleListPage',
   components: {
-    QuestionHeader,
     QuestionTags,
     QuestionClusterList,
   },
