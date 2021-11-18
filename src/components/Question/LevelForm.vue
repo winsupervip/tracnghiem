@@ -40,7 +40,7 @@ import {
   toRefs,
   useFetch,
 } from '@nuxtjs/composition-api'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   name: 'LevelForm',
@@ -60,10 +60,18 @@ export default defineComponent({
       ...toRefs(data),
     }
   },
+  computed: {
+    ...mapGetters({
+      getQuestion: 'questions/getQuestion',
+    }),
+  },
   watch: {
     levelForm() {
       this.addlevel(this.levelForm)
     },
+  },
+  mounted() {
+    this.levelForm = this.getQuestion.question.levelId
   },
   methods: {
     ...mapActions({ addlevel: 'questions/addlevel' }),

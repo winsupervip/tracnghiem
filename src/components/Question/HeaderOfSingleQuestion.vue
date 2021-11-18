@@ -121,7 +121,7 @@
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   name: 'Header',
@@ -154,6 +154,9 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapGetters({
+      getQuestion: 'questions/getQuestion',
+    }),
     criteria() {
       // Compute the search criteria
       return this.search.trim()
@@ -178,6 +181,7 @@ export default defineComponent({
     },
     title() {
       this.addTitle(this.title)
+      console.log(this.getQuestion)
     },
     tags() {
       this.addTags(this.tags)
@@ -186,12 +190,21 @@ export default defineComponent({
       this.addQuestionContent(this.questionContent)
     },
   },
+  mounted() {
+    this.questionContent = this.getQuestion.question.questionContent
+    this.title = this.getQuestion.question.title
+    this.tags = this.getQuestion.question.tags
+  },
   methods: {
     ...mapActions({
       addTags: 'questions/addTags',
       addTitle: 'questions/addTitle',
       addQuestionContent: 'questions/addQuestionContent',
     }),
+
+    showTitle() {
+      return this.getQuestion.question.title
+    },
     shown() {
       this.doShow = true
     },

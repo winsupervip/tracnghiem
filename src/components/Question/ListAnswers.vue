@@ -165,7 +165,7 @@
             <b-icon
               v-b-modal.modal-1
               icon="pencil-square"
-              @click="updateAnswer(answer.id)"
+              @click="addValueUpdateAnswer(answer)"
             ></b-icon>
             <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
           </b-col>
@@ -267,6 +267,7 @@ export default defineComponent({
       if (this.groupQuestion) {
         return this.listChildAnswer
       }
+      console.log('this question nè', this.getListAnswer)
       return this.getListAnswer
     },
   },
@@ -275,6 +276,13 @@ export default defineComponent({
       this.$logger.debug('chạy')
       this.isSelected = this.getSelected
     },
+  },
+  mounted() {
+    this.getListAnswer.left = this.getListAnswer.filter((x) => x.position === 1)
+    this.getListAnswer.right = this.getListAnswer.filter(
+      (x) => x.position === 2
+    )
+    console.log('left ', this.getListAnswer)
   },
   created() {
     // eslint-disable-next-line no-undef

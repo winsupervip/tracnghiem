@@ -52,7 +52,7 @@ import {
   toRefs,
   useFetch,
 } from '@nuxtjs/composition-api'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   props: {
@@ -85,11 +85,17 @@ export default defineComponent({
     state() {
       return Boolean(this.value)
     },
+    ...mapGetters({
+      getQuestion: 'questions/getQuestion',
+    }),
   },
   watch: {
     status() {
       this.addStatus(this.status)
     },
+  },
+  mounted() {
+    this.status = this.getQuestion?.question?.statusId
   },
   methods: {
     ...mapActions({ addStatus: 'questions/addStatus' }),
