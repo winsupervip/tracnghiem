@@ -69,7 +69,7 @@
               align-items-end
             "
           >
-            <b-button variant="outline-primary" @click="fetch()">
+            <b-button variant="outline-primary" @click="handleSearch()">
               <b-icon-filter></b-icon-filter> {{ $t('exam.filter') }}
             </b-button>
             <b-button v-b-modal.modal-1 variant="primary">
@@ -84,6 +84,9 @@
         <EmptyData />
       </div>
       <div v-else>
+        <div v-for="(item, index) in items" :key="index">
+          <ExamQuestionItem :item-data="item" />
+        </div>
         <div class="mt-2">
           <b-pagination
             v-if="total > urlQuery.pageSize"
@@ -115,34 +118,23 @@ import {
   useRoute,
   computed,
   useAsync,
+  useFetch,
+  watch,
 } from '@nuxtjs/composition-api'
-import { mapActions, mapGetters } from 'vuex'
 import examApi from '@/api/examApi'
 import QuestionApi from '@/api/question-list-page'
 import catalogApi from '@/api/catalogApi'
 import EmptyData from '@/components/EmptyData.vue'
 import ModalQuestionForAdd from '@/components/Exams/ModalQuestionForAdd.vue'
+import ExamQuestionItem from '@/components/Exams/ExamQuestionItem.vue'
 export default defineComponent({
-  components: { EmptyData, ModalQuestionForAdd },
+  components: { EmptyData, ModalQuestionForAdd, ExamQuestionItem },
   layout: 'dashboard',
   auth: true,
   setup() {
     const { app, $loader, $logger } = useContext()
     const data = reactive({
-      breadcrumbs: [
-        {
-          text: app.i18n.t('exam.dashboard'),
-          href: '/users/dashboard',
-        },
-        {
-          text: app.i18n.t('exam.exam_title'),
-          href: '/users/exams',
-        },
-        {
-          text: app.i18n.t('exam.questions.title'),
-          active: true,
-        },
-      ],
+      breadcrumbs: [],
       levels: [],
       sortBy: [],
       questionTypes: [],
@@ -182,10 +174,25 @@ export default defineComponent({
         data.questionTypes = qTypes.object.items
 
         data.examInfo = examData.object
-        data.breadcrumbs.splice(2, 0, {
-          text: data.examInfo.title,
-          href: '/users/exams/' + data.examHashId,
-        })
+        console.log(data.breadcrumbs)
+        data.breadcrumbs = [
+          {
+            text: app.i18n.t('exam.dashboard'),
+            href: '/users/dashboard',
+          },
+          {
+            text: app.i18n.t('exam.exam_title'),
+            href: '/users/exams',
+          },
+          {
+            text: data.examInfo.title,
+            href: '/users/exams/' + data.examHashId,
+          },
+          {
+            text: app.i18n.t('exam.questions.title'),
+            active: true,
+          },
+        ]
       } catch (err) {
         app.$handleError(err, () => {
           $logger.info(err)
@@ -193,20 +200,33 @@ export default defineComponent({
       }
       $loader().close()
     })
+
+    const { fetch } = useFetch(async () => {
+      $loader()
+      const { data: response } = await examApi.getQuestionsOfExam(
+        data.urlQuery,
+        data.examHashId
+      )
+      data.items = response.object.items
+      data.total = response.object.total
+      $logger.info(data.items)
+      $loader().close()
+    })
+
+    fetch()
+    watch(
+      () => data.urlQuery.page,
+      () => {
+        fetch()
+      }
+    )
     return {
       ...toRefs(data),
+      fetch,
     }
-  },
-  computed: {
-    ...mapGetters({
-      examData: 'exams/getExam',
-    }),
   },
   methods: {
     loadOptions({ action, parentNode, callback }) {},
-    ...mapActions({
-      resetExam: 'exams/resetExam',
-    }),
     async onSubmit() {
       try {
         const { data } = await examApi.editExam({ exam: this.examData })
@@ -219,6 +239,10 @@ export default defineComponent({
         })
       }
       console.log(this.examData)
+    },
+    handleSearch() {
+      this.urlQuery.page = 1
+      this.fetch()
     },
   },
 })

@@ -73,4 +73,23 @@ export default {
   addExamQuestions(data) {
     return global.$http.post('/api/v1/Exam/add-questions-to-exam', data)
   },
+  getQuestionsOfExam: (urlQuery, hashId) => {
+    let url = `/api/v1/Exam/get-question-of-exam/${hashId}?Page=${
+      urlQuery.page
+    }&PageSize=${urlQuery.pageSize}&Keyword=${encodeURIComponent(
+      urlQuery.keyword
+    )}`
+
+    if (urlQuery.levelId && urlQuery.levelId > 0) {
+      url += '&levelId=' + urlQuery.levelId
+    }
+    if (urlQuery.questionTypeId && urlQuery.questionTypeId > 0) {
+      url += '&questionTypeId=' + urlQuery.questionTypeId
+    }
+
+    if (urlQuery.orderBy && urlQuery.orderBy > 0) {
+      url += '&orderBy=' + urlQuery.orderBy
+    }
+    return global.$http.get(url)
+  },
 }

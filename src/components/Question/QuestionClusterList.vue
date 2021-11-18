@@ -52,14 +52,12 @@ import { defineComponent, useContext } from '@nuxtjs/composition-api'
 import QuestionApi from '@/api/question-list-page'
 export default defineComponent({
   name: 'MultiListPage',
-
   props: {
     questionlist: {
       type: Object,
       required: true,
     },
   },
-
   setup: () => {
     const { $logger } = useContext()
     const deletedGroupQuestion = async (value) => {
@@ -68,7 +66,6 @@ export default defineComponent({
       $logger.info('123', value)
       $logger.info('1234', result)
     }
-
     return {
       deletedGroupQuestion,
     }
