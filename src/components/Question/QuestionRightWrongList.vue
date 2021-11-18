@@ -28,7 +28,6 @@
 
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
-import '../../node_modules/bootstrap/scss/bootstrap.scss'
 export default defineComponent({
   name: 'QuestionRightWrongList',
   auth: false,
