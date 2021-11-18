@@ -23,4 +23,5 @@ export default () => ({
   updateValue: {},
   errors: [],
   selected: [],
+  selectedGroup: [],
 })

@@ -8,7 +8,10 @@
       >
         <slot name="header"></slot>
         <template #header>
-          <QuestionHeader :questions="questions" />
+          <QuestionHeader
+            :question="questions"
+            :is-delete-question="deleteQuestion"
+          />
         </template>
         <div class="list-question">
           <div class="question-item">
@@ -81,6 +84,10 @@ export default defineComponent({
   props: {
     questions: {
       type: Object,
+      required: true,
+    },
+    deleteQuestion: {
+      type: Function,
       required: true,
     },
   },
