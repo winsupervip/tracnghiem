@@ -1,42 +1,48 @@
 <template>
-  <b-modal
-    id="modal-group"
-    :title="question.name"
-    size="xl"
-    :ok-only="okOnly"
-    @shown="shown"
-    @hide="hide"
-  >
-    <div :class="$style.child">
-      <ValidationProvider
-        v-slot="{ valid, errors }"
-        name="Nội dung câu hỏi"
-        rules="required"
-      >
-        <TinyEditor v-if="doShow" v-model="questionContent" />
-        <b-form-invalid-feedback :state="valid">{{
-          errors[0]
-        }}</b-form-invalid-feedback>
-      </ValidationProvider>
-      <AddAnswer
-        :group-question="true"
-        :child-question-id="question.id"
-        :type-question="question.typeQuestion"
-        :have-random-answer="haveRandomAnswer"
-        :have-right-answer="haveRightAnswer"
-        :is-pairing="question.questionType === 'paring' ? true : false"
-      />
-      <ListAnswers
-        :type-question="question.typeQuestion"
-        :errors="isErrors"
-        :group-question="true"
-        :list-child-answer="question.answers"
-      />
-    </div>
-  </b-modal>
+  <div>
+    <b-modal
+      :id="modalId"
+      ref="modal-question-group"
+      :title="questionChild.name"
+      size="xl"
+      :ok-only="okOnly"
+      @shown="shown"
+      @hide="hide"
+    >
+      <div :class="$style.child">
+        <ValidationProvider
+          v-slot="{ valid, errors }"
+          name="Nội dung câu hỏi"
+          rules="required"
+        >
+          <TinyEditor v-if="doShow" v-model="questionContent" />
+          <b-form-invalid-feedback :state="valid">{{
+            errors[0]
+          }}</b-form-invalid-feedback>
+        </ValidationProvider>
+        <AddAnswer
+          v-if="questionChild.typeQuestion !== 'short-answer'"
+          :group-question="true"
+          :child-question-id="questionChild.id"
+          :type-question="questionChild.typeQuestion"
+          :have-random-answer="haveRandomAnswer"
+          :have-right-answer="haveRightAnswer"
+          :is-pairing="questionChild.typeQuestion === 'pairing' ? true : false"
+        />
+        <ListAnswers
+          :child-question-id="questionChild.id"
+          :type-question="questionChild.typeQuestion"
+          :errors="isErrors"
+          :group-question="true"
+          :list-child-answer="questionChild.answers"
+        />
+      </div>
+    </b-modal>
+  </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import AddAnswer from './AddAnswer.vue'
 import ListAnswers from './ListAnswers.vue'
 export default {
@@ -45,8 +51,12 @@ export default {
     ListAnswers,
   },
   props: {
-    question: {
+    questionChild: {
       type: Object,
+      required: true,
+    },
+    modalId: {
+      type: String,
       required: true,
     },
   },
@@ -56,13 +66,14 @@ export default {
       isErrors: '',
       doShow: false,
       okOnly: true,
+      question: {},
     }
   },
   computed: {
     haveRandomAnswer() {
       if (
-        this.question.typeQuestion === 'fill-blank' ||
-        this.question.typeQuestion === 'short-answer'
+        this.questionChild.typeQuestion === 'fill-blank' ||
+        this.questionChild.typeQuestion === 'short-answer'
       ) {
         return false
       }
@@ -70,23 +81,53 @@ export default {
     },
     haveRightAnswer() {
       if (
-        this.question.typeQuestion === 'fill-blank' ||
-        this.question.typeQuestion === 'short-answer' ||
-        this.question.typeQuestion === 'draggable'
+        this.questionChild.typeQuestion === 'fill-blank' ||
+        this.questionChild.typeQuestion === 'short-answer' ||
+        this.questionChild.typeQuestion === 'draggable' ||
+        this.questionChild.typeQuestion === 'pairing'
       ) {
         return false
       }
       return true
     },
   },
+  watch: {
+    questionContent() {
+      const data = {
+        id: this.questionChild.id,
+        value: this.questionContent,
+      }
+      this.addChildQuestionContent(data)
+    },
+    modalId() {
+      console.log('modal', this.modalId)
+    },
+  },
   methods: {
+    ...mapActions({
+      addChildQuestionContent: 'questions/addChildQuestionContent',
+    }),
     shown() {
       this.doShow = true
+      // khi mở modal lên sẻ có 2 trường hợp nếu mà questionConten rổng thì là thêm mới
+      // ngược lại là mở một câu hỏi có sẳn
+      if (this.questionChild.question.questionContent !== '') {
+        this.questionContent = this.questionChild.question.questionContent
+      } else {
+        this.questionContent = ''
+      }
     },
     hide() {
       this.doShow = false
-      // this.updateAnswer('remove_data')
     },
+    addQuestionContent() {
+      console.log('blur chays')
+      this.addChildQuestionContent(this.questionContent)
+    },
+  },
+  // eslint-disable-next-line vue/order-in-components
+  mounted() {
+    console.log('khue log', this.modalId, this.questionChild)
   },
 }
 </script>
@@ -94,5 +135,8 @@ export default {
 <style module>
 .child {
   margin: 2rem;
+}
+.question_child {
+  margin: 1rem;
 }
 </style>

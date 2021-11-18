@@ -1,20 +1,24 @@
 <template>
-  <div :class="$style.addQuestionTitle">
-    <p style="font-weight: bold">{{ $t('Câu trả lời (*)') }}</p>
-    <b-button class="btn btnQuestion btn-outline-primary">
-      <b-dropdown :text="$t('addChildrenQuestion')" class="m-md-2">
-        <b-dropdown-item
-          v-for="(questions, index) in questionType"
-          :key="index"
-          v-b-modal.modal-group
-          @click="handleAddQuestion(questions)"
-        >
-          {{ $t(questions.name) }}
-        </b-dropdown-item>
-      </b-dropdown>
-    </b-button>
-
-    <QuestionChild :key="question.id" :question="question" />
+  <div>
+    <div :class="$style.addQuestionTitle">
+      <p style="font-weight: bold">{{ $t('Câu trả lời (*)') }}</p>
+      <b-button class="btn btnQuestion btn-outline-primary">
+        <b-dropdown :text="$t('addChildrenQuestion')" class="m-md-2">
+          <b-dropdown-item
+            v-for="(questions, index) in questionType"
+            :key="index"
+            v-b-modal.modal-add-child-question
+            @click="handleAddQuestion(questions)"
+          >
+            {{ $t(questions.name) }}
+          </b-dropdown-item>
+        </b-dropdown>
+      </b-button>
+    </div>
+    <QuestionChild
+      :question-child="question"
+      modal-id="modal-add-child-question"
+    />
   </div>
 </template>
 <script>
@@ -86,9 +90,9 @@ export default defineComponent({
         question: {
           hashId: '',
           questionTypeId: value.questionTypeId,
-          questionContent: 'Question 1',
+          questionContent: '',
           levelId: 1,
-          plainText: 'Question 1',
+          plainText: '',
           seoAvatar: 'https://placeimg.com/640/480/any',
           groupOrder: 1,
         },

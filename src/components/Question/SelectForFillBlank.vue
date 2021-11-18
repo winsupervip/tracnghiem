@@ -3,7 +3,7 @@
     <b-form-select-option :value="null" disabled>{{
       $t('-- choose --')
     }}</b-form-select-option>
-    <b-form-select-option v-for="i in getListAnswer.length" :key="i" :value="i"
+    <b-form-select-option v-for="i in listAnswer.length" :key="i" :value="i"
       >({{ i }})</b-form-select-option
     >
   </b-form-select>
@@ -15,6 +15,18 @@ export default {
   props: {
     answer: {
       type: Object,
+      required: true,
+    },
+    groupQuestion: {
+      type: Boolean,
+      default: false,
+    },
+    childQuestionId: {
+      type: String,
+      default: '',
+    },
+    listAnswer: {
+      type: Array,
       required: true,
     },
   },
@@ -46,7 +58,11 @@ export default {
         id: this.answer.id,
         index,
       }
-      this.handleUpdateSelectForFillBlank(data)
+      if (this.groupQuestion) {
+        //
+      } else {
+        this.handleUpdateSelectForFillBlank(data)
+      }
     },
   },
 }

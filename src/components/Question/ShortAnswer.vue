@@ -17,7 +17,7 @@
       <b-icon icon="pencil-square" @click="onUpdate"></b-icon>
     </b-col>
     <b-col cols="1">
-      <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+      <b-icon icon="trash" @click="handleDelete(answer.id)"></b-icon>
     </b-col>
   </b-row>
 </template>
@@ -39,10 +39,18 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    groupQuestion: {
+      type: Boolean,
+      default: false,
+    },
+    childQuestionId: {
+      type: String,
+      default: '',
+    },
   },
-  setup() {
+  setup(props) {
     const data = reactive({
-      answerContent: 'aasds',
+      answerContent: props.answer.answerContent,
       isDisable: true,
     })
     return {
@@ -54,7 +62,19 @@ export default defineComponent({
       handleAddAnswer: 'questions/handleAddAnswer',
       deleteAnswer: 'questions/deleteAnswer',
       handleUpdateAnswer: 'questions/handleUpdateAnswer',
+      deleteAnswerOfChildQuestion: 'questions/deleteAnswerOfChildQuestion',
+      updateAnswerQuestionChild: 'questions/updateAnswerQuestionChild',
     }),
+    handleDelete(id) {
+      if (this.groupQuestion) {
+        this.deleteAnswerOfChildQuestion({
+          questionChildId: this.childQuestionId,
+          answerId: id,
+        })
+      } else {
+        this.deleteAnswer(id)
+      }
+    },
     onSubmit() {
       const data = {
         answer: {
@@ -68,8 +88,17 @@ export default defineComponent({
         },
         typeQuestion: this.typeQuestion,
       }
-      this.handleUpdateAnswer(data)
+      if (this.groupQuestion) {
+        this.updateAnswerQuestionChild({
+          id: this.childQuestionId,
+          answer: data.answer,
+        })
+      } else {
+        this.handleUpdateAnswer(data)
+      }
+
       this.isDisable = true
+      this.$toast.success('Cập nhập câu trả lời thành công').goAway(1000)
     },
     onUpdate() {
       this.isDisable = !this.isDisable

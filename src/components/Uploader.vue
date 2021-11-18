@@ -36,7 +36,7 @@
       </div>
     </form>
     <div v-else class="wrapper-img">
-      <img :src="value" class="img-fluid" style="width: 100%" />
+      <img :src="image" class="img-fluid" style="width: 100%" />
     </div>
     <!--PROCESS-->
     <div v-if="isProcess" class="text-center">
