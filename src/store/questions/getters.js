@@ -8,6 +8,12 @@ export default {
       answers: state.answers,
     }
   },
+  getGroupQuestion: (state) => {
+    return {
+      question: state.question,
+      childQuestions: state.childQuestions,
+    }
+  },
   getSelected: (state) => state.selected,
   getChildQuestion: (state) => state.childQuestions,
 }

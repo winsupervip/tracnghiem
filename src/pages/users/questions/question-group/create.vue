@@ -47,7 +47,7 @@
         </div>
 
         <div class="p-question__right">
-          <PublishQuestion :on-submit="onSubmit" />
+          <PublishQuestion />
           <Category />
           <LevelForm />
           <!-- <UploadImage :get-image="getImage" /> -->
@@ -70,8 +70,10 @@ import HeaderOfSingleQuestion from '../../../../components/Question/HeaderOfSing
 import QuestionChild from '../../../../components/Question/QuestionChild.vue'
 import AddChildrenQuestion from '../../../../components/Question/AddChildrenQuestion.vue'
 import CauHoiApi from '../../../../api/cauHoi'
+
 // eslint-disable-next-line import/no-unresolved
 import Uploader from '../../../../components/Uploader.vue'
+import handler from '@/utils/question/handleAnswer.js'
 export default defineComponent({
   components: {
     HeaderOfSingleQuestion,
@@ -84,11 +86,11 @@ export default defineComponent({
     QuestionChild,
   },
   layout: 'dashboard',
-  auth: true,
+  auth: false,
 
   setup() {
     const data = reactive({
-      errors: '',
+      errors: [],
       questionTitle: 'Câu hỏi chùm',
       dataUpdate: {},
       isUpdate: false,
@@ -100,7 +102,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      getQuestion: 'questions/getQuestion',
+      getGroupQuestion: 'questions/getGroupQuestion',
       getChildQuestion: 'questions/getChildQuestion',
     }),
   },
@@ -136,23 +138,87 @@ export default defineComponent({
       }
       return { valid, validateAnswers }
     },
-    onSubmit() {
-      const validState = this.isValidAnswer(this.getQuestion.answers)
-      if (validState.valid) {
-        const question = this.getQuestion
-        question.answers = validState.validateAnswers
-        question.question.questionTypeId = parseInt(this.questionTypeId)
-        CauHoiApi.createQuestion(
+    validateChildQuestion(groupQuestion) {
+      const result = []
+      let value = []
+      const er = []
+      console.log(groupQuestion)
+      groupQuestion.childQuestions.forEach((element, index) => {
+        if (element.typeQuestion === 'single-choice') {
+          value = handler.singleChoiceAndRightWrong(element.answers)
+        } else if (element.typeQuestion === 'short-answer') {
+          value = handler.shortAnswer(element.answers)
+        } else if (element.typeQuestion === 'right-wrong') {
+          value = handler.singleChoiceAndRightWrong(element.answers)
+        } else if (element.typeQuestion === 'multiple-choice') {
+          value = handler.multipleChoice(element.answers)
+        } else if (element.typeQuestion === 'pairing') {
+          value = handler.matching(element.answers)
+        } else if (element.typeQuestion === 'fill-blank') {
+          value = handler.fillBlank(element.answers)
+        } else if (element.typeQuestion === 'draggable') {
+          value = handler.draggable(element.answers)
+        }
+        const question = {}
+        question.title = groupQuestion.question.title
+        question.questionTypeId = element.question.questionTypeId
+        question.questionContent = element.question.questionContent
+        question.explainationIfCorrect =
+          groupQuestion.question.explainationIfCorrect
+        question.explainationIfIncorrect =
+          groupQuestion.question.explainationIfIncorrect
+        question.statusId = groupQuestion.question.statusId
+        question.levelId = groupQuestion.question.levelId
+        question.plainText = element.question.plainText
+        question.seoAvatar = groupQuestion.question.seoAvatar
+        question.seoTitle = groupQuestion.question.seoTitle
+        question.seoDescription = groupQuestion.question.seoDescription
+        question.tags = groupQuestion.question.tags
+        question.categories = groupQuestion.question.categories
+        question.questionGroupId = null
+        question.groupOrder = index + 1
+        const data = {
           question,
-          () => {
-            // this.restAnswer()
-            this.$toast.success('Thêm Thành Công').goAway(1500)
-          },
-          () => {
-            this.$toast.show('Có lỗi xảy ra').goAway(1500)
-          }
-        )
+          ansswers: value.data,
+        }
+        result.push(data)
+        er.push(value.errors)
+      })
+      return result
+    },
+    onSubmit() {
+      const questionInGroups = this.validateChildQuestion(this.getGroupQuestion)
+      const questionGroup = {
+        questionGroup: this.getGroupQuestion.question,
+        questionInGroups,
       }
+      console.log(questionGroup)
+      CauHoiApi.createQuestion(
+        questionGroup,
+        () => {
+          // this.restAnswer()
+          this.$toast.success('Thêm Thành Công').goAway(1500)
+        },
+        () => {
+          this.$toast.show('Có lỗi xảy ra').goAway(1500)
+        }
+      )
+      // const validState = this.isValidAnswer(this.getQuestion.answers)
+      // if (validState.valid) {
+      //   const question = this.getQuestion
+      //   question.answers = validState.validateAnswers
+      //   question.question.questionTypeId = parseInt(this.questionTypeId)
+      //   CauHoiApi.createQuestion(
+      //     question,
+      //     () => {
+      //       // this.restAnswer()
+      //       this.$toast.success('Thêm Thành Công').goAway(1500)
+      //     },
+      //     () => {
+      //       this.$toast.show('Có lỗi xảy ra').goAway(1500)
+      //     }
+      //   )
+      // }
     },
   },
 })
