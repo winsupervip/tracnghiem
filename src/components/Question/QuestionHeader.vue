@@ -50,7 +50,7 @@
         no-caret
       >
         <template #button-content>
-          <i class="bi bi-three-dots-vertical"></i>
+          <i class="icon-caret-down"></i>
         </template>
         <b-dropdown-item :to="'/users/questions/edit/' + question.hashId">
           {{ $t('update') }}

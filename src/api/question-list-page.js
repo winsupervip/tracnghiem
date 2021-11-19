@@ -56,4 +56,7 @@ export default {
       `/api/v1/Question/update-state-question/${hashId}?statusId=1`
     )
   },
+  updateQuestion: async (data) => {
+    await global.$http.post('/api/v1/Question/update-question', data)
+  },
 }

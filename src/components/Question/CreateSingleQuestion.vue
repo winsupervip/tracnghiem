@@ -16,7 +16,7 @@
           <CommentOrNote />
         </div>
         <div class="p-question__right">
-          <PublishQuestion :on-submit="onSubmit" />
+          <PublishQuestion :on-submit="onSubmit" :is-edit="isEdit" />
           <Category />
           <LevelForm />
           <!-- <UploadImage :get-image="getImage" /> -->
@@ -41,6 +41,7 @@ import AddSeo from './AddSeo.vue'
 import CommentOrNote from './CommentOrNote.vue'
 import AddAnswer from './AddAnswer.vue'
 import CauHoiApi from '@/api/cauHoi'
+import QuestionApi from '@/api/question-list-page'
 // eslint-disable-next-line import/no-unresolved
 import Uploader from '@/components/Uploader'
 export default defineComponent({
@@ -87,6 +88,10 @@ export default defineComponent({
       type: Function,
       required: true,
     },
+    isEdit: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   setup() {
@@ -111,9 +116,9 @@ export default defineComponent({
       this.errors = ''
       let validateAnswers = []
       let valid = true
-
+      console.log('qanswer', answers)
       const result = this.handleAnswer(answers)
-      console.log(result)
+      console.log('result', result)
       if (result.errors.length === 0) {
         validateAnswers = result.data
       } else {
@@ -129,19 +134,34 @@ export default defineComponent({
         question.answers = validState.validateAnswers
         this.$logger.debug('í dâttr', question)
         question.question.questionTypeId = parseInt(this.questionTypeId)
-        CauHoiApi.createQuestion(
-          question,
-          () => {
-            // this.restAnswer()
-            this.$toast.success('Thêm Thành Công').goAway(1500)
-            setTimeout(() => {
-              this.$router.push({ path: '/users/questions/' })
-            }, 500)
-          },
-          () => {
-            this.$toast.show('Có lỗi xảy ra').goAway(1500)
-          }
-        )
+        if (this.isEdit) {
+          QuestionApi.updateQuestion(
+            question,
+            () => {
+              this.$toast.success('Thêm Thành Công').goAway(1500)
+              setTimeout(() => {
+                this.$router.push({ path: '/users/questions/' })
+              }, 500)
+            },
+            () => {
+              this.$toast.show('Có lỗi xảy ra').goAway(1500)
+            }
+          )
+        } else {
+          CauHoiApi.createQuestion(
+            question,
+            () => {
+              // this.restAnswer()
+              this.$toast.success('Thêm Thành Công').goAway(1500)
+              setTimeout(() => {
+                this.$router.push({ path: '/users/questions/' })
+              }, 500)
+            },
+            () => {
+              this.$toast.show('Có lỗi xảy ra').goAway(1500)
+            }
+          )
+        }
       }
     },
   },

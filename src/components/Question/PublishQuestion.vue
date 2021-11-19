@@ -38,7 +38,7 @@
           > -->
         </div>
         <b-button type="submit" variant="primary">{{
-          $t('saveQuestion')
+          isEdit ? $t('editQuestion') : $t('saveQuestion')
         }}</b-button>
       </div>
     </div>
@@ -59,6 +59,10 @@ export default defineComponent({
     onSubmit: {
       type: Function,
       required: true,
+    },
+    isEdit: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(props) {
