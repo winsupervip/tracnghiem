@@ -1,6 +1,6 @@
 FROM node:12.16.1-alpine as builder
-ENV apiURI https://dev-api.tracnghiem.vn
-ENV NODE_ENV development
+ENV apiURI=https://dev-api.tracnghiem.vn
+ENV NODE_ENV=development
 WORKDIR /app
 COPY package.json /app/
 
@@ -22,7 +22,8 @@ RUN rm -rf node_modules && \
   --production=true
 
 FROM node:12.16.1-alpine 
-
+ENV apiURI=https://dev-api.tracnghiem.vn
+ENV NODE_ENV=development
 WORKDIR /app
 
 COPY --from=builder /app  .
