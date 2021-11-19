@@ -13,28 +13,6 @@
           {{ question.title }}
         </abbr>
       </div>
-      <div class="list-status-question">
-        <div v-if="question.itemType === 'question'">
-          <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-            question.levelName
-          }}</span>
-          <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-            question.questionTypeName
-          }}</span>
-          <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-            question.statusName
-          }}</span>
-        </div>
-        <div v-if="question.itemType === 'group'">
-          <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-            question.levelName
-          }}</span>
-
-          <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-            question.statusName
-          }}</span>
-        </div>
-      </div>
     </div>
     <div class="d-flex">
       <a
@@ -50,7 +28,7 @@
         no-caret
       >
         <template #button-content>
-          <i class="icon-caret-down"></i>
+          <b-icon icon="three-dots-vertical"></b-icon>
         </template>
         <b-dropdown-item :to="'/users/questions/edit/' + question.hashId">
           {{ $t('update') }}
