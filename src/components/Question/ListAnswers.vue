@@ -289,6 +289,29 @@ export default defineComponent({
     }),
     compareListAnswer() {
       if (this.groupQuestion) {
+        if (
+          this.typeQuestion === 'single-choice' ||
+          this.typeQuestion === 'right-wrong'
+        ) {
+          const index = this.listChildAnswer.findIndex(
+            (item) => item.rightAnswer === 1
+          )
+          if (index !== -1) {
+            this.handleSelected(this.listChildAnswer[index].id)
+          } else {
+            this.handleSelected('')
+          }
+
+          // this.isSelected = this.listChildAnswer[index].id
+        } else if (this.typeQuestion === 'multiple-choice') {
+          const selected = []
+          this.listChildAnswer.forEach((element) => {
+            if (element.rightAnswer === 1) {
+              selected.push(element.id)
+            }
+          })
+          this.handleSelected(selected)
+        }
         return this.listChildAnswer
       }
       console.log('this question nè', this.getListAnswer)
@@ -300,16 +323,15 @@ export default defineComponent({
       this.isSelected = this.getSelected
     },
     getGroupSelected() {
-      console.log('ok')
+      console.log('ok', this.getGroupSelected)
     },
   },
-  mounted() {
-    this.getListAnswer.left = this.getListAnswer.filter((x) => x.position === 1)
-    this.getListAnswer.right = this.getListAnswer.filter(
-      (x) => x.position === 2
-    )
-    console.log('left ', this.getListAnswer)
-  },
+  // mounted() {
+  //   this.getListAnswer.left = this.getListAnswer.filter((x) => x.position === 1)
+  //   this.getListAnswer?.right = this.getListAnswer.filter(
+  //     (x) => x.position === 2
+  //   )
+  // },
 
   methods: {
     ...mapActions({
@@ -324,7 +346,8 @@ export default defineComponent({
     isChange(id) {
       if (this.groupQuestion) {
         if (this.typeQuestion === 'multiple-choice') {
-          if (this.isSelected.length > this.getSelected.length) {
+          const index = this.isSelected.findIndex((item) => item === id)
+          if (index === 1) {
             this.handleUserChooseRightAnswerOfChildQuestion({
               action: 'add',
               questionChildId: this.childQuestionId,
@@ -371,6 +394,9 @@ export default defineComponent({
       } else {
         this.deleteAnswer(id)
       }
+    },
+    handleSelected(value) {
+      this.isSelected = value
     },
   },
 })

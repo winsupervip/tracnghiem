@@ -235,10 +235,23 @@ export default {
   },
   ADD_ANSWER_IN_CHILD_QUESTION(state, data) {
     const index = state.childQuestions.findIndex((item) => item.id === data.id)
-    state.childQuestions[index].answers.push(data.answer)
-    if (data.answer.rightAnswer === 1) {
-      state.selected = data.answer.id
+    let answers = []
+    if (
+      state.childQuestions[index].typeQuestion === 'single-choice' ||
+      state.childQuestions[index].typeQuestion === 'right-wrong'
+    ) {
+      if (data.answer.rightAnswer === 1) {
+        answers = state.childQuestions[index].answers.map((item) => {
+          item.rightAnswer = 0
+          return item
+        })
+        answers.push(data.answer)
+        state.childQuestions[index].answers = answers
+        state.selectedGroup[index].selected = data.answer.id
+        return
+      }
     }
+    state.childQuestions[index].answers.push(data.answer)
   },
   IS_RANDOM(state, data) {
     const index = state.answers.findIndex((item) => item.id === data)
@@ -250,7 +263,6 @@ export default {
       state.answers[index].random = !state.answers[index].random
     }
   },
-  // group question
   ADD_CHILD_QUESTION_CONTENT(state, data) {
     const index = state.childQuestions.findIndex((item) => item.id === data.id)
     state.childQuestions[index].question.questionContent = data.value
@@ -366,7 +378,7 @@ export default {
       // state.selected.splice(indexSelected, 1)
       state.childQuestions[indexChildQuestion].answers[
         indexAnswerOfChildQuestion
-      ].rightAnswer = 1
+      ].rightAnswer = 0
     } else if (data.action === 'change') {
       const answers = state.childQuestions[indexChildQuestion].answers?.map(
         (item) => {
@@ -381,5 +393,14 @@ export default {
       // state.selected = data.id
       state.childQuestions[indexChildQuestion].answers = answers
     }
+  },
+  HANDLE_UPDATE_SELECT_FILL_BLANK_GROUP_QUESTION(state, data) {
+    const index = state.childQuestions.findIndex(
+      (item) => item.id === data.questionId
+    )
+    const answerIndex = state.childQuestions[index].answers.findIndex(
+      (item) => item.id === data.answerId
+    )
+    state.childQuestions[index].answers[answerIndex].rightAnswer = data.index
   },
 }

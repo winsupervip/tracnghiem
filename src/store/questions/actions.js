@@ -98,4 +98,7 @@ export default {
   handleUserChooseRightAnswerOfChildQuestion({ commit }, data) {
     commit('HANDLE_USER_CHOOSE_RIGHT_ANSWER_OF_CHILD_QUESTION', data)
   },
+  handleUpdateSelectFillBlankGroupQuestion({ commit }, data) {
+    commit('HANDLE_UPDATE_SELECT_FILL_BLANK_GROUP_QUESTION', data)
+  },
 }
