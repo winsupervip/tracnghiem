@@ -227,10 +227,18 @@ export default {
   // question group //
   ADD_CHILD_QUESTION(state, data) {
     state.childQuestions.push(data)
+    const isSelected = {
+      id: data.id,
+      selected: [],
+    }
+    state.selectedGroup.push(isSelected)
   },
   ADD_ANSWER_IN_CHILD_QUESTION(state, data) {
     const index = state.childQuestions.findIndex((item) => item.id === data.id)
     state.childQuestions[index].answers.push(data.answer)
+    if (data.answer.rightAnswer === 1) {
+      state.selected = data.answer.id
+    }
   },
   IS_RANDOM(state, data) {
     const index = state.answers.findIndex((item) => item.id === data)
@@ -240,6 +248,138 @@ export default {
       state.answers[index].right.random = !state.answers[index].right.random
     } else {
       state.answers[index].random = !state.answers[index].random
+    }
+  },
+  // group question
+  ADD_CHILD_QUESTION_CONTENT(state, data) {
+    const index = state.childQuestions.findIndex((item) => item.id === data.id)
+    state.childQuestions[index].question.questionContent = data.value
+  },
+  DELETE_CHILD_QUESTION(state, data) {
+    const index = state.childQuestions.findIndex((item) => item.id === data)
+    state.childQuestions.splice(index, 1)
+  },
+  UPDATE_ANSWER_QUESTION_CHILD(state, data) {
+    const index = state.childQuestions.findIndex((item) => item.id === data.id)
+    const typeQuestion = state.childQuestions[index].typeQuestion
+    const indexAnswer = state.childQuestions[index].answers.findIndex(
+      (item) => item.id === data.answer.id
+    )
+    const indexSelectedQuestion = state.selectedGroup.findIndex(
+      (item) => item.id === data.id
+    )
+    if (typeQuestion === 'single-choice' || typeQuestion === 'right-wrong') {
+      // when user update a answer update(right-wrong, single-choice, multiple-choice)
+      // case 1. atribute rightAnswer is true and the value update is false
+      //          set value of select = ''
+      // case 2.  atribute rightAnswer is false and the value update is true
+      //          set value of select = id of update value
+
+      if (data.answer.rightAnswer === 1) {
+        state.selectedGroup[index].selected = data.answer.id
+        const answers = state.childQuestions[index].answers.map((item) => {
+          item.rightAnswer = 0
+          return item
+        })
+        state.answers = answers
+      }
+      if (
+        state.childQuestions[index].answers[indexAnswer].rightAnswer === 1 &&
+        data.answer.rightAnswer === 0
+      ) {
+        state.selectedGroup[indexSelectedQuestion].selected = ''
+      }
+    } else if (typeQuestion === 'multiple-choice') {
+      if (data.answer.rightAnswer === 1) {
+        state.selectedGroup[indexSelectedQuestion].selected.push(data.answer.id)
+      }
+      if (
+        state.childQuestions[index].answers[indexAnswer].rightAnswer === 1 &&
+        data.answer.rightAnswer === 0
+      ) {
+        const indexAnswerOfQuestion = state.selectedGroup[
+          index
+        ].answers.findIndex((item) => item === data.answer.id)
+        state.selectedGroup[index].answers.splice(indexAnswerOfQuestion, 1)
+      }
+    } else if (typeQuestion === 'pairing') {
+      try {
+        state.childQuestions[index].answers[indexAnswer].left.plainText =
+          data.answer?.left.plainText
+        state.childQuestions[index].answers[indexAnswer].left.answerContent =
+          data.answer?.left.answerContent
+        state.childQuestions[index].answers[indexAnswer].left.random =
+          data.answer?.left.random
+
+        state.childQuestions[index].answers[indexAnswer].right.plainText =
+          data.answer?.right.plainText
+        state.childQuestions[index].answers[indexAnswer].right.answerContent =
+          data.answer?.right.answerContent
+        state.childQuestions[index].answers[indexAnswer].right.random =
+          data.answer?.right.random
+      } catch (error) {
+        console.log(error)
+      }
+
+      return 0
+    }
+    state.childQuestions[index].answers[indexAnswer].plainText =
+      data.answer.plainText
+    state.childQuestions[index].answers[indexAnswer].rightAnswer =
+      data.answer.rightAnswer
+    state.childQuestions[index].answers[indexAnswer].random = data.answer.random
+    state.childQuestions[index].answers[indexAnswer].answerContent =
+      data.answer.answerContent
+  },
+  DELETE_ANSWER_OF_CHILD_QUESTION(state, data) {
+    const index = state.childQuestions.findIndex(
+      (item) => item.id === data.questionChildId
+    )
+    const answerIndex = state.childQuestions[index].answers.findIndex(
+      (item) => item.id === data.answerId
+    )
+    state.childQuestions[index].answers.splice(answerIndex, 1)
+  },
+  HANDLE_UPDATE_DRAGGBLE_ANSWER_FOR_QUESTION(state, data) {
+    const index = state.childQuestions.findIndex(
+      (item) => item.id === data.questionId
+    )
+    state.childQuestions[index].answers = data.answers
+  },
+  HANDLE_USER_CHOOSE_RIGHT_ANSWER_OF_CHILD_QUESTION(state, data) {
+    // action change => single-choice and right-wrong
+    // action add and remvoe => multiple-choice
+
+    const indexChildQuestion = state.childQuestions.findIndex(
+      (item) => item.id === data.questionChildId
+    )
+    const indexAnswerOfChildQuestion = state.childQuestions[
+      indexChildQuestion
+    ].answers.findIndex((item) => item.id === data.answerId)
+    if (data.action === 'add') {
+      state.childQuestions[indexChildQuestion].answers[
+        indexAnswerOfChildQuestion
+      ].rightAnswer = 1
+      // state.selected.push(data.id)
+    } else if (data.action === 'remove') {
+      // const indexSelected = state.selected.findIndex((item) => item === data.id)
+      // state.selected.splice(indexSelected, 1)
+      state.childQuestions[indexChildQuestion].answers[
+        indexAnswerOfChildQuestion
+      ].rightAnswer = 1
+    } else if (data.action === 'change') {
+      const answers = state.childQuestions[indexChildQuestion].answers?.map(
+        (item) => {
+          if (item.id !== data.answerId) {
+            item.rightAnswer = 0
+          } else {
+            item.rightAnswer = 1
+          }
+          return item
+        }
+      )
+      // state.selected = data.id
+      state.childQuestions[indexChildQuestion].answers = answers
     }
   },
 }

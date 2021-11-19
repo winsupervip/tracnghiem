@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
-    <b-card :sub-title="$t('exam.searchTitle')">
+    <b-card :sub-title="$t('exam.questions.search')">
       <b-form>
         <b-form-row class="row">
           <b-form-group
@@ -17,47 +17,17 @@
             ></b-form-input>
           </b-form-group>
           <b-form-group
-            :label="$t('exam.categories')"
-            label-for="categories"
+            :label="$t('exam.questionType')"
+            label-for="questionType"
             class="col-12 col-md-3 mb-3"
           >
             <treeselect
-              id="categories"
-              v-model="urlQuery.categories"
-              :multiple="true"
-              :options="categories"
-              :load-options="loadOptions"
-              :placeholder="$t('exam.categories')"
-            />
-          </b-form-group>
-          <b-form-group
-            :label="$t('exam.paymentTypes')"
-            label-for="paymentTypes"
-            class="col-12 col-md-3 mb-3"
-          >
-            <treeselect
-              id="paymentTypes"
-              v-model="urlQuery.payement_type_id"
+              id="questionType"
+              v-model="urlQuery.questionTypeId"
               :multiple="false"
-              :options="paymentTypes"
+              :options="questionTypes"
               :load-options="loadOptions"
-              :placeholder="$t('exam.paymentTypes')"
-            />
-          </b-form-group>
-        </b-form-row>
-        <b-form-row class="row">
-          <b-form-group
-            :label="$t('exam.status')"
-            label-for="status"
-            class="col-12 col-md-3 mb-3"
-          >
-            <treeselect
-              id="status"
-              v-model="urlQuery.statusId"
-              :multiple="false"
-              :options="status"
-              :load-options="loadOptions"
-              :placeholder="$t('exam.status')"
+              :placeholder="$t('exam.questionType')"
             />
           </b-form-group>
           <b-form-group
@@ -74,6 +44,8 @@
               :placeholder="$t('exam.levels')"
             />
           </b-form-group>
+        </b-form-row>
+        <b-form-row class="row">
           <b-form-group
             :label="$t('exam.sortby')"
             label-for="sortby"
@@ -90,29 +62,31 @@
           </b-form-group>
           <div
             class="
-              col-12 col-md-3
+              col-12 col-md-4
               mb-3
               d-flex
               justify-content-around
               align-items-end
             "
           >
-            <b-button variant="outline-primary btn-sm" @click="fetch()">
+            <b-button variant="outline-primary" @click="handleSearch()">
               <b-icon-filter></b-icon-filter> {{ $t('exam.filter') }}
             </b-button>
-            <nuxt-link class="btn btn-sm btn-primary" to="/users/exams/add">
+            <b-button v-b-modal.modal-1 variant="primary">
               <b-icon-plus></b-icon-plus> {{ $t('exam.add') }}
-            </nuxt-link>
+            </b-button>
           </div>
         </b-form-row>
       </b-form>
     </b-card>
-    <b-card :sub-title="$t('exam.title')" class="mt-3">
+    <b-card :sub-title="$t('exam.questions.title')" class="mt-3">
       <div v-if="total === 0">
         <EmptyData />
       </div>
       <div v-else>
-        <ExamItem v-for="(item, index) in items" :key="index" :exam="item" />
+        <div v-for="(item, index) in items" :key="index">
+          <ExamQuestionItem :item-data="item" />
+        </div>
         <div class="mt-2">
           <b-pagination
             v-if="total > urlQuery.pageSize"
@@ -125,102 +99,127 @@
         </div>
       </div>
     </b-card>
+    <b-modal
+      id="modal-1"
+      size="xl"
+      hide-footer
+      :title="$t('exam.questions.search')"
+    >
+      <ModalQuestionForAdd :exam-hash-id="examHashId" />
+    </b-modal>
   </div>
 </template>
 <script>
 import {
   defineComponent,
+  useContext,
   reactive,
   toRefs,
-  useContext,
-  useFetch,
+  useRoute,
+  computed,
   useAsync,
+  useFetch,
   watch,
 } from '@nuxtjs/composition-api'
-
+import examApi from '@/api/examApi'
 import QuestionApi from '@/api/question-list-page'
 import catalogApi from '@/api/catalogApi'
-import examApi from '@/api/examApi'
-import ExamItem from '@/components/Exams/ExamItem.vue'
 import EmptyData from '@/components/EmptyData.vue'
-
+import ModalQuestionForAdd from '@/components/Exams/ModalQuestionForAdd.vue'
+import ExamQuestionItem from '@/components/Exams/ExamQuestionItem.vue'
 export default defineComponent({
-  components: { ExamItem, EmptyData },
+  components: { EmptyData, ModalQuestionForAdd, ExamQuestionItem },
   layout: 'dashboard',
   auth: true,
   setup() {
     const { app, $loader, $logger } = useContext()
     const data = reactive({
-      breadcrumbs: [
-        {
-          text: app.i18n.t('exam.dashboard'),
-          href: '/users/dashboard',
-        },
-        {
-          text: app.i18n.t('exam.exam_title'),
-          active: true,
-        },
-      ],
-      categories: [],
-      paymentTypes: [],
-      status: [],
+      breadcrumbs: [],
       levels: [],
       sortBy: [],
+      questionTypes: [],
+      examInfo: {},
       urlQuery: {
         page: 1,
         pageSize: 10,
         keyword: '',
-        categories: null,
-        tags: null,
-        statusId: null,
         levelId: null,
-        payement_type_id: null,
+        questionTypeId: null,
         orderBy: 1,
       },
       items: [],
       total: 0,
+      examHashId: '',
     })
+
+    const route = useRoute()
+    const id = computed(() => route.value.params.id)
+    data.examHashId = id.value
     useAsync(async () => {
       $loader()
-      $logger.info('load data')
-      const [
-        { data: categories },
-        { data: paymentTypes },
-        { data: listStatus },
-        { data: levels },
-        { data: sortBy },
-      ] = await Promise.all([
-        QuestionApi.getCategory(),
-        catalogApi.getPaymentType(),
-        QuestionApi.getListStatus(),
-        QuestionApi.getLevel(),
-        catalogApi.getExamSortBy(),
-      ])
-      data.categories = categories.object.items
-      data.paymentTypes = paymentTypes.object.items
-      data.status = listStatus.object.items
-      data.levels = levels.object.items
-      data.sortBy = sortBy.object.items
+      try {
+        const [
+          { data: levels },
+          { data: sortBy },
+          { data: qTypes },
+          { data: examData },
+        ] = await Promise.all([
+          QuestionApi.getLevel(),
+          catalogApi.getExamSortBy(),
+          QuestionApi.getTreeQuestionTypes(),
+          examApi.getUserExamById(data.examHashId),
+        ])
+        data.levels = levels.object.items
+        data.sortBy = sortBy.object.items
+        data.questionTypes = qTypes.object.items
+
+        data.examInfo = examData.object
+        console.log(data.breadcrumbs)
+        data.breadcrumbs = [
+          {
+            text: app.i18n.t('exam.dashboard'),
+            href: '/users/dashboard',
+          },
+          {
+            text: app.i18n.t('exam.exam_title'),
+            href: '/users/exams',
+          },
+          {
+            text: data.examInfo.title,
+            href: '/users/exams/' + data.examHashId,
+          },
+          {
+            text: app.i18n.t('exam.questions.title'),
+            active: true,
+          },
+        ]
+      } catch (err) {
+        app.$handleError(err, () => {
+          $logger.info(err)
+        })
+      }
       $loader().close()
     })
 
     const { fetch } = useFetch(async () => {
       $loader()
-      const { data: exams } = await examApi.getUserExams(data.urlQuery)
-      data.items = exams.object.items
-      data.total = exams.object.total
+      const { data: response } = await examApi.getQuestionsOfExam(
+        data.urlQuery,
+        data.examHashId
+      )
+      data.items = response.object.items
+      data.total = response.object.total
+      $logger.info(data.items)
       $loader().close()
     })
 
     fetch()
-
     watch(
       () => data.urlQuery.page,
       () => {
         fetch()
       }
     )
-
     return {
       ...toRefs(data),
       fetch,
@@ -228,6 +227,23 @@ export default defineComponent({
   },
   methods: {
     loadOptions({ action, parentNode, callback }) {},
+    async onSubmit() {
+      try {
+        const { data } = await examApi.editExam({ exam: this.examData })
+        this.$handleError(data)
+        await this.resetExam()
+        this.$router.push('/users/exams')
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
+      console.log(this.examData)
+    },
+    handleSearch() {
+      this.urlQuery.page = 1
+      this.fetch()
+    },
   },
 })
 </script>

@@ -35,7 +35,6 @@ deploy:
     - ssh -o StrictHostKeyChecking=no trunglv@dev.tracnghiem.vn "docker-compose -f /home/trunglv/infrastructure/develop/tracnghiem.yaml up -d"
   only:
     - develop
-    - main
     
 
     

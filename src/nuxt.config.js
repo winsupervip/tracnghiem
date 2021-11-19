@@ -166,7 +166,6 @@ export default {
     { src: '@/plugins/vue2-scrollspy', ssr: false },
     { src: '@/plugins/treeselect.js', ssr: true },
     { src: "@/plugins/validators", ssr: false },
-    { src: '@/plugins/bootstrap-vue.js', ssr: true },
     { src: '@/plugins/uuid.js', ssr: true },
     { src: '~/plugins/persistedState.js'},
     { src: '@/plugins/WIRISplugins.js', ssr: false },
@@ -203,7 +202,8 @@ export default {
   // bootstrap-vue
   bootstrapVue: {
     bootstrapCSS: false, // Or `css: false`
-    bootstrapVueCSS: true // Or `bvCSS: false`
+    bootstrapVueCSS: true, // Or `bvCSS: false`
+    icons: true
   },
   toast: {
     position: 'top-right',
