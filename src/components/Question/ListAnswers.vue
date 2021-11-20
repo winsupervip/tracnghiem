@@ -35,7 +35,7 @@
             icon="pencil-square"
             @click="addValueUpdateAnswer(answer)"
           ></b-icon>
-          <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+          <b-icon icon="trash" @click="handleDeleteAnswer(answer.id)"></b-icon>
         </div>
       </div>
     </b-form-group>
@@ -78,7 +78,7 @@
           <b-icon
             v-if="index !== 0 && index !== 1"
             icon="trash"
-            @click="deleteAnswer(answer.id)"
+            @click="handleDeleteAnswer(answer.id)"
           ></b-icon>
           <b-icon v-else></b-icon>
         </div>
@@ -118,7 +118,10 @@
               @click="addValueUpdateAnswer(answer)"
             ></b-icon>
 
-            <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+            <b-icon
+              icon="trash"
+              @click="handleDeleteAnswer(answer.id)"
+            ></b-icon>
           </div>
         </div>
       </b-form-checkbox-group>
@@ -132,9 +135,15 @@
           :type-question="typeQuestion"
           :num-index="index + 1"
           :answer="answer"
+          :group-question="groupQuestion"
+          :child-question-id="childQuestionId"
         />
       </b-container>
-      <ShortAnswerInput :type-question="typeQuestion" />
+      <ShortAnswerInput
+        :type-question="typeQuestion"
+        :group-question="groupQuestion"
+        :child-question-id="childQuestionId"
+      />
     </div>
 
     <div v-if="typeQuestion === 'pairing'">
@@ -165,9 +174,12 @@
             <b-icon
               v-b-modal.modal-1
               icon="pencil-square"
-              @click="updateAnswer(answer.id)"
+              @click="addValueUpdateAnswer(answer)"
             ></b-icon>
-            <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+            <b-icon
+              icon="trash"
+              @click="handleDeleteAnswer(answer.id)"
+            ></b-icon>
           </b-col>
         </b-row>
       </b-container>
@@ -180,7 +192,12 @@
         class="p-answerItem"
       >
         <div class="p-answerItem">
-          <SelectForFillBlank :answer="answer" />
+          <SelectForFillBlank
+            :answer="answer"
+            :group-question="groupQuestion"
+            :child-question-id="childQuestionId"
+            :list-answer="compareListAnswer"
+          />
           <div
             class="p-answerItem__content"
             v-html="mathTypeDisplay(answer.answerContent)"
@@ -198,13 +215,17 @@
             @click="addValueUpdateAnswer(answer)"
           ></b-icon>
 
-          <b-icon icon="trash" @click="deleteAnswer(answer.id)"></b-icon>
+          <b-icon icon="trash" @click="handleDeleteAnswer(answer.id)"></b-icon>
         </div>
       </div>
     </div>
 
     <div v-if="typeQuestion === 'draggable'">
-      <Draggable />
+      <Draggable
+        :group-question="groupQuestion"
+        :child-question-id="childQuestionId"
+        :list-answer="compareListAnswer"
+      />
     </div>
 
     <b-form-invalid-feedback id="error" :state="false">{{
@@ -216,7 +237,6 @@
 <script>
 import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
 import { mapGetters, mapActions } from 'vuex'
-import EventBus from '../../plugins/eventBus'
 import SelectForFillBlank from './SelectForFillBlank.vue'
 import Draggable from './Draggable.vue'
 import ShortAnswer from './ShortAnswer.vue'
@@ -225,7 +245,6 @@ import mathType from '@/extensions/mathType'
 export default defineComponent({
   components: {
     SelectForFillBlank,
-    // Pairing,
     Draggable,
     ShortAnswer,
     ShortAnswerInput,
@@ -249,6 +268,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    childQuestionId: {
+      type: String,
+      default: '',
+    },
   },
   setup() {
     const data = reactive({
@@ -262,43 +285,70 @@ export default defineComponent({
     ...mapGetters({
       getListAnswer: 'questions/getListAnswer',
       getSelected: 'questions/getSelected',
+      getGroupSelected: 'questions/getGroupSelected',
     }),
     compareListAnswer() {
       if (this.groupQuestion) {
         return this.listChildAnswer
       }
+      console.log('this question nè', this.getListAnswer)
       return this.getListAnswer
     },
   },
   watch: {
     getSelected() {
-      this.$logger.debug('chạy')
       this.isSelected = this.getSelected
     },
+    getGroupSelected() {
+      console.log('ok')
+    },
   },
-  created() {
-    // eslint-disable-next-line no-undef
-    const that = this
-    EventBus.$on('updateListAnswer', function (item) {
-      // that.$emit('updateListAnswer', item)
-      this.$logger.debug('item', item)
-      this.$logger.debug('an', that.answers)
-      const answer = that.answers[item.index]
-      answer.answerContent = item.answerContent
-      answer.random = item.isRandom
-      answer.plainText = item.answerContent
-      answer.rightAnswer = item.isRightAnswer
-    })
+  mounted() {
+    this.getListAnswer.left = this.getListAnswer.filter((x) => x.position === 1)
+    this.getListAnswer.right = this.getListAnswer.filter(
+      (x) => x.position === 2
+    )
+    console.log('left ', this.getListAnswer)
   },
+
   methods: {
     ...mapActions({
       addValueUpdateAnswer: 'questions/addValueUpdateAnswer',
       deleteAnswer: 'questions/deleteAnswer',
       handleUserChooseRightAnswer: 'questions/handleUserChooseRightAnswer',
+      handleUserChooseRightAnswerOfChildQuestion:
+        'questions/handleUserChooseRightAnswerOfChildQuestion',
       isRandom: 'questions/isRandom',
+      deleteAnswerOfChildQuestion: 'questions/deleteAnswerOfChildQuestion',
     }),
     isChange(id) {
-      this.$logger.debug(id)
+      if (this.groupQuestion) {
+        if (this.typeQuestion === 'multiple-choice') {
+          if (this.isSelected.length > this.getSelected.length) {
+            this.handleUserChooseRightAnswerOfChildQuestion({
+              action: 'add',
+              questionChildId: this.childQuestionId,
+              answerId: id,
+            })
+          } else {
+            this.handleUserChooseRightAnswerOfChildQuestion({
+              action: 'remove',
+              questionChildId: this.childQuestionId,
+              answerId: id,
+            })
+          }
+        } else if (
+          this.typeQuestion === 'single-choice' ||
+          this.typeQuestion === 'right-wrong'
+        ) {
+          this.handleUserChooseRightAnswerOfChildQuestion({
+            action: 'change',
+            questionChildId: this.childQuestionId,
+            answerId: id,
+          })
+        }
+        return 0
+      }
       if (this.typeQuestion === 'multiple-choice') {
         if (this.isSelected.length > this.getSelected.length) {
           this.handleUserChooseRightAnswer({ action: 'add', id })
@@ -312,15 +362,20 @@ export default defineComponent({
         this.handleUserChooseRightAnswer({ action: 'change', id })
       }
     },
+    handleDeleteAnswer(id) {
+      if (this.childQuestionId !== '') {
+        this.deleteAnswerOfChildQuestion({
+          questionChildId: this.childQuestionId,
+          answerId: id,
+        })
+      } else {
+        this.deleteAnswer(id)
+      }
+    },
   },
 })
 </script>
 <style lang="scss" scoped>
-.matching_style {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
 p {
   margin-bottom: 0;
 }

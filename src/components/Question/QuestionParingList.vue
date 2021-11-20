@@ -50,7 +50,6 @@
 
 <script>
 import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
-import '../../node_modules/bootstrap/scss/bootstrap.scss'
 
 export default defineComponent({
   name: 'QuestionParingList',

@@ -14,10 +14,13 @@
           <template #button-content>
             <b-icon-three-dots-vertical></b-icon-three-dots-vertical>
           </template>
-          <b-dropdown-item :to="'/users/exams/' + exam.hashId">
+          <b-dropdown-item :href="'/users/exams/' + exam.hashId">
             <b-icon-pencil-square></b-icon-pencil-square> {{ $t('exam.edit') }}
           </b-dropdown-item>
-          <b-dropdown-item>Second Action</b-dropdown-item>
+          <b-dropdown-item :href="'/users/exams/questions/' + exam.hashId">
+            <b-icon-journal-text></b-icon-journal-text>
+            {{ $t('exam.questions.title') }}
+          </b-dropdown-item>
           <b-dropdown-item>Third Action</b-dropdown-item>
           <b-dropdown-divider></b-dropdown-divider>
           <b-dropdown-item active>Active action</b-dropdown-item>

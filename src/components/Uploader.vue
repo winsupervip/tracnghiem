@@ -36,7 +36,7 @@
       </div>
     </form>
     <div v-else class="wrapper-img">
-      <img :src="value" class="img-fluid" style="width: 100%" />
+      <img :src="image" class="img-fluid" style="width: 100%" />
     </div>
     <!--PROCESS-->
     <div v-if="isProcess" class="text-center">
@@ -110,7 +110,7 @@
 </template>
 <script>
 // eslint-disable-next-line import/no-unresolved
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import fileApi from '@/api/fileApi'
 const STATUS_INITIAL = 0
 const STATUS_SAVING = 1
@@ -123,7 +123,7 @@ export default {
   props: {
     value: {
       type: String,
-      required: true,
+      default: '',
     },
     accept: {
       type: String,
@@ -156,7 +156,11 @@ export default {
     isProcess() {
       return this.currentStatus === STATUS_IMPORT
     },
+    ...mapGetters({
+      getQuestion: 'questions/getQuestion',
+    }),
   },
+
   watch: {
     image() {
       console.log('watch', this.image)
@@ -166,9 +170,11 @@ export default {
   created() {
     this.image = this.value
   },
+
   mounted() {
-    // this.reset()
+    this.image = this.getQuestion?.question?.seoAvatar
   },
+
   methods: {
     ...mapActions({ addSeoAvatar: 'questions/addSeoAvatar' }),
     reup() {

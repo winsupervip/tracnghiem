@@ -29,11 +29,67 @@ export default {
     if (urlQuery.orderBy && urlQuery.orderBy > 0) {
       url += '&orderBy=' + urlQuery.orderBy
     }
-    console.log(url)
     return global.$http.get(url)
   },
   addExam: (data) => global.$http.post('/api/v1/Exam/add-exam', data),
   getUserExamById: (hashId) =>
     global.$http.get(`/api/v1/Exam/get-exam-details/${hashId}`),
   editExam: (data) => global.$http.put('/api/v1/Exam/update-exam', data),
+  getItemsAddExam: (urlQuery, examHashId) => {
+    let url = `/api/v1/Exam/get-item-list-add-to-exam?Page=${
+      urlQuery.page
+    }&PageSize=${urlQuery.pageSize}&Keyword=${encodeURIComponent(
+      urlQuery.keyword
+    )}&examHashId=${examHashId}`
+
+    if (urlQuery.categories && urlQuery.categories.length > 0) {
+      const categoryUrl = urlQuery.categories.join('&categories=')
+      url += '&categories=' + categoryUrl
+    }
+
+    if (urlQuery.levelId && urlQuery.levelId > 0) {
+      url += '&levelId=' + urlQuery.levelId
+    }
+    if (urlQuery.questionTypeId && urlQuery.questionTypeId > 0) {
+      url += '&questionTypeId=' + urlQuery.questionTypeId
+    }
+
+    if (urlQuery.filterBy != null) {
+      url += '&filterBy=' + urlQuery.filterBy
+    }
+
+    if (urlQuery.orderBy && urlQuery.orderBy > 0) {
+      url += '&orderBy=' + urlQuery.orderBy
+    }
+    return global.$http.get(url)
+  },
+  getSectionsByExam: (hashId) => {
+    const url = `/api/v1/Exam/get-list-exam-section/${hashId}`
+    return global.$http.get(url)
+  },
+  addExamSection(data) {
+    return global.$http.post('/api/v1/Exam/add-exam-section', data)
+  },
+  addExamQuestions(data) {
+    return global.$http.post('/api/v1/Exam/add-questions-to-exam', data)
+  },
+  getQuestionsOfExam: (urlQuery, hashId) => {
+    let url = `/api/v1/Exam/get-question-of-exam/${hashId}?Page=${
+      urlQuery.page
+    }&PageSize=${urlQuery.pageSize}&Keyword=${encodeURIComponent(
+      urlQuery.keyword
+    )}`
+
+    if (urlQuery.levelId && urlQuery.levelId > 0) {
+      url += '&levelId=' + urlQuery.levelId
+    }
+    if (urlQuery.questionTypeId && urlQuery.questionTypeId > 0) {
+      url += '&questionTypeId=' + urlQuery.questionTypeId
+    }
+
+    if (urlQuery.orderBy && urlQuery.orderBy > 0) {
+      url += '&orderBy=' + urlQuery.orderBy
+    }
+    return global.$http.get(url)
+  },
 }

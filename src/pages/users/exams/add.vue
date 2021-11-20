@@ -28,7 +28,7 @@ export default defineComponent({
       breadcrumbs: [
         {
           text: app.i18n.t('exam.dashboard'),
-          href: '#',
+          href: '/users/dashboard',
         },
         {
           text: app.i18n.t('exam.exam_title'),

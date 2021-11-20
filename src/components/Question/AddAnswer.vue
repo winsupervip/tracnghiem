@@ -24,7 +24,6 @@
         <div>
           <!-- class="wrapper" -->
           <div class="wrapper-left">
-            <p v-if="isPairing">Vế Trái</p>
             <TinyEditor
               v-if="doShow"
               v-model="answerContent"
@@ -171,6 +170,7 @@ export default defineComponent({
       handleUpdateAnswer: 'questions/handleUpdateAnswer',
       removeValueUpdateAnswer: 'questions/removeValueUpdateAnswer',
       addAnswerInChildQuestion: 'questions/addAnswerInChildQuestion',
+      updateAnswerQuestionChild: 'questions/updateAnswerQuestionChild',
     }),
     shown() {
       this.doShow = true
@@ -185,6 +185,7 @@ export default defineComponent({
         this.removeValueUpdateAnswer()
       }
     },
+
     handleAnswer() {
       if (this.answerContent === '' && this.answerContentRight === '') {
         // config: https://github.com/shakee93/vue-toasted
@@ -234,11 +235,20 @@ export default defineComponent({
         }
       }
       if (this.groupQuestion) {
-        this.addAnswerInChildQuestion({
-          id: this.childQuestionId,
-          answer: data?.answer,
-        })
-        this.$toast.success('Thêm câu trả lời thành công').goAway(1000)
+        if (this.getUpdateValueAnswer?.id) {
+          data.answer.id = this.getUpdateValueAnswer.id
+          this.updateAnswerQuestionChild({
+            id: this.childQuestionId,
+            answer: data.answer,
+          })
+          this.$toast.success('Cập nhập câu trả lời thành công').goAway(1000)
+        } else {
+          this.addAnswerInChildQuestion({
+            id: this.childQuestionId,
+            answer: data?.answer,
+          })
+          this.$toast.success('Thêm câu trả lời thành công').goAway(1000)
+        }
         this.isRightAnswer = false
         this.answerContent = ''
         this.answerContentRight = ''

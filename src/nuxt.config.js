@@ -166,7 +166,6 @@ export default {
     { src: '@/plugins/vue2-scrollspy', ssr: false },
     { src: '@/plugins/treeselect.js', ssr: true },
     { src: "@/plugins/validators", ssr: false },
-    { src: '@/plugins/bootstrap-vue.js', ssr: true },
     { src: '@/plugins/uuid.js', ssr: true },
     { src: '~/plugins/persistedState.js'},
     { src: '@/plugins/WIRISplugins.js', ssr: false },
@@ -203,7 +202,8 @@ export default {
   // bootstrap-vue
   bootstrapVue: {
     bootstrapCSS: false, // Or `css: false`
-    bootstrapVueCSS: true // Or `bvCSS: false`
+    bootstrapVueCSS: true, // Or `bvCSS: false`
+    icons: true
   },
   toast: {
     position: 'top-right',
@@ -294,12 +294,12 @@ export default {
         scheme: 'oauth2',
         endpoints: {
           authorization:
-            'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/auth',
+            process.env.AUTH_URL + '/auth/realms/tracnghiemvn/protocol/openid-connect/auth',
           userInfo:
-            'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/userinfo',
-          token: 'https://dev-api.tracnghiem.vn/api/Account/token',
+            process.env.AUTH_URL + '/auth/realms/tracnghiemvn/protocol/openid-connect/userinfo',
+          token: process.env.AUTH_TOKEN,
           logout:
-            'https://id.tracnghiem.vn/auth/realms/hello-world-authz/protocol/openid-connect/logout?redirect_uri=' +
+          process.env.AUTH_URL + '/auth/realms/tracnghiemvn/protocol/openid-connect/logout?redirect_uri=' +
             encodeURIComponent(process.env.BASE_URL || 'http://localhost:3000')
         },
         token: {
@@ -314,7 +314,7 @@ export default {
         },
         responseType: 'code',
         grantType: 'authorization_code',
-        clientId: 'app-auth-vanilla',
+        clientId: process.env.AUTH_CLIENT_ID,
         scope: ['openid', 'profile', 'email'],
         codeChallengeMethod: 'S256'
       }

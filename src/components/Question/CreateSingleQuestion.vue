@@ -16,7 +16,7 @@
           <CommentOrNote />
         </div>
         <div class="p-question__right">
-          <PublishQuestion :on-submit="onSubmit" />
+          <PublishQuestion />
           <Category />
           <LevelForm />
           <!-- <UploadImage :get-image="getImage" /> -->
@@ -36,7 +36,6 @@ import LevelForm from './LevelForm.vue'
 import Category from './Category.vue'
 import HeaderOfSingleQuestion from './HeaderOfSingleQuestion.vue'
 import ListAnswer from './ListAnswers.vue'
-import UploadImage from './UploadImage.vue'
 import AddSeo from './AddSeo.vue'
 import CommentOrNote from './CommentOrNote.vue'
 import AddAnswer from './AddAnswer.vue'
@@ -50,8 +49,6 @@ export default defineComponent({
     LevelForm,
     Category,
     ListAnswer,
-    // eslint-disable-next-line vue/no-unused-components
-    UploadImage,
     AddSeo,
     CommentOrNote,
     Uploader,

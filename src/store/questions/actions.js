@@ -61,6 +61,9 @@ export default {
   restAnswer({ commit }, data) {
     commit('REST_ANSWERS')
   },
+  copyQuestion({ commit }, data) {
+    commit('COPY_QUESTIONS', data)
+  },
   setNullAnswerId({ commit }, answerIndex) {
     commit('SET_NULL_ID_ANSWER', answerIndex)
   },
@@ -76,5 +79,23 @@ export default {
   },
   isRandom({ commit }, data) {
     commit('IS_RANDOM', data)
+  },
+  addChildQuestionContent({ commit }, data) {
+    commit('ADD_CHILD_QUESTION_CONTENT', data)
+  },
+  deleteChildQuestion({ commit }, data) {
+    commit('DELETE_CHILD_QUESTION', data)
+  },
+  updateAnswerQuestionChild({ commit }, data) {
+    commit('UPDATE_ANSWER_QUESTION_CHILD', data)
+  },
+  deleteAnswerOfChildQuestion({ commit }, data) {
+    commit('DELETE_ANSWER_OF_CHILD_QUESTION', data)
+  },
+  handleUpdateDraggableAnswerForGroupQuestion({ commit }, data) {
+    commit('HANDLE_UPDATE_DRAGGBLE_ANSWER_FOR_QUESTION', data)
+  },
+  handleUserChooseRightAnswerOfChildQuestion({ commit }, data) {
+    commit('HANDLE_USER_CHOOSE_RIGHT_ANSWER_OF_CHILD_QUESTION', data)
   },
 }
