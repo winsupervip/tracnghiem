@@ -1,5 +1,6 @@
-FROM node:lts as builder
-
+FROM node:12.16.1-alpine as builder
+ENV apiURI=https://api.tracnghiem.vn
+ENV NODE_ENV=production
 WORKDIR /app
 
 COPY . .
@@ -19,8 +20,9 @@ RUN rm -rf node_modules && \
   --non-interactive \
   --production=true
 
-FROM node:lts
-
+FROM node:12.16.1-alpine 
+ENV apiURI=https://api.tracnghiem.vn
+ENV NODE_ENV=production
 WORKDIR /app
 
 COPY --from=builder /app  .
