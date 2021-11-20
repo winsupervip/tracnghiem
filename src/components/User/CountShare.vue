@@ -1,6 +1,16 @@
 <template>
-  <div>
-    <p>abc</p>
+  <div class="flex flex-column">
+    <span>{{ totalShare }}</span>
+    <div class="d-flex justify-content-center gap-3">
+      <b-icon icon="people" aria-hidden="true"></b-icon>
+      <p>
+        <b>{{ $t('countShare.user') }}</b>
+      </p>
+    </div>
+    <nuxt-link to="#" class="btn btn-outline-primary d-block">
+      <b-icon icon="share" aria-hidden="true"></b-icon>
+      {{ $t('countShare.share') }}
+    </nuxt-link>
   </div>
 </template>
 <script>
@@ -18,6 +28,10 @@ export default defineComponent({
       type: String,
       default: '',
     },
+    totalShare: {
+      type: Number,
+      default: 0,
+    },
   },
   setup() {},
   computed: {},
@@ -25,14 +39,13 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
-ul {
-  list-style: none;
-  padding: 0;
-}
-.text-input {
-  text-align: center;
-}
 p {
   font-size: 14px;
+}
+span {
+  font-size: 80px;
+  font-weight: 700;
+  display: block;
+  text-align: center;
 }
 </style>

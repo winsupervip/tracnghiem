@@ -46,6 +46,22 @@
         class="form-control text-input"
         :disabled="refBy"
       />
+      <!-- <ValidationProvider rules="required" :name="$t('formInfo.lastName')">
+          <b-form-group
+            slot-scope="{ valid, errors }"
+            :label="$t('formInfo.lastName') + ' (*)'"
+          >
+            <b-form-input
+              v-model="lastName"
+              type="text"
+              :state="errors[0] ? false : valid ? true : null"
+            >
+            </b-form-input>
+            <b-form-invalid-feedback id="inputLiveFeedback">
+              {{ errors[0] }}
+            </b-form-invalid-feedback>
+          </b-form-group>
+        </ValidationProvider> -->
       <input
         v-if="!refBy"
         v-model="inputCode"
@@ -115,14 +131,12 @@ export default defineComponent({
       try {
         const { data } = await userAPI.postCode({ refCode: this.inputCode })
         this.$handleError(data)
-        this.$toast.success(this.$i18n('info.success')).goAway(1500)
+        this.isDisabled = true
       } catch (err) {
         this.$handleError(err, () => {
-          this.$toast.error(this.$i18n('info.error')).goAway(1500)
           console.log(err)
         })
       }
-      console.log(this.examData)
     },
   },
 })

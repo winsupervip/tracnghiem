@@ -7,7 +7,7 @@
       <ValidationObserver v-slot="{ handleSubmit }">
         <b-form @submit.prevent="handleSubmit(onSubmit)">
           <ValidationProvider
-            rules="required|max:20"
+            rules="required|max:255|alpha_num"
             :name="$t('formAffiliate.code')"
           >
             <b-form-group slot-scope="{ valid, errors }" label-cols-sm="3">
@@ -45,19 +45,37 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in items" :key="index">
-            <th scope="row">{{ index + 1 }}</th>
-            <td>{{ item.username }}</td>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr v-for="(item, index) in 10" :key="index">
+            <th scope="row">
+              {{ item * urlQuery.page }}
+            </th>
+            <td>{{ compareUserName(index).username }}</td>
             <td>
               {{
-                item.displayName
-                  ? item.displayName
-                  : item.firstName + ' ' + item.lastName
+                compareUserName(index).displayName
+                  ? compareUserName(index).displayName
+                  : compareUserName(index).firstName
+                  ? compareUserName(index).firstName +
+                    ' ' +
+                    compareUserName(index).lastName
+                  : ''
               }}
             </td>
             <td>
-              {{ item.createDate }}
+              {{ compareUserName(index).createDate }}
             </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
           </tr>
         </tbody>
       </table>
@@ -65,13 +83,7 @@
   </div>
 </template>
 <script>
-import {
-  defineComponent,
-  reactive,
-  toRefs,
-  useFetch,
-  useContext,
-} from '@nuxtjs/composition-api'
+import { defineComponent } from '@nuxtjs/composition-api'
 import userAPI from '../../api/user'
 export default defineComponent({
   name: 'FormAffiliate',
@@ -82,44 +94,34 @@ export default defineComponent({
       type: String,
       default: '',
     },
+    refList: {
+      type: Array,
+      // eslint-disable-next-line vue/require-valid-default-prop
+      default: [],
+    },
+    urlQuery: {
+      type: Object,
+      default: () => {},
+    },
   },
-  setup() {
-    const { $logger, $loader } = useContext()
-    const data = reactive({
-      total: 1,
-      items: [],
-      urlQuery: {
-        page: 1,
-        pageSize: 10,
-      },
-    })
-    useFetch(async () => {
-      $loader()
-      const { data: result } = await userAPI.getRefList(data.urlQuery)
-      data.total = result?.object?.total
-      data.items = result?.object?.items
-      $logger.info('total : ', data.total, 'items : ', data.items)
-      $loader().close()
-    })
-    return {
-      ...toRefs(data),
-    }
-  },
+  setup() {},
   computed: {},
   methods: {
-    onSubmit() {
-      const data = {
-        refCode: this.code,
+    compareUserName(index) {
+      if (index < this.refList.length) {
+        return this.refList[index]
       }
-      userAPI.createCode(
-        data,
-        () => {
-          this.$toast.success('tạo mã code thành công').goAway(1500)
-        },
-        () => {
-          this.$toast.error('tạo mã code thất bại').goAway(1500)
-        }
-      )
+      return {}
+    },
+    async onSubmit() {
+      try {
+        const { data } = await userAPI.createCode({ refCode: this.code })
+        this.$handleError(data)
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
     },
   },
 })

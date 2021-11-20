@@ -24,12 +24,27 @@
         </div>
         <div class="col-12 col-md-8">
           <b-card>
-            <FormAffiliate :check-ref-code="refCode" />
+            <FormAffiliate
+              :check-ref-code="refCode"
+              :ref-list="items"
+              :url-query="urlQuery"
+            />
+            <b-pagination
+              v-model="urlQuery.page"
+              class="pagination"
+              align="center"
+              :total-rows="total"
+              :per-page="urlQuery.pageSize"
+            ></b-pagination>
           </b-card>
         </div>
         <div class="col-12 col-md-4">
           <b-card sub-title="Thông tin tổng quan">
-            <CountShare :type="false" :check-ref-code="refCode" />
+            <CountShare
+              :type="false"
+              :check-ref-code="refCode"
+              :total-share="sharingNumber"
+            />
           </b-card>
         </div>
       </div>
@@ -41,8 +56,10 @@ import {
   defineComponent,
   toRefs,
   useFetch,
+  watch,
   reactive,
   useContext,
+  useRoute,
 } from '@nuxtjs/composition-api'
 import userAPI from '../../../api/user'
 import Info from '@/components/User/Info.vue'
@@ -54,16 +71,39 @@ export default defineComponent({
   layout: 'dashboard',
   setup() {
     const { $loader } = useContext()
+    const route = useRoute()
+    const queryPage = route?.value?.query?.page || 1
     const data = reactive({
       refCode: '',
+      sharingNumber: 0,
+      currentPage: queryPage,
+      total: 1,
+      items: [],
+      urlQuery: {
+        page: 1,
+        pageSize: 10,
+      },
     })
+    async function pagination() {
+      $loader()
+      const { data: result } = await userAPI.getRefList(data.urlQuery)
+      data.sharingNumber = result?.object?.total
+      data.items = result?.object?.items
+      $loader().close()
+    }
+    pagination()
     useFetch(async () => {
       $loader()
       const { data: result } = await userAPI.getAccount()
       data.refCode = result?.object?.refCode
       $loader().close()
     })
-
+    watch(
+      () => data.urlQuery.page,
+      () => {
+        pagination()
+      }
+    )
     return {
       ...toRefs(data),
     }

@@ -11,6 +11,8 @@ import {
   // eslint-disable-next-line camelcase
   max_value,
   length,
+  // eslint-disable-next-line camelcase
+  alpha_num,
 } from 'vee-validate/dist/rules'
 import { messages } from 'vee-validate/dist/locale/vi.json'
 
@@ -49,6 +51,12 @@ extend('max_value', {
 extend('length', {
   ...length,
   message: messages.length,
+})
+
+extend('alpha_num', {
+  // eslint-disable-next-line camelcase
+  ...alpha_num,
+  message: messages.alpha_num,
 })
 
 const validArrayLength = (value, [min, max]) => {

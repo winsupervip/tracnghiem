@@ -97,6 +97,10 @@
     "updateUser":"Cập nhật thành công",
     "error":"Có lỗi xảy ra"
   },
+  "countShare": {
+    "user":"người dùng",
+    "share":"Chia sẻ ngay"
+  },
   "addTags": "Thêm thẻ",
   "keyword": "Từ khóa",
   "exam": {

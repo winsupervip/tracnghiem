@@ -131,7 +131,7 @@
           />
         </b-form-group>
         <ValidationProvider
-          rules="required|max:20"
+          rules="max:500"
           :name="$t('formInfo.aboutYourself')"
         >
           <b-form-group
