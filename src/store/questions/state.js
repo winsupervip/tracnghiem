@@ -3,7 +3,6 @@ export default () => ({
     questionContent: '',
     plainText: '',
     isRandom: false,
-    indexDataUpdate: -1,
     categories: [],
     statusId: false,
     levelId: false,
