@@ -165,11 +165,10 @@ export default defineComponent({
         question.questionContent = element.question.questionContent
         question.explainationIfCorrect =
           groupQuestion.question.explainationIfCorrect
-        question.explainationIfIncorrect =
-          groupQuestion.question.explainationIfIncorrect
+        question.explainationIfIncorrect = 'ádasdsas'
         question.statusId = groupQuestion.question.statusId
         question.levelId = groupQuestion.question.levelId
-        question.plainText = element.question.plainText
+        question.plainText = ' element.question.plainText'
         question.seoAvatar = groupQuestion.question.seoAvatar
         question.seoTitle = groupQuestion.question.seoTitle
         question.seoDescription = groupQuestion.question.seoDescription
@@ -179,7 +178,7 @@ export default defineComponent({
         question.groupOrder = index + 1
         const data = {
           question,
-          ansswers: value.data,
+          answers: value.data,
         }
         result.push(data)
         er.push(value.errors)
@@ -189,11 +188,29 @@ export default defineComponent({
     onSubmit() {
       const questionInGroups = this.validateChildQuestion(this.getGroupQuestion)
       const questionGroup = {
-        questionGroup: this.getGroupQuestion.question,
+        questionGroup: {
+          title: 'haha',
+          hashId: '',
+          questionGroupName:
+            'Read the reading below carefully, and then complete it with the best option A, B, C or D given below:',
+          description:
+            'Voluntary work helps foster independence and imparts the ability to deal with different situations, often simulaneously, thus teaching people how to (1)____ their way through different systems. It therefore brings people into touch with the real worls; and, hence, equips them for the future. Initially, young adults in their late teens might not seem to have the expertise or knowledge to impart to others that say a teacher or an agriculturalist or a nurse would have, (2)____ they do have many skills that can help others. And in the absence of any particular talent, their energy and enthusiasm can be harnessed for the benefit (3) ____ their fellow human beings, and ultimately themselves. From all this, the gain to any community no matter how many voluntees are involved is (4)_____ Employers will generally look favorably on people (5)_____ have shown an ability to work as part of a team. It demonstrates a willingness to learn and an independent spirit, which would be desirable qualities in any employee.',
+          plainText:
+            'Voluntary work helps foster independence and imparts the ability to deal with different situations, often simulaneously, thus teaching people how to (1)____ their way through different systems. It therefore brings people into touch with the real worls; and, hence, equips them for the future. Initially, young adults in their late teens might not seem to have the expertise or knowledge to impart to others that say a teacher or an agriculturalist or a nurse would have, (2)____ they do have many skills that can help others. And in the absence of any particular talent, their energy and enthusiasm can be harnessed for the benefit (3) ____ their fellow human beings, and ultimately themselves. From all this, the gain to any community no matter how many voluntees are involved is (4)_____ Employers will generally look favorably on people (5)_____ have shown an ability to work as part of a team. It demonstrates a willingness to learn and an independent spirit, which would be desirable qualities in any employee.',
+          random: false,
+          statusId: 1,
+          seoAvatar: 'https://placeimg.com/640/480/any',
+          seoTitle:
+            'Read the reading below carefully, and then complete it with the best option A, B, C or D given below:',
+          seoDescription:
+            'Read the reading below carefully, and then complete it with the best option A, B, C or D given below:',
+        },
         questionInGroups,
       }
+
       console.log(questionGroup)
-      CauHoiApi.createQuestion(
+
+      CauHoiApi.createGroupQuestion(
         questionGroup,
         () => {
           // this.restAnswer()
