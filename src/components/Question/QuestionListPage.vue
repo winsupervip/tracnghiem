@@ -4,33 +4,11 @@
     <div class="line"></div>
     <div class="question">
       <QuestionTags :questiontags="questions" />
-      <QuestionSingleChoiceList
-        v-if="questions.questionTypeName == 'Một lựa chọn'"
-        :questionlist="questions"
-      />
-      <QuestionMultiChoiceList
-        v-if="questions.questionTypeName == 'Nhiều lựa chọn'"
-        :questionlist="questions"
-      />
-      <QuestionRightWrongList
-        v-if="questions.questionTypeName == 'Đúng sai'"
-        :questionlist="questions"
-      />
-      <QuestionParingList
-        v-if="questions.questionTypeName == 'Ghép đôi'"
-        :questionlist="questions"
-      />
-      <QuestionFillBlankList
-        v-if="questions.questionTypeName == 'Điền vào chỗ trống'"
-        :questionlist="questions"
-      />
-      <QuestionShortAnswerList
-        v-if="questions.questionTypeName == 'Câu trả lời ngắn'"
-        :questionlist="questions"
-      />
-      <QuestionSortAnswerList
-        v-if="questions.questionTypeName == 'Sắp xếp thứ tự'"
-        :questionlist="questions"
+
+      <component
+        :is="dynamicComponent"
+        ref="questionInExam"
+        :item-data="itemData"
       />
     </div>
   </div>
@@ -46,18 +24,19 @@ import QuestionRightWrongList from './QuestionRightWrongList.vue'
 import QuestionParingList from './QuestionParingList.vue'
 import QuestionFillBlankList from './QuestionFillBlankList.vue'
 import QuestionShortAnswerList from './QuestionShortAnswerList.vue'
-
+import QuestionSortAnswerList from './QuestionSortAnswerList.vue'
 export default defineComponent({
   name: 'SingleListPage',
   components: {
     QuestionHeader,
     QuestionTags,
-    QuestionSingleChoiceList,
-    QuestionMultiChoiceList,
-    QuestionRightWrongList,
-    QuestionParingList,
-    QuestionFillBlankList,
-    QuestionShortAnswerList,
+    'question-single-choice-list': QuestionSingleChoiceList,
+    'question-multi-choice-list': QuestionMultiChoiceList,
+    'question-right-wrong-list': QuestionRightWrongList,
+    'question-paring-list': QuestionParingList,
+    'question-fill-blank-list': QuestionFillBlankList,
+    'question-short-answer-list': QuestionShortAnswerList,
+    'question-sort-answer-list': QuestionSortAnswerList,
   },
   props: {
     questions: {
@@ -67,5 +46,29 @@ export default defineComponent({
   },
 
   setup: () => {},
+  computed: {
+    dynamicComponent(props) {
+      if (this.questions.questionTypeName === 'Một lựa chọn') {
+        return 'question-single-choice-list'
+      }
+      if (this.questions.questionTypeName === 'Nhiều lựa chọn') {
+        return 'question-multi-choice-list'
+      }
+      if (this.questions.questionTypeName === 'Đúng sai') {
+        return 'question-right-wrong-list'
+      }
+      if (this.questions.questionTypeName === 'Ghép đôi') {
+        return 'question-paring-list'
+      }
+      if (this.questions.questionTypeName === 'Điền vào chỗ trống') {
+        return 'question-fill-blank-list'
+      }
+      if (this.questions.questionTypeName === 'Sắp xếp thứ tự') {
+        return 'question-sort-blank-list'
+      } else {
+        return 'question-short-answer-list'
+      }
+    },
+  },
 })
 </script>

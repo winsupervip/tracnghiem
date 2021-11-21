@@ -16,8 +16,7 @@
         <div class="list-question">
           <div class="question-item">
             <div class="question-content text-smd">
-              <QuestionTags :questiontags="questions" />
-              <QuestionSingleChoiceList
+              <!-- <QuestionSingleChoiceList
                 v-if="questions.questionTypeName == 'Một lựa chọn'"
                 :questionlist="questions"
               />
@@ -48,7 +47,43 @@
               <QuestionClusterList
                 v-if="questions.itemType == 'group'"
                 :questionlist="questions"
+              /> -->
+              <component
+                :is="dynamicComponent"
+                ref="questionInExam"
+                :questionlist="questions"
               />
+            </div>
+          </div>
+          <QuestionTags :questiontags="questions" />
+          <div class="list-status-question">
+            <div v-if="questions.itemType === 'question'">
+              <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+                questions.levelName
+              }}</span>
+              <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+                questions.questionTypeName
+              }}</span>
+              <span
+                :class="
+                  questions.statusName === 'Bản nháp'
+                    ? 'btn btn-xs rounded-pill btn-yellow-light me-2'
+                    : questions.statusName === 'Không công khai'
+                    ? 'btn btn-xs rounded-pill btn-blue-light me-2'
+                    : 'btn btn-xs rounded-pill btn-green-light me-2'
+                "
+              >
+                {{ questions.statusName }}</span
+              >
+            </div>
+            <div v-if="questions.itemType === 'group'">
+              <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+                questions.levelName
+              }}</span>
+
+              <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+                questions.statusName
+              }}</span>
             </div>
           </div>
         </div>
@@ -68,18 +103,20 @@ import QuestionParingList from './QuestionParingList.vue'
 import QuestionFillBlankList from './QuestionFillBlankList.vue'
 import QuestionShortAnswerList from './QuestionShortAnswerList.vue'
 import QuestionClusterList from './QuestionClusterList.vue'
+import QuestionSortAnswerList from './QuestionSortAnswerList.vue'
 export default defineComponent({
   name: 'SingleListPage',
   components: {
     QuestionHeader,
     QuestionTags,
-    QuestionSingleChoiceList,
-    QuestionMultiChoiceList,
-    QuestionRightWrongList,
-    QuestionParingList,
-    QuestionFillBlankList,
-    QuestionShortAnswerList,
-    QuestionClusterList,
+    'question-single-choice-list': QuestionSingleChoiceList,
+    'question-multi-choice-list': QuestionMultiChoiceList,
+    'question-right-wrong-list': QuestionRightWrongList,
+    'question-paring-list': QuestionParingList,
+    'question-fill-blank-list': QuestionFillBlankList,
+    'question-short-answer-list': QuestionShortAnswerList,
+    'question-sort-answer-list': QuestionSortAnswerList,
+    'question-cluster-list': QuestionClusterList,
   },
   props: {
     questions: {
@@ -93,5 +130,32 @@ export default defineComponent({
   },
 
   setup: () => {},
+  computed: {
+    dynamicComponent() {
+      if (this.questions.questionTypeName === 'Một lựa chọn') {
+        return 'question-single-choice-list'
+      }
+      if (this.questions.questionTypeName === 'Nhiều lựa chọn') {
+        return 'question-multi-choice-list'
+      }
+      if (this.questions.questionTypeName === 'Đúng sai') {
+        return 'question-right-wrong-list'
+      }
+      if (this.questions.questionTypeName === 'Ghép đôi') {
+        return 'question-paring-list'
+      }
+      if (this.questions.questionTypeName === 'Điền vào chỗ trống') {
+        return 'question-fill-blank-list'
+      }
+      if (this.questions.questionTypeName === 'Sắp xếp thứ tự') {
+        return 'question-sort-answer-list'
+      }
+      if (this.questions.questionTypeName === 'Câu trả lời ngắn') {
+        return 'question-short-answer-list'
+      } else {
+        return 'question-cluster-list'
+      }
+    },
+  },
 })
 </script>
