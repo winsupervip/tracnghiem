@@ -29,7 +29,12 @@
 </template>
 
 <script>
-import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  useStore,
+} from '@nuxtjs/composition-api'
 import { mapGetters, mapActions } from 'vuex'
 import PublishQuestion from './PublishQuestion.vue'
 import LevelForm from './LevelForm.vue'
@@ -87,6 +92,8 @@ export default defineComponent({
   },
 
   setup() {
+    const store = useStore()
+    store.dispatch('questions/restData')
     const data = reactive({
       errors: '',
     })
@@ -100,7 +107,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions({
-      restAnswer: 'questions/restAnswer',
+      restData: 'questions/restData',
       setNullAnswerId: 'questions/setNullAnswerId',
     }),
 
@@ -119,26 +126,23 @@ export default defineComponent({
       }
       return { valid, validateAnswers }
     },
-    onSubmit() {
+    async onSubmit() {
       const validState = this.isValidAnswer(this.getQuestion.answers)
       if (validState.valid) {
         const question = this.getQuestion
         question.answers = validState.validateAnswers
-        this.$logger.debug('í dâttr', question)
+        this.$logger.info('í dâttr', question)
         question.question.questionTypeId = parseInt(this.questionTypeId)
-        CauHoiApi.createQuestion(
-          question,
-          () => {
-            // this.restAnswer()
-            this.$toast.success('Thêm Thành Công').goAway(1500)
-            setTimeout(() => {
-              this.$router.push({ path: '/users/questions/' })
-            }, 500)
-          },
-          () => {
-            this.$toast.show('Có lỗi xảy ra').goAway(1500)
-          }
-        )
+        try {
+          const { data } = await CauHoiApi.createQuestion(question)
+          this.$handleError(data)
+          //  this.restData()
+          window.location.href = '/users/questions/'
+        } catch (err) {
+          this.$handleError(err, () => {
+            console.log(err)
+          })
+        }
       }
     },
   },
