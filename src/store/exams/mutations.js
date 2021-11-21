@@ -6,6 +6,7 @@ export default {
     state.exam.title = examInfo.title
     state.exam.description = examInfo.description
     state.exam.tags = examInfo.tags
+    // state.exam.tags = examInfo.tags.map((item) => item.text)
   },
   SET_EXAM_SETTINGS(state, examSettings) {
     state.exam.nonExamTime = examSettings.nonExamTime

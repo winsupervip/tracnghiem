@@ -15,8 +15,8 @@ export default {
   },
 
   ADD_QUESTION_CONTENT(state, data) {
-    state.question.questionContent = data
-    state.question.plainText = data
+    state.question.questionContent = data.questionContent
+    state.question.plainText = data.questionPlanText
   },
 
   ADD_STATUS(state, data) {
@@ -189,8 +189,30 @@ export default {
     const index = state.answers.findIndex((item) => item.id === data)
     state.answers.splice(index, 1)
   },
-  REST_ANSWERS(state) {
+  REST_DATA(state) {
+    state.question = {
+      questionContent: '',
+      plainText: '',
+      isRandom: false,
+      categories: [],
+      statusId: false,
+      levelId: false,
+      seoAvatar: '',
+      seoTitle: '',
+      seoDescription: '',
+      explainationIfCorrect: '',
+      explainationIfInCorrect: '',
+      tags: [],
+      title: '',
+      position: 0,
+    }
     state.answers = []
+    state.childQuestions = []
+    state.updateValueAnswer = {}
+    state.updateValue = {}
+    state.errors = []
+    state.selected = []
+    state.selectedGroup = []
   },
   COPY_QUESTIONS(state, data) {
     const question = data.object.question

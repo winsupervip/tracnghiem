@@ -58,8 +58,8 @@ export default {
   handleUserChooseRightAnswer({ commit }, data) {
     commit('HANDLE_USER_CHOOSE_RIGHT_ANSWER', data)
   },
-  restAnswer({ commit }, data) {
-    commit('REST_ANSWERS')
+  restData({ commit }) {
+    commit('REST_DATA')
   },
   copyQuestion({ commit }, data) {
     commit('COPY_QUESTIONS', data)

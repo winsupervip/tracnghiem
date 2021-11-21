@@ -28,6 +28,7 @@
   "highSchoolGraduationExam": "Thi tốt nghiệp THPT",
   "basic": "Cơ bản",
   "public": "Công khai",
+  "everyBodyCanSee": "Tất cả mọi người đều thấy được câu hỏi này",
   "WatchOnWeb": "XEM TRÊN WEB",
   "update": "Cập nhật",
   "copy": "Tạo bản sao",
@@ -126,16 +127,16 @@
     "close": "Hủy",
     "totalQuestion": "Số câu hỏi",
     "select": "Chọn",
-    "addToExam":"Thêm vào đề thi",
+    "addToExam": "Thêm vào đề thi",
     "errors": {
       "questionEmpty": "Vui lòng chọn ít nhất 1 câu hỏi"
     }
   },
-  "section":{
+  "section": {
     "title": "Chuyên mục",
     "add": "Thêm mới chuyên mục",
     "addDesc": "Vui lòng thêm mới nếu không tìm thấy chuyên mục",
-    "position":"Vị trí thêm",
+    "position": "Vị trí thêm",
     "numberQuestionsTest": "Số câu hỏi / đề thi",
     "description": "Mô tả"
   },

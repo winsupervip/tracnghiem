@@ -12,11 +12,12 @@
     </p>
     <div class="p-question__box__body">
       <div class="p-question__box__body__item box--level">
-        <ValidationProvider name="Độ khó câu hỏi" rules="required">
-          <b-form-radio-group
-            v-model="levelForm"
-            slot-scope="{ valid, errors }"
-          >
+        <ValidationProvider
+          v-slot="{ errors, valid }"
+          name="Độ khó câu hỏi"
+          rules="required"
+        >
+          <b-form-radio-group v-model="levelForm">
             <b-form-radio
               v-for="level in listLevelRadio"
               :key="level.id"
@@ -47,7 +48,7 @@ export default defineComponent({
 
   setup() {
     const data = reactive({
-      levelForm: '',
+      levelForm: 1,
       listLevelRadio: [],
     })
     const { fetch } = useFetch(async () => {
@@ -71,7 +72,11 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.levelForm = this.getQuestion.question.levelId
+    if (this.getQuestion?.question?.levelId) {
+      this.levelForm = this.getQuestion.question.levelId
+    } else {
+      this.addlevel(1)
+    }
   },
   methods: {
     ...mapActions({ addlevel: 'questions/addlevel' }),

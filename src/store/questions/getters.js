@@ -16,4 +16,6 @@ export default {
   },
   getSelected: (state) => state.selected,
   getChildQuestion: (state) => state.childQuestions,
+  getTitle: (state) => state.question.title,
+  getQuestionPlanText: (state) => state.question.plainText,
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p-question__box">
     <form
       v-if="(isInitial || isSaving) && image.length === 0"
       class="wrapper-img"
@@ -167,12 +167,15 @@ export default {
       this.addSeoAvatar(this.image)
     },
   },
-  created() {
-    this.image = this.value
-  },
-
   mounted() {
-    this.image = this.getQuestion?.question?.seoAvatar
+    console.log('chay')
+    if (this.getQuestion?.question?.seoAvatar) {
+      console.log('chaádady')
+      this.image = this.getQuestion?.question?.seoAvatar
+    } else {
+      console.log('kheu', this.value)
+      this.image = 'https://dev.tracnghiem.vn/images/search-img.png'
+    }
   },
 
   methods: {
