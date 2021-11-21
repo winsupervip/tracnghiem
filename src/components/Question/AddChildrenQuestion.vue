@@ -1,19 +1,17 @@
 <template>
-  <div>
+  <div :class="$style.child">
     <div :class="$style.addQuestionTitle">
       <p style="font-weight: bold">{{ $t('Câu trả lời (*)') }}</p>
-      <b-button class="btn btnQuestion btn-outline-primary">
-        <b-dropdown :text="$t('addChildrenQuestion')" class="m-md-2">
-          <b-dropdown-item
-            v-for="(questions, index) in questionType"
-            :key="index"
-            v-b-modal.modal-add-child-question
-            @click="handleAddQuestion(questions)"
-          >
-            {{ $t(questions.name) }}
-          </b-dropdown-item>
-        </b-dropdown>
-      </b-button>
+      <b-dropdown :text="$t('addChildrenQuestion')" variant="outline-primary">
+        <b-dropdown-item
+          v-for="(questions, index) in questionType"
+          :key="index"
+          v-b-modal.modal-add-child-question
+          @click="handleAddQuestion(questions)"
+        >
+          {{ $t(questions.name) }}
+        </b-dropdown-item>
+      </b-dropdown>
     </div>
     <QuestionChild
       :question-child="question"
@@ -111,6 +109,10 @@ export default defineComponent({
   margin-top: 1rem;
   z-index: 100;
   position: relative;
+}
+.child {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 </style>
 
