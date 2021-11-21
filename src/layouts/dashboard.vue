@@ -116,7 +116,11 @@
                       <div class="p-navItem--dropdown__inner__menu__child">
                         <div class="item item__heading">Recent workspaces</div>
                         <nuxt-link class="item item__link" to="">
-                          Nguyen Phuoc Tien
+                          {{
+                            displayName
+                              ? displayName
+                              : firstName + ' ' + lastName
+                          }}
                         </nuxt-link>
                         <nuxt-link class="item item__link" to="">
                           All workspaces
@@ -124,7 +128,10 @@
                       </div>
                       <div class="p-navItem--dropdown__inner__menu__child">
                         <div class="item item__heading">Settings</div>
-                        <nuxt-link class="item item__link" to="">
+                        <nuxt-link
+                          to="/users/questions/personal"
+                          class="item item__link"
+                        >
                           Personal settings
                         </nuxt-link>
                         <nuxt-link class="item item__link" to="">
@@ -132,7 +139,13 @@
                         </nuxt-link>
                       </div>
                       <div class="p-navItem--dropdown__inner__menu__child">
-                        <div class="item item__heading">NGUYEN PHUOC TIEN</div>
+                        <div class="item item__heading">
+                          {{
+                            displayName
+                              ? displayName
+                              : firstName + ' ' + lastName
+                          }}
+                        </div>
                         <nuxt-link class="item item__link" to="">
                           Logout
                         </nuxt-link>
@@ -201,7 +214,7 @@
                 <h2 class="one-line">Công cụ chung</h2>
                 <ul>
                   <li>
-                    <nuxt-link to="/users/questions/">
+                    <nuxt-link to="/users/questions/affiliate">
                       <div>
                         <img
                           src="~/assets/img/dashboard/bx_bx-network-chart.svg"
@@ -261,11 +274,23 @@
 import $ from 'jquery/dist/jquery.slim'
 import { defineComponent } from '@vue/composition-api'
 import _ from 'lodash'
+import userAPI from '@/api/user'
 
 export default defineComponent({
   name: 'Dashboard',
   data() {
+    const personal = async () => {
+      const { data: result } = await userAPI.getAccount()
+      this.firstName = result?.object?.firstName
+      this.lastName = result?.object?.lastName
+      this.displayName = result?.object?.displayName
+      this.avatar = result?.object?.avatar
+    }
+    personal()
     return {
+      firstName: '',
+      lastName: '',
+      displayName: '',
       backdrop: false,
       visible: true,
       variant: 'transparent',
