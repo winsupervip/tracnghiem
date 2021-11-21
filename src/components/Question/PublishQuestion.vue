@@ -42,10 +42,6 @@ import { mapActions, mapGetters } from 'vuex'
 import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
   props: {
-    onSubmit: {
-      type: Function,
-      required: true,
-    },
     isEdit: {
       type: Boolean,
       default: false,
