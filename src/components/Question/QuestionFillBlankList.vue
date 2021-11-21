@@ -39,8 +39,6 @@ export default defineComponent({
 </script>
 <style lang="scss">
 .question-fillblank {
-  text-align: center;
-
   .answer-fillblank {
     width: 100%;
 

@@ -3,6 +3,36 @@
     <p v-for="tag in questiontags.tagItems" :key="tag.tagId">
       <a href="">#{{ tag.tagName }}</a>
     </p>
+    <div class="list-status-question">
+      <div v-if="questiontags.itemType === 'question'">
+        <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+          questiontags.levelName
+        }}</span>
+        <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+          questiontags.questionTypeName
+        }}</span>
+        <span
+          :class="
+            questiontags.statusName === 'Công khai'
+              ? 'btn btn-xs rounded-pill btn-green-light me-2'
+              : questiontags.statusName === 'Không công khai'
+              ? 'btn btn-xs rounded-pill btn-blue-light me-2'
+              : 'btn btn-xs rounded-pill btn-yellow-light me-2'
+          "
+        >
+          {{ questiontags.statusName }}</span
+        >
+      </div>
+      <div v-if="questiontags.itemType === 'group'">
+        <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+          questiontags.levelName
+        }}</span>
+
+        <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
+          questiontags.statusName
+        }}</span>
+      </div>
+    </div>
   </div>
 </template>
 

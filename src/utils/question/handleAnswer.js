@@ -133,7 +133,7 @@ const matching = (answers) => {
     console.log(item?.left.answerContent.length)
     if (item?.left.answerContent.length > 0) {
       result.data.push({
-        position: item.position,
+        position: item.left.position,
         hashId: '',
         plainText: item.left.plainText,
         rightAnswer: index + 1,
@@ -143,7 +143,7 @@ const matching = (answers) => {
     }
     if (item?.right.answerContent.length > 0) {
       result.data.push({
-        position: item.position,
+        position: item.right.position,
         hashId: '',
         plainText: item.right.plainText,
         rightAnswer: index + 1,

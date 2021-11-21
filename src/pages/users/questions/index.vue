@@ -2,38 +2,7 @@
   <div class="page-container">
     <div class="heading-page">
       <h1 class="heading-title">{{ $t('questionBank') }}</h1>
-      <b-btn
-        pill
-        variant="primary"
-        size="sm"
-        class="btn-rounded"
-        @click="$bvModal.show('bv-modal-add-question')"
-      >
-        {{ $t('add') }}
-      </b-btn>
     </div>
-    <b-modal id="bv-modal-add-question" hide-footer title="Câu hỏi:">
-      <div class="d-block">
-        <ul>
-          <li v-for="item in items" :key="item.message" type="1">
-            <nuxt-link :to="item.url" :style="{ fontWeight: 'bold' }">{{
-              item.title
-            }}</nuxt-link>
-          </li>
-        </ul>
-        <div class="dropdown-divider"></div>
-        <a href="#" :style="{ fontWeight: 'bold' }">Câu chùm</a>
-      </div>
-      <div class="d-flex justify-content-center mt-3">
-        <b-button
-          variant="primary"
-          class="text-center"
-          block
-          @click="$bvModal.hide('bv-modal-add-question')"
-          >{{ $t('close') }}</b-button
-        >
-      </div>
-    </b-modal>
 
     <div class="filter-bar">
       <div class="row">
@@ -72,7 +41,8 @@
         </div>
         <div class="col-6 col-md-4 col-lg-3 mb-3">
           <treeselect
-            :options="options"
+            v-model="urlQuery.orderBy"
+            :options="orderBy"
             :load-options="loadOptions"
             :placeholder="$t('sort')"
           />
@@ -100,10 +70,61 @@
             </ul>
           </b-form-group>
         </div>
-        <div class="col-6 col-md-4 col-lg-3 mb-3">
-          <b-button class="btn btn-primary" block @click="handleSearch">{{
-            $t('apply')
-          }}</b-button>
+        <!-- <div class="col-6 col-md-4 col-lg-3 mb-3">
+          <b-button variant="outline-primary btn-sm" @click="handleSearch"
+            ><b-icon-filter></b-icon-filter>{{ $t('apply') }}</b-button
+          >
+
+          <b-btn
+            pill
+            variant="outline-primary btn-sm"
+            size="sm"
+            @click="$bvModal.show('bv-modal-add-question')"
+          >
+            <b-icon-plus></b-icon-plus> {{ $t('add') }}
+          </b-btn> -->
+
+        <div
+          class="
+            col-12 col-md-3
+            mb-3
+            d-flex
+            justify-content-around
+            align-items-end
+          "
+        >
+          <b-button variant="outline-primary btn-sm" @click="handleSearch">
+            <b-icon-filter></b-icon-filter> {{ $t('apply') }}
+          </b-button>
+          <b-button
+            variant="primary"
+            class="btn btn-sm btn-primary"
+            @click="$bvModal.show('bv-modal-add-question')"
+          >
+            <b-icon-plus></b-icon-plus> {{ $t('add') }}
+          </b-button>
+          <b-modal id="bv-modal-add-question" hide-footer title="Câu hỏi:">
+            <div class="d-block">
+              <ul>
+                <li v-for="item in items" :key="item.message" type="1">
+                  <nuxt-link :to="item.url" :style="{ fontWeight: 'bold' }">{{
+                    item.title
+                  }}</nuxt-link>
+                </li>
+              </ul>
+              <div class="dropdown-divider"></div>
+              <a href="#" :style="{ fontWeight: 'bold' }">Câu chùm</a>
+            </div>
+            <div class="d-flex justify-content-center mt-3">
+              <b-button
+                variant="primary"
+                class="text-center"
+                block
+                @click="$bvModal.hide('bv-modal-add-question')"
+                >{{ $t('close') }}</b-button
+              >
+            </div>
+          </b-modal>
         </div>
       </div>
     </div>
@@ -134,14 +155,13 @@ import {
   toRefs,
   watch,
 } from '@nuxtjs/composition-api'
-import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
+
 import _ from 'lodash'
 import QuestionApi from '@/api/question-list-page'
+import catalogApi from '@/api/catalogApi'
 import SingleListPage from '@/components/Question/SingleListPage.vue'
 import '../../../assets/scss/single-question.scss'
-const simulateAsyncOperation = (fn) => {
-  setTimeout(fn, 2000)
-}
+
 export default defineComponent({
   components: {
     SingleQuestion: SingleListPage,
@@ -162,6 +182,7 @@ export default defineComponent({
       treeQuestionTypes: [],
       listStatus: [],
       level: [],
+      orderBy: [],
       autoCompleteTag: [],
       text: [],
       search: '',
@@ -176,7 +197,7 @@ export default defineComponent({
         statusId: null,
         levelId: null,
         questionTypeId: null,
-        orderby: 1,
+        orderBy: 1,
         questionGroupId: null,
       },
     })
@@ -194,13 +215,15 @@ export default defineComponent({
       const { data: result2 } = await QuestionApi.getTreeQuestionTypes()
       const { data: result3 } = await QuestionApi.getListStatus()
       const { data: result4 } = await QuestionApi.getLevel()
+      const { data: result5 } = await catalogApi.getItemSortTypeInExam()
+
       handleSearch()
 
       data.category = result1.object.items
       data.treeQuestionTypes = result2.object.items
       data.listStatus = result3.object.items
       data.level = result4.object.items
-      // $logger.debug('category', result1.object.items)
+      data.orderBy = result5.object.items
       $loader().close()
     })
 
@@ -281,41 +304,8 @@ export default defineComponent({
       this.questionList.splice(index, 1)
     },
 
-    loadOptions({ action, parentNode, callback }) {
-      // Typically, do the AJAX stuff here.
-      // Once the server has responded,
-      // assign children options to the parent node & call the callback.
-
-      if (action === LOAD_CHILDREN_OPTIONS) {
-        switch (parentNode.id) {
-          case 'success': {
-            simulateAsyncOperation(() => {
-              parentNode.children = [
-                {
-                  id: 'child',
-                  label: 'Child option',
-                },
-              ]
-              callback()
-            })
-            break
-          }
-          case 'no-children': {
-            simulateAsyncOperation(() => {
-              parentNode.children = []
-              callback()
-            })
-            break
-          }
-          case 'failure': {
-            simulateAsyncOperation(() => {
-              callback(new Error('Failed to load options: network error.'))
-            })
-            break
-          }
-          default: /* empty */
-        }
-      }
+    loadOptions({ callback }) {
+      callback()
     },
   },
 })

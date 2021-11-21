@@ -129,7 +129,7 @@ export default defineComponent({
       if (validState.valid) {
         const question = this.getQuestion
         question.answers = validState.validateAnswers
-        this.$logger.debug('í dâttr', question)
+        this.$logger.info('í dâttr', question)
         question.question.questionTypeId = parseInt(this.questionTypeId)
         if (this.isEdit) {
           QuestionApi.updateQuestion(

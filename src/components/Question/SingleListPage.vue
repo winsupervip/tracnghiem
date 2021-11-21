@@ -56,36 +56,6 @@
             </div>
           </div>
           <QuestionTags :questiontags="questions" />
-          <div class="list-status-question">
-            <div v-if="questions.itemType === 'question'">
-              <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                questions.levelName
-              }}</span>
-              <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                questions.questionTypeName
-              }}</span>
-              <span
-                :class="
-                  questions.statusName === 'Bản nháp'
-                    ? 'btn btn-xs rounded-pill btn-yellow-light me-2'
-                    : questions.statusName === 'Không công khai'
-                    ? 'btn btn-xs rounded-pill btn-blue-light me-2'
-                    : 'btn btn-xs rounded-pill btn-green-light me-2'
-                "
-              >
-                {{ questions.statusName }}</span
-              >
-            </div>
-            <div v-if="questions.itemType === 'group'">
-              <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                questions.levelName
-              }}</span>
-
-              <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                questions.statusName
-              }}</span>
-            </div>
-          </div>
         </div>
       </b-card>
     </div>
