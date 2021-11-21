@@ -47,8 +47,7 @@ export default defineComponent({
         display: flex;
         justify-content: space-around;
         align-items: center;
-        span {
-        }
+
         input {
           width: 10%;
           text-align: center;

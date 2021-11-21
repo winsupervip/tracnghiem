@@ -16,38 +16,6 @@
         <div class="list-question">
           <div class="question-item">
             <div class="question-content text-smd">
-              <!-- <QuestionSingleChoiceList
-                v-if="questions.questionTypeName == 'Một lựa chọn'"
-                :questionlist="questions"
-              />
-              <QuestionMultiChoiceList
-                v-if="questions.questionTypeName == 'Nhiều lựa chọn'"
-                :questionlist="questions"
-              />
-              <QuestionRightWrongList
-                v-if="questions.questionTypeName == 'Đúng sai'"
-                :questionlist="questions"
-              />
-              <QuestionParingList
-                v-if="questions.questionTypeName == 'Ghép đôi'"
-                :questionlist="questions"
-              />
-              <QuestionFillBlankList
-                v-if="questions.questionTypeName == 'Điền vào chỗ trống'"
-                :questionlist="questions"
-              />
-              <QuestionShortAnswerList
-                v-if="questions.questionTypeName == 'Câu trả lời ngắn'"
-                :questionlist="questions"
-              />
-              <QuestionSortAnswerList
-                v-if="questions.questionTypeName == 'Sắp xếp thứ tự'"
-                :questionlist="questions"
-              />
-              <QuestionClusterList
-                v-if="questions.itemType == 'group'"
-                :questionlist="questions"
-              /> -->
               <component
                 :is="dynamicComponent"
                 ref="questionInExam"
