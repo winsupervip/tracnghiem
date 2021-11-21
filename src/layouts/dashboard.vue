@@ -102,7 +102,11 @@
                   <div class="p-navItem--dropdown__inner">
                     <div class="p-navItem--dropdown__inner__icon">
                       <nuxt-link to="">
-                        <img :src="avatar" alt="user.jpg" class="img-circle" />
+                        <img
+                          src="~/assets/img/dashboard/user.jpg"
+                          alt="user.jpg"
+                          class="img-circle"
+                        />
                       </nuxt-link>
                     </div>
                     <div

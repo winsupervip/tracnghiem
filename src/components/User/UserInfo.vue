@@ -2,7 +2,10 @@
   <div>
     <div class="info">
       <div class="info-image">
-        <img :src="user.avatar" class="card" />
+        <img
+          :src="user.avatar ? user.avatar : '/images/logo.svg'"
+          class="card"
+        />
         <!-- <Uploader :accept="'*/*'" :disabled="false"></Uploader> -->
         <p v-if="show" class="text-image">{{ $t('userInfo.change') }}</p>
       </div>
