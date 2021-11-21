@@ -2,29 +2,28 @@
   <div>
     <div class="info">
       <div class="info-image">
-        <img :src="avatar ? avatar : '/images/logo.svg  '" class="card" />
+        <img :src="user.avatar" class="card" />
+        <!-- <Uploader :accept="'*/*'" :disabled="false"></Uploader> -->
         <p v-if="show" class="text-image">{{ $t('userInfo.change') }}</p>
       </div>
 
       <div class="info-content">
         <p>
-          <b>{{ displayName ? displayName : firstName + ' ' + lastName }}</b>
+          <b>{{
+            user.displayName
+              ? user.displayName
+              : user.firstName + ' ' + user.lastName
+          }}</b>
         </p>
-        <p>{{ email }}</p>
-        <p>{{ school }}</p>
+        <p>{{ user.email }}</p>
+        <p>{{ user.school }}</p>
       </div>
     </div>
   </div>
 </template>
 <script>
-import {
-  defineComponent,
-  useFetch,
-  useContext,
-  reactive,
-  toRefs,
-} from '@nuxtjs/composition-api'
-import userAPI from '../../api/user'
+import { defineComponent } from '@nuxtjs/composition-api'
+// import Uploader from '@/components/Uploader.vue'
 export default defineComponent({
   name: 'UserlInfo',
   auth: true,
@@ -34,33 +33,12 @@ export default defineComponent({
       type: Boolean,
       required: true,
     },
+    user: {
+      type: Object,
+      default: () => {},
+    },
   },
-  setup() {
-    const { $loader } = useContext()
-    const data = reactive({
-      firstName: '',
-      lastName: '',
-      displayName: '',
-      email: '',
-      school: '',
-      avatar: '',
-    })
-    useFetch(async () => {
-      $loader()
-      const { data: result } = await userAPI.getAccount()
-      data.firstName = result?.object?.firstName
-      data.lastName = result?.object?.lastName
-      data.displayName = result?.object?.displayName
-      data.email = result?.object?.email
-      data.school = result?.object?.school?.label
-      data.refCode = result?.object?.refCode
-      data.avatar = result?.object?.avatar
-      $loader().close()
-    })
-    return {
-      ...toRefs(data),
-    }
-  },
+  setup() {},
   computed: {},
   methods: {},
 })

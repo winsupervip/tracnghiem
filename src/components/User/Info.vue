@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <UserlInfo :show="type" />
+    <UserlInfo :show="type" :user="bio" />
     <div v-if="type">
       <ul>
         <li>
@@ -16,21 +16,30 @@
           </nuxt-link>
         </li>
         <li>
-          <b-icon icon="share" aria-hidden="true"></b-icon>
+          <b-icon icon="share" aria-hidden="true" class="mt-3"></b-icon>
           {{ $t('info.codeIntroduce') }}:<b>{{
-            refCode ? refCode : ' Chưa có'
+            bio.refCode ? bio.refCode : ' Chưa có'
           }}</b>
         </li>
       </ul>
       <div class="input-group mb-3">
-        <input type="text" class="form-control" readonly />
+        <input
+          type="text"
+          class="form-control"
+          :value="
+            bio.refCode ? `https://tracnghiem.vn/affiliate?ref=${refCode}` : ''
+          "
+          readonly
+        />
 
         <button class="btn btn-primary">
           <b-icon icon="file-code" aria-hidden="true"></b-icon>
         </button>
       </div>
-      <b-icon icon="arrow-counterclockwise" aria-hidden="true"></b-icon>
-      <p class="d-inline-block">{{ $t('info.logOut') }}</p>
+      <div class="d-inline-block" @click="logout()">
+        <b-icon icon="arrow-counterclockwise" aria-hidden="true"></b-icon>
+        <p class="d-inline-block">{{ $t('info.logOut') }}</p>
+      </div>
     </div>
     <div v-if="!type">
       <ul>
@@ -40,57 +49,36 @@
         </li>
       </ul>
       <input
-        v-if="refBy"
-        :value="refBy"
+        v-if="bio.refBy"
         type="text"
+        :value="bio.refBy"
         class="form-control text-input"
-        :disabled="refBy"
+        :disabled="bio.refBy"
       />
-      <!-- <ValidationProvider rules="required" :name="$t('formInfo.lastName')">
-          <b-form-group
-            slot-scope="{ valid, errors }"
-            :label="$t('formInfo.lastName') + ' (*)'"
-          >
-            <b-form-input
-              v-model="lastName"
-              type="text"
-              :state="errors[0] ? false : valid ? true : null"
-            >
-            </b-form-input>
-            <b-form-invalid-feedback id="inputLiveFeedback">
-              {{ errors[0] }}
-            </b-form-invalid-feedback>
-          </b-form-group>
-        </ValidationProvider> -->
       <input
-        v-if="!refBy"
+        v-if="!bio.refBy"
         v-model="inputCode"
         type="text"
         class="form-control text-input"
         :disabled="isDisabled"
+        :placeholder="$t('info.referralCode')"
       />
       <button
-        v-if="!checkRefCode"
+        v-if="!bio.refCode && bio.refBy"
         class="btn btn-outline-primary d-block m-auto mt-2 mb-4"
-        :disabled="isDisabled"
+        :disabled="bio.refBy"
         @click="handleUpdate"
       >
         {{ $t('info.btnUpdate') }}
       </button>
-      <p v-if="!checkRefCode">{{ $t('info.note') }}</p>
+      <p v-if="!bio.refCode">{{ $t('info.note') }}</p>
     </div>
   </div>
 </template>
 <script>
-import {
-  defineComponent,
-  useContext,
-  reactive,
-  useFetch,
-  toRefs,
-} from '@nuxtjs/composition-api'
-import userAPI from '../../api/user'
+import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
 import UserlInfo from './UserInfo.vue'
+import userAPI from '@/api/user'
 export default defineComponent({
   name: 'Info',
   auth: true,
@@ -100,25 +88,15 @@ export default defineComponent({
       type: Boolean,
       required: true,
     },
-    checkRefCode: {
-      type: String,
-      default: '',
+    bio: {
+      type: Object,
+      default: () => {},
     },
   },
   setup() {
-    const { $loader } = useContext()
     const data = reactive({
-      refCode: '',
       inputCode: '',
-      refBy: '',
       isDisabled: false,
-    })
-    useFetch(async () => {
-      $loader()
-      const { data: result } = await userAPI.getAccount()
-      data.refCode = result?.object?.refCode
-      data.refBy = result?.object?.refBy
-      $loader().close()
     })
 
     return {
@@ -137,6 +115,9 @@ export default defineComponent({
           console.log(err)
         })
       }
+    },
+    logout() {
+      this.$auth.logout('http://localhost:3000/')
     },
   },
 })

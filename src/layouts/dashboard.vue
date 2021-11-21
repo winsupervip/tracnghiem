@@ -102,11 +102,7 @@
                   <div class="p-navItem--dropdown__inner">
                     <div class="p-navItem--dropdown__inner__icon">
                       <nuxt-link to="">
-                        <img
-                          src="~/assets/img/dashboard/user.jpg"
-                          alt="user.jpg"
-                          class="img-circle"
-                        />
+                        <img :src="avatar" alt="user.jpg" class="img-circle" />
                       </nuxt-link>
                     </div>
                     <div
@@ -116,7 +112,11 @@
                       <div class="p-navItem--dropdown__inner__menu__child">
                         <div class="item item__heading">Recent workspaces</div>
                         <nuxt-link class="item item__link" to="">
-                          Nguyen Phuoc Tien
+                          {{
+                            displayName
+                              ? displayName
+                              : firstName + ' ' + lastName
+                          }}
                         </nuxt-link>
                         <nuxt-link class="item item__link" to="">
                           All workspaces
@@ -124,18 +124,24 @@
                       </div>
                       <div class="p-navItem--dropdown__inner__menu__child">
                         <div class="item item__heading">Settings</div>
-                        <a
-                          :href="'/users/questions/personal'"
+                        <nuxt-link
+                          to="/users/questions/personal"
                           class="item item__link"
                         >
                           Personal settings
-                        </a>
+                        </nuxt-link>
                         <nuxt-link class="item item__link" to="">
                           Labs
                         </nuxt-link>
                       </div>
                       <div class="p-navItem--dropdown__inner__menu__child">
-                        <div class="item item__heading">NGUYEN PHUOC TIEN</div>
+                        <div class="item item__heading">
+                          {{
+                            displayName
+                              ? displayName
+                              : firstName + ' ' + lastName
+                          }}
+                        </div>
                         <nuxt-link class="item item__link" to="">
                           Logout
                         </nuxt-link>
@@ -204,7 +210,7 @@
                 <h2 class="one-line">Công cụ chung</h2>
                 <ul>
                   <li>
-                    <a :href="'/users/questions/affiliate'">
+                    <nuxt-link to="/users/questions/affiliate">
                       <div>
                         <img
                           src="~/assets/img/dashboard/bx_bx-network-chart.svg"
@@ -212,7 +218,7 @@
                         />
                       </div>
                       <span>Affiliate</span>
-                    </a>
+                    </nuxt-link>
                   </li>
                   <li>
                     <nuxt-link to="/users/questions/">
@@ -264,11 +270,23 @@
 import $ from 'jquery/dist/jquery.slim'
 import { defineComponent } from '@vue/composition-api'
 import _ from 'lodash'
+import userAPI from '@/api/user'
 
 export default defineComponent({
   name: 'Dashboard',
   data() {
+    const personal = async () => {
+      const { data: result } = await userAPI.getAccount()
+      this.firstName = result?.object?.firstName
+      this.lastName = result?.object?.lastName
+      this.displayName = result?.object?.displayName
+      this.avatar = result?.object?.avatar
+    }
+    personal()
     return {
+      firstName: '',
+      lastName: '',
+      displayName: '',
       backdrop: false,
       visible: true,
       variant: 'transparent',

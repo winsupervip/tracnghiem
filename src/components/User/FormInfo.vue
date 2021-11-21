@@ -2,17 +2,19 @@
   <div>
     <ValidationObserver v-slot="{ handleSubmit }">
       <b-form @submit.prevent="handleSubmit(onSubmit)">
-        <ValidationProvider rules="required" :name="$t('formInfo.firstName')">
+        <ValidationProvider
+          rules="required|max:255"
+          :name="$t('formInfo.firstName')"
+        >
           <b-form-group
             slot-scope="{ valid, errors }"
+            class="mb-1"
             :label="$t('formInfo.firstName') + ' (*)'"
-            label-cols-sm="3"
           >
             <b-form-input
               v-model="firstName"
               type="text"
               :state="errors[0] ? false : valid ? true : null"
-              class="col"
             >
             </b-form-input>
             <b-form-invalid-feedback id="inputLiveFeedback">
@@ -20,9 +22,13 @@
             </b-form-invalid-feedback>
           </b-form-group>
         </ValidationProvider>
-        <ValidationProvider rules="required" :name="$t('formInfo.lastName')">
+        <ValidationProvider
+          rules="required|max:255"
+          :name="$t('formInfo.lastName')"
+        >
           <b-form-group
             slot-scope="{ valid, errors }"
+            class="mb-1"
             :label="$t('formInfo.lastName') + ' (*)'"
           >
             <b-form-input
@@ -36,9 +42,13 @@
             </b-form-invalid-feedback>
           </b-form-group>
         </ValidationProvider>
-        <ValidationProvider rules="required" :name="$t('formInfo.displayName')">
+        <ValidationProvider
+          rules="required|max:255"
+          :name="$t('formInfo.displayName')"
+        >
           <b-form-group
             slot-scope="{ valid, errors }"
+            class="mb-1"
             :label="$t('formInfo.displayName') + ' (*)'"
           >
             <b-form-input
@@ -53,60 +63,58 @@
           </b-form-group>
         </ValidationProvider>
         <ValidationProvider rules="required" :name="$t('formInfo.gender')">
-          <b-form-radio-group
-            v-model="treeValueGender"
+          <b-form-group
             slot-scope="{ valid, errors }"
+            class="mb-1"
+            :label="$t('formInfo.gender') + ' (*)'"
           >
-            <b-dropdown id="dropdown-1" class="m-md-2">
-              <b-form-radio
-                v-for="gender in treeDataGenders"
-                :key="gender.id"
-                :value="gender.id"
-                ><b-dropdown-item>
-                  {{ gender.label }}
-                </b-dropdown-item>
-              </b-form-radio>
-            </b-dropdown>
+            <treeselect
+              v-model="treeValueGender"
+              :multiple="false"
+              :options="treeDataGenders"
+            />
             <b-form-invalid-feedback :state="valid">{{
               errors[0]
             }}</b-form-invalid-feedback>
-            <p>{{ treeValueGender }}</p>
-          </b-form-radio-group>
+          </b-form-group>
         </ValidationProvider>
         <ValidationProvider rules="required" :name="$t('formInfo.birthday')">
           <b-form-group
             slot-scope="{ valid, errors }"
             :label="$t('formInfo.birthday') + ' (*)'"
           >
-            <b-input-group class="mb-3">
+            <b-input-group class="mb-1">
               <b-form-input
                 id="example-input"
                 v-model="valueBirthday"
                 type="text"
                 autocomplete="off"
               ></b-form-input>
-              <b-input-group-append>
-                <b-form-datepicker
-                  v-model="valueBirthday"
-                  button-only
-                  right
-                  locale="en-US"
-                  aria-controls="example-input"
-                ></b-form-datepicker>
-              </b-input-group-append>
+              <!-- <b-input-group-append> -->
+              <b-form-datepicker
+                v-model="valueBirthday"
+                button-only
+                right
+                locale="en-US"
+                aria-controls="example-input"
+              ></b-form-datepicker>
+              <!-- </b-input-group-append> -->
             </b-input-group>
             <b-form-invalid-feedback :state="valid">{{
               errors[0]
             }}</b-form-invalid-feedback>
-            <p>{{ valueBirthday }}</p>
           </b-form-group>
         </ValidationProvider>
-        <b-form-group :label="$t('formInfo.address')">
+        <b-form-group class="mb-1" :label="$t('formInfo.address')">
           <b-form-input v-model="address" type="text"> </b-form-input>
         </b-form-group>
-        <ValidationProvider rules="required" :name="$t('formInfo.phoneNumber')">
+        <ValidationProvider
+          rules="required|max:10|integer"
+          :name="$t('formInfo.phoneNumber')"
+        >
           <b-form-group
             slot-scope="{ valid, errors }"
+            class="mb-1"
             :label="$t('formInfo.phoneNumber') + ' (*)'"
           >
             <b-form-input
@@ -120,7 +128,7 @@
             </b-form-invalid-feedback>
           </b-form-group>
         </ValidationProvider>
-        <b-form-group :label="$t('formInfo.workAt')">
+        <b-form-group class="mb-1" :label="$t('formInfo.workAt')">
           <treeselect
             ref="tree"
             v-model="treeValueWorkAt"
@@ -131,7 +139,7 @@
           />
         </b-form-group>
         <ValidationProvider
-          rules="max:500"
+          rules="max:1000"
           :name="$t('formInfo.aboutYourself')"
         >
           <b-form-group
@@ -141,15 +149,27 @@
             <b-form-textarea
               id="textarea-default"
               v-model="bio"
-              class="mb-20"
               :state="errors[0] ? false : valid ? true : null"
             ></b-form-textarea>
             <b-form-invalid-feedback id="inputLiveFeedback">
               {{ errors[0] }}
             </b-form-invalid-feedback>
+            <p>
+              <i>{{ $t('formInfo.contentLimit') }}</i>
+            </p>
           </b-form-group>
         </ValidationProvider>
-        <b-button variant="outline-primary" type="submit">Cập nhật</b-button>
+        <div class="d-flex gap-2 justify-content-end">
+          <b-button variant="outline-primary" @click="deleteContent">{{
+            $t('formInfo.cancel')
+          }}</b-button>
+          <b-button
+            :disabled="isShow"
+            variant="outline-primary"
+            type="submit"
+            >{{ $t('formInfo.update') }}</b-button
+          >
+        </div>
       </b-form>
     </ValidationObserver>
   </div>
@@ -186,6 +206,7 @@ export default defineComponent({
       lastName: '',
       displayName: '',
       bio: '',
+      isShow: false,
       treeDataGenders: [],
       alwaysOpen: false,
     })
@@ -193,6 +214,7 @@ export default defineComponent({
       $loader()
       const { data: genders } = await userAPI.getListgenders()
       data.treeDataGenders = genders?.object?.items
+      console.log(data.treeDataGenders)
       $loader().close()
     })
     fetch()
@@ -203,6 +225,17 @@ export default defineComponent({
   },
   computed: {},
   methods: {
+    deleteContent() {
+      this.firstName = ''
+      this.lastName = ''
+      this.bio = ''
+      this.treeValueWorkAt = ''
+      this.phoneNumber = ''
+      this.address = ''
+      this.displayName = ''
+      this.valueBirthday = ''
+      this.treeValueGender = ''
+    },
     loadOptions({ action, searchQuery, callback }) {
       if (action === ASYNC_SEARCH) {
         this.searchAsync(callback, searchQuery)
@@ -212,8 +245,8 @@ export default defineComponent({
         console.log('load root')
       }
     },
-    onSubmit() {
-      const data = {
+    async onSubmit() {
+      const user = {
         firstName: this.firstName,
         lastName: this.lastName,
         avatar: '',
@@ -225,16 +258,17 @@ export default defineComponent({
         birthday: this.valueBirthday,
         genderId: this.treeValueGender,
       }
-      console.log(data)
-      userAPI.updateAccount(
-        data,
-        () => {
-          this.$toast.success(this.$i18n('formInfo.updateUser')).goAway(1500)
-        },
-        () => {
-          this.$toast.show(this.$i18n('formInfo.error')).goAway(1500)
-        }
-      )
+      // console.log(data)
+      try {
+        const { data } = await userAPI.updateAccount(user)
+        this.$handleError(data)
+        this.isDisabled = true
+        this.isShow = true
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
     },
     searchAsync: _.debounce(async function (callback, searchQuery) {
       try {

@@ -20,14 +20,6 @@ export default defineComponent({
   auth: true,
   components: {},
   props: {
-    type: {
-      type: Boolean,
-      required: true,
-    },
-    checkRefCode: {
-      type: String,
-      default: '',
-    },
     totalShare: {
       type: Number,
       default: 0,

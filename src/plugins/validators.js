@@ -6,6 +6,7 @@ import {
   email,
   min,
   max,
+  integer,
   // eslint-disable-next-line camelcase
   min_value,
   // eslint-disable-next-line camelcase
@@ -57,6 +58,11 @@ extend('alpha_num', {
   // eslint-disable-next-line camelcase
   ...alpha_num,
   message: messages.alpha_num,
+})
+
+extend('integer', {
+  ...integer,
+  message: messages.integer,
 })
 
 const validArrayLength = (value, [min, max]) => {

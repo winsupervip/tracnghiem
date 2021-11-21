@@ -38,10 +38,10 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">TT</th>
-            <th scope="col">Mã tài khoản</th>
-            <th scope="col">Họ tên</th>
-            <th scope="col">Ngày đăng ký</th>
+            <th scope="col">{{ $t('formAffiliate.ordinalNumber') }}</th>
+            <th scope="col">{{ $t('formAffiliate.name') }}</th>
+            <th scope="col">{{ $t('formAffiliate.accountCode') }}</th>
+            <th scope="col">{{ $t('formAffiliate.registrationDate') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -53,7 +53,7 @@
           </tr>
           <tr v-for="(item, index) in 10" :key="index">
             <th scope="row">
-              {{ item * urlQuery.page }}
+              {{ item + (urlQuery.page - 1) * 10 }}
             </th>
             <td>{{ compareUserName(index).username }}</td>
             <td>
