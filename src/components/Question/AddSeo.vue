@@ -25,12 +25,24 @@
             </b-form-invalid-feedback>
           </b-form-group>
         </ValidationProvider>
-        <b-form-textarea
-          id="textarea-default"
-          v-model="seoDescription"
-          :placeholder="$t('SEOdescription (*)')"
-          :class="$style.inputF"
-        ></b-form-textarea>
+        <ValidationProvider rules="required" name="Mô tả SEO">
+          <b-form-group
+            slot-scope="{ valid, errors }"
+            :label="$t('SEOdescription (*)')"
+            :label-for="$t('SEOdescription (*)')"
+          >
+            <b-form-textarea
+              id="textarea-default"
+              v-model="seoDescription"
+              :placeholder="$t('SEOdescription (*)')"
+              :state="errors[0] ? false : valid ? true : null"
+              :class="$style.inputF"
+            ></b-form-textarea>
+            <b-form-invalid-feedback id="inputLiveFeedback">
+              {{ errors[0] }}
+            </b-form-invalid-feedback>
+          </b-form-group>
+        </ValidationProvider>
       </div>
     </div>
   </div>
@@ -48,6 +60,8 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       getQuestion: 'questions/getQuestion',
+      getTitle: 'questions/getTitle',
+      getQuestionPlanText: 'questions/getQuestionPlanText',
     }),
   },
   watch: {
@@ -56,6 +70,12 @@ export default defineComponent({
     },
     seoDescription() {
       this.addSeoDescription(this.seoDescription)
+    },
+    getTitle() {
+      this.seoTitle = this.getTitle
+    },
+    getQuestionPlanText() {
+      this.seoDescription = this.getQuestionPlanText
     },
   },
   mounted() {

@@ -2,14 +2,10 @@
   <div>
     <div>
       <p class="p-headerQuestion">
-        {{ $t('questionBank') }} > {{ questionTitle }}
+        <u> {{ $t('questionBank') }} </u>> <u>{{ questionTitle }}</u>
       </p>
-      <ValidationProvider rules="required" name="Tiêu Đề">
-        <b-form-group
-          slot-scope="{ valid, errors }"
-          :label="$t('title')"
-          :label-for="$t('title')"
-        >
+      <ValidationProvider rules="required|max:255" name="Tiêu Đề">
+        <b-form-group slot-scope="{ valid, errors }" :label-for="$t('title')">
           <b-form-input
             v-model="title"
             type="text"
@@ -23,82 +19,19 @@
         </b-form-group>
       </ValidationProvider>
       <div class="p-question__tagGroup">
-        <ValidationProvider rules="required" name="Tags">
+        <ValidationProvider
+          v-slot="{ errors, valid }"
+          rules="required"
+          :name="$t('addTags')"
+        >
           <b-form-group
-            slot-scope="{ valid, errors }"
             :label-for="$t('addTags')"
+            :label="$t('exam.form.tags') + ' (*)'"
+            class="col-12 mb-3"
+            :description="$t('exam.form.tagHelper')"
           >
-            <b-form-tags
-              id="tags-with-dropdown"
-              v-model="tags"
-              :label="$t('tagYourQuestionUpTo5Tags')"
-              no-outer-focus
-              :state="errors[0] ? false : valid ? true : null"
-              class="mb-2"
-            >
-              <template #default="{ tags, addTag, removeTag }">
-                <ul
-                  v-if="tags.length > 0"
-                  class="list-inline d-inline-block mb-2"
-                >
-                  <li v-for="tag in tags" :key="tag" class="list-inline-item">
-                    <b-form-tag
-                      :title="tag"
-                      variant="primary"
-                      @remove="removeTag(tag)"
-                      >{{ tag }}</b-form-tag
-                    >
-                  </li>
-                </ul>
-
-                <b-dropdown
-                  size="sm"
-                  variant="outline-primary"
-                  block
-                  menu-class="w-100"
-                >
-                  <template #button-content>
-                    <b-icon icon="tag-fill" class="tag"></b-icon>
-                    <span class="textTag">{{ $t('addTags') }}</span>
-                  </template>
-                  <b-dropdown-form @submit.stop.prevent="() => {}">
-                    <b-form-group
-                      label="Search tags"
-                      label-for="tag-search-input"
-                      label-cols-md="auto"
-                      class="mb-0"
-                      label-size="sm"
-                      :description="searchDesc"
-                    >
-                      <b-form-input
-                        id="tag-search-input"
-                        v-model="search"
-                        type="search"
-                        size="sm"
-                        autocomplete="off"
-                      ></b-form-input>
-                    </b-form-group>
-                  </b-dropdown-form>
-                  <b-dropdown-divider></b-dropdown-divider>
-                  <b-dropdown-item-button
-                    v-for="(option, index) in availableOptions"
-                    :key="index"
-                    @click="onOptionClick({ option, addTag })"
-                  >
-                    {{ option.label }}
-                  </b-dropdown-item-button>
-
-                  <b-button
-                    v-if="search.length > 0"
-                    variant="primary"
-                    class="p-question__btnAdd"
-                    @click="userAddTag"
-                    >{{ $t('add') }}</b-button
-                  >
-                </b-dropdown>
-              </template>
-            </b-form-tags>
-            <b-form-invalid-feedback id="inputLiveFeedback">
+            <Tag v-model="tags" />
+            <b-form-invalid-feedback id="inputLiveFeedback" :state="valid">
               {{ errors[0] }}
             </b-form-invalid-feedback>
           </b-form-group>
@@ -110,7 +43,7 @@
           name="Nội dung câu hỏi"
           rules="required"
         >
-          <TinyEditor v-model="questionContent" />
+          <TinyEditor v-model="questionContent" @text="getText" />
           <b-form-invalid-feedback :state="valid">{{
             errors[0]
           }}</b-form-invalid-feedback>
@@ -122,10 +55,11 @@
 <script>
 import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
 import { mapActions, mapGetters } from 'vuex'
-import CauHoiApi from '@/api/cauHoi'
+import _ from 'lodash'
+import Tag from '@/components/Tag.vue'
 export default defineComponent({
   name: 'Header',
-  components: {},
+  components: { Tag },
   props: {
     questionTitle: {
       type: String,
@@ -138,15 +72,38 @@ export default defineComponent({
         convert_urls: false,
         entity_encoding: 'raw',
       },
+      isTagValid: false,
       questionContent: '',
+      questionPlanText: '',
       isRightAnswer: false,
       isRandom: false,
-      isUpdate: -1,
       doShow: false,
       okOnly: true,
       options: [],
       search: '',
       tags: [],
+      tag: '',
+      autocompleteItems: [],
+      validation: [
+        {
+          classes: 'min-length',
+          rule: (tag) => tag.text.length < 4,
+        },
+        {
+          classes: 'no-numbers',
+          rule: /^([^0-9]*)$/,
+        },
+        {
+          classes: 'avoid-item',
+          rule: /^(?!Cannot).*$/,
+          disableAdd: true,
+        },
+        {
+          classes: 'no-braces',
+          rule: ({ text }) => text.includes('{') || text.includes('}'),
+        },
+      ],
+
       title: '',
     })
     return {
@@ -172,22 +129,14 @@ export default defineComponent({
     },
   },
   watch: {
-    search() {
-      if (this.search.length >= 2) {
-        CauHoiApi.getTagByKey(this.search, (response) => {
-          this.options = response
-        })
-      }
-    },
     title() {
-      this.addTitle(this.title)
-      console.log(this.getQuestion)
+      this.commitTitle()
     },
     tags() {
       this.addTags(this.tags)
     },
     questionContent() {
-      this.addQuestionContent(this.questionContent)
+      this.commitQuestion()
     },
   },
   mounted() {
@@ -196,12 +145,41 @@ export default defineComponent({
     this.tags = this.getQuestion.question.tags
   },
   methods: {
+    isAddTag(value) {
+      this.addTags(value)
+    },
+    checktagValid(evt) {
+      console.log(evt)
+      if (this.tags.length > 0) {
+        return true
+      }
+      return false
+    },
     ...mapActions({
       addTags: 'questions/addTags',
       addTitle: 'questions/addTitle',
       addQuestionContent: 'questions/addQuestionContent',
     }),
-
+    commitTitle: _.debounce(function () {
+      this.addTitle(this.title)
+    }, 200),
+    commitQuestion: _.debounce(function () {
+      this.addQuestionContent({
+        questionContent: this.questionContent,
+        questionPlanText: this.questionPlanText,
+      })
+    }, 200),
+    getText(val) {
+      if (val) {
+        let description = ''
+        if (val.length > 500) {
+          description = val.substring(0, 500)
+        } else {
+          description = val
+        }
+        this.questionPlanText = description.replace('\n', '')
+      }
+    },
     showTitle() {
       return this.getQuestion.question.title
     },
@@ -210,25 +188,6 @@ export default defineComponent({
     },
     hide() {
       this.doShow = false
-    },
-    onOptionClick({ option, addTag }) {
-      if (this.tags.length >= 5) {
-        this.$toast.error(this.$18n.t('Tối đa 5 tags')).goAway(1500)
-        return
-      }
-      addTag(option.label)
-      this.search = ''
-    },
-    userAddTag() {
-      try {
-        if (this.tags.length >= 5) {
-          this.$toast.error('Tối đa 5 tags').goAway(1500)
-          return
-        }
-        this.tags.push(this.search)
-      } catch (ex) {
-        this.$logger.debug(ex)
-      }
     },
   },
 })

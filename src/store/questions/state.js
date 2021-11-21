@@ -18,7 +18,6 @@ export default () => ({
   answers: [],
   childQuestions: [],
   updateValueAnswer: {},
-  modalShow: false,
   updateValue: {},
   errors: [],
   selected: [],
