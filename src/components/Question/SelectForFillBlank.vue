@@ -3,7 +3,10 @@
     <b-form-select-option :value="null" disabled>{{
       $t('-- choose --')
     }}</b-form-select-option>
-    <b-form-select-option v-for="i in listAnswer.length" :key="i" :value="i"
+    <b-form-select-option
+      v-for="i in compareListAnswer.length"
+      :key="i"
+      :value="i"
       >({{ i }})</b-form-select-option
     >
   </b-form-select>
@@ -40,6 +43,10 @@ export default {
       getListAnswer: 'questions/getListAnswer',
       getUpdateValueAnswer: 'questions/getUpdateValueAnswer',
     }),
+    compareListAnswer() {
+      this.handlerSelected()
+      return this.listAnswer
+    },
   },
   watch: {
     // getListAnswer() {
@@ -47,20 +54,33 @@ export default {
     // },
   },
   methods: {
+    handlerSelected() {
+      const index = this.listAnswer.findIndex(
+        (item) => item.id === this.answer.id
+      )
+      this.isSelected = this.listAnswer[index].rightAnswer
+    },
     ...mapActions({
       addValueUpdateAnswer: 'questions/addValueUpdateAnswer',
       deleteAnswer: 'questions/deleteAnswer',
       handleUpdateSelectForFillBlank:
         'questions/handleUpdateSelectForFillBlank',
+      handleUpdateSelectFillBlankGroupQuestion:
+        'questions/handleUpdateSelectFillBlankGroupQuestion',
     }),
     changeSelected(index) {
-      const data = {
-        id: this.answer.id,
-        index,
-      }
       if (this.groupQuestion) {
-        //
+        const data = {
+          questionId: this.childQuestionId,
+          answerId: this.answer.id,
+          index,
+        }
+        this.handleUpdateSelectFillBlankGroupQuestion(data)
       } else {
+        const data = {
+          id: this.answer.id,
+          index,
+        }
         this.handleUpdateSelectForFillBlank(data)
       }
     },

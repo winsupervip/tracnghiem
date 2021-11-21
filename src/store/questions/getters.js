@@ -8,6 +8,14 @@ export default {
       answers: state.answers,
     }
   },
+  getGroupQuestion: (state) => {
+    return {
+      question: state.question,
+      childQuestions: state.childQuestions,
+    }
+  },
   getSelected: (state) => state.selected,
   getChildQuestion: (state) => state.childQuestions,
+  getTitle: (state) => state.question.title,
+  getQuestionPlanText: (state) => state.question.plainText,
 }

@@ -138,6 +138,8 @@ export default defineComponent({
     update(newTags) {
       this.autocompleteItems = []
       this.tags = newTags.map((x) => x.text)
+      // console.log(newTags)
+      // this.tags = newTags
     },
     initItems() {
       if (this.tag.length < 2) return

@@ -8,6 +8,7 @@
       :is-pairing="isPairing"
       :have-random-answer="isHaveRandomAnswer"
       :handle-answer="handleAnswer"
+      :is-edit="true"
     />
   </div>
 </template>
@@ -146,87 +147,8 @@ export default defineComponent({
             },
           }))
         listAnswer = [...convertLeft, ...convertRight]
-        // answers.forEach((answer) => {
-        //   let isMap = false
-        //   let answerItem = {}
-        //   answers.forEach((a) => {
-        //     if (
-        //       answer.rightAnswer === a.rightAnswer &&
-        //       answer.hashId !== a.hashId
-        //     ) {
-        //       isMap = true
-        //       answerItem = {
-        //         left: {
-        //           id: uuid.v4(),
-        //           position: 1,
-        //           hashId: '',
-        //           plainText: answer.plainText,
-        //           rightAnswer: answer.rightAnswer,
-        //           random: answer.random,
-        //           answerContent: answer.answerContent,
-        //         },
-        //         right: {
-        //           id: uuid.v4(),
-        //           position: 2,
-        //           hashId: '',
-        //           plainText: a.plainText,
-        //           rightAnswer: a.rightAnswer,
-        //           random: a.random,
-        //           answerContent: a.answerContent,
-        //         },
-        //         id: uuid.v4(),
-        //       }
-        //     }
-        //   })
-        //   if (!isMap) {
-        //     if (answer.position === 1) {
-        //       answerItem = {
-        //         left: {
-        //           id: uuid.v4(),
-        //           position: 1,
-        //           hashId: '',
-        //           plainText: answer.plainText,
-        //           rightAnswer: answer.rightAnswer,
-        //           random: answer.random,
-        //           answerContent: answer.answerContent,
-        //         },
-        //         right: {
-        //           id: uuid.v4(),
-        //           position: 2,
-        //           hashId: '',
-        //           plainText: '',
-        //           rightAnswer: answer.rightAnswer,
-        //           random: answer.random,
-        //           answerContent: '',
-        //         },
-        //         id: uuid.v4(),
-        //       }
-        //     } else {
-        //       answerItem = {
-        //         left: {
-        //           id: uuid.v4(),
-        //           position: 1,
-        //           hashId: '',
-        //           plainText: '',
-        //           rightAnswer: answer.rightAnswer,
-        //           random: answer.random,
-        //           answerContent: '',
-        //         },
-        //         right: {
-        //           id: uuid.v4(),
-        //           position: 2,
-        //           hashId: '',
-        //           plainText: answer.plainText,
-        //           rightAnswer: answer.rightAnswer,
-        //           random: answer.random,
-        //           answerContent: answer.answerContent,
-        //         },
-        //         id: uuid.v4(),
-        //       }
-        //     }
-        //   }
-        //   listAnswer.push(answerItem)
-        // })
+      } else {
+        listAnswer = answers
       }
 
       data.questionData.object.answers = listAnswer
@@ -238,25 +160,27 @@ export default defineComponent({
   },
   methods: {
     handleAnswer(data) {
-      if (this.questionTypeId === 1) {
+      console.log('chay nxcxce')
+      if (this.questionTypeId === '1') {
+        console.log('chay ne')
         return handler.singleChoiceAndRightWrong(data)
       }
-      if (this.questionTypeId === 2) {
+      if (this.questionTypeId === '2') {
         return handler.multipleChoice(data)
       }
-      if (this.questionTypeId === 3) {
+      if (this.questionTypeId === '3') {
         return handler.singleChoiceAndRightWrong(data)
       }
-      if (this.questionTypeId === 4) {
+      if (this.questionTypeId === '4') {
         return handler.matching(data)
       }
-      if (this.questionTypeId === 5) {
+      if (this.questionTypeId === '5') {
         return handler.fillBlank(data)
       }
-      if (this.questionTypeId === 6) {
+      if (this.questionTypeId === '6') {
         return handler.shortAnswer(data)
       }
-      if (this.questionTypeId === 7) {
+      if (this.questionTypeId === '7') {
         return handler.draggable(data)
       }
     },

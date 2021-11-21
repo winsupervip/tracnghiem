@@ -22,23 +22,9 @@
         </ValidationProvider>
       </div>
       <div class="p-question__box__body__item">
-        <p>
-          <!-- <b>{{ $t('Chỉ bạn mới thấy được câu hỏi này.') }}</b> -->
-        </p>
-        <div>
-          <!-- <b-button variant="outline-primary" class="btnQuestion">{{
-            $t('Lưu bản nháp')
-          }}</b-button
-          ><br />
-          <b-button
-            variant="outline-primary"
-            class="btnQuestion btn-save"
-            @click="onSubmit"
-            >{{ $t('Lưu câu hỏi') }}</b-button
-          > -->
-        </div>
+        <p>{{ statusMessage }}</p>
         <b-button type="submit" variant="primary">{{
-          $t('saveQuestion')
+          isEdit ? $t('editQuestion') : $t('saveQuestion')
         }}</b-button>
       </div>
     </div>
@@ -55,10 +41,16 @@ import {
 import { mapActions, mapGetters } from 'vuex'
 import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
+  props: {
+    isEdit: {
+      type: Boolean,
+      default: false,
+    },
+  },
   setup(props) {
     const data = reactive({
       listStatus: [],
-      status: '',
+      status: 3,
       value: null,
       options: [
         { text: 'First radio', value: 'first' },
@@ -76,12 +68,18 @@ export default defineComponent({
     }
   },
   computed: {
-    state() {
-      return Boolean(this.value)
-    },
     ...mapGetters({
       getQuestion: 'questions/getQuestion',
     }),
+    statusMessage() {
+      let mess = ''
+      if (this.status === 1) {
+        mess = this.$i18n.t('everyBodyCanSee')
+      } else {
+        mess = this.$i18n.t('onlyYouCanSeeThisQuestion')
+      }
+      return mess
+    },
   },
   watch: {
     status() {
@@ -89,7 +87,11 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.status = this.getQuestion?.question?.statusId
+    if (this.getQuestion?.question?.statusId) {
+      this.status = this.getQuestion?.question?.statusId
+    } else {
+      this.addStatus(1)
+    }
   },
   methods: {
     ...mapActions({ addStatus: 'questions/addStatus' }),
