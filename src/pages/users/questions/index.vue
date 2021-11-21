@@ -22,7 +22,11 @@
           </li>
         </ul>
         <div class="dropdown-divider"></div>
-        <a href="#" :style="{ fontWeight: 'bold' }">Câu chùm</a>
+        <nuxt-link
+          to="/users/questions/question-group/create"
+          :style="{ fontWeight: 'bold' }"
+          >Câu chùm</nuxt-link
+        >
       </div>
       <div class="d-flex justify-content-center mt-3">
         <b-button

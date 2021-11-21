@@ -16,7 +16,7 @@
           <CommentOrNote />
         </div>
         <div class="p-question__right">
-          <PublishQuestion :on-submit="onSubmit" :is-edit="isEdit" />
+          <PublishQuestion :is-edit="isEdit" />
           <Category />
           <LevelForm />
           <!-- <UploadImage :get-image="getImage" /> -->
