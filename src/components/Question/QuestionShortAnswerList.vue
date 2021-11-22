@@ -32,16 +32,11 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
-.question-shortAnswer {
-  p {
-    text-align: center;
-  }
-  .answer-shortAnswer {
-    input {
-      display: block;
-      width: 20%;
-      margin: 10px 50px 0;
-    }
+.answer-shortAnswer {
+  input {
+    display: block;
+    width: 20%;
+    margin: 10px 50px 0;
   }
 }
 </style>

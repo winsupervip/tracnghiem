@@ -60,13 +60,17 @@ export default defineComponent({
       required: true,
     },
   },
+
   setup(props) {
+    console.log('123', props.questionlist.answers)
     const data = reactive({
       rowA: props.questionlist.answers.filter((x) => x.position === 1),
       rowB: props.questionlist.answers.filter((x) => x.position === 2),
     })
+
     const findAnswer = (rightAnswerA) => {
       const answer = data.rowB.find((x) => x.rightAnswer === rightAnswerA)
+
       return answer || ''
     }
 
@@ -87,8 +91,6 @@ export default defineComponent({
 .answer-pairing {
   display: flex;
 
-  text-align: center;
-  justify-content: center;
   .row_A {
     th,
     td {

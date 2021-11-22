@@ -32,16 +32,11 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
-.question-sortAnswer {
-  p {
-    text-align: center;
-  }
-  .answer-sortAnswer {
-    input {
-      display: block;
-      width: 80%;
-      margin: 10px 0;
-    }
+.answer-sortAnswer {
+  input {
+    display: block;
+    width: 80%;
+    margin: 10px 0;
   }
 }
 </style>
