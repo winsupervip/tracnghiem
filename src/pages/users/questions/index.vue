@@ -215,7 +215,8 @@ export default defineComponent({
       const { data: result2 } = await QuestionApi.getTreeQuestionTypes()
       const { data: result3 } = await QuestionApi.getListStatus()
       const { data: result4 } = await QuestionApi.getLevel()
-      const { data: result5 } = await catalogApi.getItemSortTypeInExam()
+      const { data: result5 } = await catalogApi.getExamSortBy()
+      $logger.info('sort nè', result5)
 
       handleSearch()
 
