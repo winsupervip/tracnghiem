@@ -36,7 +36,7 @@
       </div>
     </form>
     <div v-else class="wrapper-img">
-      <img :src="image" class="img-fluid" style="width: 100%" />
+      <img :src="compareImg" class="img-fluid" style="width: 100%" />
     </div>
     <!--PROCESS-->
     <div v-if="isProcess" class="text-center">
@@ -110,7 +110,7 @@
 </template>
 <script>
 // eslint-disable-next-line import/no-unresolved
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import fileApi from '@/api/fileApi'
 const STATUS_INITIAL = 0
 const STATUS_SAVING = 1
@@ -159,27 +159,21 @@ export default {
     ...mapGetters({
       getQuestion: 'questions/getQuestion',
     }),
+    compareImg() {
+      if (this.image !== '') {
+        return this.image
+      }
+      return this.value
+    },
   },
 
   watch: {
     image() {
-      console.log('watch', this.image)
-      this.addSeoAvatar(this.image)
+      this.$emit('input', this.image)
     },
-  },
-  mounted() {
-    console.log('chay')
-    if (this.getQuestion?.question?.seoAvatar) {
-      console.log('chaádady')
-      this.image = this.getQuestion?.question?.seoAvatar
-    } else {
-      console.log('kheu', this.value)
-      this.image = 'https://dev.tracnghiem.vn/images/search-img.png'
-    }
   },
 
   methods: {
-    ...mapActions({ addSeoAvatar: 'questions/addSeoAvatar' }),
     reup() {
       this.$emit('reupload')
       this.reset()

@@ -94,7 +94,29 @@ export default defineComponent({
           seoAvatar: 'https://placeimg.com/640/480/any',
           groupOrder: 1,
         },
-        answers: [],
+        answers:
+          value.questionTypeId !== 3
+            ? []
+            : [
+                {
+                  id: uuid.v4(),
+                  position: 0,
+                  hashId: '',
+                  plainText: 'Đúng',
+                  rightAnswer: 1,
+                  random: true,
+                  answerContent: '<p>Đúng</p>',
+                },
+                {
+                  id: uuid.v4(),
+                  position: 0,
+                  hashId: '',
+                  plainText: 'Sai',
+                  rightAnswer: 0,
+                  random: true,
+                  answerContent: '<p>Sai</p>',
+                },
+              ],
       }
       this.question = data
       this.addChildQuestion(data)

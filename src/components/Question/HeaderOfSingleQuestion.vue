@@ -139,10 +139,15 @@ export default defineComponent({
       this.commitQuestion()
     },
   },
-  mounted() {
-    this.questionContent = this.getQuestion.question.questionContent
-    this.title = this.getQuestion.question.title
-    this.tags = this.getQuestion.question.tags
+  updated() {
+    // khi mà edit thì đọc từ store vào
+    console.log('aaa', this.getQuestion.question.questionContent)
+    if (this.getQuestion.question.questionContent !== '') {
+      this.questionContent = this.getQuestion.question.questionContent
+      this.title = this.getQuestion.question.title
+      this.tags = this.getQuestion.question.tags
+      this.questionPlanText = this.getQuestion.question.plainText
+    }
   },
   methods: {
     isAddTag(value) {

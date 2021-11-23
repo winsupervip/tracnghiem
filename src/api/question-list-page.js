@@ -8,7 +8,6 @@ export default {
     const result = await global.$http.get(
       `/api/v1/Catalog/auto-complete-tag?keyword=${key}`
     )
-    console.log(result)
     if (successCallApi) {
       successCallApi(result?.data?.object?.items)
     }

@@ -15,7 +15,7 @@ const singleChoiceAndRightWrong = (answers) => {
     }
     const data = {
       position: item.position,
-      hashId: '',
+      hashId: item.hashId,
       plainText: item.plainText,
       rightAnswer: item.rightAnswer,
       random: item.random,
@@ -50,7 +50,7 @@ const multipleChoice = (answers) => {
     }
     const data = {
       position: item.position,
-      hashId: '',
+      hashId: item.hashId,
       plainText: item.plainText,
       rightAnswer: item.rightAnswer,
       random: item.random,
@@ -79,7 +79,7 @@ const shortAnswer = (answers) => {
   answers.forEach((item) => {
     const data = {
       position: item.position,
-      hashId: '',
+      hashId: item.hashId,
       plainText: item.plainText,
       rightAnswer: 1,
       random: item.random,
@@ -104,7 +104,7 @@ const fillBlank = (answers) => {
   answers.forEach((item) => {
     const data = {
       position: item.position,
-      hashId: '',
+      hashId: item.hashId,
       plainText: item.plainText,
       rightAnswer: item.rightAnswer,
       random: item.random,
@@ -134,7 +134,7 @@ const matching = (answers) => {
     if (item?.left.answerContent.length > 0) {
       result.data.push({
         position: item.left.position,
-        hashId: '',
+        hashId: item.left.hashId,
         plainText: item.left.plainText,
         rightAnswer: index + 1,
         random: item.left.random,
@@ -144,7 +144,7 @@ const matching = (answers) => {
     if (item?.right.answerContent.length > 0) {
       result.data.push({
         position: item.right.position,
-        hashId: '',
+        hashId: item.right.hashId,
         plainText: item.right.plainText,
         rightAnswer: index + 1,
         random: item.right.random,
@@ -168,7 +168,7 @@ const draggable = (answers) => {
   answers.forEach((item, index) => {
     const data = {
       position: 0,
-      hashId: '',
+      hashId: item.hashId,
       plainText: item.plainText,
       rightAnswer: index + 1,
       random: item.random,

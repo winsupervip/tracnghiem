@@ -32,7 +32,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getQuestion: 'questions/getQuestion',
+      getExplainationIfCorrect: 'questions/getExplainationIfCorrect',
+
+      getExplainationIfInCorrect: 'questions/getExplainationIfInCorrect',
     }),
   },
   watch: {
@@ -42,15 +44,11 @@ export default {
     explainationIfIncorrect() {
       this.addExplainationIfInCorrect(this.explainationIfIncorrect)
     },
+    getExplainationIfCorrect() {
+      this.explainationIfCorrect = this.getExplainationIfCorrect
+      this.explainationIfIncorrect = this.getExplainationIfInCorrect
+    },
   },
-
-  mounted() {
-    this.explainationIfIncorrect =
-      this.getQuestion?.question?.explainationIfIncorrect
-    this.explainationIfCorrect =
-      this.getQuestion?.question?.explainationIfCorrect
-  },
-
   methods: {
     ...mapActions({
       addExplainationIfCorrect: 'questions/addExplainationIfCorrect',

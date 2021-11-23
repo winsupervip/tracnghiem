@@ -20,7 +20,11 @@
           <Category />
           <LevelForm />
           <!-- <UploadImage :get-image="getImage" /> -->
-          <Uploader :accept="'*/*'" :disabled="false"></Uploader>
+          <Uploader
+            v-model="image"
+            :accept="'*/*'"
+            :disabled="false"
+          ></Uploader>
           <AddSeo />
         </div>
       </div>
@@ -67,7 +71,7 @@ export default defineComponent({
       required: true,
     },
     questionTypeId: {
-      type: String,
+      type: Number,
       required: true,
     },
     questionTitle: {
@@ -96,11 +100,14 @@ export default defineComponent({
     },
   },
 
-  setup() {
+  setup(props) {
     const store = useStore()
-    store.dispatch('questions/restData')
+    if (!props.isEdit) {
+      store.dispatch('questions/restData')
+    }
     const data = reactive({
       errors: '',
+      image: '',
     })
 
     return {
@@ -108,10 +115,25 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters({ getQuestion: 'questions/getQuestion' }),
+    ...mapGetters({
+      getSeoAvatar: 'questions/getSeoAvatar',
+      getQuestion: 'questions/getQuestion',
+    }),
+  },
+  watch: {
+    image() {
+      this.addSeoAvater(this.image)
+    },
+    getSeoAvatar() {
+      this.image = this.getSeoAvatar
+    },
+  },
+  mounted() {
+    this.image = this.getSeoAvatar
   },
   methods: {
     ...mapActions({
+      addSeoAvater: 'questions/addSeoAvatar',
       restData: 'questions/restData',
       setNullAnswerId: 'questions/setNullAnswerId',
     }),
@@ -120,9 +142,11 @@ export default defineComponent({
       this.errors = ''
       let validateAnswers = []
       let valid = true
-      console.log('qanswer', answers)
+      if (answers.length === 0) {
+        this.errors = 'Câu trả lời hiện đang trống'
+        return { valid, validateAnswers }
+      }
       const result = this.handleAnswer(answers)
-      console.log('result', result)
       if (result.errors.length === 0) {
         validateAnswers = result.data
       } else {
@@ -134,31 +158,38 @@ export default defineComponent({
     async onSubmit() {
       const validState = this.isValidAnswer(this.getQuestion.answers)
       if (validState.valid) {
-        const question = this.getQuestion
-        question.answers = validState.validateAnswers
-        this.$logger.info('í dâttr', question)
-        question.question.questionTypeId = parseInt(this.questionTypeId)
+        const question = {
+          question: {
+            hashId: this.getQuestion.question.hashId,
+            title: this.getQuestion.question.title,
+            questionTypeId: this.questionTypeId,
+            questionContent: this.getQuestion.question.questionContent,
+            explainationIfCorrect:
+              this.getQuestion.question.explainationIfCorrect,
+            explainationIfIncorrect:
+              this.getQuestion.question.explainationIfIncorrect,
+            statusId: this.getQuestion.question.statusId,
+            levelId: this.getQuestion.question.levelId,
+            plainText: this.getQuestion.question.plainText,
+            seoAvatar: this.getQuestion.question.seoAvatar,
+            seoTitle: this.getQuestion.question.seoTitle,
+            seoDescription: this.getQuestion.question.seoDescription,
+            tags: this.getQuestion.question.tags,
+            categories: this.getQuestion.question.categories,
+          },
+          answers: validState.validateAnswers,
+        }
         try {
           if (this.isEdit) {
-            QuestionApi.updateQuestion(
-              question,
-              () => {
-                this.$toast.success('Thêm Thành Công').goAway(1500)
-                setTimeout(() => {
-                  this.$router.push({ path: '/users/questions/' })
-                }, 500)
-              },
-              () => {
-                this.$toast.show('Có lỗi xảy ra').goAway(1500)
-              }
-            )
+            await QuestionApi.updateQuestion(question)
+            // this.$handleError(data)
+            this.$toast.success(this.$i18n.t('errors.00000000'))
           } else {
             const { data } = await CauHoiApi.createQuestion(question)
             this.$handleError(data)
           }
-
-          //  this.restData()
           window.location.href = '/users/questions/'
+          //  this.restData()
         } catch (err) {
           this.$handleError(err, () => {
             console.log(err)

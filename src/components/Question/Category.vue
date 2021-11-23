@@ -40,7 +40,7 @@ import {
 import { mapActions, mapGetters } from 'vuex'
 import CauHoiApi from '@/api/cauHoi'
 export default defineComponent({
-  setup(props) {
+  setup() {
     const { $loader } = useContext()
     const data = reactive({
       listFormCheck: [],
@@ -62,16 +62,17 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      getQuestion: 'questions/getQuestion',
+      getCategories: 'questions/getCategories',
     }),
   },
   watch: {
     treeValue() {
       this.addCategory(this.treeValue)
     },
-  },
-  mounted() {
-    this.treeValue = this.getQuestion?.question?.categories
+
+    getCategories() {
+      this.treeValue = this.getCategories
+    },
   },
   methods: {
     ...mapActions({ addCategory: 'questions/addCategory' }),
