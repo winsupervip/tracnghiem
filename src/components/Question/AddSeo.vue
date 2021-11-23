@@ -59,8 +59,9 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      getQuestion: 'questions/getQuestion',
       getTitle: 'questions/getTitle',
+      getSeoTitle: 'questions/getSeoTitle',
+      getseoDescription: 'questions/getseoDescription',
       getQuestionPlanText: 'questions/getQuestionPlanText',
     }),
   },
@@ -71,16 +72,18 @@ export default defineComponent({
     seoDescription() {
       this.addSeoDescription(this.seoDescription)
     },
+    getSeoTitle() {
+      this.seoTitle = this.getSeoTitle
+    },
+    getseoDescription() {
+      this.seoDescription = this.getseoDescription
+    },
     getTitle() {
       this.seoTitle = this.getTitle
     },
     getQuestionPlanText() {
       this.seoDescription = this.getQuestionPlanText
     },
-  },
-  mounted() {
-    this.seoTitle = this.getQuestion?.question?.seoTitle
-    this.seoDescription = this.getQuestion?.question?.seoDescription
   },
   methods: {
     ...mapActions({

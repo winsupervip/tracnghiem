@@ -36,15 +36,15 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const route = useRoute()
+    store.dispatch('questions/restData')
     const id = computed(() => route.value.params.id)
     const data = reactive({
-      questionData: {},
-      questionTypeId: '',
+      questionTypeId: 0,
       questionType: '',
       questionTitle: '',
-      ishaveRightAnswer: false,
+      ishaveRightAnswer: true,
       isPairing: false,
-      isHaveRandomAnswer: false,
+      isHaveRandomAnswer: true,
     })
     const questionId = id.value
     console.log(questionId)
@@ -53,50 +53,54 @@ export default defineComponent({
       switch (value.questionTypeId) {
         case 1:
           data.questionType = 'single-choice'
-          data.questionTypeId = '1'
+          data.questionTypeId = 1
           data.questionTitle = 'Thêm câu hỏi 1 lựa chọn'
           break
         case 2:
           data.questionType = 'multiple-choice'
-          data.questionTypeId = '2'
+          data.questionTypeId = 2
           data.questionTitle = 'Thêm câu hỏi nhiều lựa chọn'
           break
         case 3:
           data.questionType = 'right-wrong'
-          data.questionTypeId = '3'
+          data.questionTypeId = 3
           data.questionTitle = 'Thêm câu hỏi đúng sai'
           break
         case 4:
           data.questionType = 'pairing'
-          data.questionTypeId = '4'
+          data.questionTypeId = 4
           data.isPairing = true
+          data.isHaveRandomAnswer = false
           data.questionTitle = 'Thêm câu hỏi ghép đôi'
           break
         case 5:
           data.questionType = 'fill-blank'
-          data.questionTypeId = '5'
+          data.questionTypeId = 5
           data.questionTitle = 'Thêm câu hỏi điền vào chổ trống'
+          data.isHaveRandomAnswer = false
           break
         case 6:
           data.questionType = 'short-answer'
-          data.questionTypeId = '6'
+          data.questionTypeId = 6
           data.questionTitle = 'Thêm câu hỏi trả lời ngắn'
+          data.isHaveRandomAnswer = false
+          data.isHaveRandomAnswer = false
           break
         case 7:
           data.questionType = 'draggable'
-          data.questionTypeId = '7'
+          data.questionTypeId = 7
           data.questionTitle = 'Thêm câu hỏi sắp xếp thứ tự'
+          data.isHaveRandomAnswer = false
           break
       }
     }
 
     useAsync(async () => {
-      const { data } = await QuestionApi.getUserQuestionDetails(questionId)
-      data.questionData = data
-      const answers = data.questionData.object.answers
+      const result = await QuestionApi.getUserQuestionDetails(questionId)
+      console.log('day la result', result)
+      const answers = result.data.object.answers
       let listAnswer = []
-      console.log('answers', answers)
-      if (data.questionData.object.question.questionTypeId === 4) {
+      if (result.data.object.question.questionTypeId === 4) {
         const lefts = answers.filter((answer) => answer.position === 1)
         const rights = answers.filter((answer) => answer.position === 2)
         const convertLeft = lefts.map((left) => {
@@ -106,19 +110,19 @@ export default defineComponent({
             left: {
               id: uuid.v4(),
               position: 1,
-              hashId: '',
-              plainText: left.plainText,
-              rightAnswer: left.rightAnswer,
-              random: left.random,
+              hashId: left.hashId || '',
+              plainText: left.plainText || '',
+              rightAnswer: left.rightAnswer || 0,
+              random: left.random || true,
               answerContent: left.answerContent,
             },
             right: {
               id: uuid.v4(),
               position: 2,
-              hashId: '',
+              hashId: right.hashId,
               plainText: right?.plainText || '',
-              rightAnswer: right?.rightAnswer || '',
-              random: right?.random || false,
+              rightAnswer: right?.rightAnswer || 0,
+              random: right?.random || true,
               answerContent: right?.answerContent || '',
             },
           }
@@ -148,39 +152,41 @@ export default defineComponent({
           }))
         listAnswer = [...convertLeft, ...convertRight]
       } else {
-        listAnswer = answers
+        listAnswer = answers.map((item) => {
+          item.id = uuid.v4()
+          return item
+        })
       }
 
-      data.questionData.object.answers = listAnswer
-
-      store.dispatch('questions/copyQuestion', data.questionData)
-      checkQuestionType(data.object.question)
+      result.data.object.answers = listAnswer
+      console.log('update', result.data)
+      await store.dispatch('questions/copyQuestion', result.data)
+      checkQuestionType(result.data.object.question)
     })
+
     return { ...toRefs(data) }
   },
   methods: {
     handleAnswer(data) {
-      console.log('chay nxcxce')
-      if (this.questionTypeId === '1') {
-        console.log('chay ne')
+      if (this.questionTypeId === 1) {
         return handler.singleChoiceAndRightWrong(data)
       }
-      if (this.questionTypeId === '2') {
+      if (this.questionTypeId === 2) {
         return handler.multipleChoice(data)
       }
-      if (this.questionTypeId === '3') {
+      if (this.questionTypeId === 3) {
         return handler.singleChoiceAndRightWrong(data)
       }
-      if (this.questionTypeId === '4') {
+      if (this.questionTypeId === 4) {
         return handler.matching(data)
       }
-      if (this.questionTypeId === '5') {
+      if (this.questionTypeId === 5) {
         return handler.fillBlank(data)
       }
-      if (this.questionTypeId === '6') {
+      if (this.questionTypeId === 6) {
         return handler.shortAnswer(data)
       }
-      if (this.questionTypeId === '7') {
+      if (this.questionTypeId === 7) {
         return handler.draggable(data)
       }
     },

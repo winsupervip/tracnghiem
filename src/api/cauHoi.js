@@ -11,7 +11,6 @@ export default {
       '/api/v1/Question/add-question-group',
       data
     )
-    console.log(result)
     if ((successCallApi && result.status === 200) || result.status === 201) {
       successCallApi()
     } else if (errorCallApi) {

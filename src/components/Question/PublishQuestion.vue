@@ -50,7 +50,7 @@ export default defineComponent({
   setup(props) {
     const data = reactive({
       listStatus: [],
-      status: 3,
+      status: 1,
       value: null,
       options: [
         { text: 'First radio', value: 'first' },
@@ -69,7 +69,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      getQuestion: 'questions/getQuestion',
+      getStatus: 'questions/getStatus',
     }),
     statusMessage() {
       let mess = ''
@@ -85,13 +85,9 @@ export default defineComponent({
     status() {
       this.addStatus(this.status)
     },
-  },
-  mounted() {
-    if (this.getQuestion?.question?.statusId) {
-      this.status = this.getQuestion?.question?.statusId
-    } else {
-      this.addStatus(1)
-    }
+    getStatus() {
+      this.status = this.getStatus
+    },
   },
   methods: {
     ...mapActions({ addStatus: 'questions/addStatus' }),
