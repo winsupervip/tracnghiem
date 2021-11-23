@@ -16,38 +16,6 @@
         <div class="list-question">
           <div class="question-item">
             <div class="question-content text-smd">
-              <!-- <QuestionSingleChoiceList
-                v-if="questions.questionTypeName == 'Một lựa chọn'"
-                :questionlist="questions"
-              />
-              <QuestionMultiChoiceList
-                v-if="questions.questionTypeName == 'Nhiều lựa chọn'"
-                :questionlist="questions"
-              />
-              <QuestionRightWrongList
-                v-if="questions.questionTypeName == 'Đúng sai'"
-                :questionlist="questions"
-              />
-              <QuestionParingList
-                v-if="questions.questionTypeName == 'Ghép đôi'"
-                :questionlist="questions"
-              />
-              <QuestionFillBlankList
-                v-if="questions.questionTypeName == 'Điền vào chỗ trống'"
-                :questionlist="questions"
-              />
-              <QuestionShortAnswerList
-                v-if="questions.questionTypeName == 'Câu trả lời ngắn'"
-                :questionlist="questions"
-              />
-              <QuestionSortAnswerList
-                v-if="questions.questionTypeName == 'Sắp xếp thứ tự'"
-                :questionlist="questions"
-              />
-              <QuestionClusterList
-                v-if="questions.itemType == 'group'"
-                :questionlist="questions"
-              /> -->
               <component
                 :is="dynamicComponent"
                 ref="questionInExam"
@@ -56,36 +24,6 @@
             </div>
           </div>
           <QuestionTags :questiontags="questions" />
-          <div class="list-status-question">
-            <div v-if="questions.itemType === 'question'">
-              <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                questions.levelName
-              }}</span>
-              <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                questions.questionTypeName
-              }}</span>
-              <span
-                :class="
-                  questions.statusName === 'Bản nháp'
-                    ? 'btn btn-xs rounded-pill btn-yellow-light me-2'
-                    : questions.statusName === 'Không công khai'
-                    ? 'btn btn-xs rounded-pill btn-blue-light me-2'
-                    : 'btn btn-xs rounded-pill btn-green-light me-2'
-                "
-              >
-                {{ questions.statusName }}</span
-              >
-            </div>
-            <div v-if="questions.itemType === 'group'">
-              <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                questions.levelName
-              }}</span>
-
-              <span class="btn btn-xs rounded-pill btn-green-light me-2">{{
-                questions.statusName
-              }}</span>
-            </div>
-          </div>
         </div>
       </b-card>
     </div>
