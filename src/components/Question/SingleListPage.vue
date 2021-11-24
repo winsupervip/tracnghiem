@@ -1,18 +1,12 @@
 <template>
   <div class="list-single-question">
     <div class="list-questions-user">
-      <b-card
-        class="card-question mb-3"
-        header-tag="header"
-        footer-tag="footer"
-      >
-        <slot name="header"></slot>
-        <template #header>
-          <QuestionHeader
-            :question="questions"
-            :is-delete-question="deleteQuestion"
-          />
-        </template>
+      <b-card class="mt-3">
+        <QuestionHeader
+          :question="questions"
+          :is-delete-question="deleteQuestion"
+        />
+
         <div class="list-question">
           <div class="question-item">
             <div class="question-content text-smd">
