@@ -123,9 +123,10 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    // eslint-disable-next-line vue/require-default-prop
     deleteQuestion: {
       type: Function,
-      required: true,
+      required: false,
     },
   },
 

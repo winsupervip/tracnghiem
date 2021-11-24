@@ -13,11 +13,13 @@
             type="none"
           >
             <span
+              v-if="answer"
               :style="{ display: 'flex' }"
               :class="answer.rightAnswer ? 'rightAnswer' : 'wrongAnswer'"
             >
               {{ String.fromCharCode(65 + index) + '. ' }}
-              <p v-html="answer.answerContent"></p>
+              <p v-html="mathTypeDisplay(answer.answerContent)"></p>
+              <!-- <p v-html="answer.answerContent"></p> -->
             </span>
           </li>
         </ul>
@@ -28,9 +30,11 @@
 
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
+import mathType from '@/extensions/mathType'
 export default defineComponent({
   name: 'QuestionSingleChoiceList',
   auth: false,
+  mixins: [mathType],
   props: {
     questionlist: {
       type: Object,
