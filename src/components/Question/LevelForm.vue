@@ -1,12 +1,5 @@
 <template>
   <section class="p-question__box">
-    <!-- <treeselect
-      v-model="value"
-      :class="$style.display"
-      :multiple="true"
-      :options="options"
-      :value-consists-of="valueConsistsOf"
-    /> -->
     <p class="p-question__box__heading">
       <strong>{{ $t('level') }}</strong>
     </p>
@@ -63,20 +56,16 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      getQuestion: 'questions/getQuestion',
+      getLevel: 'questions/getLevel',
     }),
   },
   watch: {
+    getLevel() {
+      this.levelForm = this.getLevel
+    },
     levelForm() {
       this.addlevel(this.levelForm)
     },
-  },
-  mounted() {
-    if (this.getQuestion?.question?.levelId) {
-      this.levelForm = this.getQuestion.question.levelId
-    } else {
-      this.addlevel(1)
-    }
   },
   methods: {
     ...mapActions({ addlevel: 'questions/addlevel' }),

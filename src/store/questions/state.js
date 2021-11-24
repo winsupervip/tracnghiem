@@ -10,7 +10,7 @@ export default () => ({
     seoTitle: '',
     seoDescription: '',
     explainationIfCorrect: '',
-    explainationIfInCorrect: '',
+    explainationIfIncorrect: '',
     tags: [],
     title: '',
     position: 0,

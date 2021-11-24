@@ -37,7 +37,7 @@ export default {
   },
 
   ADD_EXPLAINATION_IF_IN_CORRECT(state, data) {
-    state.question.explainationIfInCorrect = data
+    state.question.explainationIfIncorrect = data
   },
 
   ADD_EXPLAINATION_IF_CORRECT(state, data) {
@@ -51,20 +51,13 @@ export default {
     ) {
       // when user add a answer and this  answer is the right of question
       // first . update rightAnswer  in current listAnswer = 0(false)
-      // second. set selected = id of new answer
+
       if (data.answer.rightAnswer === 1) {
-        state.selected = data.answer.id
         const answers = state?.answers?.map((item) => {
           item.rightAnswer = 0
           return item
         })
         state.answers = answers
-      }
-    } else if (data.typeQuestion === 'multiple-choice') {
-      // type question multiple choice is have many right answer so when user add a new answer
-      // and this answer is right answer of question, i will push answer's id to selected avariable
-      if (data.answer.rightAnswer === 1) {
-        state.selected.push(data.answer.id)
       }
     } else if (data.typeQuestion === 'draggable') {
       // type question sort when user add a new answer
@@ -92,31 +85,11 @@ export default {
       // case 2.  atribute rightAnswer is false and the value update is true
       //          set value of select = id of update value
       if (data.answer.rightAnswer === 1) {
-        state.selected = data.answer.id
         const answers = state.answers.map((item) => {
           item.rightAnswer = 0
           return item
         })
         state.answers = answers
-      }
-      if (
-        state.answers[index].rightAnswer === 1 &&
-        data.answer.rightAnswer === 0
-      ) {
-        state.selected = ''
-      }
-    } else if (data.typeQuestion === 'multiple-choice') {
-      if (data.answer.rightAnswer === 1) {
-        state.selected.push(data.answer.id)
-      }
-      if (
-        state.answers[index].rightAnswer === 1 &&
-        data.answer.rightAnswer === 0
-      ) {
-        const index = state.selected.findIndex(
-          (item) => item === data.answer.id
-        )
-        state.selected.splice(index, 1)
       }
     } else if (data.typeQuestion === 'pairing') {
       try {
@@ -159,10 +132,7 @@ export default {
     const index = state.answers.findIndex((item) => item.id === data.id)
     if (data.action === 'add') {
       state.answers[index].rightAnswer = 1
-      state.selected.push(data.id)
     } else if (data.action === 'remove') {
-      const indexSelected = state.selected.findIndex((item) => item === data.id)
-      state.selected.splice(indexSelected, 1)
       state.answers[index].rightAnswer = 0
     } else if (data.action === 'change') {
       const answers = state.answers?.map((item) => {
@@ -173,7 +143,6 @@ export default {
         }
         return item
       })
-      state.selected = data.id
       state.answers = answers
     }
   },
@@ -195,9 +164,9 @@ export default {
       plainText: '',
       isRandom: false,
       categories: [],
-      statusId: false,
-      levelId: false,
-      seoAvatar: '',
+      statusId: 1,
+      levelId: 1,
+      seoAvatar: 'https://storage.tracnghiem.vn/tracnghiem-dev/exam-avatar.png',
       seoTitle: '',
       seoDescription: '',
       explainationIfCorrect: '',
@@ -211,8 +180,6 @@ export default {
     state.updateValueAnswer = {}
     state.updateValue = {}
     state.errors = []
-    state.selected = []
-    state.selectedGroup = []
   },
   COPY_QUESTIONS(state, data) {
     const question = data.object.question
@@ -242,19 +209,13 @@ export default {
         plainText: 'Sai',
         rightAnswer: 0,
         random: true,
-        answerContent: '<p>sai</p>',
+        answerContent: '<p>Sai</p>',
       },
     ]
-    state.selected = state.answers[0].id
   },
   // question group //
   ADD_CHILD_QUESTION(state, data) {
     state.childQuestions.push(data)
-    const isSelected = {
-      id: data.id,
-      selected: [],
-    }
-    state.selectedGroup.push(isSelected)
   },
   ADD_ANSWER_IN_CHILD_QUESTION(state, data) {
     const index = state.childQuestions.findIndex((item) => item.id === data.id)
@@ -270,7 +231,6 @@ export default {
         })
         answers.push(data.answer)
         state.childQuestions[index].answers = answers
-        state.selectedGroup[index].selected = data.answer.id
         return
       }
     }
@@ -300,9 +260,6 @@ export default {
     const indexAnswer = state.childQuestions[index].answers.findIndex(
       (item) => item.id === data.answer.id
     )
-    const indexSelectedQuestion = state.selectedGroup.findIndex(
-      (item) => item.id === data.id
-    )
     if (typeQuestion === 'single-choice' || typeQuestion === 'right-wrong') {
       // when user update a answer update(right-wrong, single-choice, multiple-choice)
       // case 1. atribute rightAnswer is true and the value update is false
@@ -311,31 +268,11 @@ export default {
       //          set value of select = id of update value
 
       if (data.answer.rightAnswer === 1) {
-        state.selectedGroup[index].selected = data.answer.id
         const answers = state.childQuestions[index].answers.map((item) => {
           item.rightAnswer = 0
           return item
         })
         state.answers = answers
-      }
-      if (
-        state.childQuestions[index].answers[indexAnswer].rightAnswer === 1 &&
-        data.answer.rightAnswer === 0
-      ) {
-        state.selectedGroup[indexSelectedQuestion].selected = ''
-      }
-    } else if (typeQuestion === 'multiple-choice') {
-      if (data.answer.rightAnswer === 1) {
-        state.selectedGroup[indexSelectedQuestion].selected.push(data.answer.id)
-      }
-      if (
-        state.childQuestions[index].answers[indexAnswer].rightAnswer === 1 &&
-        data.answer.rightAnswer === 0
-      ) {
-        const indexAnswerOfQuestion = state.selectedGroup[
-          index
-        ].answers.findIndex((item) => item === data.answer.id)
-        state.selectedGroup[index].answers.splice(indexAnswerOfQuestion, 1)
       }
     } else if (typeQuestion === 'pairing') {
       try {
@@ -395,10 +332,7 @@ export default {
       state.childQuestions[indexChildQuestion].answers[
         indexAnswerOfChildQuestion
       ].rightAnswer = 1
-      // state.selected.push(data.id)
     } else if (data.action === 'remove') {
-      // const indexSelected = state.selected.findIndex((item) => item === data.id)
-      // state.selected.splice(indexSelected, 1)
       state.childQuestions[indexChildQuestion].answers[
         indexAnswerOfChildQuestion
       ].rightAnswer = 0
@@ -413,7 +347,6 @@ export default {
           return item
         }
       )
-      // state.selected = data.id
       state.childQuestions[indexChildQuestion].answers = answers
     }
   },

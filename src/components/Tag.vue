@@ -1,7 +1,7 @@
 <template>
   <vue-tags-input
     v-model="tag"
-    :tags="tags"
+    :tags="compareTags"
     :autocomplete-items="autocompleteItems"
     :placeholder="$t('exam.form.tagHolder')"
     @tags-changed="update"
@@ -25,16 +25,26 @@ export default {
       autocompleteItems: [],
     }
   },
+  computed: {
+    compareTags() {
+      const handleTags = []
+      this.value.forEach((item) => {
+        handleTags.push({
+          text: item,
+          tiClasses: ['ti-valid'],
+        })
+      })
+      return handleTags
+    },
+  },
   watch: {
     tag() {
       this.initItems()
     },
   },
-  created() {
-    this.tags = this.value
-  },
   methods: {
     update(newTags) {
+      console.log(newTags)
       this.autocompleteItems = []
       this.tags = newTags
       const getT = newTags.map((x) => x.text)

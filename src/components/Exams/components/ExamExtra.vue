@@ -278,7 +278,9 @@ export default defineComponent({
       this.slug = this.examExtra.slug
     },
   },
-  created() {},
+  mounted() {
+    this.image = this.examExtra.image
+  },
   methods: {
     ...mapActions({
       setExamExtra: 'exams/setExamExtra',

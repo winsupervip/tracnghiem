@@ -15,7 +15,7 @@
           name="some-radios"
           :value="answer.id"
           :aria-checked="true"
-          @change="isChange(answer.id)"
+          @change="isChange(answer.id, $event)"
           ><div class="p-answerItem">
             <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
             <div
@@ -55,7 +55,7 @@
           name="some-radios"
           :value="answer.id"
           :aria-checked="true"
-          @change="isChange(answer.id)"
+          @click="isChange(answer.id)"
           ><div class="p-answerItem">
             <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
             <div
@@ -276,6 +276,7 @@ export default defineComponent({
   setup() {
     const data = reactive({
       isSelected: [],
+      tempSelected: [],
     })
     return {
       ...toRefs(data),
@@ -314,25 +315,33 @@ export default defineComponent({
         }
         return this.listChildAnswer
       }
-      console.log('this question nè', this.getListAnswer)
+      if (
+        this.typeQuestion === 'single-choice' ||
+        this.typeQuestion === 'right-wrong'
+      ) {
+        const index = this.getListAnswer.findIndex(
+          (item) => item.rightAnswer === 1
+        )
+        if (index !== -1) {
+          this.handleSelected(this.getListAnswer[index].id)
+        } else {
+          this.handleSelected('')
+        }
+
+        // this.isSelected = this.listChildAnswer[index].id
+      } else if (this.typeQuestion === 'multiple-choice') {
+        const selected = []
+        this.getListAnswer.forEach((element) => {
+          if (element.rightAnswer === 1) {
+            selected.push(element.id)
+          }
+        })
+        this.handleSelected(selected)
+      }
       return this.getListAnswer
     },
   },
-  watch: {
-    getSelected() {
-      this.isSelected = this.getSelected
-    },
-    getGroupSelected() {
-      console.log('ok', this.getGroupSelected)
-    },
-  },
-  // mounted() {
-  //   this.getListAnswer.left = this.getListAnswer.filter((x) => x.position === 1)
-  //   this.getListAnswer?.right = this.getListAnswer.filter(
-  //     (x) => x.position === 2
-  //   )
-  // },
-
+  // s
   methods: {
     ...mapActions({
       addValueUpdateAnswer: 'questions/addValueUpdateAnswer',
@@ -344,10 +353,10 @@ export default defineComponent({
       deleteAnswerOfChildQuestion: 'questions/deleteAnswerOfChildQuestion',
     }),
     isChange(id) {
+      // câu hỏi chùm
       if (this.groupQuestion) {
         if (this.typeQuestion === 'multiple-choice') {
-          const index = this.isSelected.findIndex((item) => item === id)
-          if (index === 1) {
+          if (this.isSelected.length > this.tempSelected.length) {
             this.handleUserChooseRightAnswerOfChildQuestion({
               action: 'add',
               questionChildId: this.childQuestionId,
@@ -372,8 +381,9 @@ export default defineComponent({
         }
         return 0
       }
+      // câu hỏi đơn
       if (this.typeQuestion === 'multiple-choice') {
-        if (this.isSelected.length > this.getSelected.length) {
+        if (this.isSelected.length > this.tempSelected.length) {
           this.handleUserChooseRightAnswer({ action: 'add', id })
         } else {
           this.handleUserChooseRightAnswer({ action: 'remove', id })
@@ -397,6 +407,7 @@ export default defineComponent({
     },
     handleSelected(value) {
       this.isSelected = value
+      this.tempSelected = value
     },
   },
 })

@@ -184,10 +184,11 @@ export default defineComponent({
         question.questionContent = element.question.questionContent
         question.explainationIfCorrect =
           groupQuestion.question.explainationIfCorrect
-        question.explainationIfIncorrect = 'ádasdsas'
+        question.explainationIfIncorrect =
+          groupQuestion.question.explainationInIfcorrect
         question.statusId = groupQuestion.question.statusId
         question.levelId = groupQuestion.question.levelId
-        question.plainText = ' element.question.plainText'
+        question.plainText = element.question.plainText
         question.seoAvatar = groupQuestion.question.seoAvatar
         question.seoTitle = groupQuestion.question.seoTitle
         question.seoDescription = groupQuestion.question.seoDescription
