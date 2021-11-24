@@ -5,147 +5,155 @@
     </div>
 
     <div class="filter-bar">
-      <div class="row">
-        <div class="col-6 col-md-4 col-lg-3 mb-3">
-          <treeselect
-            v-model="urlQuery.categories"
-            :multiple="true"
-            :options="category"
-            :load-options="loadOptions"
-            :placeholder="$t('category')"
-          />
-        </div>
-        <div class="col-6 col-md-4 col-lg-3 mb-3">
-          <treeselect
-            v-model="urlQuery.questionTypeId"
-            :options="treeQuestionTypes"
-            :load-options="loadOptions"
-            :placeholder="$t('questionType')"
-          />
-        </div>
-        <div class="col-6 col-md-4 col-lg-3 mb-3">
-          <treeselect
-            v-model="urlQuery.statusId"
-            :options="listStatus"
-            :load-options="loadOptions"
-            :placeholder="$t('status')"
-          />
-        </div>
-        <div class="col-6 col-md-4 col-lg-3 mb-3">
-          <treeselect
-            v-model="urlQuery.levelId"
-            :options="level"
-            :load-options="loadOptions"
-            :placeholder="$t('level')"
-          />
-        </div>
-        <div class="col-6 col-md-4 col-lg-3 mb-3">
-          <treeselect
-            v-model="urlQuery.orderBy"
-            :options="orderBy"
-            :load-options="loadOptions"
-            :placeholder="$t('sort')"
-          />
-        </div>
-        <div class="col-6 col-md-4 col-lg-3 mb-3">
-          <b-form-group class="mb-0 form-group">
-            <b-form-input
-              id="tag-search-input"
-              v-model="search"
-              type="search"
-              :placeholder="$t('search')"
-              autocomplete="off"
+      <b-card :sub-title="$t('exam.questions.search')">
+        <b-form>
+          <b-form-row class="row">
+            <b-form-group
+              :label="$t('keyword')"
+              label-for="keyword"
+              class="col-12 col-md-6 mb-3"
             >
-            </b-form-input>
-
-            <ul>
-              <b-dropdown-item
-                v-for="(option, index) in availableOptions"
-                :key="index"
-                class="abc"
-                @click="inputSearch(option.label)"
-              >
-                {{ option.label }}
-              </b-dropdown-item>
-            </ul>
-          </b-form-group>
-        </div>
-        <!-- <div class="col-6 col-md-4 col-lg-3 mb-3">
-          <b-button variant="outline-primary btn-sm" @click="handleSearch"
-            ><b-icon-filter></b-icon-filter>{{ $t('apply') }}</b-button
-          >
-
-          <b-btn
-            pill
-            variant="outline-primary btn-sm"
-            size="sm"
-            @click="$bvModal.show('bv-modal-add-question')"
-          >
-            <b-icon-plus></b-icon-plus> {{ $t('add') }}
-          </b-btn> -->
-
-        <div
-          class="
-            col-12 col-md-3
-            mb-3
-            d-flex
-            justify-content-around
-            align-items-end
-          "
-        >
-          <b-button variant="outline-primary btn-sm" @click="handleSearch">
-            <b-icon-filter></b-icon-filter> {{ $t('apply') }}
-          </b-button>
-          <b-button
-            variant="primary"
-            class="btn btn-sm btn-primary"
-            @click="$bvModal.show('bv-modal-add-question')"
-          >
-            <b-icon-plus></b-icon-plus> {{ $t('add') }}
-          </b-button>
-          <b-modal id="bv-modal-add-question" hide-footer title="Câu hỏi:">
-            <div class="d-block">
-              <ul>
-                <li v-for="item in items" :key="item.message" type="1">
-                  <nuxt-link :to="item.url" :style="{ fontWeight: 'bold' }">{{
-                    item.title
-                  }}</nuxt-link>
-                </li>
-              </ul>
-              <div class="dropdown-divider"></div>
-              <nuxt-link
-                to="/users/questions/question-group/create"
-                :style="{ fontWeight: 'bold' }"
-                >Câu chùm</nuxt-link
-              >
-            </div>
-            <div class="d-flex justify-content-center mt-3">
-              <b-button
+              <b-form-input
+                id="tag-search-input"
+                v-model="search"
+                trim
+                type="search"
+                :placeholder="$t('search')"
+                autocomplete="off"
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group
+              :label="$t('exam.questions.categories')"
+              label-for="categories"
+              class="col-12 col-md-3 mb-3"
+            >
+              <treeselect
+                id="categories"
+                :multiple="true"
+                :options="category"
+                :load-options="loadOptions"
+                :placeholder="$t('category')"
+              />
+            </b-form-group>
+            <b-form-group
+              :label="$t('exam.questions.paymentTypes')"
+              label-for="paymentTypes"
+              class="col-12 col-md-3 mb-3"
+            >
+              <treeselect
+                id="paymentTypes"
+                v-model="urlQuery.questionTypeId"
+                :options="treeQuestionTypes"
+                :load-options="loadOptions"
+                :placeholder="$t('questionType')"
+              />
+            </b-form-group>
+          </b-form-row>
+          <b-form-row class="row">
+            <b-form-group
+              :label="$t('exam.status')"
+              label-for="status"
+              class="col-12 col-md-3 mb-3"
+            >
+              <treeselect
+                id="status"
+                v-model="urlQuery.statusId"
+                :options="listStatus"
+                :load-options="loadOptions"
+                :placeholder="$t('status')"
+              />
+            </b-form-group>
+            <b-form-group
+              :label="$t('exam.levels')"
+              label-for="levels"
+              class="col-12 col-md-3 mb-3"
+            >
+              <treeselect
+                id="levels"
+                v-model="urlQuery.levelId"
+                :options="level"
+                :load-options="loadOptions"
+                :placeholder="$t('level')"
+              />
+            </b-form-group>
+            <b-form-group
+              :label="$t('exam.sortby')"
+              label-for="sortby"
+              class="col-12 col-md-3 mb-3"
+            >
+              <treeselect
+                id="sortby"
+                v-model="urlQuery.orderBy"
+                :options="orderBy"
+                :load-options="loadOptions"
+                :placeholder="$t('sort')"
+              />
+            </b-form-group>
+            <div
+              class="
+                col-12 col-md-3
+                mb-3
+                d-flex
+                justify-content-around
+                align-items-end
+              "
+            >
+              <b-button variant="outline-primary btn-sm" @click="handleSearch">
+                <b-icon-filter></b-icon-filter> {{ $t('apply') }}
+              </b-button>
+              <b-btn
                 variant="primary"
-                class="text-center"
-                block
-                @click="$bvModal.hide('bv-modal-add-question')"
-                >{{ $t('close') }}</b-button
+                size="sm"
+                @click="$bvModal.show('bv-modal-add-question')"
               >
+                <b-icon-plus></b-icon-plus> {{ $t('add') }}
+              </b-btn>
+              <b-modal id="bv-modal-add-question" hide-footer title="Câu hỏi:">
+                <div class="d-block">
+                  <ul>
+                    <li
+                      v-for="item in items"
+                      :key="item.message"
+                      type="1"
+                      class="text-dark fw-bold"
+                    >
+                      <nuxt-link :to="item.url" class="text-dark">{{
+                        item.title
+                      }}</nuxt-link>
+                    </li>
+                  </ul>
+                  <div class="dropdown-divider"></div>
+                  <a href="#" class="text-dark fw-bold">Câu chùm</a>
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                  <b-button
+                    variant="primary"
+                    class="text-center"
+                    block
+                    @click="$bvModal.hide('bv-modal-add-question')"
+                    >{{ $t('close') }}</b-button
+                  >
+                </div>
+              </b-modal>
             </div>
-          </b-modal>
-        </div>
-      </div>
+          </b-form-row>
+        </b-form>
+      </b-card>
+
+      <SingleQuestion
+        v-for="question in questionList"
+        :key="question.id"
+        :questions="question"
+        :delete-question="deleteQuestion"
+      />
+
+      <b-pagination
+        v-model="urlQuery.page"
+        class="pagination"
+        :total-rows="total"
+        :per-page="urlQuery.pageSize"
+      ></b-pagination>
     </div>
-
-    <SingleQuestion
-      v-for="question in questionList"
-      :key="question.id"
-      :questions="question"
-      :delete-question="deleteQuestion"
-    />
-
-    <b-pagination
-      v-model="urlQuery.page"
-      class="pagination"
-      :total-rows="total"
-      :per-page="urlQuery.pageSize"
-    ></b-pagination>
   </div>
 </template>
 

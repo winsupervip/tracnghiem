@@ -1,9 +1,11 @@
 <template>
   <div class="d-flex">
     <div class="question-hashtag">
-      <p v-for="tag in questiontags.tagItems" :key="tag.tagId">
-        <a href="">#{{ tag.tagName }}</a>
-      </p>
+      <div class="d-flex align-items-center">
+        <p v-for="tag in questiontags.tagItems" :key="tag.tagId" class="me-3">
+          <a href="">#{{ tag.tagName }}</a>
+        </p>
+      </div>
       <div class="list-status-question">
         <div v-if="questiontags.itemType === 'question'">
           <span class="btn btn-xs rounded-pill btn-green-light me-2">{{

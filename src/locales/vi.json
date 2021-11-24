@@ -1,7 +1,7 @@
 {
   "login": "Đăng nhập",
   "register": "Đăng ký",
-  "questionBank": "Ngân Hàng câu hỏi",
+  "questionBank": "Ngân hàng câu hỏi",
   "tagYourQuestionUpTo5Tags": "Gắn thẻ câu hỏi của bạn, tối đa 5 thẻ(*)",
   "selectTag": "Chọn thẻ",
   "thereAreNoTagsMatchingYourSearchCriteria": "Không tồn tại thẻ bạn vừa nhập, nhấn thêm để thêm mới",
@@ -117,6 +117,7 @@
   },
   "addTags": "Thêm thẻ",
   "keyword": "Từ khóa",
+  
   "exam": {
     "dashboard": "Trang tổng quan",
     "exam_title": "Ngân hàng đề thi",
@@ -169,7 +170,9 @@
     "edit": "Cập nhật",
     "questions": {
       "title": "Danh sách câu hỏi",
-      "search": "Tìm kiếm câu hỏi"
+      "search": "Tìm kiếm câu hỏi",
+       "categories": "Danh mục câu hỏi",
+    "paymentTypes": "Loại câu hỏi"
     }
   },
   "modalQToExam": {

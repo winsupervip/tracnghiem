@@ -187,6 +187,7 @@ export default {
     state.question = question
     state.answers = answers
   },
+  EDIT_QUESTIONS(state, data) {},
   SET_NULL_ID_ANSWER(state, aIndex) {
     state.answers[aIndex].id = undefined
   },

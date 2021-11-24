@@ -64,6 +64,10 @@ export default {
   copyQuestion({ commit }, data) {
     commit('COPY_QUESTIONS', data)
   },
+  editQuestion({ commit }, data) {
+    commit('EDIT_QUESTIONS', data)
+  },
+
   setNullAnswerId({ commit }, answerIndex) {
     commit('SET_NULL_ID_ANSWER', answerIndex)
   },
