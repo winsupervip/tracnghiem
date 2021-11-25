@@ -46,6 +46,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    isCopy: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props) {
     const data = reactive({

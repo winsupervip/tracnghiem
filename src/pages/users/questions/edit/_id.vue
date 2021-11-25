@@ -168,25 +168,25 @@ export default defineComponent({
   },
   methods: {
     handleAnswer(data) {
-      if (this.questionTypeId === 1) {
+      if (this.questionType === 'single-choice') {
         return handler.singleChoiceAndRightWrong(data)
       }
-      if (this.questionTypeId === 2) {
+      if (this.questionType === 'multiple-choice') {
         return handler.multipleChoice(data)
       }
-      if (this.questionTypeId === 3) {
+      if (this.questionType === 'right-wrong') {
         return handler.singleChoiceAndRightWrong(data)
       }
-      if (this.questionTypeId === 4) {
+      if (this.questionType === 'pairing') {
         return handler.matching(data)
       }
-      if (this.questionTypeId === 5) {
+      if (this.questionType === 'fill-blank') {
         return handler.fillBlank(data)
       }
-      if (this.questionTypeId === 6) {
+      if (this.questionType === 'short-answer') {
         return handler.shortAnswer(data)
       }
-      if (this.questionTypeId === 7) {
+      if (this.questionType === 'draggable') {
         return handler.draggable(data)
       }
     },
