@@ -60,7 +60,11 @@
           <Category />
           <LevelForm />
           <!-- <UploadImage :get-image="getImage" /> -->
-          <Uploader :accept="'*/*'" :disabled="false"></Uploader>
+          <Uploader
+            v-model="image"
+            :accept="'*/*'"
+            :disabled="false"
+          ></Uploader>
           <AddSeo />
         </div>
       </div>
@@ -112,6 +116,7 @@ export default defineComponent({
       dataUpdate: {},
       isUpdate: false,
       isValid: true,
+      image: '',
     })
 
     return {
@@ -122,14 +127,23 @@ export default defineComponent({
     ...mapGetters({
       getGroupQuestion: 'questions/getGroupQuestion',
       getChildQuestion: 'questions/getChildQuestion',
+      getSeoAvatar: 'questions/getSeoAvatar',
     }),
   },
-
+  watch: {
+    image() {
+      this.addSeoAvater(this.image)
+    },
+  },
+  mounted() {
+    this.image = this.getSeoAvatar
+  },
   methods: {
     ...mapActions({
       restAnswer: 'questions/restAnswer',
       setNullAnswerId: 'questions/setNullAnswerId',
       deleteChildQuestion: 'questions/deleteChildQuestion',
+      addSeoAvater: 'questions/addSeoAvatar',
     }),
     openUpdate(data) {
       this.dataUpdate = data
@@ -162,7 +176,16 @@ export default defineComponent({
       this.errors = []
       this.isValid = true
       console.log(groupQuestion)
+      if (groupQuestion.childQuestions.length === 0) {
+        this.errors.push('Bạn phải nhập vào nội dung câu hỏi')
+        this.isValid = false
+        return
+      }
       groupQuestion.childQuestions.forEach((element, index) => {
+        if (element.question.questionContent === '') {
+          this.errors.push('Bạn phải nhập vào nội dung câu hỏi con')
+          this.isValid = false
+        }
         if (element.typeQuestion === 'single-choice') {
           value = handler.singleChoiceAndRightWrong(element.answers)
         } else if (element.typeQuestion === 'short-answer') {

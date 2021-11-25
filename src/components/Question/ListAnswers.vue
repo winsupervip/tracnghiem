@@ -55,7 +55,7 @@
           name="some-radios"
           :value="answer.id"
           :aria-checked="true"
-          @click="isChange(answer.id)"
+          @change="isChange(answer.id)"
           ><div class="p-answerItem">
             <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
             <div
