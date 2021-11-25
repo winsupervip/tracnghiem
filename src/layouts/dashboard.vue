@@ -275,6 +275,7 @@
 import $ from 'jquery/dist/jquery.slim'
 import { defineComponent } from '@vue/composition-api'
 import _ from 'lodash'
+import { mapGetters } from 'vuex'
 import userAPI from '@/api/user'
 
 export default defineComponent({
@@ -298,6 +299,12 @@ export default defineComponent({
       isDisplayMenu: true,
       isDisplayMenuSp: false,
     }
+  },
+  computed: {
+    ...mapGetters({
+      isAdmin: 'user/isAdmin',
+      isAgency: 'user/isAgency',
+    }),
   },
   watch: {
     visible(val) {
