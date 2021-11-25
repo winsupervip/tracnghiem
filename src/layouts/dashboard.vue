@@ -264,6 +264,7 @@
         </div>
       </b-sidebar>
       <div class="l-dashboard__content">
+        <TinyEditor style="display: none" />
         <Nuxt />
       </div>
     </div>
