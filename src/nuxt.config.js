@@ -9,7 +9,7 @@ export default {
     title:
       'Trắc nghiệm Online, Ngân hàng câu hỏi, đề thi mới nhất cập nhật 24h/7',
     htmlAttrs: {
-      lang: 'vi'
+      lang: 'vi',
     },
     meta: [
       { charset: 'utf-8' },
@@ -17,16 +17,16 @@ export default {
       {
         name: 'keywords',
         content:
-          'Trắc nghiệm, Online, trac nghiem online, ngan hang de thi, ngan hang cau hoi, thi truc tuyen'
+          'Trắc nghiệm, Online, trac nghiem online, ngan hang de thi, ngan hang cau hoi, thi truc tuyen',
       },
       {
         name: 'description',
         content:
-          'Thi trắc nghiệm online với hàng ngàn đề thi, ngân hàng câu hỏi phong phú đa dạng trên nhiều lĩnh vực'
+          'Thi trắc nghiệm online với hàng ngàn đề thi, ngân hàng câu hỏi phong phú đa dạng trên nhiều lĩnh vực',
       },
       {
         property: 'og:image',
-        content: 'https://tracnghiem.vn/images/logo-shared.png'
+        content: 'https://tracnghiem.vn/images/logo-shared.png',
       },
       { property: 'og:image:width', content: '400' },
       { property: 'og:image:height', content: '400' },
@@ -34,81 +34,81 @@ export default {
       { name: 'msapplication-TileColor', content: '#ffffff' },
       {
         name: 'msapplication-TileImage',
-        content: '/favicon/ms-icon-144x144.png'
+        content: '/favicon/ms-icon-144x144.png',
       },
-      { name: 'theme-color', content: '#ffffff' }
+      { name: 'theme-color', content: '#ffffff' },
     ],
     link: [
       {
         rel: 'apple-touch-icon',
         sizes: '57x57',
-        href: '/favicon/apple-icon-57x57.png'
+        href: '/favicon/apple-icon-57x57.png',
       },
       {
         rel: 'apple-touch-icon',
         sizes: '60x60',
-        href: '/favicon/apple-icon-60x60.png'
+        href: '/favicon/apple-icon-60x60.png',
       },
       {
         rel: 'apple-touch-icon',
         sizes: '72x72',
-        href: '/favicon/apple-icon-72x72.png'
+        href: '/favicon/apple-icon-72x72.png',
       },
       {
         rel: 'apple-touch-icon',
         sizes: '76x76',
-        href: '/favicon/apple-icon-76x76.png'
+        href: '/favicon/apple-icon-76x76.png',
       },
       {
         rel: 'apple-touch-icon',
         sizes: '114x114',
-        href: '/favicon/apple-icon-114x114.png'
+        href: '/favicon/apple-icon-114x114.png',
       },
       {
         rel: 'apple-touch-icon',
         sizes: '120x120',
-        href: '/favicon/apple-icon-120x120.png'
+        href: '/favicon/apple-icon-120x120.png',
       },
       {
         rel: 'apple-touch-icon',
         sizes: '144x144',
-        href: '/favicon/apple-icon-144x144.png'
+        href: '/favicon/apple-icon-144x144.png',
       },
       {
         rel: 'apple-touch-icon',
         sizes: '152x152',
-        href: '/favicon/apple-icon-152x152.png'
+        href: '/favicon/apple-icon-152x152.png',
       },
       {
         rel: 'apple-touch-icon',
         sizes: '180x180',
-        href: '/favicon/apple-icon-180x180.png'
+        href: '/favicon/apple-icon-180x180.png',
       },
       {
         rel: 'icon',
         type: 'image/png',
         sizes: '192x192',
-        href: '/favicon/android-icon-192x192.png'
+        href: '/favicon/android-icon-192x192.png',
       },
       {
         rel: 'icon',
         type: 'image/png',
         sizes: '32x32',
-        href: '/favicon/favicon-32x32.png'
+        href: '/favicon/favicon-32x32.png',
       },
       {
         rel: 'icon',
         type: 'image/png',
         sizes: '96x96',
-        href: '/favicon/favicon-96x96.png'
+        href: '/favicon/favicon-96x96.png',
       },
       {
         rel: 'icon',
         type: 'image/png',
         sizes: '16x16',
-        href: '/favicon/favicon-16x16.png'
+        href: '/favicon/favicon-16x16.png',
       },
-      { rel: 'manifest', href: '/favicon/manifest.json' }
+      { rel: 'manifest', href: '/favicon/manifest.json' },
     ],
     script: [
       {
@@ -119,16 +119,16 @@ export default {
         potentialAction: {
           '@type': 'SearchAction',
           target: 'https://tracnghiem.vn/tim-kiem/?q={search_term_string}',
-          'query-input': 'required name=search_term_string'
+          'query-input': 'required name=search_term_string',
         },
         author: {
           '@type': 'Team',
-          name: 'TracNghiemTeam'
+          name: 'TracNghiemTeam',
         },
         description:
-          'Thi trắc nghiệm online với hàng ngàn đề thi, ngân hàng câu hỏi phong phú đa dạng trên nhiều lĩnh vực'
-      }
-    ]
+          'Thi trắc nghiệm online với hàng ngàn đề thi, ngân hàng câu hỏi phong phú đa dạng trên nhiều lĩnh vực',
+      },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -141,15 +141,13 @@ export default {
   ],
 
   styleResources: {
-    scss: [
-      '@/assets/scss/foundation/_mixins.scss',
-    ]
+    scss: ['@/assets/scss/foundation/_mixins.scss'],
   },
 
   render: {
     etag: {
-      hash: (html) => murmurHash128(html)
-    }
+      hash: (html) => murmurHash128(html),
+    },
   },
 
   serverMiddleware: ['@/middleware/cache.js'],
@@ -165,12 +163,12 @@ export default {
     { src: '@/plugins/filters.js', ssr: true },
     { src: '@/plugins/vue2-scrollspy', ssr: false },
     { src: '@/plugins/treeselect.js', ssr: true },
-    { src: "@/plugins/validators", ssr: false },
+    { src: '@/plugins/validators', ssr: false },
     { src: '@/plugins/uuid.js', ssr: true },
-    { src: '~/plugins/persistedState.js'},
+    { src: '~/plugins/persistedState.js' },
     { src: '@/plugins/WIRISplugins.js', ssr: false },
     { src: '~/plugins/vue-tags-input', ssr: false },
-    { src: '@/plugins/handle-error', }
+    { src: '@/plugins/handle-error' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -196,26 +194,27 @@ export default {
   ],
   // https://github.com/nuxt-community/google-gtag-module
   'google-gtag': {
-    id: 'G-4RQGST5TRG'
+    id: 'G-4RQGST5TRG',
   },
 
   // bootstrap-vue
   bootstrapVue: {
     bootstrapCSS: false, // Or `css: false`
     bootstrapVueCSS: true, // Or `bvCSS: false`
-    icons: true
+    icons: true,
   },
   toast: {
     position: 'top-right',
-    register: [ // Register custom toasts
+    register: [
+      // Register custom toasts
       {
         name: 'my-error',
         message: 'Oops...Something went wrong',
         options: {
-          type: 'error'
-        }
-      }
-    ]
+          type: 'error',
+        },
+      },
+    ],
   },
   i18n: {
     locales: [
@@ -230,7 +229,7 @@ export default {
   axios: {
     baseURL: process.env.apiURI,
     proxyHeaders: false,
-    credentials: false
+    credentials: false,
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
@@ -243,7 +242,7 @@ export default {
       presets({ envName }) {
         const envTargets = {
           client: { browsers: ['last 2 versions'], ie: 11 },
-          server: { node: 'current' }
+          server: { node: 'current' },
         }
 
         return [
@@ -257,13 +256,13 @@ export default {
                 'es.promise',
                 'es.object.assign',
                 'es.promise.finally',
-                'es.weak-map'
+                'es.weak-map',
               ],
-              useBuiltIns: 'usage'
-            }
-          ]
+              useBuiltIns: 'usage',
+            },
+          ],
         ]
-      }
+      },
     },
 
     transpile: [/@nuxtjs[\\/]composition-api/],
@@ -274,17 +273,22 @@ export default {
         config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
       }
     },
-    vendor: ['tinymce', '@johmun/vue-tags-input']
+    vendor: ['tinymce', '@johmun/vue-tags-input'],
   },
   router: {
     extendRoutes(routes, resolve) {
       routes.push({
         name: 'custom1',
         path: '',
-        component: resolve(__dirname, 'pages/home')
+        component: resolve(__dirname, 'pages/home'),
+      })
+      routes.push({
+        name: 'de-thi-id-slug',
+        path: '/:slug-:id',
+        component: resolve(__dirname, 'pages/de-thi/_id/index.vue'),
       })
     },
-    middleware: ['auth']
+    middleware: ['auth'],
   },
   auth: {
     plugins: [{ src: '@/plugins/http.js', ssr: true }],
@@ -294,35 +298,40 @@ export default {
         scheme: 'oauth2',
         endpoints: {
           authorization:
-            process.env.AUTH_URL + '/auth/realms/tracnghiemvn/protocol/openid-connect/auth',
+            process.env.AUTH_URL +
+            '/auth/realms/tracnghiemvn/protocol/openid-connect/auth',
           userInfo:
-            process.env.AUTH_URL + '/auth/realms/tracnghiemvn/protocol/openid-connect/userinfo',
+            process.env.AUTH_URL +
+            '/auth/realms/tracnghiemvn/protocol/openid-connect/userinfo',
           token: process.env.AUTH_TOKEN,
           logout:
-          process.env.AUTH_URL + '/auth/realms/tracnghiemvn/protocol/openid-connect/logout?redirect_uri=' +
-            encodeURIComponent(process.env.BASE_URL || 'http://localhost:3000')
+            process.env.AUTH_URL +
+            '/auth/realms/tracnghiemvn/protocol/openid-connect/logout?redirect_uri=' +
+            encodeURIComponent(process.env.BASE_URL || 'http://localhost:3000'),
         },
         token: {
           property: 'access_token',
           type: 'Bearer',
           name: 'Authorization',
-          maxAge: 300 // Can be dynamic ?
+          maxAge: 300, // Can be dynamic ?
         },
         refreshToken: {
           property: 'refresh_token',
-          maxAge: 60 * 60 * 24 * 30 // Can be dynamic ?
+          maxAge: 60 * 60 * 24 * 30, // Can be dynamic ?
         },
         responseType: 'code',
         grantType: 'authorization_code',
         clientId: process.env.AUTH_CLIENT_ID,
         scope: ['openid', 'profile', 'email'],
-        codeChallengeMethod: 'S256'
-      }
+        codeChallengeMethod: 'S256',
+      },
     },
     redirect: {
       login: '/login',
-      logout: encodeURIComponent(process.env.BASE_URL || 'http://localhost:3000'),
-      home: '/'
-    }
-  }
+      logout: encodeURIComponent(
+        process.env.BASE_URL || 'http://localhost:3000'
+      ),
+      home: '/',
+    },
+  },
 }

@@ -7,5 +7,6 @@
 export default {
   layout: 'dashboard',
   auth: true,
+  middleware: ['isAdmin'],
 }
 </script>
