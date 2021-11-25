@@ -16,10 +16,10 @@
           <CommentOrNote />
         </div>
         <div class="p-question__right">
-          <PublishQuestion :is-edit="isEdit" />
+          <PublishQuestion :is-edit="isEdit" :is-copy="isCopy" />
           <Category />
           <LevelForm />
-          <!-- <UploadImage :get-image="getImage" /> -->
+
           <Uploader
             v-model="image"
             :accept="'*/*'"
@@ -95,6 +95,10 @@ export default defineComponent({
       required: true,
     },
     isEdit: {
+      type: Boolean,
+      default: false,
+    },
+    isCopy: {
       type: Boolean,
       default: false,
     },
@@ -179,10 +183,17 @@ export default defineComponent({
           },
           answers: validState.validateAnswers,
         }
+        if (this.isCopy) {
+          question.question.hashId = ''
+        }
         try {
           if (this.isEdit) {
             await QuestionApi.updateQuestion(question)
             // this.$handleError(data)
+            this.$toast.success(this.$i18n.t('errors.00000000'))
+          } else if (this.isCopy) {
+            await QuestionApi.createQuestion(question)
+
             this.$toast.success(this.$i18n.t('errors.00000000'))
           } else {
             const { data } = await CauHoiApi.createQuestion(question)
