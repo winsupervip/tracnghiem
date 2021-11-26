@@ -28,7 +28,6 @@
             :label-for="$t('addTags')"
             :label="$t('exam.form.tags') + ' (*)'"
             class="col-12 mb-3"
-            :description="$t('exam.form.tagHelper')"
           >
             <Tag v-model="tags" />
             <b-form-invalid-feedback id="inputLiveFeedback" :state="valid">

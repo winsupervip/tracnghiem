@@ -4,6 +4,7 @@
     :tags="compareTags"
     :autocomplete-items="autocompleteItems"
     :placeholder="$t('exam.form.tagHolder')"
+    :max-tags="5"
     @tags-changed="update"
   />
 </template>
@@ -39,12 +40,15 @@ export default {
   },
   watch: {
     tag() {
+      if (this.tags.length === 5) {
+        this.$toast.show('Tối đa là 5 thẻ').goAway(1000)
+        return
+      }
       this.initItems()
     },
   },
   methods: {
     update(newTags) {
-      console.log(newTags)
       this.autocompleteItems = []
       this.tags = newTags
       const getT = newTags.map((x) => x.text)

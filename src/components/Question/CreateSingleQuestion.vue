@@ -71,7 +71,7 @@ export default defineComponent({
       required: true,
     },
     questionTypeId: {
-      type: Number,
+      type: [Number, String],
       required: true,
     },
     questionTitle: {
@@ -144,6 +144,8 @@ export default defineComponent({
       let valid = true
       if (answers.length === 0) {
         this.errors = 'Câu trả lời hiện đang trống'
+        valid = false
+        this.$toast.show('Câu trả lời hiện đang bỏ trống').goAway(1000)
         return { valid, validateAnswers }
       }
       const result = this.handleAnswer(answers)
