@@ -129,7 +129,7 @@
                       <div class="p-navItem--dropdown__inner__menu__child">
                         <div class="item item__heading">Settings</div>
                         <nuxt-link
-                          to="/users/questions/personal"
+                          to="/users/personal/personal"
                           class="item item__link"
                         >
                           Personal settings
@@ -214,7 +214,7 @@
                 <h2 class="one-line">Công cụ chung</h2>
                 <ul>
                   <li>
-                    <nuxt-link to="/users/questions/affiliate">
+                    <nuxt-link to="/users/personal/affiliate">
                       <div>
                         <img
                           src="~/assets/img/dashboard/bx_bx-network-chart.svg"

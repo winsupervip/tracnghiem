@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
     <UserlInfo :show="type" :user="bio" />
     <div v-if="type">
       <ul>
@@ -27,7 +27,9 @@
           type="text"
           class="form-control"
           :value="
-            bio.refCode ? `https://tracnghiem.vn/affiliate?ref=${refCode}` : ''
+            bio.refCode
+              ? `https://tracnghiem.vn/affiliate?ref=${bio.refCode}`
+              : ''
           "
           readonly
         />
