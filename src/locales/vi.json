@@ -234,5 +234,32 @@
     "00011111": "Mật khẩu mới phải khác mật khẩu hiện tại",
     "00100010": "Vui lòng đính kèm ít nhất 1 tệp tin minh chứng trước khi gửi duyệt",
     "405": "HTTP 405 - Method Not Allowed"
+  },
+  "admin": {
+    "dashboard":"Trang tổng quan",
+    "category": {
+      "title":"Danh sách chuyên mục",
+      "edit":"Cập nhật",
+      "delete":"Xóa",
+      "search":"Tìm kiếm danh mục",
+      "categoryName": "Tên danh mục",
+      "parentId": "Danh mục cấp trên",
+      "seoTitle": "Tiêu đề SEO",
+      "seoDescription": "Mô tả SEO",
+      "seoAvatar": "Ảnh đại diện",
+      "slug": "Đường dẫn",
+      "htmlContent": "Nội dung chi tiết",
+      "add":"Thêm mới",
+      "save":"Lưu",
+      "cancel":"Hủy Bỏ"
+    },
+    "configs":{
+      "exam":{
+        "title":"Danh sách đề thi trang chủ"
+      },
+      "category":{
+        "title":"Danh mục trang chủ"
+      }
+    }
   }
 }

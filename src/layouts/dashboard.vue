@@ -171,6 +171,32 @@
                 v-if="isDisplayMenu || isDisplayMenuSp"
                 class="p-navMenu__child"
               >
+                <ul v-if="isAdmin">
+                  <li>
+                    <nuxt-link to="/admin/category">
+                      <div>
+                        <b-icon-card-checklist></b-icon-card-checklist>
+                      </div>
+                      <span>Danh mục đề thi</span>
+                    </nuxt-link>
+                  </li>
+                  <li>
+                    <nuxt-link to="/admin/configs/exam">
+                      <div>
+                        <b-icon-card-checklist></b-icon-card-checklist>
+                      </div>
+                      <span>TOP đề thi</span>
+                    </nuxt-link>
+                  </li>
+                  <li>
+                    <nuxt-link to="/admin/configs/categories">
+                      <div>
+                        <b-icon-card-checklist></b-icon-card-checklist>
+                      </div>
+                      <span>TOP danh mục</span>
+                    </nuxt-link>
+                  </li>
+                </ul>
                 <ul>
                   <li>
                     <nuxt-link to="">
