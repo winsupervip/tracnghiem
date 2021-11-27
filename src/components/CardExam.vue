@@ -1,61 +1,96 @@
 <template>
   <div class="card card-exam">
     <div class="card-exam-thumb">
-      <img :src="data.thumbnail" :alt="data.name" />
+      <img
+        :src="
+          data.image && data.image.startsWith('http')
+            ? data.image
+            : '/images/exam-1.jpg'
+        "
+        :alt="data.title"
+      />
     </div>
     <span
       :class="
-        data.level === 1 ? 'level font-sm base' : 'level font-sm advanced'
+        data.level.id === 1 ? 'level font-sm base' : 'level font-sm advanced'
       "
-      >{{ data.level === 1 ? 'Cơ bản' : 'Nâng cao' }}</span
+      >{{ data.level.name }}</span
     >
     <b-btn class="btn-transparent btn-favorite">
-      <i class="icon-heart"></i>
+      <i v-if="!data.isLiked" class="icon-heart"></i>
+      <b-icon
+        v-else
+        icon="heart-fill"
+        variant="danger"
+        aria-hidden="true"
+      ></b-icon>
     </b-btn>
     <div class="card-exam-teacher">
-      <nuxt-link :to="`/giao-vien/${data.teacherId}`">
+      <nuxt-link :to="`/giao-vien/${data.teacher ? data.teacher.userId : ''}`">
         <img
           class="avatar avatar-lg"
-          :src="data.teacherAvatar"
-          :alt="data.teacherName"
+          :src="
+            data.teacher && data.teacher.avatar
+              ? data.teacher.avatar
+              : 'https://dev.tracnghiem.vn/images/teacher.png'
+          "
+          :alt="
+            data.teacher
+              ? data.teacher.displayName
+                ? data.displayName
+                : data.teacher.firstName + data.teacher.lastName
+              : ''
+          "
         />
-        <span>{{ data.teacherName }}</span>
+        <span>{{
+          data.teacher
+            ? data.teacher.displayName
+              ? data.displayName
+              : data.teacher.firstName + data.teacher.lastName
+            : ''
+        }}</span>
       </nuxt-link>
     </div>
     <div class="card-body">
-      <nuxt-link :to="`/de-thi/${data.id}`" class="exam-title">
+      <nuxt-link :to="`/de-thi/${data.hashId}`" class="exam-title">
         <h4 class="font-md font-bold">
-          {{ data.name }}
+          {{ data.title }}
         </h4>
       </nuxt-link>
       <div class="exam-tag">
-        <nuxt-link v-for="tag in data.tags" :key="tag.id" :to="`tag/${tag.id}`">
-          #{{ tag.name }}
+        <nuxt-link
+          v-for="tag in data.tags"
+          :key="tag.id"
+          :to="`tag/${tag.tagId}`"
+        >
+          #{{ tag.tagName }}
         </nuxt-link>
       </div>
       <div class="d-flex justify-content-between">
         <span class="exam-category text-gray font-sm">
-          {{ data.category }}
+          {{ data.categories.categoryName }}
         </span>
         <div class="exam-rating">
           <i class="icon-star-fill text-yellow mr-1"></i>
           <strong class="font-sm mr-1">{{ data.rating }}</strong>
-          <span class="font-sm text-gray">({{ data.ratingCount }})</span>
+          <span class="font-sm text-gray">({{ data.totalRating }})</span>
         </div>
       </div>
     </div>
     <div class="card-footer">
       <div class="card-footer-item">
         <i class="icon-clock text-primary"></i>
-        <span class="font-sm">{{ data.time }} phút</span>
+        <span v-if="!data.nonExamTime" class="font-sm"
+          >{{ data.examTime }} phút</span
+        >
       </div>
       <div class="card-footer-item">
         <i class="icon-exam text-primary"></i>
-        <span class="font-sm">{{ data.examCount }}+ lượt thi</span>
+        <span class="font-sm">{{ data.numberQuiz }}+ lượt thi</span>
       </div>
       <div class="card-footer-item">
         <i class="icon-question text-primary"></i>
-        <span class="font-sm">{{ data.questionCount }} câu hỏi</span>
+        <span class="font-sm">{{ data.numberQuestionsTest }} câu hỏi</span>
       </div>
     </div>
   </div>
@@ -67,7 +102,7 @@ export default {
   props: {
     data: {
       type: Object,
-      default: () => {},
+      required: true,
     },
   },
 }

@@ -11,6 +11,10 @@ body.dashboard {
   }
 }
 
+.pagination-center {
+  display: flex;
+  justify-content: center;
+}
 .header--dashboardTheme {
   position: absolute;
   display: none;
