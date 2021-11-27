@@ -2,7 +2,11 @@
   <div class="card card-topic">
     <div class="card-thumb">
       <nuxt-link :to="`topic/${data.id}`">
-        <img :src="data.thumbnail" :alt="data.name" />
+        <!-- <img :src="data.thumbnail" :alt="data.name" /> -->
+        <img
+          src="https://dev.tracnghiem.vn/images/topic-2.jpg"
+          :alt="data.name"
+        />
       </nuxt-link>
     </div>
     <div class="card-body">
@@ -11,9 +15,9 @@
       </nuxt-link>
       <div class="d-flex justify-content-between">
         <strong class="text-primary">
-          {{ data.categoryCount }} chuyên mục
+          {{ data.totalChillCategory }} chuyên mục
         </strong>
-        <span>+ {{ data.examCount }} đề thi</span>
+        <span>+ {{ data.totalExam }} đề thi</span>
       </div>
     </div>
   </div>
