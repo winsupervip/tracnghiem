@@ -72,6 +72,8 @@
               v-model="treeValueGender"
               :multiple="false"
               :options="treeDataGenders"
+              :always-open="alwaysOpen"
+              :load-options="loadOptions"
             />
             <b-form-invalid-feedback :state="valid">{{
               errors[0]
@@ -193,19 +195,24 @@ export default defineComponent({
   name: 'FormInfo',
   auth: true,
   components: {},
-  props: {},
-  setup() {
+  props: {
+    info: {
+      type: Object,
+      default: () => {},
+    },
+  },
+  setup(props) {
     const { $loader } = useContext()
     const data = reactive({
-      treeValueWorkAt: null,
-      treeValueGender: null,
-      valueBirthday: '',
-      firstName: '',
-      address: '',
-      phoneNumber: '',
-      lastName: '',
-      displayName: '',
-      bio: '',
+      treeValueWorkAt: props.info.school,
+      treeValueGender: props.info.gender,
+      valueBirthday: props.info.birthday,
+      firstName: props.info.firstName,
+      address: props.info.address,
+      phoneNumber: props.info.phone,
+      lastName: props.info.lastName,
+      displayName: props.info.displayName,
+      bio: props.info.bio,
       isShow: false,
       treeDataGenders: [],
       alwaysOpen: false,
@@ -218,7 +225,6 @@ export default defineComponent({
       $loader().close()
     })
     fetch()
-
     return {
       ...toRefs(data),
     }
