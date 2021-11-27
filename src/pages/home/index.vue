@@ -251,7 +251,13 @@
 
 <script>
 // eslint-disable-next-line import/no-unresolved
-import { defineComponent } from '@vue/composition-api'
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  useFetch,
+  useContext,
+} from '@nuxtjs/composition-api'
 import VueSlickCarousel from 'vue-slick-carousel'
 // eslint-disable-next-line import/no-unresolved
 import SectionSearch from '@/components/SectionSearch'
@@ -264,7 +270,7 @@ import CardExam from '@/components/CardExam'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 // optional style for arrows & dots
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
-
+import apiHome from '@/api/apiHome'
 export default defineComponent({
   components: {
     SectionSearch,
@@ -275,7 +281,30 @@ export default defineComponent({
   },
   layout: 'default',
   auth: false,
-  setup() {},
+  setup() {
+    const { $logger, $loader } = useContext()
+    const data = reactive({
+      dataFeatureTopic: [],
+    })
+    const { fetch } = useFetch(async () => {
+      try {
+        $loader()
+        const { data: result } = await apiHome.getCategories()
+        data.dataFeatureTopic = result.object?.items
+        $logger.info('trung log nek hehe 1', data.dataFeatureTopic)
+        $loader().close()
+      } catch (err) {
+        $loader().close()
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
+    })
+    fetch()
+    return {
+      ...toRefs(data),
+    }
+  },
   data() {
     return {
       isCallSearch: false,
