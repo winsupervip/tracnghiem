@@ -1,8 +1,8 @@
 <template>
   <div class="home-container">
     <SectionSearch
-      :data-prop="dataSearch"
       :is-loading="isCallSearch"
+      :data-categories="dataCategories"
       @onSubmitSearch="onSubmitSearch"
     />
     <section class="section bg-gray">
@@ -19,6 +19,7 @@
             </nuxt-link>
           </div>
           <VueSlickCarousel
+            v-if="dataFeatureTopic && dataFeatureTopic.length > 0"
             class="feature-topic-slider"
             v-bind="configFeatureTopic"
           >
@@ -57,7 +58,42 @@
         <Heading title="Chủ đề nổi bật theo danh mục"></Heading>
         <div class="list-category">
           <b-row>
-            <b-col cols="12" sm="6" md="6" lg="3">
+            <b-col
+              v-for="category in dataConfigCategories"
+              :key="category.id"
+              cols="12"
+              sm="6"
+              md="6"
+              lg="3"
+            >
+              <div class="category-item">
+                <nuxt-link
+                  :to="category.slug ? category.slug : '#'"
+                  class="category-title"
+                >
+                  <h3 class="font-lg font-bold">{{ category.categoryName }}</h3>
+                </nuxt-link>
+                <ul class="list-unstyled category-item-list">
+                  <li v-for="child in category.children" :key="child.id">
+                    <nuxt-link
+                      :to="child.slug ? category.slug : '#'"
+                      class="text-black"
+                    >
+                      <h4 class="font-lmd font-bold">
+                        {{ child.categoryName }}
+                      </h4>
+                    </nuxt-link>
+                    <div class="exam-count d-flex align-items-center">
+                      <i class="icon-exam me-1 font-lg text-primary"></i>
+                      <span class="font-sm"
+                        >{{ child.numberQuiz }}+ lượt thi</span
+                      >
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </b-col>
+            <!-- <b-col cols="12" sm="6" md="6" lg="3">
               <div class="category-item">
                 <nuxt-link to="#" class="category-title">
                   <h3 class="font-lg font-bold">Tốt nghiệp THPT</h3>
@@ -191,52 +227,7 @@
                   </li>
                 </ul>
               </div>
-            </b-col>
-            <b-col cols="12" sm="6" md="6" lg="3">
-              <div class="category-item">
-                <nuxt-link to="#" class="category-title">
-                  <h3 class="font-lg font-bold">Tốt nghiệp THPT</h3>
-                </nuxt-link>
-                <ul class="list-unstyled category-item-list">
-                  <li>
-                    <nuxt-link to="#" class="text-black">
-                      <h4 class="font-lmd font-bold">Toán học</h4>
-                    </nuxt-link>
-                    <div class="exam-count d-flex align-items-center">
-                      <i class="icon-exam me-1 font-lg text-primary"></i>
-                      <span class="font-sm">100+ lượt thi</span>
-                    </div>
-                  </li>
-                  <li>
-                    <nuxt-link to="#" class="text-black">
-                      <h4 class="font-lmd font-bold">Toán học</h4>
-                    </nuxt-link>
-                    <div class="exam-count d-flex align-items-center">
-                      <i class="icon-exam me-1 font-lg text-primary"></i>
-                      <span class="font-sm">100+ lượt thi</span>
-                    </div>
-                  </li>
-                  <li>
-                    <nuxt-link to="#" class="text-black">
-                      <h4 class="font-lmd font-bold">Toán học</h4>
-                    </nuxt-link>
-                    <div class="exam-count d-flex align-items-center">
-                      <i class="icon-exam me-1 font-lg text-primary"></i>
-                      <span class="font-sm">100+ lượt thi</span>
-                    </div>
-                  </li>
-                  <li>
-                    <nuxt-link to="#" class="text-black">
-                      <h4 class="font-lmd font-bold">Toán học</h4>
-                    </nuxt-link>
-                    <div class="exam-count d-flex align-items-center">
-                      <i class="icon-exam me-1 font-lg text-primary"></i>
-                      <span class="font-sm">100+ lượt thi</span>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </b-col>
+            </b-col> -->
           </b-row>
           <div class="text-center my-3">
             <nuxt-link to="/chuyen-muc" class="btn btn-outline-primary">
@@ -285,256 +276,9 @@ export default defineComponent({
     const { $logger, $loader } = useContext()
     const data = reactive({
       dataFeatureTopic: [],
-    })
-    const { fetch } = useFetch(async () => {
-      try {
-        $loader()
-        const { data: result } = await apiHome.getCategories()
-        data.dataFeatureTopic = result.object?.items
-        $logger.info('trung log nek hehe 1', data.dataFeatureTopic)
-        $loader().close()
-      } catch (err) {
-        $loader().close()
-        this.$handleError(err, () => {
-          console.log(err)
-        })
-      }
-    })
-    fetch()
-    return {
-      ...toRefs(data),
-    }
-  },
-  data() {
-    return {
-      isCallSearch: false,
-      dataSearch: {
-        keyword: this.$route.query.keyword || '',
-        exam: this.$route.query.exam || '',
-        category: this.$route.query.category || '',
-        per_page: 10,
-        page: this.$route.query.page || 1,
-      },
-      dataFeatureTopic: [
-        {
-          id: 1,
-          name: 'Đề thi  Tốt nghiệp THPT',
-          categoryCount: '20',
-          examCount: '1.000',
-          thumbnail: '/images/topic-1.jpg',
-        },
-        {
-          id: 2,
-          name: 'Tính cách - MBTI',
-          categoryCount: '10',
-          examCount: '500',
-          thumbnail: '/images/topic-2.jpg',
-        },
-        {
-          id: 3,
-          name: 'Đại học',
-          categoryCount: '200',
-          examCount: '100',
-          thumbnail: '/images/topic-3.jpg',
-        },
-        {
-          id: 4,
-          name: 'Đề thi  Tốt nghiệp THPT',
-          categoryCount: '20',
-          examCount: '1.000',
-          thumbnail: '/images/topic-1.jpg',
-        },
-        {
-          id: 5,
-          name: 'Tính cách - MBTI',
-          categoryCount: '10',
-          examCount: '500',
-          thumbnail: '/images/topic-2.jpg',
-        },
-        {
-          id: 6,
-          name: 'Đại học',
-          categoryCount: '200',
-          examCount: '50',
-          thumbnail: '/images/topic-3.jpg',
-        },
-      ],
-      dataFeatureExam: [
-        {
-          id: 1,
-          name: '69 câu hỏi trắc nghiệm vật lý của cô Minh Thu',
-          thumbnail: '/images/exam-1.jpg',
-          category: 'Thi tốt nghiệp THPT',
-          time: '45',
-          examCount: '100',
-          questionCount: '90',
-          teacherId: 1,
-          teacherAvatar: '/images/teacher.png',
-          teacherName: 'Cô giáo Minh Thu',
-          rating: '4.5',
-          ratingCount: 20,
-          level: 1,
-          tags: [
-            {
-              id: 1,
-              name: 'Vật lý 12',
-            },
-            {
-              id: 2,
-              name: 'Luyện thi đại học',
-            },
-            {
-              id: 3,
-              name: 'Vật lý nâng cao',
-            },
-          ],
-        },
-        {
-          id: 2,
-          name: '69 câu hỏi trắc nghiệm vật lý của cô Thu Minh',
-          thumbnail: '/images/exam-1.jpg',
-          category: 'Thi tốt nghiệp THPT',
-          time: '45',
-          examCount: '100',
-          questionCount: '90',
-          teacherId: 1,
-          teacherAvatar: '/images/teacher.png',
-          teacherName: 'Cô giáo Minh Thu',
-          rating: '4.5',
-          ratingCount: 20,
-          level: 1,
-          tags: [
-            {
-              id: 1,
-              name: 'Vật lý 12',
-            },
-            {
-              id: 2,
-              name: 'Luyện thi đại học',
-            },
-            {
-              id: 3,
-              name: 'Vật lý nâng cao',
-            },
-          ],
-        },
-        {
-          id: 3,
-          name: '69 câu hỏi trắc nghiệm vật lý của cô Minh Thu',
-          thumbnail: '/images/exam-1.jpg',
-          category: 'Thi tốt nghiệp THPT',
-          time: '45',
-          examCount: '100',
-          questionCount: '90',
-          teacherId: 1,
-          teacherAvatar: '/images/teacher.png',
-          teacherName: 'Cô giáo Minh Thu',
-          rating: '4.5',
-          ratingCount: 20,
-          level: 1,
-          tags: [
-            {
-              id: 1,
-              name: 'Vật lý 12',
-            },
-            {
-              id: 2,
-              name: 'Luyện thi đại học',
-            },
-            {
-              id: 3,
-              name: 'Vật lý nâng cao',
-            },
-          ],
-        },
-        {
-          id: 4,
-          name: '69 câu hỏi trắc nghiệm vật lý của cô Minh Thu',
-          thumbnail: '/images/exam-1.jpg',
-          category: 'Thi tốt nghiệp THPT',
-          time: '45',
-          examCount: '100',
-          questionCount: '90',
-          teacherId: 1,
-          teacherAvatar: '/images/teacher.png',
-          teacherName: 'Cô giáo Minh Thu',
-          rating: '4.5',
-          ratingCount: 20,
-          level: 2,
-          tags: [
-            {
-              id: 1,
-              name: 'Vật lý 12',
-            },
-            {
-              id: 2,
-              name: 'Luyện thi đại học',
-            },
-            {
-              id: 3,
-              name: 'Vật lý nâng cao',
-            },
-          ],
-        },
-        {
-          id: 5,
-          name: '69 câu hỏi trắc nghiệm vật lý của cô Minh Thu',
-          thumbnail: '/images/exam-1.jpg',
-          category: 'Thi tốt nghiệp THPT',
-          time: '45',
-          examCount: '100',
-          questionCount: '90',
-          teacherId: 1,
-          teacherAvatar: '/images/teacher.png',
-          teacherName: 'Cô giáo Minh Thu',
-          rating: '4.5',
-          ratingCount: 20,
-          level: 2,
-          tags: [
-            {
-              id: 1,
-              name: 'Vật lý 12',
-            },
-            {
-              id: 2,
-              name: 'Luyện thi đại học',
-            },
-            {
-              id: 3,
-              name: 'Vật lý nâng cao',
-            },
-          ],
-        },
-        {
-          id: 6,
-          name: '69 câu hỏi trắc nghiệm vật lý của cô Minh Thu',
-          thumbnail: '/images/exam-1.jpg',
-          category: 'Thi tốt nghiệp THPT',
-          time: '45',
-          examCount: '100',
-          questionCount: '90',
-          teacherId: 1,
-          teacherAvatar: '/images/teacher.png',
-          teacherName: 'Cô giáo Minh Thu',
-          rating: '4.5',
-          ratingCount: 20,
-          level: 1,
-          tags: [
-            {
-              id: 1,
-              name: 'Vật lý 12',
-            },
-            {
-              id: 2,
-              name: 'Luyện thi đại học',
-            },
-            {
-              id: 3,
-              name: 'Vật lý nâng cao',
-            },
-          ],
-        },
-      ],
+      dataFeatureExam: [],
+      dataConfigCategories: [],
+      dataCategories: [],
       configFeatureTopic: {
         arrows: true,
         dots: false,
@@ -565,11 +309,242 @@ export default defineComponent({
           },
         ],
       },
+    })
+    const { fetch } = useFetch(async () => {
+      try {
+        $loader()
+        const { data: result } = await apiHome.getCategories()
+        const { data: exam } = await apiHome.getExam({
+          type: 'highlight',
+          pageSize: 6,
+        })
+        const { data: configCategories } = await apiHome.getConfigCategories({
+          type: 'highlight',
+          pageSize: 4,
+          pageSizeChild: 4,
+        })
+        const { data: resultCategories } = await apiHome.categoriesAtHomePage({
+          parent: 0,
+          recursive: 0,
+        })
+        data.dataFeatureExam = exam.object?.items
+        data.dataFeatureTopic = result.object?.items
+        data.dataConfigCategories = configCategories.object.items
+        data.dataCategories = resultCategories.object.items
+        $logger.info('trung log nek hehe 1', data.dataFeatureExam)
+        $loader().close()
+      } catch (err) {
+        $loader().close()
+        // this.$handleError(err, () => {
+        //   console.log(err)
+        // })
+      }
+    })
+    fetch()
+    return {
+      ...toRefs(data),
+    }
+  },
+  data() {
+    return {
+      isCallSearch: false,
+      dataSearch: {
+        keyword: this.$route.query.keyword || '',
+        exam: this.$route.query.exam || '',
+        category: this.$route.query.category || '',
+        per_page: 10,
+        page: this.$route.query.page || 1,
+      },
+      // dataFeatureExam: [
+      //   {
+      //     id: 1,
+      //     name: '69 câu hỏi trắc nghiệm vật lý của cô Minh Thu',
+      //     thumbnail: '/images/exam-1.jpg',
+      //     category: 'Thi tốt nghiệp THPT',
+      //     time: '45',
+      //     examCount: '100',
+      //     questionCount: '90',
+      //     teacherId: 1,
+      //     teacherAvatar: '/images/teacher.png',
+      //     teacherName: 'Cô giáo Minh Thu',
+      //     rating: '4.5',
+      //     ratingCount: 20,
+      //     level: 1,
+      //     tags: [
+      //       {
+      //         id: 1,
+      //         name: 'Vật lý 12',
+      //       },
+      //       {
+      //         id: 2,
+      //         name: 'Luyện thi đại học',
+      //       },
+      //       {
+      //         id: 3,
+      //         name: 'Vật lý nâng cao',
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     id: 2,
+      //     name: '69 câu hỏi trắc nghiệm vật lý của cô Thu Minh',
+      //     thumbnail: '/images/exam-1.jpg',
+      //     category: 'Thi tốt nghiệp THPT',
+      //     time: '45',
+      //     examCount: '100',
+      //     questionCount: '90',
+      //     teacherId: 1,
+      //     teacherAvatar: '/images/teacher.png',
+      //     teacherName: 'Cô giáo Minh Thu',
+      //     rating: '4.5',
+      //     ratingCount: 20,
+      //     level: 1,
+      //     tags: [
+      //       {
+      //         id: 1,
+      //         name: 'Vật lý 12',
+      //       },
+      //       {
+      //         id: 2,
+      //         name: 'Luyện thi đại học',
+      //       },
+      //       {
+      //         id: 3,
+      //         name: 'Vật lý nâng cao',
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     id: 3,
+      //     name: '69 câu hỏi trắc nghiệm vật lý của cô Minh Thu',
+      //     thumbnail: '/images/exam-1.jpg',
+      //     category: 'Thi tốt nghiệp THPT',
+      //     time: '45',
+      //     examCount: '100',
+      //     questionCount: '90',
+      //     teacherId: 1,
+      //     teacherAvatar: '/images/teacher.png',
+      //     teacherName: 'Cô giáo Minh Thu',
+      //     rating: '4.5',
+      //     ratingCount: 20,
+      //     level: 1,
+      //     tags: [
+      //       {
+      //         id: 1,
+      //         name: 'Vật lý 12',
+      //       },
+      //       {
+      //         id: 2,
+      //         name: 'Luyện thi đại học',
+      //       },
+      //       {
+      //         id: 3,
+      //         name: 'Vật lý nâng cao',
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     id: 4,
+      //     name: '69 câu hỏi trắc nghiệm vật lý của cô Minh Thu',
+      //     thumbnail: '/images/exam-1.jpg',
+      //     category: 'Thi tốt nghiệp THPT',
+      //     time: '45',
+      //     examCount: '100',
+      //     questionCount: '90',
+      //     teacherId: 1,
+      //     teacherAvatar: '/images/teacher.png',
+      //     teacherName: 'Cô giáo Minh Thu',
+      //     rating: '4.5',
+      //     ratingCount: 20,
+      //     level: 2,
+      //     tags: [
+      //       {
+      //         id: 1,
+      //         name: 'Vật lý 12',
+      //       },
+      //       {
+      //         id: 2,
+      //         name: 'Luyện thi đại học',
+      //       },
+      //       {
+      //         id: 3,
+      //         name: 'Vật lý nâng cao',
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     id: 5,
+      //     name: '69 câu hỏi trắc nghiệm vật lý của cô Minh Thu',
+      //     thumbnail: '/images/exam-1.jpg',
+      //     category: 'Thi tốt nghiệp THPT',
+      //     time: '45',
+      //     examCount: '100',
+      //     questionCount: '90',
+      //     teacherId: 1,
+      //     teacherAvatar: '/images/teacher.png',
+      //     teacherName: 'Cô giáo Minh Thu',
+      //     rating: '4.5',
+      //     ratingCount: 20,
+      //     level: 2,
+      //     tags: [
+      //       {
+      //         id: 1,
+      //         name: 'Vật lý 12',
+      //       },
+      //       {
+      //         id: 2,
+      //         name: 'Luyện thi đại học',
+      //       },
+      //       {
+      //         id: 3,
+      //         name: 'Vật lý nâng cao',
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     id: 6,
+      //     name: '69 câu hỏi trắc nghiệm vật lý của cô Minh Thu',
+      //     thumbnail: '/images/exam-1.jpg',
+      //     category: 'Thi tốt nghiệp THPT',
+      //     time: '45',
+      //     examCount: '100',
+      //     questionCount: '90',
+      //     teacherId: 1,
+      //     teacherAvatar: '/images/teacher.png',
+      //     teacherName: 'Cô giáo Minh Thu',
+      //     rating: '4.5',
+      //     ratingCount: 20,
+      //     level: 1,
+      //     tags: [
+      //       {
+      //         id: 1,
+      //         name: 'Vật lý 12',
+      //       },
+      //       {
+      //         id: 2,
+      //         name: 'Luyện thi đại học',
+      //       },
+      //       {
+      //         id: 3,
+      //         name: 'Vật lý nâng cao',
+      //       },
+      //     ],
+      //   },
+      // ],
     }
   },
   methods: {
-    onSubmitSearch() {
-      this.isCallSearch = true
+    onSubmitSearch(value) {
+      console.log(value)
+      let url = 'de-thi?'
+      if (value.keyword !== '') {
+        url += `keyword=${value.keyword}&`
+      }
+
+      if (value.category !== '') {
+        url += `category=${value.category}`
+      }
+      this.$router.push(url)
     },
   },
 })

@@ -92,4 +92,38 @@ export default {
     }
     return global.$http.get(url)
   },
+  searchExam: (urlQuery) => {
+    let url = '/api/v1/Exam/get-user-exam-list-public?'
+    if (urlQuery.page) {
+      url += `Page=${urlQuery.page}&`
+    }
+    if (urlQuery.page) {
+      url += `PageSize=${urlQuery.pageSize}&`
+    }
+    if (urlQuery.Keyword) {
+      url += `Keyword=${urlQuery.Keyword}&`
+    }
+    if (urlQuery.levels) {
+      url += `levels=${urlQuery.levels}&`
+    }
+    if (urlQuery.ratings) {
+      url += `ratings=${urlQuery.ratings}&`
+    }
+    if (urlQuery.amountquestionleft) {
+      url += `amountquestionleft=${urlQuery.amountquestionleft}&`
+    }
+    if (urlQuery.amountquestionright) {
+      url += `amountquestionright=${urlQuery.amountquestionright}&`
+    }
+    if (urlQuery.amountexamtimeleft) {
+      url += `amountexamtimeleft=${urlQuery.amountexamtimeleft}&`
+    }
+    if (urlQuery.amountexamtimeright) {
+      url += `amountexamtimeright=${urlQuery.amountexamtimeright}&`
+    }
+    if (urlQuery.orderBy) {
+      url += `orderBy=${urlQuery.orderBy}`
+    }
+    return global.$http.get(url)
+  },
 }

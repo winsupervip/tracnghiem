@@ -2,9 +2,12 @@
   <div class="card card-topic">
     <div class="card-thumb">
       <nuxt-link :to="`topic/${data.id}`">
-        <!-- <img :src="data.thumbnail" :alt="data.name" /> -->
         <img
-          src="https://dev.tracnghiem.vn/images/topic-2.jpg"
+          :src="
+            data.image && data.image.startsWith('http')
+              ? data.image
+              : 'https://dev.tracnghiem.vn/images/topic-2.jpg'
+          "
           :alt="data.name"
         />
       </nuxt-link>
