@@ -26,10 +26,18 @@
           >
             <button
               type="button"
-              class="btn btn-primary"
+              class="btn btn-primary me-2"
               @click="showModal('modal-add')"
             >
               <b-icon-plus></b-icon-plus> {{ $t('admin.category.add') }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              @click="clearAll"
+            >
+              <b-icon-trash></b-icon-trash>
+              {{ $t('admin.configs.category.clear') }}
             </button>
           </div>
         </b-form-row>
@@ -40,7 +48,14 @@
         <EmptyData />
       </div>
       <div v-else>
-        <b-table striped hover :items="items" :fields="fields"> </b-table>
+        <b-table striped hover :items="items" :fields="fields">
+          <template #cell(actions)="data">
+            <b-button @click="deleteCategory(data.item.id)">
+              <b-icon-trash></b-icon-trash>
+              {{ $t('admin.category.delete') }}
+            </b-button>
+          </template>
+        </b-table>
         <div class="mt-2">
           <b-pagination
             v-if="total > urlQuery.pageSize"
@@ -53,6 +68,14 @@
         </div>
       </div>
     </b-card>
+    <b-modal
+      id="modal-add"
+      size="xl"
+      hide-footer
+      :title="$t('admin.category.add')"
+    >
+      <CategoryHomeForm @submit="onSubmit" />
+    </b-modal>
   </div>
 </template>
 <script>
@@ -67,9 +90,10 @@ import {
 
 import adminApi from '@/api/adminApi'
 import EmptyData from '@/components/EmptyData.vue'
+import CategoryHomeForm from '~/components/Admin/Category/CategoryHomeForm.vue'
 
 export default defineComponent({
-  components: { EmptyData },
+  components: { EmptyData, CategoryHomeForm },
   layout: 'dashboard',
   auth: true,
   middleware: ['isAdmin'],
@@ -119,7 +143,12 @@ export default defineComponent({
           key: 'sortOrder',
           label: 'Thứ tự',
         },
+        {
+          key: 'actions',
+          label: 'Chức năng',
+        },
       ],
+      dataForm: {},
     })
     const { fetch } = useFetch(async () => {
       $logger.info('Danh sách category')
@@ -149,6 +178,39 @@ export default defineComponent({
       search,
     }
   },
-  methods: {},
+  methods: {
+    showModal(id) {
+      this.$bvModal.show(id)
+    },
+    onSubmit() {
+      this.$bvModal.hide('modal-add')
+      this.search()
+    },
+    async deleteCategory(id) {
+      try {
+        const { data } = await adminApi.deleteConfigCategory(id)
+        this.$handleError(data, () => {
+          this.search()
+        })
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
+    },
+    async clearAll() {
+      if (!window.confirm('Bạn thực sự muốn xóa tất cả?')) return
+      try {
+        const { data } = await adminApi.clearAllConfigCategory('highlight')
+        this.$handleError(data, () => {
+          this.search()
+        })
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
+    },
+  },
 })
 </script>
