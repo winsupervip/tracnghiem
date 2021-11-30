@@ -150,20 +150,24 @@
               value-field="value"
               text-field="text"
             ></b-form-checkbox-group> -->
-            <div class="custom-ranger mt-5 mb-3">
-              <VueRange
-                v-model="rangeNumberQuestion"
-                :min="min"
-                :max="maxQuestion"
-                :bg-style="bgStyle"
-                :tooltip-style="tooltipStyle"
-                :process-style="processStyle"
-                :tooltip-merge="tooltipMerge"
-                :enable-cross="enableCross"
-                :formatter="formatterNumberQuestion"
-                @drag-end="changeOptionSeach"
-                @on-keypress="false"
-              ></VueRange>
+            <div class="custom-ranger px-1 my-3">
+              <div
+                class="
+                  ranger-selected-value
+                  d-flex
+                  justify-content-center
+                  font-smd
+                "
+              >
+                <span>{{ valueNumberQuestion[0] }} câu</span>
+                <span class="mx-2">~</span>
+                <span>{{ valueNumberQuestion[1] }} câu</span>
+              </div>
+              <VueSlider
+                ref="slider"
+                v-model="valueNumberQuestion"
+                v-bind="optionsNumberQuestion"
+              />
             </div>
           </b-collapse>
         </div>
@@ -187,20 +191,24 @@
               value-field="value"
               text-field="text"
             ></b-form-checkbox-group> -->
-            <div class="custom-ranger mt-5 mb-3">
-              <VueRange
-                v-model="rangeTimeExam"
-                :min="min"
-                :max="maxTime"
-                :bg-style="bgStyle"
-                :tooltip-style="tooltipStyle"
-                :process-style="processStyle"
-                :tooltip-merge="tooltipMerge"
-                :enable-cross="enableCross"
-                :formatter="formatterTime"
-                @drag-end="changeOptionSeach"
-                @on-keypress="false"
-              ></VueRange>
+            <div class="custom-ranger px-1 my-3">
+              <div
+                class="
+                  ranger-selected-value
+                  d-flex
+                  justify-content-center
+                  font-smd
+                "
+              >
+                <span>{{ valueTimeExam[0] }} phút</span>
+                <span class="mx-2">~</span>
+                <span>{{ valueTimeExam[1] }} phút</span>
+              </div>
+              <VueSlider
+                ref="slider"
+                v-model="valueTimeExam"
+                v-bind="optionsTimeExam"
+              />
             </div>
           </b-collapse>
         </div>
@@ -214,12 +222,32 @@
 
 <script>
 import apiHome from '@/api/apiHome'
-import 'vue-range-component/dist/vue-range-slider.css'
+import 'vue-slider-component/theme/antd.css'
 
 export default {
   name: 'SidebarExam',
   data() {
     return {
+      valueTimeExam: [0, 120],
+      optionsTimeExam: {
+        dotSize: 16,
+        width: 'auto',
+        height: 6,
+        min: 0,
+        max: 120,
+        minRange: 0,
+        maxRange: 120,
+      },
+      valueNumberQuestion: [0, 500],
+      optionsNumberQuestion: {
+        dotSize: 16,
+        width: 'auto',
+        height: 6,
+        min: 0,
+        max: 500,
+        minRange: 0,
+        maxRange: 500,
+      },
       inputKeyword: '',
       visibleSuggestions: false,
       currentHistoryIndex: 0,
@@ -324,27 +352,27 @@ export default {
       return value.label
     },
   },
-  created() {
-    this.min = 0
-    this.maxTime = 120
-    this.maxQuestion = 500
-    this.bgStyle = {
-      backgroundColor: '#fff',
-      boxShadow: 'inset 0.5px 0.5px 3px 1px rgba(0,0,0,.36)',
-    }
-    this.tooltipStyle = {
-      backgroundColor: '#1c3988',
-      borderColor: '#1c3988',
-    }
-    this.processStyle = {
-      backgroundColor: '#1c3988',
-    }
-    this.enableCross = false
-    this.tooltipMerge = false
-    this.formatterTime = (rangeTimeExam) => `${rangeTimeExam} phút`
-    this.formatterNumberQuestion = (rangeNumberQuestion) =>
-      `${rangeNumberQuestion} câu`
-  },
+  // created() {
+  //   this.min = 0
+  //   this.maxTime = 120
+  //   this.maxQuestion = 500
+  //   this.bgStyle = {
+  //     backgroundColor: '#fff',
+  //     boxShadow: 'inset 0.5px 0.5px 3px 1px rgba(0,0,0,.36)',
+  //   }
+  //   this.tooltipStyle = {
+  //     backgroundColor: '#1c3988',
+  //     borderColor: '#1c3988',
+  //   }
+  //   this.processStyle = {
+  //     backgroundColor: '#1c3988',
+  //   }
+  //   this.enableCross = false
+  //   this.tooltipMerge = false
+  //   this.formatterTime = (rangeTimeExam) => `${rangeTimeExam} phút`
+  //   this.formatterNumberQuestion = (rangeNumberQuestion) =>
+  //     `${rangeNumberQuestion} câu`
+  // },
   mounted() {
     this.fetchCategories(0)
   },

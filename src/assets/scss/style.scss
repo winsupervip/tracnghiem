@@ -744,6 +744,10 @@ img {
   .custom-control {
     .custom-control-label {
       width: 100%;
+      .icon-star-fill {
+        font-size: 1.125rem;
+        margin-right: 0.25rem;
+      }
     }
   }
 }
@@ -1656,4 +1660,23 @@ img {
       text-align: right;
     }
   }
+}
+
+.vue-slider-process {
+  background-color: $primary;
+}
+
+.vue-slider-dot-handle {
+  border-color: $primary;
+  &:hover {
+    border-color: $secondary;
+  }
+}
+
+.vue-slider:hover .vue-slider-process {
+  background-color: $secondary;
+}
+
+.vue-slider:hover .vue-slider-dot-handle {
+  border-color: $secondary;
 }
