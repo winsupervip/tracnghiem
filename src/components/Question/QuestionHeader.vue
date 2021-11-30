@@ -33,7 +33,7 @@
         <b-dropdown-item :to="'/users/questions/edit/' + question.hashId">
           {{ $t('update') }}
         </b-dropdown-item>
-        <b-dropdown-item @click="copyQuestion(question)">{{
+        <b-dropdown-item :to="'/users/questions/copy/' + question.hashId">{{
           $t('copy')
         }}</b-dropdown-item>
         <b-dropdown-item href="#" @click="updateState(question)">{{
@@ -73,61 +73,6 @@ export default defineComponent({
     const updateState = async (question) => {
       await QuestionApi.updateStateQuestion(question.hashId)
     }
-    const copyQuestion = async (question) => {
-      if (question.itemType === 'question') {
-        const result = await QuestionApi.getUserQuestionDetails(question.hashId)
-        const questionData = result.data.object
-
-        const singleQuestion = {
-          question: {
-            hashId: '',
-            title: questionData.question.title,
-            questionTypeId: questionData.question.questionTypeId,
-            questionContent: questionData.question.questionContent,
-            explainationIfCorrect: questionData.question.explainationIfCorrect,
-            explainationIfIncorrect:
-              questionData.question.explainationIfIncorrect,
-            statusId: questionData.question.statusId,
-            levelId: questionData.question.levelId,
-            plainText: questionData.question.plainText,
-            seoTitle: questionData.question.seoTitle,
-            seoDescription: questionData.question.seoDescription,
-            tags: questionData.question.tags,
-            categories: questionData.categoryItems.map((x) => {
-              return x.categoryId
-            }),
-            questionGroupId: questionData.question.questionGroupId,
-            groupOrder: questionData.question.groupOrder,
-          },
-          answers: question.answers,
-        }
-
-        $logger.info(singleQuestion)
-        // const result2 = await QuestionApi.createQuestion(singleQuestion)
-        // $logger.info('copied question', result2)
-      }
-      if (question.itemType === 'group') {
-        const result = await QuestionApi.getUserQuestionGroupDetails(
-          question.hashId
-        )
-        $logger.info('create group', result)
-        const questionData = result.data.object
-        questionData.questionGroup.hashId = ''
-        questionData.questions.map((question) => {
-          question.hashId = ''
-          question.answers.map((x) => (x.hashId = ''))
-          delete question.categoryItems
-          return question
-        })
-
-        const GroupQuestion = {
-          ...questionData,
-        }
-        $logger.info('create group', GroupQuestion)
-        // const result2 = await QuestionApi.createQuestion(GroupQuestion)
-        // $logger.info('copied GroupQuestion', result2)
-      }
-    }
 
     const DeletedQuestion = async (question) => {
       if (question.itemType === 'group') {
@@ -140,7 +85,7 @@ export default defineComponent({
       }
       props.isDeleteQuestion(question.hashId)
     }
-    return { updateState, copyQuestion, DeletedQuestion }
+    return { updateState, DeletedQuestion }
   },
 })
 </script>

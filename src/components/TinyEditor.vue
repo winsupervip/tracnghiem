@@ -68,7 +68,7 @@ export default {
     this.init()
   },
   beforeDestroy() {
-    this.editor.destroy()
+    if (this.editor) this.editor.destroy()
     document.removeEventListener('focusin', this.onFocusin)
   },
   methods: {

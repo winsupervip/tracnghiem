@@ -19,6 +19,9 @@ export default (context, inject) => {
       // success
       console.log(error)
       app.$toast.success(app.i18n.t('errors.' + error.message)).goAway(1500)
+      if (typeof callback === 'function') {
+        callback()
+      }
     }
   }
   // Inject $handleError(error) in Vue, context and store.
