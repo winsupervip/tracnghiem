@@ -162,6 +162,7 @@
                 :enable-cross="enableCross"
                 :formatter="formatterNumberQuestion"
                 @drag-end="changeOptionSeach"
+                @on-keypress="false"
               ></VueRange>
             </div>
           </b-collapse>
@@ -198,6 +199,7 @@
                 :enable-cross="enableCross"
                 :formatter="formatterTime"
                 @drag-end="changeOptionSeach"
+                @on-keypress="false"
               ></VueRange>
             </div>
           </b-collapse>
@@ -372,9 +374,11 @@ export default {
     },
     nextToOtherCategory(value) {
       this.categoriesHistory.push(value)
+      this.selectCategories = []
       this.fetchCategories(value.id)
     },
     backToOldCategories() {
+      this.selectCategories = []
       const removeHistory = this.categoriesHistory.length - 1
       this.categoriesHistory.splice(removeHistory, 1)
       console.log('back', this.categoriesHistory)
