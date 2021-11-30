@@ -8,6 +8,10 @@ export default {
     global.$http.get(
       `/api/v1/Catalog/config/categories?type=${data.type}&limit=${data.pageSize}&limitChild=${data.pageSizeChild}`
     ),
+  categoriesAtHomePage: (data) =>
+    global.$http.get(
+      `/api/v1/Catalog/get-categories?parent=${data.parent}&recursive=${data.recursive}`
+    ),
   getCategoriesExamPage: (data) =>
     global.$http.get(
       `/api/v1/Catalog/get-categories?parent=${data.parent}&recursive=0`

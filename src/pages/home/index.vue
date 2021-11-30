@@ -331,15 +331,17 @@ export default defineComponent({
         data.dataFeatureTopic = result.object?.items
         data.dataConfigCategories = configCategories.object.items
         data.dataCategories = resultCategories.object.items
-        $logger.info('trung log nek hehe 1', data.dataFeatureExam)
+        $logger.info('trung log nek hehe 1', result)
         $loader().close()
       } catch (err) {
+        console.log(err)
         $loader().close()
         // this.$handleError(err, () => {
         //   console.log(err)
         // })
       }
     })
+    $logger.info('trung log nek hehe 1')
     fetch()
     return {
       ...toRefs(data),
