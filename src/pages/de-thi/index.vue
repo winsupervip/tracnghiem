@@ -5,7 +5,7 @@
       <b-container>
         <b-row>
           <b-col cols="12" sm="12" md="4" lg="3" class="filter-sidebar">
-            <SidebarExam />
+            <SidebarExam @seachOption="seachOption" />
           </b-col>
           <b-col
             cols="12"
@@ -111,7 +111,7 @@ import HeadingPage from '@/components/HeadingPage'
 import SidebarExam from '@/components/SidebarExam'
 // eslint-disable-next-line import/no-unresolved
 import CardExam from '@/components/CardExam'
-import examApi from '@/api/examApi'
+import apiHome from '@/api/apiHome'
 export default defineComponent({
   components: {
     HeadingPage,
@@ -166,7 +166,7 @@ export default defineComponent({
     const { fetch } = useFetch(async () => {
       try {
         $loader()
-        const { data: result } = await examApi.searchExam(data.queryUrl)
+        const { data: result } = await apiHome.searchExam(data.queryUrl)
         data.dataExam = result.object.items
         data.rows = result.object.total
         if (data.rows > 0) {
@@ -188,6 +188,12 @@ export default defineComponent({
       }
     })
     fetch()
+    const seachOption = (value) => {
+      data.queryUrl.categories = value.categories
+      data.queryUrl.levels = value.levels
+      data.queryUrl.ratings = value.ratings
+      fetch()
+    }
     watch(
       () => data.queryUrl.page,
       () => {
@@ -202,6 +208,7 @@ export default defineComponent({
     )
     return {
       ...toRefs(data),
+      seachOption,
     }
   },
 })

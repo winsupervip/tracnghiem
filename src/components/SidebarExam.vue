@@ -48,11 +48,35 @@
           </strong>
           <b-collapse v-model="showFilterGroup1" class="filter-group-body">
             <b-form-checkbox-group
-              v-model="selectedOptions1"
-              :options="options1"
-              value-field="value"
-              text-field="text"
-            ></b-form-checkbox-group>
+              id="checkbox-group-2"
+              v-model="selectCategories"
+              @change="changeOptionSeach"
+            >
+              <p v-if="currentCategoryLabel !== ''">
+                <b-icon
+                  icon="chevron-left"
+                  @click="backToOldCategories()"
+                ></b-icon>
+                <strong>{{ currentCategoryLabel }}</strong>
+              </p>
+              <div
+                v-for="category in categories"
+                :key="category.id"
+                class="d-flex justify-content-between"
+                :value="category.id"
+              >
+                <b-form-checkbox :value="category.id">{{
+                  category.label
+                }}</b-form-checkbox>
+                <b-icon
+                  icon="chevron-right"
+                  @click="nextToOtherCategory(category)"
+                ></b-icon>
+              </div>
+            </b-form-checkbox-group>
+            <b-alert v-if="categories.length === 0" show variant="warning"
+              >Chưa có danh mục con</b-alert
+            >
           </b-collapse>
         </div>
         <hr class="line-divide" />
@@ -70,10 +94,11 @@
           </strong>
           <b-collapse v-model="showFilterGroup2" class="filter-group-body">
             <b-form-checkbox-group
-              v-model="selectedOptions2"
+              v-model="selectLevels"
               :options="options2"
               value-field="value"
               text-field="text"
+              @change="changeOptionSeach"
             ></b-form-checkbox-group>
           </b-collapse>
         </div>
@@ -91,7 +116,10 @@
             <i class="icon-caret-down"></i>
           </strong>
           <b-collapse v-model="showFilterGroup3" class="filter-group-body">
-            <b-form-checkbox-group v-model="selectedOptions3">
+            <b-form-checkbox-group
+              v-model="selecTratings"
+              @change="changeOptionSeach"
+            >
               <b-form-checkbox
                 v-for="item in options3"
                 :key="item.value"
@@ -155,12 +183,25 @@
 </template>
 
 <script>
+import apiHome from '@/api/apiHome'
 export default {
   name: 'SidebarExam',
   data() {
     return {
       inputKeyword: '',
       visibleSuggestions: false,
+      currentHistoryIndex: 0,
+      categories: [],
+      categoriesHistory: [
+        {
+          id: 0,
+          label: '',
+        },
+        {
+          id: 0,
+          label: '',
+        },
+      ],
       listSuggestions: [
         {
           text: 'Tiếng Anh',
@@ -181,7 +222,7 @@ export default {
       ],
       visibleFilter: false,
       showFilterGroup1: true,
-      selectedOptions1: [],
+      selectCategories: [],
       options1: [
         { text: 'Thi tốt nghiệp THPT', value: 1 },
         { text: 'Trắc nghiệm giáo dục K12', value: 2 },
@@ -191,7 +232,7 @@ export default {
         { text: 'Trắc nghiệm tính cách', value: 6 },
       ],
       showFilterGroup2: true,
-      selectedOptions2: [],
+      selectLevels: [],
       options2: [
         { text: 'Cơ bản', value: 1 },
         { text: 'Trung bình', value: 2 },
@@ -199,7 +240,7 @@ export default {
         { text: 'Khó', value: 4 },
       ],
       showFilterGroup3: true,
-      selectedOptions3: [],
+      selecTratings: [],
       options3: [
         {
           text: '<i class="icon-star-fill"></i><i class="icon-star-fill"></i><i class="icon-star-fill"></i><i class="icon-star-fill"></i><i class="icon-star-fill"></i>',
@@ -242,11 +283,21 @@ export default {
       ],
     }
   },
+  computed: {
+    currentCategoryLabel() {
+      const l = this.categoriesHistory.length
+      const value = this.categoriesHistory[l - 1]
+      return value.label
+    },
+  },
+  mounted() {
+    this.fetchCategories(0)
+  },
   methods: {
     clearFilter() {
-      this.selectedOptions1 = []
-      this.selectedOptions2 = []
-      this.selectedOptions3 = []
+      this.selectCategories = []
+      this.selectLevels = []
+      this.selecTratings = []
       this.selectedOptions4 = []
       this.selectedOptions5 = []
     },
@@ -259,6 +310,31 @@ export default {
     selectSuggestion(value) {
       this.inputKeyword = value
       this.$logger.debug(value)
+    },
+    async fetchCategories(id) {
+      const { data: result } = await apiHome.getCategoriesExamPage({
+        parent: id,
+      })
+      this.categories = result?.object?.items
+    },
+    nextToOtherCategory(value) {
+      this.categoriesHistory.push(value)
+      this.fetchCategories(value.id)
+    },
+    backToOldCategories() {
+      const removeHistory = this.categoriesHistory.length - 1
+      this.categoriesHistory.splice(removeHistory, 1)
+      console.log('back', this.categoriesHistory)
+      const id = this.categoriesHistory[removeHistory - 2].id
+      this.fetchCategories(id)
+    },
+    changeOptionSeach() {
+      const data = {
+        categories: this.selectCategories,
+        levels: this.selectCategories,
+        ratings: this.selecTratings,
+      }
+      this.$emit('seachOption', data)
     },
   },
 }
