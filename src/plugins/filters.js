@@ -19,6 +19,8 @@ Vue.filter('slugify', function (value, separator = '-') {
   if (!value) return ''
   return value
     .toString()
+    .replace('đ', 'd')
+    .replace('Đ', 'D')
     .normalize('NFD') // split an accented letter in the base letter and the acent
     .replace(/[\u0300-\u036F]/g, '') // remove all previously split accents
     .toLowerCase()

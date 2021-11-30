@@ -38,17 +38,17 @@ export default {
         url += `ratings=${item}&`
       })
     }
-    if (urlQuery.amountquestionleft) {
-      url += `amountquestionleft=${urlQuery.amountquestionleft}&`
+    if (urlQuery.amountQuestionLeft) {
+      url += `amountquestionleft=${urlQuery.amountQuestionLeft}&`
     }
-    if (urlQuery.amountquestionright) {
-      url += `amountquestionright=${urlQuery.amountquestionright}&`
+    if (urlQuery.amountQuestionRight) {
+      url += `amountquestionright=${urlQuery.amountQuestionRight}&`
     }
-    if (urlQuery.amountexamtimeleft) {
-      url += `amountexamtimeleft=${urlQuery.amountexamtimeleft}&`
+    if (urlQuery.amountExamTimeLeft) {
+      url += `amountexamtimeleft=${urlQuery.amountExamTimeLeft}&`
     }
-    if (urlQuery.amountexamtimeright) {
-      url += `amountexamtimeright=${urlQuery.amountexamtimeright}&`
+    if (urlQuery.amountExamTimeRight) {
+      url += `amountexamtimeright=${urlQuery.amountExamTimeRight}&`
     }
     if (urlQuery.orderBy) {
       url += `orderBy=${urlQuery.orderBy}`

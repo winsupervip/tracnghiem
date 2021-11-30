@@ -144,12 +144,26 @@
             <i class="icon-caret-down"></i>
           </strong>
           <b-collapse v-model="showFilterGroup4" class="filter-group-body">
-            <b-form-checkbox-group
+            <!-- <b-form-checkbox-group
               v-model="selectedOptions4"
               :options="options4"
               value-field="value"
               text-field="text"
-            ></b-form-checkbox-group>
+            ></b-form-checkbox-group> -->
+            <div class="custom-ranger mt-5 mb-3">
+              <VueRange
+                v-model="rangeNumberQuestion"
+                :min="min"
+                :max="maxQuestion"
+                :bg-style="bgStyle"
+                :tooltip-style="tooltipStyle"
+                :process-style="processStyle"
+                :tooltip-merge="tooltipMerge"
+                :enable-cross="enableCross"
+                :formatter="formatterNumberQuestion"
+                @drag-end="changeOptionSeach"
+              ></VueRange>
+            </div>
           </b-collapse>
         </div>
         <hr class="line-divide" />
@@ -166,12 +180,26 @@
             <i class="icon-caret-down"></i>
           </strong>
           <b-collapse v-model="showFilterGroup5" class="filter-group-body">
-            <b-form-checkbox-group
+            <!-- <b-form-checkbox-group
               v-model="selectedOptions5"
               :options="options5"
               value-field="value"
               text-field="text"
-            ></b-form-checkbox-group>
+            ></b-form-checkbox-group> -->
+            <div class="custom-ranger mt-5 mb-3">
+              <VueRange
+                v-model="rangeTimeExam"
+                :min="min"
+                :max="maxTime"
+                :bg-style="bgStyle"
+                :tooltip-style="tooltipStyle"
+                :process-style="processStyle"
+                :tooltip-merge="tooltipMerge"
+                :enable-cross="enableCross"
+                :formatter="formatterTime"
+                @drag-end="changeOptionSeach"
+              ></VueRange>
+            </div>
           </b-collapse>
         </div>
       </div>
@@ -184,6 +212,8 @@
 
 <script>
 import apiHome from '@/api/apiHome'
+import 'vue-range-component/dist/vue-range-slider.css'
+
 export default {
   name: 'SidebarExam',
   data() {
@@ -281,6 +311,8 @@ export default {
         { text: 'Từ 60 đến 90 phút', value: 4 },
         { text: 'Trên 90 câu', value: 5 },
       ],
+      rangeTimeExam: [0, 120],
+      rangeNumberQuestion: [0, 500],
     }
   },
   computed: {
@@ -289,6 +321,27 @@ export default {
       const value = this.categoriesHistory[l - 1]
       return value.label
     },
+  },
+  created() {
+    this.min = 0
+    this.maxTime = 120
+    this.maxQuestion = 500
+    this.bgStyle = {
+      backgroundColor: '#fff',
+      boxShadow: 'inset 0.5px 0.5px 3px 1px rgba(0,0,0,.36)',
+    }
+    this.tooltipStyle = {
+      backgroundColor: '#1c3988',
+      borderColor: '#1c3988',
+    }
+    this.processStyle = {
+      backgroundColor: '#1c3988',
+    }
+    this.enableCross = false
+    this.tooltipMerge = false
+    this.formatterTime = (rangeTimeExam) => `${rangeTimeExam} phút`
+    this.formatterNumberQuestion = (rangeNumberQuestion) =>
+      `${rangeNumberQuestion} câu`
   },
   mounted() {
     this.fetchCategories(0)
@@ -333,6 +386,10 @@ export default {
         categories: this.selectCategories,
         levels: this.selectCategories,
         ratings: this.selecTratings,
+        amountExamTimeLeft: this.rangeTimeExam[0],
+        amountExamTimeRight: this.rangeTimeExam[1],
+        amountQuestionLeft: this.rangeNumberQuestion[0],
+        amountQuestionRight: this.rangeNumberQuestion[1],
       }
       this.$emit('seachOption', data)
     },

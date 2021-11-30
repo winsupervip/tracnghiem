@@ -129,7 +129,7 @@
                       <div class="p-navItem--dropdown__inner__menu__child">
                         <div class="item item__heading">Settings</div>
                         <nuxt-link
-                          to="/users/questions/personal"
+                          to="/users/personal/personal"
                           class="item item__link"
                         >
                           Personal settings
@@ -171,6 +171,32 @@
                 v-if="isDisplayMenu || isDisplayMenuSp"
                 class="p-navMenu__child"
               >
+                <ul v-if="isAdmin">
+                  <li>
+                    <nuxt-link to="/admin/category">
+                      <div>
+                        <b-icon-card-checklist></b-icon-card-checklist>
+                      </div>
+                      <span>Danh mục đề thi</span>
+                    </nuxt-link>
+                  </li>
+                  <li>
+                    <nuxt-link to="/admin/configs/exam">
+                      <div>
+                        <b-icon-card-checklist></b-icon-card-checklist>
+                      </div>
+                      <span>TOP đề thi</span>
+                    </nuxt-link>
+                  </li>
+                  <li>
+                    <nuxt-link to="/admin/configs/categories">
+                      <div>
+                        <b-icon-card-checklist></b-icon-card-checklist>
+                      </div>
+                      <span>TOP danh mục</span>
+                    </nuxt-link>
+                  </li>
+                </ul>
                 <ul>
                   <li>
                     <nuxt-link to="">
@@ -214,7 +240,7 @@
                 <h2 class="one-line">Công cụ chung</h2>
                 <ul>
                   <li>
-                    <nuxt-link to="/users/questions/affiliate">
+                    <nuxt-link to="/users/personal/affiliate">
                       <div>
                         <img
                           src="~/assets/img/dashboard/bx_bx-network-chart.svg"

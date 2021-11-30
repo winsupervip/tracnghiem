@@ -18,7 +18,7 @@
               <b-tab title="Tất cả đề thi" active>
                 <div class="count-result mb-4">
                   <div class="count-result-left">
-                    <strong>1909</strong>
+                    <strong>{{ rows }}</strong>
                     <span>kết quả</span>
                   </div>
                   <div class="count-result-right">
@@ -81,7 +81,7 @@
                 v-if="rows > 0"
                 v-model="queryUrl.page"
                 :total-rows="rows"
-                :per-page="queryUrl.perPage"
+                per-page="10"
                 aria-controls="my-table"
               ></b-pagination>
               <h4 v-else>{{ mess }}</h4>
@@ -121,7 +121,7 @@ export default defineComponent({
   layout: 'default',
   auth: false,
   setup() {
-    const { $logger, $loader } = useContext()
+    const { $loader } = useContext()
     const route = useRoute()
     const router = useRouter()
     const category = route?.value?.query.category || false
@@ -146,7 +146,6 @@ export default defineComponent({
       dataExam: [],
       currentPage: 0,
       rows: 0,
-      perPage: 1,
       queryUrl: {
         page: 1,
         pageSize: 10,
@@ -155,10 +154,10 @@ export default defineComponent({
         tags: false,
         levels: false,
         ratings: false,
-        amountquestionleft: false,
-        amountquestionright: false,
-        amountexamtimeleft: false,
-        amountexamtimeright: false,
+        amountExamTimeLeft: false,
+        amountExamTimeRight: false,
+        amountQuestionLeft: false,
+        amountQuestionRight: false,
         orderBy: false,
       },
       mess: '',
@@ -167,15 +166,10 @@ export default defineComponent({
       try {
         $loader()
         const { data: result } = await apiHome.searchExam(data.queryUrl)
+        console.log(result)
         data.dataExam = result.object.items
         data.rows = result.object.total
-        if (data.rows > 0) {
-          data.perPage =
-            result.object.total % data.queryUrl.pageSize !== 0
-              ? parseInt(result.object.total / data.queryUrl.pageSize) + 1
-              : parseInt(result.object.total / data.queryUrl.pageSize)
-          $logger.info('khue', result, data.perPage)
-        } else {
+        if (data.rows < 0) {
           data.mess = 'Không có đề thi nào được tìm thấy'
         }
         window.scrollTo(0, 0)
@@ -192,6 +186,10 @@ export default defineComponent({
       data.queryUrl.categories = value.categories
       data.queryUrl.levels = value.levels
       data.queryUrl.ratings = value.ratings
+      data.queryUrl.amountExamTimeLeft = value.amountExamTimeLeft
+      data.queryUrl.amountExamTimeRight = value.amountExamTimeRight
+      data.queryUrl.amountQuestionLeft = value.amountQuestionLeft
+      data.queryUrl.amountQuestionRight = value.amountQuestionRight
       fetch()
     }
     watch(
