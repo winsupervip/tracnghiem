@@ -15,6 +15,14 @@ Vue.filter('formatDurationDay', function (value) {
   return inputTime.format('DD/MM/YYYY')
 })
 
+Vue.filter('formatMoney', function (value) {
+  const numberFormat = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  })
+  return numberFormat.format(value)
+})
+
 Vue.filter('slugify', function (value, separator = '-') {
   if (!value) return ''
   return value

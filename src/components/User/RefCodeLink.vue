@@ -7,13 +7,18 @@
       </p>
       <div class="input-group mb-3">
         <input
+          ref="clipboard"
           type="text"
           class="form-control"
           :value="`https://tracnghiem.vn/affiliate?ref=${refCode}`"
           readonly
         />
         <button class="btn btn-outline-primary">
-          <b-icon icon="file-code" aria-hidden="true"></b-icon>
+          <b-icon
+            icon="file-code"
+            aria-hidden="true"
+            @click="handleCopy"
+          ></b-icon>
         </button>
       </div>
     </b-card>
@@ -33,7 +38,14 @@ export default defineComponent({
   },
   setup() {},
   computed: {},
-  methods: {},
+  methods: {
+    handleCopy(e) {
+      navigator.clipboard.writeText(
+        `https://tracnghiem.vn/affiliate?ref=${this.refCode}`
+      )
+      this.$toast.success('copy thành công').goAway(1000)
+    },
+  },
 })
 </script>
 <style lang="scss" scoped>

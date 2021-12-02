@@ -5,7 +5,12 @@
       <div class="row">
         <div class="col-12 col-md-4">
           <b-card :sub-title="$t('personal.userInfo')">
-            <Info :type="true" :bio="user" />
+            <Info
+              :type="true"
+              :bio="user"
+              :check-ref-by="user.refCode"
+              @isCreateRefBy="isCreateRefBy"
+            />
           </b-card>
         </div>
         <div class="col-12 col-md-8">
@@ -69,9 +74,12 @@ export default defineComponent({
       data.user.gender = result?.object?.gender?.label
       $loader().close()
     })
-
+    const isCreateRefBy = (value) => {
+      data.user.refBy = value
+    }
     return {
       ...toRefs(data),
+      isCreateRefBy,
     }
   },
   methods: {},

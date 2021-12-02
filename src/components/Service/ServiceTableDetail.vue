@@ -1,42 +1,36 @@
 <template>
   <div>
-    <table class="table">
+    <table class="table" style="width: 100%">
       <thead>
         <tr>
           <th scope="col">STT</th>
-          <th scope="col">Tên gói</th>
-          <th scope="col">Thời hạn(ngày)</th>
+          <th scope="col">Đại lý</th>
+          <th scope="col">Ngày cấp</th>
+          <th scope="col">Ngày hết hạn</th>
           <th scope="col">Trạng thái</th>
-          <th scope="col">Số câu hỏi</th>
-          <th scope="col">Số đề thi</th>
-          <th scope="col">Giá tiền</th>
-          <th scope="col">Ngày tạo</th>
+          <th scope="col" style="width: 15%">Số lượt kích hoạt được cấp</th>
+          <th scope="col" style="width: 15%">Số lượt user đã kích hoạt</th>
+          <th scope="col">Người cấp</th>
           <th scope="col">Chức năng</th>
         </tr>
       </thead>
-      <tbody>
+      <!-- <tbody>
         <tr v-for="(item, index) in list" :key="index">
           <td>{{ index + 1 + (urlQuery.page - 1) * 10 }}</td>
           <td>{{ item.name }}</td>
           <td>{{ item.exp }}</td>
-          <td>{{ item.status === 1 ? 'Hoạt động' : 'Không hoạt động' }}</td>
+          <td>{{ item.isActive ? 'Hoạt động' : 'Không hoạt động' }}</td>
           <td>{{ item.limitQuestion }}</td>
           <td>{{ item.limitExam }}</td>
           <td>{{ formatMoney(item.price) }}</td>
-          <td>{{ item.createDate | formatDurationDay }}</td>
+          <td>{{ formatDate(item.createDate) }}</td>
           <td>
             <b-dropdown class="m-md-2" no-caret size="sm">
               <template #button-content>
                 <b-icon-three-dots></b-icon-three-dots>
               </template>
-              <b-dropdown-item @click="detail(item.hashId)"
-                >Chi tiết</b-dropdown-item
-              >
-              <b-dropdown-item
-                v-b-modal.modal-prevent-closing
-                @click="handleUpdate(item.hashId)"
-                >Cập nhật</b-dropdown-item
-              >
+              <b-dropdown-item>Chi tiết</b-dropdown-item>
+              <b-dropdown-item>Cập nhật</b-dropdown-item>
               <b-dropdown-item
                 v-if="item.status === 1"
                 @click="updateActive(item.hashId)"
@@ -54,7 +48,7 @@
             </b-dropdown>
           </td>
         </tr>
-      </tbody>
+      </tbody> -->
     </table>
   </div>
 </template>
@@ -78,21 +72,15 @@ export default defineComponent({
     handleDelete(id) {
       this.$emit('deleteService', id)
     },
-    updateActive(id) {
-      this.$emit('updateActive', id)
-    },
-    handleUpdate(id) {
-      this.$emit('updateService', id)
-    },
-    detail(id) {
-      this.$router.push(`configs/${id}`)
-    },
-    formatMoney(value) {
-      const money = value.toLocaleString('vn-VN', {
-        style: 'currency',
-        currency: 'VND',
-      })
-      return money
+    // formatMoney(value) {
+    //   const money = value.toLocaleString('vn-VN', {
+    //     style: 'currency',
+    //     currency: 'VND',
+    //   })
+    //   return money
+    // },
+    formatDate(value) {
+      return value.slice(0, 10).split('-').reverse().join('/')
     },
   },
 })

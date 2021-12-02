@@ -12,7 +12,7 @@
               v-model="urlQuery.keyword"
               trim
               type="search"
-              placeholder="Tìm kiếm tên gói"
+              placeholder="Tìm kiếm đại lý"
             >
             </b-form-input>
             <button
@@ -28,10 +28,10 @@
           >
             <b-form-input
               id="keyword"
-              v-model="urlQuery.fromDate"
+              v-model="urlQuery.createDateFrom"
               trim
               type="search"
-              placeholder="Ngày tạo từ"
+              placeholder="Ngày cấp từ"
             >
             </b-form-input>
           </b-form-group>
@@ -40,19 +40,20 @@
           >
             <b-form-input
               id="keyword"
-              v-model="urlQuery.toDate"
+              v-model="urlQuery.createDateTo"
               trim
               type="search"
-              placeholder="Ngày tạo đến"
+              placeholder="Ngày cấp đến"
             >
             </b-form-input>
           </b-form-group>
+
           <b-form-group class="col-12 col-md-3 mb-3">
             <treeselect
               id="status"
               v-model="urlQuery.isActive"
               :multiple="false"
-              :options="listActive"
+              :options="status"
               :load-options="loadOptions"
               placeholder="Trạng thái"
             />
@@ -67,13 +68,43 @@
               placeholder="Sắp xếp"
             />
           </b-form-group>
+          <b-form-group
+            class="col-12 col-md-3 mb-3 position-relative overflow-hidden"
+          >
+            <b-form-input
+              id="keyword"
+              v-model="urlQuery.expireDateFrom"
+              trim
+              type="search"
+              placeholder="Ngày hết hạn từ"
+            >
+            </b-form-input>
+          </b-form-group>
+          <b-form-group
+            class="col-12 col-md-3 mb-3 position-relative overflow-hidden"
+          >
+            <b-form-input
+              id="keyword"
+              v-model="urlQuery.expireDateTo"
+              trim
+              type="search"
+              placeholder="Ngày hết hạn đến"
+            >
+            </b-form-input>
+          </b-form-group>
           <div
-            class="col-12 col-md-3 mb-3 d-flex justify-content-around align-items-end"
+            class="
+              col-12 col-md-3
+              mb-3
+              d-flex
+              justify-content-around
+              align-items-end
+            "
           >
             <b-button
               v-b-modal.modal-prevent-closing
               variant="outline-primary btn-sm"
-              >Thêm gói</b-button
+              >Thêm đại lý</b-button
             >
           </div>
         </b-form-row>
@@ -177,8 +208,6 @@
         :list="listServices"
         :url-query="urlQuery"
         @deleteService="handleDelete"
-        @updateActive="updateActive"
-        @updateService="handleUpdate"
       />
       <b-pagination
         v-model="urlQuery.page"
@@ -201,7 +230,7 @@ import {
   watch,
 } from '@nuxtjs/composition-api'
 import userAPI from '@/api/service'
-import ServiceTable from '@/components/Service/ServiceTable.vue'
+import ServiceTable from '@/components/Service/ServiceTableDetail.vue'
 export default defineComponent({
   auth: true,
   components: { ServiceTable },
@@ -211,13 +240,15 @@ export default defineComponent({
     const { $loader } = useContext()
     const route = useRoute()
     const queryPage = route?.value?.query?.page || 1
+    const id = route.value.params.id
+    console.log('id', id)
     const data = reactive({
       breadcrumbs: [
         {
           text: 'Danh sách gói dịch vụ',
         },
       ],
-      listServices: [],
+      listPackage: [],
       valueStatus: null,
       name: '',
       exp: null,
@@ -227,23 +258,8 @@ export default defineComponent({
       isPublic: false,
       note: '',
       nameState: null,
+      submittedNames: [],
       sorts: [],
-      isCheck: false,
-      hashId: '',
-      listActive: [
-        {
-          id: '',
-          label: 'Khác',
-        },
-        {
-          id: 1,
-          label: 'Hoạt động',
-        },
-        {
-          id: 0,
-          label: 'Không hoạt động',
-        },
-      ],
       status: [
         {
           id: '',
@@ -262,21 +278,29 @@ export default defineComponent({
       total: 1,
       urlQuery: {
         page: 1,
+        hashId: id,
         pageSize: 10,
         sort: 1,
-        isActive: '',
+        status: 1,
         keyword: '',
-        fromDate: '',
-        toDate: '',
+        createDateFrom: '',
+        createDateTo: '',
+        expireDateFrom: '',
+        expireDateTo: '',
       },
     })
     const { fetch } = useFetch(async () => {
       $loader()
-      const { data: result } = await userAPI.getServices(data.urlQuery)
-      data.listServices = result?.object?.items
+      const { data: result } = await userAPI.getServiceDetailAgencies(
+        id,
+        data.urlQuery
+      )
+      data.listPackage = result?.object?.items
       data.total = result?.object?.total
+      console.log('list-package : ', data.listPackage)
       $loader().close()
     })
+    fetch()
     const sortTypeService = async () => {
       $loader()
       const { data: result } = await userAPI.getSortType()
@@ -328,49 +352,13 @@ export default defineComponent({
         })
       }
     },
-    async updateActive(hashId) {
-      const findItem = this.listServices.find((item) => item.hashId === hashId)
-      findItem.isActive = !findItem.status
-      const index = this.listServices.findIndex(
-        (item) => item.hashId === hashId
-      )
-      this.listServices.splice(index, 1)
-      try {
-        const { result } = await userAPI.updateService(findItem)
-
-        this.listServices.splice(index, 0, findItem)
-        this.$handleError(result)
-      } catch (err) {
-        this.$handleError(err, () => {
-          console.log(err)
-        })
-      }
-    },
-    handleUpdate(hashId) {
-      this.isCheck = true
-      const findItem = this.listServices.find((item) => item.hashId === hashId)
-      this.price = findItem.price
-      this.name = findItem.name
-      this.isPublic = findItem.isPublic
-      this.createData = findItem.createData
-      this.valueStatus = !!findItem.status
-      this.exp = findItem.exp
-      this.limitQuestion = findItem.limitQuestion
-      this.limitExam = findItem.limitExam
-      this.note = findItem.note
-      this.hashId = hashId
-      console.log('this.valueStatus ', this.valueStatus)
-    },
-    // async handleUpdate(hashId) {
-    //   const findItem = this.listServices.find((item) => item.hashId === hashId)
-
-    // },
     checkFormValidity() {
       const valid = this.$refs.form.checkValidity()
       this.nameState = valid
       return valid
     },
     resetModal() {
+      this.name = ''
       this.nameState = null
     },
     handleOk(bvModalEvt) {
@@ -385,47 +373,24 @@ export default defineComponent({
         return
       }
       // Push the name to submitted names
+      this.submittedNames.push(this.name)
       const data = {
         name: this.name,
         exp: Number(this.exp),
         limitQuestion: Number(this.limitQuestion),
         limitExam: Number(this.limitExam),
         price: Number(this.price),
-        status: this.isActive,
+        isActive: this.isActive,
         isPublic: this.isPublic,
-        note: '',
+        note: this.note,
       }
-      const dataUpdate = {
-        name: this.name,
-        exp: Number(this.exp),
-        limitQuestion: Number(this.limitQuestion),
-        limitExam: Number(this.limitExam),
-        price: Number(this.price),
-        isActive: this.valueStatus,
-        isPublic: this.isPublic,
-        hashId: this.hashId,
-        note: '',
-      }
-      if (this.isCheck) {
-        console.log('isCheck ', dataUpdate)
-        try {
-          const { result } = await userAPI.updateService(dataUpdate)
-          this.isCheck = false
-          this.$handleError(result)
-        } catch (err) {
-          this.$handleError(err, () => {
-            console.log(err)
-          })
-        }
-      } else {
-        try {
-          const { result } = await userAPI.createService(data)
-          this.$handleError(result)
-        } catch (err) {
-          this.$handleError(err, () => {
-            console.log(err)
-          })
-        }
+      try {
+        const { result } = await userAPI.createService(data)
+        this.$handleError(result)
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
       }
       // Hide the modal manually
       this.$nextTick(() => {

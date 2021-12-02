@@ -15,13 +15,10 @@
               placeholder="Tìm kiếm tên gói"
             >
             </b-form-input>
-            <button
-              class="btn btn-primary position-absolute btn-search"
-              type="button"
-              @click="search()"
-            >
-              <b-icon-search></b-icon-search>
-            </button>
+            <b-icon-search
+              v-show="!urlQuery.keyword"
+              class="position-absolute btn-search"
+            ></b-icon-search>
           </b-form-group>
           <b-form-group
             class="col-12 col-md-3 mb-3 position-relative overflow-hidden"
@@ -52,7 +49,7 @@
               id="status"
               v-model="urlQuery.isActive"
               :multiple="false"
-              :options="listActive"
+              :options="status"
               :load-options="loadOptions"
               placeholder="Trạng thái"
             />
@@ -70,6 +67,10 @@
           <div
             class="col-12 col-md-3 mb-3 d-flex justify-content-around align-items-end"
           >
+            <b-button variant="outline-primary btn-sm" @click="search()">
+              <b-icon-filter></b-icon-filter>
+              Áp dụng
+            </b-button>
             <b-button
               v-b-modal.modal-prevent-closing
               variant="outline-primary btn-sm"
@@ -173,20 +174,57 @@
       </form>
     </b-modal>
     <b-card>
-      <ServiceTable
-        :list="listServices"
-        :url-query="urlQuery"
-        @deleteService="handleDelete"
-        @updateActive="updateActive"
-        @updateService="handleUpdate"
-      />
-      <b-pagination
-        v-model="urlQuery.page"
-        class="pagination"
-        align="center"
-        :total-rows="total"
-        :per-page="urlQuery.pageSize"
-      ></b-pagination>
+      <div v-if="total === 0">
+        <EmptyData />
+      </div>
+      <div v-else>
+        <b-table striped hover :items="listServices" :fields="fields">
+          <template #cell(actions)="data">
+            <b-dropdown class="m-md-2" no-caret size="sm">
+              <template #button-content>
+                <b-icon-three-dots></b-icon-three-dots>
+              </template>
+              <b-dropdown-item @click="detail(data.item.hashId)">
+                <b-icon-file-text></b-icon-file-text>
+                Chi tiết
+              </b-dropdown-item>
+              <b-dropdown-item
+                v-b-modal.modal-prevent-closing
+                @click="handleUpdate(data.item.hashId)"
+              >
+                <b-icon-pencil-square></b-icon-pencil-square>
+                Cập nhật
+              </b-dropdown-item>
+              <b-dropdown-item @click="updateActive(data.item.hashId)">
+                <b-icon-check2-circle></b-icon-check2-circle>
+                {{ data.item.status ? 'Hủy kích hoạt' : 'Kích hoạt' }}
+              </b-dropdown-item>
+              <b-dropdown-divider></b-dropdown-divider>
+              <b-dropdown-item @click="handleDelete(data.item.hashId)">
+                <b-icon-trash></b-icon-trash>
+                Xóa
+              </b-dropdown-item>
+            </b-dropdown>
+          </template>
+          <template #cell(status)="data">
+            {{ data.item.status ? 'Hoạt động' : 'Không hoạt động' }}
+          </template>
+          <template #cell(createDate)="data">
+            {{ data.item.createDate | formatDurationDay }}
+          </template>
+          <template #cell(price)="data">
+            {{ data.item.price | formatMoney }}
+          </template>
+        </b-table>
+        <b-pagination
+          v-if="total > urlQuery.pageSize"
+          v-model="urlQuery.page"
+          class="pagination"
+          align="center"
+          :total-rows="total"
+          :per-page="urlQuery.pageSize"
+        ></b-pagination>
+      </div>
     </b-card>
   </div>
 </template>
@@ -201,10 +239,9 @@ import {
   watch,
 } from '@nuxtjs/composition-api'
 import userAPI from '@/api/service'
-import ServiceTable from '@/components/Service/ServiceTable.vue'
 export default defineComponent({
   auth: true,
-  components: { ServiceTable },
+  components: {},
   layout: 'dashboard',
   middleware: ['isAdmin'],
   setup() {
@@ -230,6 +267,43 @@ export default defineComponent({
       sorts: [],
       isCheck: false,
       hashId: '',
+      fields: [
+        {
+          label: 'STT',
+        },
+        {
+          key: 'name',
+          label: 'Tên gói',
+        },
+        {
+          key: 'exp',
+          label: 'Thời hạn (ngày)',
+        },
+        {
+          key: 'status',
+          label: 'Trạng thái',
+        },
+        {
+          key: 'limitQuestion',
+          label: 'Số câu hỏi',
+        },
+        {
+          key: 'limitExam',
+          label: 'Số đề thi',
+        },
+        {
+          key: 'price',
+          label: 'Giá tiền',
+        },
+        {
+          key: 'createDate',
+          label: 'Ngày tạo',
+        },
+        {
+          key: 'actions',
+          label: 'Chức năng',
+        },
+      ],
       listActive: [
         {
           id: '',
@@ -259,7 +333,7 @@ export default defineComponent({
         },
       ],
       currentPage: queryPage,
-      total: 1,
+      total: 0,
       urlQuery: {
         page: 1,
         pageSize: 10,
@@ -287,41 +361,43 @@ export default defineComponent({
     const search = () => {
       fetch()
     }
+    const render = () => {
+      data.urlQuery.page = 1
+      fetch()
+    }
     watch(
       () => data.urlQuery.page,
       () => {
         fetch()
       }
     )
-    watch(
-      () => data.urlQuery.sort,
-      () => {
-        fetch()
-      }
-    )
-    watch(
-      () => data.urlQuery.isActive,
-      () => {
-        fetch()
-      }
-    )
+    // watch(
+    //   () => data.urlQuery.sort,
+    //   () => {
+    //     fetch()
+    //   }
+    // )
+    // watch(
+    //   () => data.urlQuery.isActive,
+    //   () => {
+    //     fetch()
+    //   }
+    // )
     return {
       ...toRefs(data),
       search,
+      render,
     }
   },
   methods: {
     async handleDelete(hashId) {
-      if (!window.confirm('Bạn thực sự muốn xóa?')) {
+      if (!window.confirm('Chắc chưa ba ?')) {
         return
       }
       try {
         const { data } = await userAPI.deleteService(hashId)
-        const index = this.listServices.findIndex(
-          (item) => item.hashId === hashId
-        )
-        this.listServices.splice(index, 1)
         this.$handleError(data)
+        this.render()
       } catch (err) {
         this.$handleError(err, () => {
           console.log(err)
@@ -329,16 +405,8 @@ export default defineComponent({
       }
     },
     async updateActive(hashId) {
-      const findItem = this.listServices.find((item) => item.hashId === hashId)
-      findItem.isActive = !findItem.status
-      const index = this.listServices.findIndex(
-        (item) => item.hashId === hashId
-      )
-      this.listServices.splice(index, 1)
       try {
-        const { result } = await userAPI.updateService(findItem)
-
-        this.listServices.splice(index, 0, findItem)
+        const { result } = await userAPI.updateService(hashId)
         this.$handleError(result)
       } catch (err) {
         this.$handleError(err, () => {
@@ -346,25 +414,6 @@ export default defineComponent({
         })
       }
     },
-    handleUpdate(hashId) {
-      this.isCheck = true
-      const findItem = this.listServices.find((item) => item.hashId === hashId)
-      this.price = findItem.price
-      this.name = findItem.name
-      this.isPublic = findItem.isPublic
-      this.createData = findItem.createData
-      this.valueStatus = !!findItem.status
-      this.exp = findItem.exp
-      this.limitQuestion = findItem.limitQuestion
-      this.limitExam = findItem.limitExam
-      this.note = findItem.note
-      this.hashId = hashId
-      console.log('this.valueStatus ', this.valueStatus)
-    },
-    // async handleUpdate(hashId) {
-    //   const findItem = this.listServices.find((item) => item.hashId === hashId)
-
-    // },
     checkFormValidity() {
       const valid = this.$refs.form.checkValidity()
       this.nameState = valid
@@ -411,6 +460,7 @@ export default defineComponent({
         try {
           const { result } = await userAPI.updateService(dataUpdate)
           this.isCheck = false
+          this.render()
           this.$handleError(result)
         } catch (err) {
           this.$handleError(err, () => {
@@ -421,6 +471,7 @@ export default defineComponent({
         try {
           const { result } = await userAPI.createService(data)
           this.$handleError(result)
+          this.render()
         } catch (err) {
           this.$handleError(err, () => {
             console.log(err)
@@ -439,7 +490,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .btn-search {
   top: 0;
-  right: 10px;
+  right: 10%;
   height: 100%;
 }
 </style>

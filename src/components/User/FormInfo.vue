@@ -204,15 +204,15 @@ export default defineComponent({
   setup(props) {
     const { $loader } = useContext()
     const data = reactive({
-      treeValueWorkAt: props.info.school,
-      treeValueGender: props.info.gender,
-      valueBirthday: props.info.birthday,
-      firstName: props.info.firstName,
-      address: props.info.address,
-      phoneNumber: props.info.phone,
-      lastName: props.info.lastName,
-      displayName: props.info.displayName,
-      bio: props.info.bio,
+      treeValueWorkAt: null || props.info.school,
+      treeValueGender: null || props.info.gender,
+      valueBirthday: '' || props.info.birthday,
+      firstName: '' || props.info.firstName,
+      address: '' || props.info.address,
+      phoneNumber: '' || props.info.phone,
+      lastName: '' || props.info.lastName,
+      displayName: '' || props.info.displayName,
+      bio: '' || props.info.bio,
       isShow: false,
       treeDataGenders: [],
       alwaysOpen: false,
@@ -221,7 +221,6 @@ export default defineComponent({
       $loader()
       const { data: genders } = await userAPI.getListgenders()
       data.treeDataGenders = genders?.object?.items
-      console.log(data.treeDataGenders)
       $loader().close()
     })
     fetch()
@@ -229,7 +228,22 @@ export default defineComponent({
       ...toRefs(data),
     }
   },
-  computed: {},
+  watch: {
+    info: {
+      handler(val) {
+        this.treeValueWorkAt = val.school
+        this.treeValueGender = val.gender
+        this.valueBirthday = val.birthday
+        this.firstName = val.firstName
+        this.address = val.address
+        this.phoneNumber = val.phone
+        this.lastName = val.lastName
+        this.displayName = val.displayName
+        this.bio = val.bio
+      },
+      deep: true,
+    },
+  },
   methods: {
     deleteContent() {
       this.firstName = ''

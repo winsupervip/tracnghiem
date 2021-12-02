@@ -24,6 +24,7 @@
       </ul>
       <div class="input-group mb-3">
         <input
+          ref="clipboard"
           type="text"
           class="form-control"
           :value="
@@ -34,7 +35,7 @@
           readonly
         />
 
-        <button class="btn btn-primary">
+        <button class="btn btn-primary" @click="handleCopy">
           <b-icon icon="file-code" aria-hidden="true"></b-icon>
         </button>
       </div>
@@ -66,14 +67,14 @@
         :placeholder="$t('info.referralCode')"
       />
       <button
-        v-if="!bio.refCode && bio.refBy"
+        v-if="!bio.refBy && !checkRefBy"
         class="btn btn-outline-primary d-block m-auto mt-2 mb-4"
-        :disabled="bio.refBy"
+        :disabled="isDisabled"
         @click="handleUpdate"
       >
         {{ $t('info.btnUpdate') }}
       </button>
-      <p v-if="!bio.refCode">{{ $t('info.note') }}</p>
+      <p v-if="!bio.refBy && !checkRefBy">{{ $t('info.note') }}</p>
     </div>
   </div>
 </template>
@@ -86,6 +87,10 @@ export default defineComponent({
   auth: true,
   components: { UserlInfo },
   props: {
+    checkRefBy: {
+      type: String,
+      default: () => '',
+    },
     type: {
       type: Boolean,
       required: true,
@@ -110,8 +115,10 @@ export default defineComponent({
     async handleUpdate() {
       try {
         const { data } = await userAPI.postCode({ refCode: this.inputCode })
-        this.$handleError(data)
+        this.$emit('isCreateRefBy', this.inputCode)
+        console.log(this.inputCode)
         this.isDisabled = true
+        this.$handleError(data)
       } catch (err) {
         this.$handleError(err, () => {
           console.log(err)
@@ -120,6 +127,12 @@ export default defineComponent({
     },
     logout() {
       this.$auth.logout('http://localhost:3000/')
+    },
+    handleCopy(e) {
+      navigator.clipboard.writeText(
+        `https://tracnghiem.vn/affiliate?ref=${this.bio.refCode}`
+      )
+      this.$toast.success('copy thành công').goAway(1000)
     },
   },
 })
