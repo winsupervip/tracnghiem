@@ -21,24 +21,35 @@
               </div>
               <b-input
                 id="input_keyword"
-                v-model="dataSearch.keyword"
+                v-model="keyword"
                 name="keyword"
                 placeholder="Từ khóa"
               ></b-input>
             </div>
-            <div class="input-select">
+            <!-- <div class="input-select">
               <b-select
                 v-model="dataSearch.exam"
                 class="form-control"
                 :options="optionsExam"
               ></b-select>
-            </div>
+            </div> -->
             <div class="input-select">
-              <b-select
+              <!-- <b-select
                 v-model="dataSearch.category"
                 class="form-control"
                 :options="optionsCategory"
-              ></b-select>
+              ></b-select> -->
+              <b-form-select v-model="selected" class="form-control">
+                <b-form-select-option :value="''"
+                  >Danh Mục</b-form-select-option
+                >
+                <b-form-select-option
+                  v-for="(category, index) in dataCategories"
+                  :key="index"
+                  :value="category.id"
+                  >{{ category.label }}</b-form-select-option
+                >
+              </b-form-select>
             </div>
             <div class="search-button">
               <b-btn type="submit" variant="primary" :disabled="isLoading">
@@ -74,18 +85,20 @@
 export default {
   name: 'SectionSearch',
   props: {
-    dataProp: {
-      type: Object,
-      default: () => {},
-    },
     isLoading: {
       type: Boolean,
       default: false,
     },
+    dataCategories: {
+      type: Array,
+      default: () => [],
+    },
   },
+
   data() {
     return {
-      dataSearch: Object.assign({}, this.dataProp),
+      keyword: '',
+      selected: '',
     }
   },
   computed: {
@@ -109,35 +122,14 @@ export default {
         },
       ]
     },
-    optionsCategory() {
-      return [
-        {
-          value: '',
-          text: 'Danh mục',
-        },
-        {
-          value: 'thpt',
-          text: 'Đề thi Tốt nghiệp THPT',
-        },
-        {
-          value: 'toeic',
-          text: 'Đề thi Toeic',
-        },
-        {
-          value: 'ielts',
-          text: 'Đề thi Ielts',
-        },
-      ]
-    },
-  },
-  watch: {
-    dataProp(newValue) {
-      this.dataSearch = { ...newValue }
-    },
   },
   methods: {
     onSubmitSearch() {
-      this.$emit('onSubmitSearch', this.dataSearch)
+      const data = {
+        keyword: this.keyword,
+        category: this.selected,
+      }
+      this.$emit('onSubmitSearch', data)
     },
   },
 }

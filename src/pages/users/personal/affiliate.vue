@@ -18,9 +18,10 @@
               :check-ref-code="user.refCode"
               :ref-list="items"
               :url-query="urlQuery"
+              @isCreateRefCode="isCreateRefCode"
             />
             <b-pagination
-              v-if="user.refCode"
+              v-if="user.refCode && items.length"
               v-model="urlQuery.page"
               class="pagination"
               align="center"
@@ -104,8 +105,12 @@ export default defineComponent({
         pagination()
       }
     )
+    const isCreateRefCode = (value) => {
+      data.user.refCode = value
+    }
     return {
       ...toRefs(data),
+      isCreateRefCode,
     }
   },
 })

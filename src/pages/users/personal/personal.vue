@@ -10,7 +10,7 @@
         </div>
         <div class="col-12 col-md-8">
           <b-card :sub-title="$t('personal.updateInfo')">
-            <FormInfo />
+            <FormInfo :info="user" />
           </b-card>
         </div>
       </div>
@@ -44,6 +44,11 @@ export default defineComponent({
         avatar: '',
         refCode: '',
         refBy: '',
+        phone: '',
+        birthday: '',
+        bio: '',
+        address: '',
+        gender: '',
       },
     })
     useFetch(async () => {
@@ -54,9 +59,14 @@ export default defineComponent({
       data.user.lastName = result?.object?.lastName
       data.user.displayName = result?.object?.displayName
       data.user.email = result?.object?.email
+      data.user.birthday = result?.object?.birthDay
+      data.user.address = result?.object?.address
+      data.user.phone = result?.object?.phone
+      data.user.bio = result?.object?.bio
       data.user.school = result?.object?.school?.label
       data.user.refCode = result?.object?.refCode
       data.user.avatar = result?.object?.avatar
+      data.user.gender = result?.object?.gender?.label
       $loader().close()
     })
 

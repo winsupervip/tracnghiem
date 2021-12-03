@@ -7,7 +7,7 @@
       <ValidationObserver v-slot="{ handleSubmit }">
         <b-form @submit.prevent="handleSubmit(onSubmit)">
           <ValidationProvider
-            rules="required|max:255|alpha_num"
+            rules="required|max:255|alpha_num|min:5"
             :name="$t('formAffiliate.code')"
           >
             <b-form-group slot-scope="{ valid, errors }" label-cols-sm="3">
@@ -51,24 +51,22 @@
             <td></td>
             <td></td>
           </tr>
-          <tr v-for="(item, index) in 10" :key="index">
+          <tr v-for="(item, index) in refList" :key="index">
             <th scope="row">
-              {{ item + (urlQuery.page - 1) * 10 }}
+              {{ index + 1 }}
             </th>
-            <td>{{ compareUserName(index).username }}</td>
+            <td>{{ item.username }}</td>
             <td>
               {{
-                compareUserName(index).displayName
-                  ? compareUserName(index).displayName
-                  : compareUserName(index).firstName
-                  ? compareUserName(index).firstName +
-                    ' ' +
-                    compareUserName(index).lastName
+                item.displayName
+                  ? item.displayName
+                  : item.firstName
+                  ? item.firstName + ' ' + item.lastName
                   : ''
               }}
             </td>
             <td>
-              {{ compareUserName(index).createDate }}
+              {{ formatDate(item.createDate) }}
             </td>
           </tr>
           <tr>
@@ -79,16 +77,18 @@
           </tr>
         </tbody>
       </table>
+      <EmptyData v-if="!refList.length" />
     </div>
   </div>
 </template>
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
 import userAPI from '../../api/user'
+import EmptyData from '@/components/EmptyData.vue'
 export default defineComponent({
   name: 'FormAffiliate',
   auth: true,
-  components: {},
+  components: { EmptyData },
   props: {
     checkRefCode: {
       type: String,
@@ -104,18 +104,20 @@ export default defineComponent({
       default: () => {},
     },
   },
-  setup() {},
+  data() {
+    return {
+      code: '',
+    }
+  },
   computed: {},
   methods: {
-    compareUserName(index) {
-      if (index < this.refList.length) {
-        return this.refList[index]
-      }
-      return {}
+    formatDate(value) {
+      return value.slice(0, 10).split('-').reverse().join('/')
     },
     async onSubmit() {
       try {
         const { data } = await userAPI.createCode({ refCode: this.code })
+        this.$emit('isCreateRefCode', this.code)
         this.$handleError(data)
       } catch (err) {
         this.$handleError(err, () => {

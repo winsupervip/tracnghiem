@@ -169,6 +169,7 @@ export default {
     { src: '@/plugins/WIRISplugins.js', ssr: false },
     { src: '~/plugins/vue-tags-input', ssr: false },
     { src: '@/plugins/handle-error' },
+    { src: '@/plugins/vue-slider-component.js', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
