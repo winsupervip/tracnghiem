@@ -265,6 +265,15 @@
         "emptySelected": "Vui lòng chọn ít nhất 1 danh mục",
         "clear":"Xóa tất cả"
       }
+    },
+    "service":{
+      "agency":"Chọn đại lý",
+      "expireDate":"Ngày hết hạn",
+      "expireDateNew":"Ngày hết hạn mới",
+      "limitActive":"Tổng số kích hoạt",
+      "paymentAmount":"Số tiền thanh toán",
+      "note":"Ghi chú",
+      "comments":"Nhập tên hoặc gmail đại lý"
     }
   }
 }

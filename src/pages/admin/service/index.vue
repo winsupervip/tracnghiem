@@ -65,7 +65,13 @@
             />
           </b-form-group>
           <div
-            class="col-12 col-md-3 mb-3 d-flex justify-content-around align-items-end"
+            class="
+              col-12 col-md-3
+              mb-3
+              d-flex
+              justify-content-around
+              align-items-end
+            "
           >
             <b-button variant="outline-primary btn-sm" @click="search()">
               <b-icon-filter></b-icon-filter>
@@ -190,12 +196,12 @@
               </b-dropdown-item>
               <b-dropdown-item
                 v-b-modal.modal-prevent-closing
-                @click="handleUpdate(data.item.hashId)"
+                @click="handleSubmit(data.item)"
               >
                 <b-icon-pencil-square></b-icon-pencil-square>
                 Cập nhật
               </b-dropdown-item>
-              <b-dropdown-item @click="updateActive(data.item.hashId)">
+              <b-dropdown-item @click="updateActive(data.item)">
                 <b-icon-check2-circle></b-icon-check2-circle>
                 {{ data.item.status ? 'Hủy kích hoạt' : 'Kích hoạt' }}
               </b-dropdown-item>
@@ -266,7 +272,6 @@ export default defineComponent({
       nameState: null,
       sorts: [],
       isCheck: false,
-      hashId: '',
       fields: [
         {
           label: 'STT',
@@ -351,6 +356,7 @@ export default defineComponent({
       data.total = result?.object?.total
       $loader().close()
     })
+    fetch()
     const sortTypeService = async () => {
       $loader()
       const { data: result } = await userAPI.getSortType()
@@ -359,9 +365,6 @@ export default defineComponent({
     }
     sortTypeService()
     const search = () => {
-      fetch()
-    }
-    const render = () => {
       data.urlQuery.page = 1
       fetch()
     }
@@ -371,22 +374,9 @@ export default defineComponent({
         fetch()
       }
     )
-    // watch(
-    //   () => data.urlQuery.sort,
-    //   () => {
-    //     fetch()
-    //   }
-    // )
-    // watch(
-    //   () => data.urlQuery.isActive,
-    //   () => {
-    //     fetch()
-    //   }
-    // )
     return {
       ...toRefs(data),
       search,
-      render,
     }
   },
   methods: {
@@ -397,17 +387,29 @@ export default defineComponent({
       try {
         const { data } = await userAPI.deleteService(hashId)
         this.$handleError(data)
-        this.render()
+        this.search()
       } catch (err) {
         this.$handleError(err, () => {
           console.log(err)
         })
       }
     },
-    async updateActive(hashId) {
+    async updateActive(item) {
+      const result = {
+        name: item.name,
+        exp: item.exp,
+        limitQuestion: item.limitQuestion,
+        limitExam: item.limitExam,
+        price: item.price,
+        isActive: !item.status,
+        isPublic: item.isPublic,
+        hashId: item.hashId,
+        note: '',
+      }
       try {
-        const { result } = await userAPI.updateService(hashId)
-        this.$handleError(result)
+        const { data } = await userAPI.updateService(result)
+        this.$handleError(data)
+        this.search()
       } catch (err) {
         this.$handleError(err, () => {
           console.log(err)
@@ -428,13 +430,14 @@ export default defineComponent({
       // Trigger submit handler
       this.handleSubmit()
     },
-    async handleSubmit() {
+    async handleSubmit(item) {
       // Exit when the form isn't valid
-      if (!this.checkFormValidity()) {
-        return
-      }
+      // if (!this.checkFormValidity()) {
+      //   return
+      // }
       // Push the name to submitted names
-      const data = {
+      // console.log('list ', item)
+      const dataCreate = {
         name: this.name,
         exp: Number(this.exp),
         limitQuestion: Number(this.limitQuestion),
@@ -445,23 +448,22 @@ export default defineComponent({
         note: '',
       }
       const dataUpdate = {
-        name: this.name,
-        exp: Number(this.exp),
-        limitQuestion: Number(this.limitQuestion),
-        limitExam: Number(this.limitExam),
-        price: Number(this.price),
-        isActive: this.valueStatus,
-        isPublic: this.isPublic,
-        hashId: this.hashId,
+        name: item.name,
+        exp: item.exp,
+        limitQuestion: item.limitQuestion,
+        limitExam: item.limitExam,
+        price: item.price,
+        isActive: !item.status,
+        isPublic: item.isPublic,
+        hashId: item.hashId,
         note: '',
       }
-      if (this.isCheck) {
-        console.log('isCheck ', dataUpdate)
+      if (!this.isCheck) {
         try {
-          const { result } = await userAPI.updateService(dataUpdate)
+          const { data } = await userAPI.updateService(dataUpdate)
           this.isCheck = false
-          this.render()
-          this.$handleError(result)
+          this.$handleError(data)
+          this.search()
         } catch (err) {
           this.$handleError(err, () => {
             console.log(err)
@@ -469,9 +471,9 @@ export default defineComponent({
         }
       } else {
         try {
-          const { result } = await userAPI.createService(data)
-          this.$handleError(result)
-          this.render()
+          const { data } = await userAPI.createService(dataCreate)
+          this.$handleError(data)
+          this.search()
         } catch (err) {
           this.$handleError(err, () => {
             console.log(err)

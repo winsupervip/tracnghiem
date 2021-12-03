@@ -12,4 +12,51 @@ export default {
     global.$http.get(
       `/api/v1/Catalog/get-categories?parent=${data.parent}&recursive=${data.recursive}`
     ),
+  getCategoriesExamPage: (data) =>
+    global.$http.get(
+      `/api/v1/Catalog/get-categories?parent=${data.parent}&recursive=0`
+    ),
+  searchExam: (urlQuery) => {
+    let url = '/api/v1/Exam/get-user-exam-list-public?'
+    if (urlQuery.page) {
+      url += `Page=${urlQuery.page}&`
+    }
+    if (urlQuery.pageSize) {
+      url += `PageSize=${urlQuery.pageSize}&`
+    }
+    if (urlQuery.Keyword) {
+      url += `Keyword=${urlQuery.Keyword}&`
+    }
+    if (urlQuery.categories && urlQuery.categories.length > 0) {
+      urlQuery.categories.forEach((item) => {
+        url += `categories=${item}&`
+      })
+    }
+    if (urlQuery.levels && urlQuery.levels.length > 0) {
+      urlQuery.levels.forEach((item) => {
+        url += `levels=${item}&`
+      })
+    }
+    if (urlQuery.ratings && urlQuery.ratings.length > 0) {
+      urlQuery.ratings.forEach((item) => {
+        url += `ratings=${item}&`
+      })
+    }
+    if (urlQuery.amountQuestionLeft) {
+      url += `amountquestionleft=${urlQuery.amountQuestionLeft}&`
+    }
+    if (urlQuery.amountQuestionRight) {
+      url += `amountquestionright=${urlQuery.amountQuestionRight}&`
+    }
+    if (urlQuery.amountExamTimeLeft) {
+      url += `amountexamtimeleft=${urlQuery.amountExamTimeLeft}&`
+    }
+    if (urlQuery.amountExamTimeRight) {
+      url += `amountexamtimeright=${urlQuery.amountExamTimeRight}&`
+    }
+    if (urlQuery.orderBy) {
+      url += `orderBy=${urlQuery.orderBy}`
+    }
+    return global.$http.get(url)
+  },
 }
