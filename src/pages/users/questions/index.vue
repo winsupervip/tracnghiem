@@ -1,8 +1,6 @@
 <template>
   <div class="page-container">
-    <div class="heading-page">
-      <h1 class="heading-title">{{ $t('questionBank') }}</h1>
-    </div>
+    <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
 
     <div class="filter-bar">
       <b-card :sub-title="$t('exam.questions.search')">
@@ -145,6 +143,7 @@
         :key="question.id"
         :questions="question"
         :delete-question="deleteQuestion"
+        :handle-search="handleSearch"
       />
 
       <b-pagination
@@ -167,8 +166,8 @@ import {
   toRefs,
   watch,
 } from '@nuxtjs/composition-api'
-
 import _ from 'lodash'
+import EventBus from '../../../plugins/eventBus'
 import QuestionApi from '@/api/question-list-page'
 import catalogApi from '@/api/catalogApi'
 import SingleListPage from '@/components/Question/SingleListPage.vue'
@@ -181,11 +180,21 @@ export default defineComponent({
   layout: 'dashboard',
   auth: true,
   setup() {
-    const { $loader, $logger } = useContext()
+    const { app, $loader, $logger } = useContext()
     const route = useRoute()
     const queryPage = route?.value?.query?.page || 1
 
     const data = reactive({
+      breadcrumbs: [
+        {
+          text: app.i18n.t('exam.dashboard'),
+          href: '/users/dashboard',
+        },
+        {
+          text: app.i18n.t('questionBank'),
+          active: true,
+        },
+      ],
       currentPage: queryPage,
       showSingleQuestion: true,
       showMultipleQuestion: false,
@@ -218,8 +227,6 @@ export default defineComponent({
       data.total = result.data?.object?.total
 
       data.questionList = result.data?.object?.items
-
-      // $logger.info('123', result.data?.object)
     }
     const { fetch } = useFetch(async () => {
       $loader()
@@ -233,6 +240,10 @@ export default defineComponent({
       handleSearch()
 
       data.category = result1.object.items
+      console.log(
+        '🚀 ~ file: index.vue ~ line 243 ~ const{fetch}=useFetch ~ data.category',
+        result1
+      )
       data.treeQuestionTypes = result2.object.items
       data.listStatus = result3.object.items
       data.level = result4.object.items
@@ -298,6 +309,9 @@ export default defineComponent({
       const that = this
       this.checkSearch(that)
     },
+  },
+  created() {
+    EventBus.$on('update-page', this.handleSearch)
   },
   methods: {
     checkSearch: _.debounce((that) => {

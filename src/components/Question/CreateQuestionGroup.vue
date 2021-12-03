@@ -17,10 +17,7 @@
                   <b-col cols="2">
                     <strong>Câu {{ index + 1 }}</strong>
                   </b-col>
-                  <b-col
-                    cols="8 "
-                    v-html="question.question.questionContent"
-                  ></b-col>
+                  <b-col cols="8 " v-html="question.questionContent"></b-col>
                   <b-col cols="2" class="matching_style">
                     <b-icon icon="shuffle"></b-icon>
                     <b-icon
@@ -54,7 +51,7 @@
           <PublishQuestion />
           <Category />
           <LevelForm />
-          <!-- <UploadImage :get-image="getImage" /> -->
+
           <Uploader :accept="'*/*'" :disabled="false"></Uploader>
           <AddSeo />
         </div>
@@ -71,15 +68,15 @@ import {
   useStore,
 } from '@nuxtjs/composition-api'
 import { mapGetters, mapActions } from 'vuex'
-import PublishQuestion from '../../../../components/Question/PublishQuestion.vue'
-import AddSeo from '../../../../components/Question/AddSeo.vue'
-import LevelForm from '../../../../components/Question/LevelForm.vue'
-import Category from '../../../../components/Question/Category.vue'
-import HeaderOfSingleQuestion from '../../../../components/Question/HeaderOfSingleQuestion.vue'
-import QuestionChild from '../../../../components/Question/QuestionChild.vue'
-import AddChildrenQuestion from '../../../../components/Question/AddChildrenQuestion.vue'
-import CauHoiApi from '../../../../api/cauHoi'
-import Uploader from '../../../../components/Uploader.vue'
+import Uploader from '../Uploader.vue'
+import PublishQuestion from './PublishQuestion.vue'
+import AddSeo from './AddSeo.vue'
+import LevelForm from './LevelForm.vue'
+import Category from './Category.vue'
+import HeaderOfSingleQuestion from './HeaderOfSingleQuestion.vue'
+
+import AddChildrenQuestion from './AddChildrenQuestion.vue'
+import CauHoiApi from '@/api/cauHoi'
 import CommentOrNote from '@/components/Question/CommentOrNote.vue'
 // eslint-disable-next-line import/no-unresolved
 import handler from '@/utils/question/handleAnswer.js'
@@ -92,7 +89,6 @@ export default defineComponent({
     AddSeo,
     Uploader,
     AddChildrenQuestion,
-    QuestionChild,
     CommentOrNote,
   },
   layout: 'dashboard',
@@ -107,6 +103,7 @@ export default defineComponent({
       dataUpdate: {},
       isUpdate: false,
       isValid: true,
+      question: '',
     })
 
     return {
@@ -126,6 +123,7 @@ export default defineComponent({
       setNullAnswerId: 'questions/setNullAnswerId',
       deleteChildQuestion: 'questions/deleteChildQuestion',
     }),
+
     openUpdate(data) {
       this.dataUpdate = data
       this.isUpdate = true
