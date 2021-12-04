@@ -78,107 +78,14 @@
               Áp dụng
             </b-button>
             <b-button
-              v-b-modal.modal-prevent-closing
               variant="outline-primary btn-sm"
+              @click="showModal('modal-add')"
               >Thêm gói</b-button
             >
           </div>
         </b-form-row>
       </b-form>
     </b-card>
-    <b-modal
-      id="modal-prevent-closing"
-      ref="modal"
-      title="Thông tin gói dịch vụ"
-      @show="resetModal"
-      @hidden="resetModal"
-      @ok="handleOk"
-    >
-      <form ref="form" @submit.stop.prevent="handleSubmit">
-        <b-form-group
-          label="Tên gói (*)"
-          label-for="name-input"
-          invalid-feedback="Chưa nhập tên gói"
-          :state="nameState"
-        >
-          <b-form-input
-            id="name-input"
-            v-model="name"
-            :state="nameState"
-            required
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label="Thời hạn (ngày) (*)"
-          label-for="name-input"
-          invalid-feedback="Chưa nhập thời hạn"
-          :state="nameState"
-        >
-          <b-form-input
-            id="name-input"
-            v-model="exp"
-            :state="nameState"
-            required
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label="Số lượng câu hỏi (*)"
-          label-for="name-input"
-          invalid-feedback="Chưa nhập số lượng câu hỏi"
-          :state="nameState"
-        >
-          <b-form-input
-            id="name-input"
-            v-model="limitQuestion"
-            :state="nameState"
-            required
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label="Số lượng đề thi (*)"
-          label-for="name-input"
-          invalid-feedback="Chưa nhập số lượng đề thi"
-          :state="nameState"
-        >
-          <b-form-input
-            id="name-input"
-            v-model="limitExam"
-            :state="nameState"
-            required
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label="Giá tiền(*)"
-          label-for="name-input"
-          invalid-feedback="Chưa nhập giá tiền"
-          :state="nameState"
-        >
-          <b-form-input
-            id="name-input"
-            v-model="price"
-            :state="nameState"
-            required
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group label="Trạng thái">
-          <treeselect
-            id="status"
-            v-model="valueStatus"
-            :multiple="false"
-            :options="status"
-            placeholder=""
-          />
-        </b-form-group>
-        <b-form-group class="mt-3">
-          <b-form-checkbox id="checkbox-1" v-model="isPublic">
-            User tự động đăng ký?
-          </b-form-checkbox>
-        </b-form-group>
-        <b-form-group label="Ghi chú" label-for="note-input">
-          <b-form-textarea id="note-input" v-model="note"></b-form-textarea>
-        </b-form-group>
-      </form>
-    </b-modal>
     <b-card>
       <div v-if="total === 0">
         <EmptyData />
@@ -194,10 +101,7 @@
                 <b-icon-file-text></b-icon-file-text>
                 Chi tiết
               </b-dropdown-item>
-              <b-dropdown-item
-                v-b-modal.modal-prevent-closing
-                @click="handleSubmit(data.item)"
-              >
+              <b-dropdown-item v-b-modal.modal-edit @click="edit(data.item)">
                 <b-icon-pencil-square></b-icon-pencil-square>
                 Cập nhật
               </b-dropdown-item>
@@ -232,6 +136,287 @@
         ></b-pagination>
       </div>
     </b-card>
+    <b-modal
+      id="modal-add"
+      ref="modal"
+      title="Thông tin gói dịch vụ"
+      hide-footer
+      @shown="shown"
+      @hide="hide"
+    >
+      <ValidationObserver v-if="doShow" ref="form" v-slot="{ handleSubmit }">
+        <b-form @submit.prevent="handleSubmit(onSubmit)">
+          <ValidationProvider rules="required|max:255" name="Tên gói">
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              label="Tên gói (*)"
+              label-for="name"
+              class="mb-3"
+            >
+              <b-form-input
+                id="name"
+                v-model="name"
+                type="text"
+                :state="errors[0] ? false : valid ? true : null"
+              ></b-form-input>
+              <b-form-invalid-feedback>
+                {{ errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <ValidationProvider
+            name="Thời hạn (ngày) (*)"
+            rules="required|max:255|integer"
+          >
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              label="Thời hạn (ngày) (*)"
+              label-for="exp"
+              class="mb-3"
+            >
+              <b-form-input
+                id="exp"
+                v-model="exp"
+                type="text"
+                :state="errors[0] ? false : valid ? true : null"
+              ></b-form-input>
+              <b-form-invalid-feedback>
+                {{ errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <ValidationProvider
+            name="Số lượng câu hỏi (*)"
+            rules="required|max:255|integer"
+          >
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              label="Số lượng câu hỏi (*)"
+              label-for="limitQuestion"
+              class="mb-3"
+            >
+              <b-form-input
+                id="limitQuestion"
+                v-model="limitQuestion"
+                type="text"
+                :state="errors[0] ? false : valid ? true : null"
+              ></b-form-input>
+              <b-form-invalid-feedback>
+                {{ errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <ValidationProvider
+            name="Số lượng đề thi (*)"
+            rules="required|max:255|integer"
+          >
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              label="Số lượng đề thi (*)"
+              label-for="limitExam"
+              class="mb-3"
+            >
+              <b-form-input
+                id="limitExam"
+                v-model="limitExam"
+                type="text"
+                :state="errors[0] ? false : valid ? true : null"
+              ></b-form-input>
+              <b-form-invalid-feedback>
+                {{ errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <ValidationProvider
+            name="Giá tiền (*)"
+            rules="required|max:255|integer"
+          >
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              label="Giá tiền (*)"
+              label-for="price"
+              class="mb-3"
+            >
+              <b-form-input
+                id="price"
+                v-model="price"
+                type="text"
+                :state="errors[0] ? false : valid ? true : null"
+              ></b-form-input>
+              <b-form-invalid-feedback>
+                {{ errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <b-form-group label="Trạng thái" label-for="status" class="mb-3">
+            <treeselect
+              id="status"
+              v-model="isActive"
+              :multiple="false"
+              :options="status"
+              :load-options="loadOptions"
+            />
+          </b-form-group>
+          <b-form-group class="mt-3" label-for="checkbox-1">
+            <b-form-checkbox id="checkbox-1" v-model="isPublic">
+              User tự động đăng ký?
+            </b-form-checkbox>
+          </b-form-group>
+          <ValidationProvider rules="max:1000">
+            <b-form-group label="ghi chú" label-for="note">
+              <b-form-textarea id="note" v-model="note"></b-form-textarea>
+            </b-form-group>
+          </ValidationProvider>
+          <footer class="modal-footer">
+            <button type="button" class="btn btn-secondary">Hủy Bỏ</button>
+            <button type="submit" class="btn btn-primary">Lưu</button>
+          </footer>
+        </b-form>
+      </ValidationObserver>
+    </b-modal>
+    <b-modal
+      id="modal-edit"
+      ref="modal"
+      title="Thông tin gói dịch vụ"
+      hide-footer
+      @shown="shownEdit"
+      @hide="hideEdit"
+      @oke="onEdit"
+    >
+      <ValidationObserver
+        v-if="doShowEdit"
+        ref="form"
+        v-slot="{ handleSubmit }"
+      >
+        <b-form @submit.prevent="handleSubmit(onEdit)">
+          <ValidationProvider rules="required|max:255" name="Tên gói">
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              label="Tên gói (*)"
+              label-for="name"
+              class="mb-3"
+            >
+              <b-form-input
+                id="name"
+                v-model="name"
+                type="text"
+                :state="errors[0] ? false : valid ? true : null"
+              ></b-form-input>
+              <b-form-invalid-feedback>
+                {{ errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <ValidationProvider
+            name="Thời hạn (ngày) (*)"
+            rules="required|max:255|integer"
+          >
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              label="Thời hạn (ngày) (*)"
+              label-for="exp"
+              class="mb-3"
+            >
+              <b-form-input
+                id="exp"
+                v-model="exp"
+                type="text"
+                :state="errors[0] ? false : valid ? true : null"
+              ></b-form-input>
+              <b-form-invalid-feedback>
+                {{ errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <ValidationProvider
+            name="Số lượng câu hỏi (*)"
+            rules="required|max:255|integer"
+          >
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              label="Số lượng câu hỏi (*)"
+              label-for="limitQuestion"
+              class="mb-3"
+            >
+              <b-form-input
+                id="limitQuestion"
+                v-model="limitQuestion"
+                type="text"
+                :state="errors[0] ? false : valid ? true : null"
+              ></b-form-input>
+              <b-form-invalid-feedback>
+                {{ errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <ValidationProvider
+            name="Số lượng đề thi (*)"
+            rules="required|max:255|integer"
+          >
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              label="Số lượng đề thi (*)"
+              label-for="limitExam"
+              class="mb-3"
+            >
+              <b-form-input
+                id="limitExam"
+                v-model="limitExam"
+                type="text"
+                :state="errors[0] ? false : valid ? true : null"
+              ></b-form-input>
+              <b-form-invalid-feedback>
+                {{ errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <ValidationProvider
+            name="Giá tiền (*)"
+            rules="required|max:255|integer"
+          >
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              label="Giá tiền (*)"
+              label-for="price"
+              class="mb-3"
+            >
+              <b-form-input
+                id="price"
+                v-model="price"
+                type="text"
+                :state="errors[0] ? false : valid ? true : null"
+              ></b-form-input>
+              <b-form-invalid-feedback>
+                {{ errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <b-form-group label="Trạng thái" label-for="status" class="mb-3">
+            <treeselect
+              id="status"
+              v-model="isActive"
+              :multiple="false"
+              :options="status"
+              :load-options="loadOptions"
+            />
+          </b-form-group>
+          <b-form-group class="mt-3" label-for="checkbox-1">
+            <b-form-checkbox id="checkbox-1" v-model="isPublic">
+              User tự động đăng ký?
+            </b-form-checkbox>
+          </b-form-group>
+          <ValidationProvider rules="max:1000">
+            <b-form-group label="ghi chú" label-for="note">
+              <b-form-textarea id="note" v-model="note"></b-form-textarea>
+            </b-form-group>
+          </ValidationProvider>
+          <footer class="modal-footer">
+            <button type="button" class="btn btn-secondary">Hủy Bỏ</button>
+            <button type="submit" class="btn btn-primary">Lưu</button>
+          </footer>
+        </b-form>
+      </ValidationObserver>
+    </b-modal>
   </div>
 </template>
 <script>
@@ -261,7 +446,7 @@ export default defineComponent({
         },
       ],
       listServices: [],
-      valueStatus: null,
+      isActive: null,
       name: '',
       exp: null,
       limitQuestion: null,
@@ -269,9 +454,10 @@ export default defineComponent({
       price: null,
       isPublic: false,
       note: '',
-      nameState: null,
+      hashId: '',
+      doShow: false,
+      doShowEdit: false,
       sorts: [],
-      isCheck: false,
       fields: [
         {
           label: 'STT',
@@ -329,12 +515,12 @@ export default defineComponent({
           label: 'Khác',
         },
         {
-          id: true,
-          label: 'Hoạt động',
-        },
-        {
           id: false,
           label: 'Không hoạt động',
+        },
+        {
+          id: true,
+          label: 'Hoạt động',
         },
       ],
       currentPage: queryPage,
@@ -380,6 +566,7 @@ export default defineComponent({
     }
   },
   methods: {
+    loadOptions({ action, searchQuery, callback }) {},
     async handleDelete(hashId) {
       if (!window.confirm('Chắc chưa ba ?')) {
         return
@@ -416,76 +603,96 @@ export default defineComponent({
         })
       }
     },
-    checkFormValidity() {
-      const valid = this.$refs.form.checkValidity()
-      this.nameState = valid
-      return valid
+    showModal(id) {
+      this.$bvModal.show(id)
     },
-    resetModal() {
-      this.nameState = null
+    hideModal(id) {
+      this.$bvModal.hide(id)
     },
-    handleOk(bvModalEvt) {
-      // Prevent modal from closing
-      bvModalEvt.preventDefault()
-      // Trigger submit handler
-      this.handleSubmit()
+    shown() {
+      this.doShow = true
     },
-    async handleSubmit(item) {
-      // Exit when the form isn't valid
-      // if (!this.checkFormValidity()) {
-      //   return
-      // }
-      // Push the name to submitted names
-      // console.log('list ', item)
-      const dataCreate = {
+    hide() {
+      this.doShow = false
+    },
+    shownEdit() {
+      this.doShowEdit = true
+    },
+    hideEdit() {
+      this.doShowEdit = false
+    },
+    async onSubmit() {
+      const formData = {
         name: this.name,
         exp: Number(this.exp),
         limitQuestion: Number(this.limitQuestion),
         limitExam: Number(this.limitExam),
         price: Number(this.price),
-        status: this.isActive,
+        isActive: this.isActive,
         isPublic: this.isPublic,
+        hashId: this.hashId,
         note: '',
       }
-      const dataUpdate = {
-        name: item.name,
-        exp: item.exp,
-        limitQuestion: item.limitQuestion,
-        limitExam: item.limitExam,
-        price: item.price,
-        isActive: !item.status,
-        isPublic: item.isPublic,
-        hashId: item.hashId,
-        note: '',
+      try {
+        const { data } = await userAPI.createService(formData)
+        this.$handleError(data)
+        this.resetDataForm()
+        this.search()
+        this.hideModal('modal-add')
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
       }
-      if (!this.isCheck) {
-        try {
-          const { data } = await userAPI.updateService(dataUpdate)
-          this.isCheck = false
-          this.$handleError(data)
-          this.search()
-        } catch (err) {
-          this.$handleError(err, () => {
-            console.log(err)
-          })
-        }
-      } else {
-        try {
-          const { data } = await userAPI.createService(dataCreate)
-          this.$handleError(data)
-          this.search()
-        } catch (err) {
-          this.$handleError(err, () => {
-            console.log(err)
-          })
-        }
-      }
-      // Hide the modal manually
-      this.$nextTick(() => {
-        this.$bvModal.hide('modal-prevent-closing')
-      })
     },
-    loadOptions({ action, searchQuery, callback }) {},
+    edit(item) {
+      this.name = item.name
+      this.exp = item.exp
+      this.limitQuestion = item.limitQuestion
+      this.limitExam = item.limitExam
+      this.price = item.price
+      this.isActive = item.status
+      this.isPublic = item.isPublic
+      this.hashId = item.hashId
+      this.note = ''
+    },
+    async onEdit() {
+      const result = {
+        name: this.name,
+        exp: this.exp,
+        limitQuestion: this.limitQuestion,
+        limitExam: this.limitExam,
+        price: this.price,
+        isActive: !!this.isActive,
+        isPublic: this.isPublic,
+        hashId: this.hashId,
+        note: '',
+      }
+      console.log(result)
+      try {
+        const { data } = await userAPI.updateService(result)
+        this.$handleError(data)
+        this.hideModal('modal-edit')
+        this.resetDataForm()
+        this.search()
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
+    },
+    resetDataForm() {
+      this.formAdd = {
+        isActive: null,
+        name: '',
+        exp: null,
+        limitQuestion: null,
+        limitExam: null,
+        price: null,
+        isPublic: false,
+        note: '',
+      }
+    },
   },
 })
 </script>

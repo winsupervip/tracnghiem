@@ -144,6 +144,7 @@ export default defineComponent({
     },
   },
   setup(props) {
+    // const { $loader, $logger } = useContext()
     const data = reactive({
       serviceHashId: '',
       agencyId: props.id,
@@ -168,8 +169,8 @@ export default defineComponent({
     },
     async onSubmit() {
       const dataSubmit = {
-        serviceHashId: this.serviceHashId,
-        agencyId: this.agencyId,
+        serviceHashId: this.agencyId,
+        agencyId: this.serviceHashId,
         expireDate: this.expireDate,
         limitActive: Number(this.limitActive),
         price: Number(this.price),

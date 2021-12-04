@@ -65,30 +65,6 @@
               placeholder="Sắp xếp"
             />
           </b-form-group>
-          <b-form-group
-            class="col-12 col-md-3 mb-3 position-relative overflow-hidden"
-          >
-            <b-form-input
-              id="keyword"
-              v-model="urlQuery.expireDateFrom"
-              trim
-              type="search"
-              placeholder="Ngày hết hạn từ"
-            >
-            </b-form-input>
-          </b-form-group>
-          <b-form-group
-            class="col-12 col-md-3 mb-3 position-relative overflow-hidden"
-          >
-            <b-form-input
-              id="keyword"
-              v-model="urlQuery.expireDateTo"
-              trim
-              type="search"
-              placeholder="Ngày hết hạn đến"
-            >
-            </b-form-input>
-          </b-form-group>
           <div
             class="
               col-12 col-md-3
@@ -117,7 +93,7 @@
         <EmptyData />
       </div>
       <div v-else>
-        <b-table striped hover :items="listPackage" :fields="fields">
+        <b-table striped hover :items="listAgency" :fields="fields">
           <template #cell(actions)="data">
             <b-dropdown class="m-md-2" no-caret size="sm">
               <template #button-content>
@@ -176,7 +152,7 @@
         ></b-pagination>
       </div>
     </b-card>
-    <b-modal
+    <!-- <b-modal
       id="modal-add"
       ref="modal"
       title="Thông tin gói dịch vụ"
@@ -225,7 +201,6 @@
                   type="text"
                   autocomplete="off"
                 ></b-form-input>
-                <!-- <b-input-group-append> -->
                 <b-form-datepicker
                   v-model="expireDate"
                   button-only
@@ -233,7 +208,6 @@
                   locale="vi-VN"
                   aria-controls="example-input"
                 ></b-form-datepicker>
-                <!-- </b-input-group-append> -->
               </b-input-group>
               <b-form-invalid-feedback :state="valid">{{
                 errors[0]
@@ -337,7 +311,6 @@
                   type="text"
                   autocomplete="off"
                 ></b-form-input>
-                <!-- <b-input-group-append> -->
                 <b-form-datepicker
                   v-model="expireDate"
                   button-only
@@ -345,7 +318,6 @@
                   locale="vi-VN"
                   aria-controls="expireDate"
                 ></b-form-datepicker>
-                <!-- </b-input-group-append> -->
               </b-input-group>
               <b-form-invalid-feedback :state="valid">{{
                 errors[0]
@@ -395,7 +367,7 @@
           </footer>
         </b-form>
       </ValidationObserver>
-    </b-modal>
+    </b-modal> -->
   </div>
 </template>
 <script>
@@ -408,25 +380,16 @@ import {
   useRoute,
   watch,
 } from '@nuxtjs/composition-api'
-import {
-  ASYNC_SEARCH,
-  LOAD_CHILDREN_OPTIONS,
-  LOAD_ROOT_OPTIONS,
-} from '@riophae/vue-treeselect'
-import _ from 'lodash'
 import userAPI from '@/api/service'
 export default defineComponent({
   auth: true,
   components: {},
   layout: 'dashboard',
-  middleware: ['isAdmin'],
+  // middleware: ['isAgency'],
   setup() {
     const { $loader } = useContext()
     const route = useRoute()
     const queryPage = route?.value?.query?.page || 1
-    const id = route.value.params.id
-
-    console.log('id', id)
     const data = reactive({
       serviceHashId: 'mpjfjuaxd',
       agencyId: '',
@@ -440,7 +403,7 @@ export default defineComponent({
           text: 'Danh sách gói dịch vụ',
         },
       ],
-      listPackage: [],
+      listAgency: [],
       sorts: [],
       status: [],
       fields: [
@@ -486,24 +449,18 @@ export default defineComponent({
       total: 0,
       urlQuery: {
         page: 1,
-        hashId: id,
         pageSize: 10,
         sort: 1,
         status: '',
         keyword: '',
         createDateFrom: '',
         createDateTo: '',
-        expireDateFrom: '',
-        expireDateTo: '',
       },
     })
     const { fetch } = useFetch(async () => {
       $loader()
-      const { data: result } = await userAPI.getServiceDetailAgencies(
-        'mpjfjuaxd',
-        data.urlQuery
-      )
-      data.listPackage = result?.object?.items
+      const { data: result } = await userAPI.getAgency(data.urlQuery)
+      data.listAgency = result?.object?.items
       data.total = result?.object?.total
       $loader().close()
     })
@@ -538,15 +495,7 @@ export default defineComponent({
     }
   },
   methods: {
-    loadOptions({ action, searchQuery, callback }) {
-      if (action === ASYNC_SEARCH) {
-        this.searchAsync(callback, searchQuery)
-      } else if (action === LOAD_CHILDREN_OPTIONS) {
-        // eslint-disable-next-line
-      } else if (action === LOAD_ROOT_OPTIONS) {
-        console.log('load root')
-      }
-    },
+    loadOptions({ action, searchQuery, callback }) {},
     showModal(id) {
       this.$bvModal.show(id)
     },
@@ -565,103 +514,91 @@ export default defineComponent({
     hideEdit() {
       this.doShowEdit = false
     },
-    async handleDelete(hashId) {
-      if (!window.confirm('Bạn thực sự muốn xóa?')) {
-        return
-      }
-      try {
-        const { data } = await userAPI.deleteServiceAgencies(hashId)
-        this.$handleError(data)
-        this.search()
-      } catch (err) {
-        this.$handleError(err, () => {
-          console.log(err)
-        })
-      }
-    },
-    async updateStatus(hashId, status) {
-      if (status === 1) {
-        try {
-          const { data } = await userAPI.updateServiceAgenciesDeactivePending(
-            hashId
-          )
-          this.$handleError(data)
-          this.search()
-        } catch (err) {
-          this.$handleError(err, () => {
-            console.log(err)
-          })
-        }
-      } else {
-        try {
-          const { data } = await userAPI.updateServiceAgenciesActive(hashId)
-          this.$handleError(data)
-          this.search()
-        } catch (err) {
-          this.$handleError(err, () => {
-            console.log(err)
-          })
-        }
-      }
-    },
-    searchAsync: _.debounce(async function (callback, searchQuery) {
-      try {
-        const response = await userAPI.getSericeCategoryAgencies(
-          this.axios,
-          searchQuery
-        )
-        const options = response.data?.object?.items
-        callback(null, options)
-      } catch (err) {
-        callback(null, [])
-      }
-    }, 200),
-    async onSubmit() {
-      const dataSubmit = {
-        serviceHashId: this.serviceHashId,
-        agencyId: this.agencyId,
-        expireDate: this.expireDate,
-        limitActive: Number(this.limitActive),
-        price: Number(this.price),
-        note: this.note,
-      }
-      try {
-        const { data } = await userAPI.createServiceAgencies(dataSubmit)
-        this.$handleError(data)
-        this.hideModal('modal-add')
-        this.search()
-      } catch (err) {
-        this.$handleError(err, () => {
-          console.log(err)
-        })
-      }
-    },
-    edit(item) {
-      this.limitActive = item.limitActive
-      this.expireDate = item.expireDate
-      this.hashId = item.hashId
-      this.note = item.note
-      console.log('item ', item)
-    },
-    async onEdit() {
-      const result = {
-        hashId: this.hashId,
-        expireDate: this.expireDate,
-        limitActive: this.limitActive,
-        note: this.note,
-      }
-      console.log(result)
-      try {
-        const { data } = await userAPI.updateServiceAgencies(result)
-        this.$handleError(data)
-        this.hideModal('modal-edit')
-        this.search()
-      } catch (err) {
-        this.$handleError(err, () => {
-          console.log(err)
-        })
-      }
-    },
+    // async handleDelete(hashId) {
+    //   if (!window.confirm('Bạn thực sự muốn xóa?')) {
+    //     return
+    //   }
+    //   try {
+    //     const { data } = await userAPI.deleteServiceAgencies(hashId)
+    //     this.$handleError(data)
+    //     this.search()
+    //   } catch (err) {
+    //     this.$handleError(err, () => {
+    //       console.log(err)
+    //     })
+    //   }
+    // },
+    // async updateStatus(hashId, status) {
+    //   if (status === 1) {
+    //     try {
+    //       const { data } = await userAPI.updateServiceAgenciesDeactivePending(
+    //         hashId
+    //       )
+    //       this.$handleError(data)
+    //       this.search()
+    //     } catch (err) {
+    //       this.$handleError(err, () => {
+    //         console.log(err)
+    //       })
+    //     }
+    //   } else {
+    //     try {
+    //       const { data } = await userAPI.updateServiceAgenciesActive(hashId)
+    //       this.$handleError(data)
+    //       this.search()
+    //     } catch (err) {
+    //       this.$handleError(err, () => {
+    //         console.log(err)
+    //       })
+    //     }
+    //   }
+    // },
+    // async onSubmit() {
+    //   const dataSubmit = {
+    //     serviceHashId: this.serviceHashId,
+    //     agencyId: this.agencyId,
+    //     expireDate: this.expireDate,
+    //     limitActive: Number(this.limitActive),
+    //     price: Number(this.price),
+    //     note: this.note,
+    //   }
+    //   try {
+    //     const { data } = await userAPI.createServiceAgencies(dataSubmit)
+    //     this.$handleError(data)
+    //     this.hideModal('modal-add')
+    //     this.search()
+    //   } catch (err) {
+    //     this.$handleError(err, () => {
+    //       console.log(err)
+    //     })
+    //   }
+    // },
+    // edit(item) {
+    //   this.limitActive = item.limitActive
+    //   this.expireDate = item.expireDate
+    //   this.hashId = item.hashId
+    //   this.note = item.note
+    //   console.log('item ', item)
+    // },
+    // async onEdit() {
+    //   const result = {
+    //     hashId: this.hashId,
+    //     expireDate: this.expireDate,
+    //     limitActive: this.limitActive,
+    //     note: this.note,
+    //   }
+    //   console.log(result)
+    //   try {
+    //     const { data } = await userAPI.updateServiceAgencies(result)
+    //     this.$handleError(data)
+    //     this.hideModal('modal-edit')
+    //     this.search()
+    //   } catch (err) {
+    //     this.$handleError(err, () => {
+    //       console.log(err)
+    //     })
+    //   }
+    // },
   },
 })
 </script>
