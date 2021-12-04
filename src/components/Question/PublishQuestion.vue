@@ -24,7 +24,7 @@
       <div class="p-question__box__body__item">
         <p>{{ statusMessage }}</p>
         <b-button type="submit" variant="primary">{{
-          isEdit ? $t('editQuestion') : $t('saveQuestion')
+          isEdit ? $t('editQuestion') : buttonTitle
         }}</b-button>
       </div>
     </div>
@@ -54,7 +54,8 @@ export default defineComponent({
   setup(props) {
     const data = reactive({
       listStatus: [],
-      status: 1,
+      status: 3,
+      buttonTitle: '',
       value: null,
       options: [
         { text: 'First radio', value: 'first' },
@@ -76,6 +77,7 @@ export default defineComponent({
       getStatus: 'questions/getStatus',
     }),
     statusMessage() {
+      this.changeButtonMess()
       let mess = ''
       if (this.status === 1) {
         mess = this.$i18n.t('everyBodyCanSee')
@@ -94,6 +96,15 @@ export default defineComponent({
     },
   },
   methods: {
+    changeButtonMess() {
+      if (this.status === 1) {
+        this.buttonTitle = 'Lưu công khai'
+      } else if (this.status === 2) {
+        this.buttonTitle = 'Lưu không công khai'
+      } else {
+        this.buttonTitle = 'Lưu bản nháp'
+      }
+    },
     ...mapActions({ addStatus: 'questions/addStatus' }),
   },
 })
