@@ -15,7 +15,7 @@
           name="Nội dung câu hỏi"
           rules="required"
         >
-          <TinyEditor v-if="doShow" v-model="questionContent" />
+          <TinyEditor v-if="doShow" v-model="questionContent" @text="getText" />
           <b-form-invalid-feedback :state="valid">{{
             errors[0]
           }}</b-form-invalid-feedback>
@@ -63,6 +63,7 @@ export default {
   data() {
     return {
       questionContent: '',
+      questionPlantext: '',
       isErrors: '',
       doShow: false,
       okOnly: true,
@@ -96,6 +97,7 @@ export default {
       const data = {
         id: this.questionChild.id,
         value: this.questionContent,
+        questionPlantext: this.questionPlantext,
       }
       this.addChildQuestionContent(data)
     },
@@ -123,6 +125,17 @@ export default {
     addQuestionContent() {
       console.log('blur chays')
       this.addChildQuestionContent(this.questionContent)
+    },
+    getText(val) {
+      if (val) {
+        let description = ''
+        if (val.length > 500) {
+          description = val.substring(0, 500)
+        } else {
+          description = val
+        }
+        this.questionPlantext = description.replace('\n', '')
+      }
     },
   },
   // eslint-disable-next-line vue/order-in-components

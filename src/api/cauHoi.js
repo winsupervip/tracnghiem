@@ -17,4 +17,7 @@ export default {
       errorCallApi()
     }
   },
+  updateQuestionGroup: (data) => {
+    global.$http.post('/api/v1/Question/update-question-group', data)
+  },
 }

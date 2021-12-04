@@ -72,18 +72,16 @@ export default defineComponent({
     seoDescription() {
       this.addSeoDescription(this.seoDescription)
     },
-    getSeoTitle() {
-      this.seoTitle = this.getSeoTitle
-    },
-    getseoDescription() {
-      this.seoDescription = this.getseoDescription
-    },
     getTitle() {
       this.seoTitle = this.getTitle
     },
     getQuestionPlanText() {
       this.seoDescription = this.getQuestionPlanText
     },
+  },
+  mounted() {
+    this.seoTitle = this.getTitle
+    this.seoDescription = this.getseoDescription
   },
   methods: {
     ...mapActions({

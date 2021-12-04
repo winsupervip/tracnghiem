@@ -1,7 +1,7 @@
 <template>
   <div>
     <CreateSingleQuestion
-      v-if="questionItemType === 'question'"
+      v-if="questionItemType === 'question' && doneCall"
       :question-type="questionType"
       :question-type-id="questionTypeId"
       :question-title="questionTitle"
@@ -11,13 +11,7 @@
       :handle-answer="handleAnswer"
       :is-edit="true"
     />
-    <CreateQuestionGroup
-      v-if="questionItemType === 'group'"
-      :have-right-answer="ishaveRightAnswer"
-      :is-pairing="isPairing"
-      :have-random-answer="isHaveRandomAnswer"
-      :handle-answer="handleAnswer"
-    />
+    <CreateQuestionGroup v-if="questionItemType === 'group' && doneCall" />
   </div>
 </template>
 
@@ -53,13 +47,13 @@ export default defineComponent({
 
     const data = reactive({
       questionItemType: ItemType.value,
-
       questionTypeId: 0,
       questionType: '',
       questionTitle: '',
       ishaveRightAnswer: true,
       isPairing: false,
       isHaveRandomAnswer: true,
+      doneCall: false,
     })
     const questionId = id.value
 
@@ -108,13 +102,11 @@ export default defineComponent({
           break
       }
     }
-
     useAsync(async () => {
       let result = {}
       if (data.questionItemType === 'question') {
         result = await QuestionApi.getUserQuestionDetails(questionId)
         const answers = result.data.object.answers
-
         let listAnswer = []
         if (result.data.object.question.questionTypeId === 4) {
           const lefts = answers.filter((answer) => answer.position === 1)
@@ -181,8 +173,10 @@ export default defineComponent({
         checkQuestionType(result.data.object.question)
       } else if (data.questionItemType === 'group') {
         result = await QuestionApi.getUserQuestionGroupDetails(questionId)
+        console.log('getUserQuestionGroupDetails', result)
         await store.dispatch('questions/copyGroupQuestion', result.data)
       }
+      data.doneCall = true
     })
 
     return { ...toRefs(data) }

@@ -91,9 +91,9 @@ export default defineComponent({
     status() {
       this.addStatus(this.status)
     },
-    getStatus() {
-      this.status = this.getStatus
-    },
+  },
+  mounted() {
+    this.status = this.getStatus
   },
   methods: {
     changeButtonMess() {

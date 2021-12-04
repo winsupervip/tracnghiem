@@ -13,6 +13,7 @@
             :placeholder="$t('title')"
           >
           </b-form-input>
+          {{ getTitle }}
           <b-form-invalid-feedback id="inputLiveFeedback">
             {{ errors[0] }}
           </b-form-invalid-feedback>
@@ -123,7 +124,7 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       getQuestion: 'questions/getQuestion',
-      getGroupQuestion: 'questions/getGroupQuestion',
+      getTitle: 'questions/getTitle',
     }),
     criteria() {
       // Compute the search criteria
@@ -150,16 +151,11 @@ export default defineComponent({
       this.commitQuestion()
     },
   },
-  updated() {
-    // khi mà edit thì đọc từ store vào
-    console.log('aaa', this.getQuestion.question.questionContent)
-    console.log('abc', this.title)
-    if (this.getQuestion.question.questionContent !== '') {
-      this.questionContent = this.getQuestion.question.questionContent
-      this.title = this.getQuestion.question.title
-      this.tags = this.getQuestion.question.tags
-      this.questionPlanText = this.getQuestion.question.plainText
-    }
+  mounted() {
+    this.questionContent = this.getQuestion.question.questionContent
+    this.title = this.getQuestion.question.title
+    this.tags = this.getQuestion.question.tags
+    this.questionPlanText = this.getQuestion.question.plainText
   },
   methods: {
     isAddTag(value) {

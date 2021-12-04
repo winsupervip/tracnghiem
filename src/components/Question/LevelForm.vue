@@ -60,12 +60,12 @@ export default defineComponent({
     }),
   },
   watch: {
-    getLevel() {
-      this.levelForm = this.getLevel
-    },
     levelForm() {
       this.addlevel(this.levelForm)
     },
+  },
+  mounted() {
+    this.levelForm = this.getLevel
   },
   methods: {
     ...mapActions({ addlevel: 'questions/addlevel' }),

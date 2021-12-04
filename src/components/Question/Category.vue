@@ -69,10 +69,9 @@ export default defineComponent({
     treeValue() {
       this.addCategory(this.treeValue)
     },
-
-    getCategories() {
-      this.treeValue = this.getCategories
-    },
+  },
+  mounted() {
+    this.treeValue = this.getCategories
   },
   methods: {
     ...mapActions({ addCategory: 'questions/addCategory' }),
