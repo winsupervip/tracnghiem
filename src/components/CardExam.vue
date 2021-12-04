@@ -38,7 +38,7 @@
             data.teacher
               ? data.teacher.displayName
                 ? data.displayName
-                : data.teacher.firstName + ' a ' + data.teacher.lastName
+                : data.teacher.firstName + ' ' + data.teacher.lastName
               : ''
           "
         />
