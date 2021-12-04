@@ -208,6 +208,7 @@
                 ref="slider"
                 v-model="valueTimeExam"
                 v-bind="optionsTimeExam"
+                @drag-end="changeOptionSeach"
               />
             </div>
           </b-collapse>
@@ -352,27 +353,6 @@ export default {
       return value.label
     },
   },
-  // created() {
-  //   this.min = 0
-  //   this.maxTime = 120
-  //   this.maxQuestion = 500
-  //   this.bgStyle = {
-  //     backgroundColor: '#fff',
-  //     boxShadow: 'inset 0.5px 0.5px 3px 1px rgba(0,0,0,.36)',
-  //   }
-  //   this.tooltipStyle = {
-  //     backgroundColor: '#1c3988',
-  //     borderColor: '#1c3988',
-  //   }
-  //   this.processStyle = {
-  //     backgroundColor: '#1c3988',
-  //   }
-  //   this.enableCross = false
-  //   this.tooltipMerge = false
-  //   this.formatterTime = (rangeTimeExam) => `${rangeTimeExam} phút`
-  //   this.formatterNumberQuestion = (rangeNumberQuestion) =>
-  //     `${rangeNumberQuestion} câu`
-  // },
   mounted() {
     this.fetchCategories(0)
   },
@@ -418,10 +398,10 @@ export default {
         categories: this.selectCategories,
         levels: this.selectCategories,
         ratings: this.selecTratings,
-        amountExamTimeLeft: this.rangeTimeExam[0],
-        amountExamTimeRight: this.rangeTimeExam[1],
-        amountQuestionLeft: this.rangeNumberQuestion[0],
-        amountQuestionRight: this.rangeNumberQuestion[1],
+        amountExamTimeLeft: this.valueTimeExam[0],
+        amountExamTimeRight: this.valueTimeExam[1],
+        amountQuestionLeft: this.valueNumberQuestion[0],
+        amountQuestionRight: this.valueNumberQuestion[1],
       }
       this.$emit('seachOption', data)
     },
