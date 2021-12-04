@@ -17,10 +17,7 @@
                   <b-col cols="2">
                     <strong>Câu {{ index + 1 }}</strong>
                   </b-col>
-                  <b-col
-                    cols="8 "
-                    v-html="question.question.questionContent"
-                  ></b-col>
+                  <b-col cols="8 " v-html="question.questionContent"></b-col>
                   <b-col cols="2" class="matching_style">
                     <b-icon icon="shuffle"></b-icon>
                     <b-icon
@@ -54,12 +51,8 @@
           <PublishQuestion />
           <Category />
           <LevelForm />
-          <!-- <UploadImage :get-image="getImage" /> -->
-          <Uploader
-            v-model="image"
-            :accept="'*/*'"
-            :disabled="false"
-          ></Uploader>
+
+          <Uploader :accept="'*/*'" :disabled="false"></Uploader>
           <AddSeo />
         </div>
       </div>
@@ -75,15 +68,15 @@ import {
   useStore,
 } from '@nuxtjs/composition-api'
 import { mapGetters, mapActions } from 'vuex'
-import PublishQuestion from '../../../../components/Question/PublishQuestion.vue'
-import AddSeo from '../../../../components/Question/AddSeo.vue'
-import LevelForm from '../../../../components/Question/LevelForm.vue'
-import Category from '../../../../components/Question/Category.vue'
-import HeaderOfSingleQuestion from '../../../../components/Question/HeaderOfSingleQuestion.vue'
-import QuestionChild from '../../../../components/Question/QuestionChild.vue'
-import AddChildrenQuestion from '../../../../components/Question/AddChildrenQuestion.vue'
-import CauHoiApi from '../../../../api/cauHoi'
-import Uploader from '../../../../components/Uploader.vue'
+import Uploader from '../Uploader.vue'
+import PublishQuestion from './PublishQuestion.vue'
+import AddSeo from './AddSeo.vue'
+import LevelForm from './LevelForm.vue'
+import Category from './Category.vue'
+import HeaderOfSingleQuestion from './HeaderOfSingleQuestion.vue'
+
+import AddChildrenQuestion from './AddChildrenQuestion.vue'
+import CauHoiApi from '@/api/cauHoi'
 import CommentOrNote from '@/components/Question/CommentOrNote.vue'
 // eslint-disable-next-line import/no-unresolved
 import handler from '@/utils/question/handleAnswer.js'
@@ -96,7 +89,6 @@ export default defineComponent({
     AddSeo,
     Uploader,
     AddChildrenQuestion,
-    QuestionChild,
     CommentOrNote,
   },
   layout: 'dashboard',
@@ -111,7 +103,7 @@ export default defineComponent({
       dataUpdate: {},
       isUpdate: false,
       isValid: true,
-      image: '',
+      question: '',
     })
 
     return {
@@ -122,24 +114,16 @@ export default defineComponent({
     ...mapGetters({
       getGroupQuestion: 'questions/getGroupQuestion',
       getChildQuestion: 'questions/getChildQuestion',
-      getSeoAvatar: 'questions/getSeoAvatar',
     }),
   },
-  watch: {
-    image() {
-      this.addSeoAvater(this.image)
-    },
-  },
-  mounted() {
-    this.image = this.getSeoAvatar
-  },
+
   methods: {
     ...mapActions({
       restAnswer: 'questions/restAnswer',
       setNullAnswerId: 'questions/setNullAnswerId',
       deleteChildQuestion: 'questions/deleteChildQuestion',
-      addSeoAvater: 'questions/addSeoAvatar',
     }),
+
     openUpdate(data) {
       this.dataUpdate = data
       this.isUpdate = true
@@ -171,16 +155,7 @@ export default defineComponent({
       this.errors = []
       this.isValid = true
       console.log(groupQuestion)
-      if (groupQuestion.childQuestions.length === 0) {
-        this.errors.push('Bạn phải nhập vào nội dung câu hỏi')
-        this.isValid = false
-        return
-      }
       groupQuestion.childQuestions.forEach((element, index) => {
-        if (element.question.questionContent === '') {
-          this.errors.push('Bạn phải nhập vào nội dung câu hỏi con')
-          this.isValid = false
-        }
         if (element.typeQuestion === 'single-choice') {
           value = handler.singleChoiceAndRightWrong(element.answers)
         } else if (element.typeQuestion === 'short-answer') {
@@ -233,7 +208,8 @@ export default defineComponent({
           title: this.getGroupQuestion.question.title,
           hashId: '',
           questionGroupName: this.getGroupQuestion.question.questionContent,
-          description: this.getGroupQuestion.question.questionContent,
+          description:
+            'Voluntary work helps foster independence and imparts the ability to deal with different situations, often simulaneously, thus teaching people how to (1)____ their way through different systems. It therefore brings people into touch with the real worls; and, hence, equips them for the future. Initially, young adults in their late teens might not seem to have the expertise or knowledge to impart to others that say a teacher or an agriculturalist or a nurse would have, (2)____ they do have many skills that can help others. And in the absence of any particular talent, their energy and enthusiasm can be harnessed for the benefit (3) ____ their fellow human beings, and ultimately themselves. From all this, the gain to any community no matter how many voluntees are involved is (4)_____ Employers will generally look favorably on people (5)_____ have shown an ability to work as part of a team. It demonstrates a willingness to learn and an independent spirit, which would be desirable qualities in any employee.',
           plainText: this.getGroupQuestion.question.plainText,
           random: false,
           statusId: 1,

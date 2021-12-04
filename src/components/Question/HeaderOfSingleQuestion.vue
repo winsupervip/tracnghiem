@@ -52,7 +52,13 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  useRoute,
+  computed,
+} from '@nuxtjs/composition-api'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 import Tag from '@/components/Tag.vue'
@@ -65,12 +71,16 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  setup() {
+    const route = useRoute()
+    const ItemType = computed(() => route.value.query.type)
+
     const data = reactive({
       optionsText: {
         convert_urls: false,
         entity_encoding: 'raw',
       },
+      questionItemType: ItemType.value,
       isTagValid: false,
       questionContent: '',
       questionPlanText: '',
@@ -105,6 +115,7 @@ export default defineComponent({
 
       title: '',
     })
+
     return {
       ...toRefs(data),
     }
@@ -112,6 +123,7 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       getQuestion: 'questions/getQuestion',
+      getGroupQuestion: 'questions/getGroupQuestion',
     }),
     criteria() {
       // Compute the search criteria
@@ -141,6 +153,7 @@ export default defineComponent({
   updated() {
     // khi mà edit thì đọc từ store vào
     console.log('aaa', this.getQuestion.question.questionContent)
+    console.log('abc', this.title)
     if (this.getQuestion.question.questionContent !== '') {
       this.questionContent = this.getQuestion.question.questionContent
       this.title = this.getQuestion.question.title

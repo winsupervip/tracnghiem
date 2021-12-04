@@ -187,7 +187,12 @@ export default {
     state.question = question
     state.answers = answers
   },
-  EDIT_QUESTIONS(state, data) {},
+  COPY_GROUP_QUESTION(state, data) {
+    const questionGroup = data.object.questionGroup
+    const questions = data.object.questions
+    state.question = questionGroup
+    state.childQuestions = questions
+  },
   SET_NULL_ID_ANSWER(state, aIndex) {
     state.answers[aIndex].id = undefined
   },
