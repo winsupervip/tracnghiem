@@ -18,6 +18,8 @@ export default {
     state.exam.checkAnswersWhileTest = examSettings.checkAnswersWhileTest
     state.exam.checkAnswersAfterTest = examSettings.checkAnswersAfterTest
     state.exam.allowChangeSettings = examSettings.allowChangeSettings
+    state.exam.sectionConfig = examSettings.sectionConfig
+    state.exam.examTimeSecond = examSettings.examTimeSecond
   },
   SET_EXAM_EXTRA(state, examExtra) {
     state.exam.image = examExtra.image
@@ -30,7 +32,11 @@ export default {
     state.exam.slug = examExtra.slug
   },
   SET_SEO_DESCRIPTION(state, seoDescription) {
-    console.log('SET_SEO_DESCRIPTION', seoDescription)
     state.exam.seoDescription = seoDescription
+  },
+  SET_SECTION_CONFIG(state, { id, value }) {
+    const item = state.exam.sectionConfig.find((x) => x.sectionHashId === id)
+    console.log('SET_SECTION_CONFIG item: ')
+    if (item) item.numberQuestionsTest = value
   },
 }

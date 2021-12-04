@@ -8,6 +8,7 @@ export default {
   getExamSettings: (state) => ({
     nonExamTime: state.exam.nonExamTime,
     examTime: state.exam.examTime,
+    examTimeSecond: state.exam.examTimeSecond,
     maximumTest: state.exam.maximumTest,
     numberQuestionsTest: state.exam.numberQuestionsTest,
     suffleQuestions: state.exam.suffleQuestions,
@@ -15,6 +16,7 @@ export default {
     checkAnswersWhileTest: state.exam.checkAnswersWhileTest,
     checkAnswersAfterTest: state.exam.checkAnswersAfterTest,
     allowChangeSettings: state.exam.allowChangeSettings,
+    sectionConfig: state.exam.sectionConfig,
   }),
   getExamExtra: (state) => ({
     image: state.exam.image,

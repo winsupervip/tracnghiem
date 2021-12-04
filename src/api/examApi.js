@@ -137,4 +137,20 @@ export default {
     }&Keyword=${encodeURIComponent(urlQuery.keyword)}`
     return global.$http.get(url)
   },
+
+  getExamConfig(examId) {
+    const url = `/api/v1/Exam/get-exam-config/${examId}`
+    return global.$http.get(url)
+  },
+  addQuiz(data) {
+    return global.$http.post('/api/v1/Quiz/add-quiz', data)
+  },
+  getQuestionsBeforeSubmit(quizId) {
+    const url = `/api/v1/Quiz/get-questions-before-submit?quizId=${quizId}`
+    return global.$http.get(url)
+  },
+  getQuestionById(questionId) {
+    const url = `/api/v1/Quiz/question/${questionId}`
+    return global.$http.get(url)
+  },
 }
