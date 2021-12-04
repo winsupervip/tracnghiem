@@ -2,11 +2,12 @@
   <div class="list-single-question">
     <div class="list-questions-user">
       <b-card class="mt-3">
-        <QuestionHeader
-          :question="questions"
-          :is-delete-question="deleteQuestion"
-        />
-
+        <slot name="header">
+          <QuestionHeader
+            :question="questions"
+            :is-delete-question="deleteQuestion"
+          />
+        </slot>
         <div class="list-question">
           <div class="question-item">
             <div class="question-content text-smd">
