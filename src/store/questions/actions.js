@@ -64,8 +64,8 @@ export default {
   copyQuestion({ commit }, data) {
     commit('COPY_QUESTIONS', data)
   },
-  editQuestion({ commit }, data) {
-    commit('EDIT_QUESTIONS', data)
+  copyGroupQuestion({ commit }, data) {
+    commit('COPY_GROUP_QUESTION', data)
   },
 
   setNullAnswerId({ commit }, answerIndex) {
