@@ -350,6 +350,8 @@ export default defineComponent({
     },
     onAddQuestions() {
       this.$bvModal.hide('modal-selected')
+      this.selectedQuestions = []
+      this.selectedItems = []
       this.searchHandler()
     },
   },
