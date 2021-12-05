@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex">
     <div class="question-hashtag">
-      <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center flex-wrap">
         <p v-for="tag in questiontags.tagItems" :key="tag.tagId" class="me-3">
           <a href="">#{{ tag.tagName }}</a>
         </p>
