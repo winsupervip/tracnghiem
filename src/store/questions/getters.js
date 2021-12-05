@@ -2,6 +2,7 @@ export default {
   getListAnswer: (state) => state.answers,
   getUpdateValueAnswer: (state) => state.updateValueAnswer,
   getGroupSelected: (state) => state.selectedGroup,
+  getListChildrenAnswer: (state) => state.childQuestions,
   getQuestion: (state) => {
     return {
       question: state.question,

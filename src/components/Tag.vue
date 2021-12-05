@@ -41,6 +41,7 @@ export default {
   watch: {
     tag() {
       if (this.tags.length === 5) {
+        this.resetTag()
         this.$toast.show('Tối đa là 5 thẻ').goAway(1000)
         return
       }
@@ -48,6 +49,10 @@ export default {
     },
   },
   methods: {
+    resetTag() {
+      console.log('ádasd')
+      this.tag = ''
+    },
     update(newTags) {
       this.autocompleteItems = []
       this.tags = newTags

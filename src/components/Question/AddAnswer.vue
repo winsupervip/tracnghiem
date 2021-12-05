@@ -4,6 +4,7 @@
       <p style="font-weight: bold">{{ $t('AddAnswer.answer') }}(*)</p>
       <b-button
         v-b-modal.modal-1
+        :disabled="typeQuestion == 'right-wrong' && getListAnswer.length === 3"
         class="btnQuestion"
         variant="outline-primary"
         >{{ $t('addMoreAnswers') }}</b-button
@@ -24,6 +25,7 @@
         <div>
           <!-- class="wrapper" -->
           <div class="wrapper-left">
+            <p v-if="isPairing">Vế Phải</p>
             <TinyEditor
               v-if="doShow"
               v-model="answerContent"
