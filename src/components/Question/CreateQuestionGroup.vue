@@ -101,6 +101,10 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    isCopy: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup() {
     const data = reactive({
@@ -175,7 +179,6 @@ export default defineComponent({
         return
       }
       groupQuestion.childQuestions.forEach((element, index) => {
-        console.log('element', element.question.questionGroupId)
         if (element.question.questionContent === '') {
           this.errors.push('Bạn phải nhập vào nội dung câu hỏi con')
           this.isValid = false
@@ -213,17 +216,30 @@ export default defineComponent({
         question.categories = groupQuestion.question.categories
         question.questionGroupId = element.question.questionGroupId
         question.groupOrder = index + 1
-        question.hashId = element.question.hashId
-        const data = {
-          question,
-          answers: value.data,
+        question.hashId = this.isCopy ? '' : element.question.hashId
+        let data = {}
+        if (this.isCopy) {
+          if (value.data.length > 0) {
+            data = {
+              question,
+              answers: value.data.map((item) => {
+                item.hashId = ''
+                return item
+              }),
+            }
+          }
+        } else {
+          data = {
+            question,
+            answers: value.data,
+          }
         }
-        console.log('data index', data)
-        result.push(data)
-        this.errors.push(value.errors)
+
         if (value.errors.length !== 0) {
           this.isValid = false
         }
+        result.push(data)
+        this.errors.push(value.errors)
       })
       return result
     },
@@ -247,9 +263,24 @@ export default defineComponent({
       if (this.isValid) {
         console.log('questionGroup questionGroup', questionGroup)
         try {
-          const result = await CauHoiApi.updateQuestionGroup(questionGroup)
-          console.log('adadad', result)
-          this.$toast.success('Update thành công')
+          if (!this.isCopy) {
+            const result = await CauHoiApi.updateQuestionGroup(questionGroup)
+            console.log('adadad', result)
+            this.$toast.success('Update thành công')
+          } else {
+            CauHoiApi.createGroupQuestion(
+              questionGroup,
+              () => {
+                // this.restAnswer()
+                console.log('day la dataa', questionGroup)
+                this.$toast.success('Thêm Thành Công').goAway(1500)
+                window.location.href = '/users/questions/'
+              },
+              () => {
+                this.$toast.show('Có lỗi xảy ra').goAway(1500)
+              }
+            )
+          }
           // window.location.href = '/users/questions/'
           //  this.restData()
         } catch (err) {

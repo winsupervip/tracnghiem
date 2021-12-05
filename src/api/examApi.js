@@ -121,4 +121,12 @@ export default {
     }
     return global.$http.get(url)
   },
+  updateSectionName: (data) => {
+    const url = '/api/v1/Exam/update-exam-section'
+    return global.$http.put(url, data)
+  },
+  deleteSection: (data) => {
+    const url = `/api/v1/Exam/delete-exam-section?hashExamId=${data.hashExamId}&hashExamSectionId=${data.hashExamSectionId}`
+    return global.$http.delete(url, data)
+  },
 }
