@@ -51,7 +51,7 @@
         </div>
 
         <div class="p-question__right">
-          <PublishQuestion />
+          <PublishQuestion :is-edit="isEdit" />
           <Category />
           <LevelForm />
           <!-- <UploadImage :get-image="getImage" /> -->
@@ -96,7 +96,12 @@ export default defineComponent({
   },
   layout: 'dashboard',
   auth: false,
-
+  props: {
+    isEdit: {
+      type: Boolean,
+      default: true,
+    },
+  },
   setup() {
     const data = reactive({
       errors: [],
