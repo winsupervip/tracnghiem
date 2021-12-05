@@ -266,5 +266,8 @@
         "clear":"Xóa tất cả"
       }
     }
+  },
+  "history":{
+    "title":"Lịch sử làm bài"
   }
 }

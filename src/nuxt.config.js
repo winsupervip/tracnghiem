@@ -292,6 +292,13 @@ export default {
     middleware: ['auth'],
   },
   auth: {
+    cookie: {
+      prefix: 'auth.',
+      options: {
+        path: '/',
+        maxAge: 60 * 60 * 5, // Can be dynamic ?
+      }
+    },
     plugins: [{ src: '@/plugins/http.js', ssr: true }],
     strategies: {
       local: false,

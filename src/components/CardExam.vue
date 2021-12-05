@@ -32,7 +32,7 @@
           :src="
             data.teacher && data.teacher.avatar
               ? data.teacher.avatar
-              : 'https://dev.tracnghiem.vn/images/teacher.png'
+              : '/images/teacher.png'
           "
           :alt="
             data.teacher

@@ -30,20 +30,6 @@
               :placeholder="$t('exam.categories')"
             />
           </b-form-group>
-          <b-form-group
-            :label="$t('exam.paymentTypes')"
-            label-for="paymentTypes"
-            class="col-12 col-md-3 mb-3"
-          >
-            <treeselect
-              id="paymentTypes"
-              v-model="urlQuery.payement_type_id"
-              :multiple="false"
-              :options="paymentTypes"
-              :load-options="loadOptions"
-              :placeholder="$t('exam.paymentTypes')"
-            />
-          </b-form-group>
         </b-form-row>
         <b-form-row class="row">
           <b-form-group
@@ -58,20 +44,6 @@
               :options="status"
               :load-options="loadOptions"
               :placeholder="$t('exam.status')"
-            />
-          </b-form-group>
-          <b-form-group
-            :label="$t('exam.levels')"
-            label-for="levels"
-            class="col-12 col-md-3 mb-3"
-          >
-            <treeselect
-              id="levels"
-              v-model="urlQuery.levelId"
-              :multiple="false"
-              :options="levels"
-              :load-options="loadOptions"
-              :placeholder="$t('exam.levels')"
             />
           </b-form-group>
           <b-form-group
@@ -107,12 +79,16 @@
         </b-form-row>
       </b-form>
     </b-card>
-    <b-card :sub-title="$t('exam.title')" class="mt-3">
+    <b-card :sub-title="$t('history.title')" class="mt-3">
       <div v-if="total === 0">
         <EmptyData />
       </div>
       <div v-else>
-        <ExamItem v-for="(item, index) in items" :key="index" :exam="item" />
+        <ExamHistoryItem
+          v-for="(item, index) in items"
+          :key="index"
+          :exam="item"
+        />
         <div class="mt-2">
           <b-pagination
             v-if="total > urlQuery.pageSize"
@@ -141,11 +117,10 @@ import {
 import QuestionApi from '@/api/question-list-page'
 import catalogApi from '@/api/catalogApi'
 import examApi from '@/api/examApi'
-import ExamItem from '@/components/Exams/ExamItem.vue'
 import EmptyData from '@/components/EmptyData.vue'
-
+import ExamHistoryItem from '@/components/History/ExamHistoryItem.vue'
 export default defineComponent({
-  components: { ExamItem, EmptyData },
+  components: { EmptyData, ExamHistoryItem },
   layout: 'dashboard',
   auth: true,
   setup() {
@@ -157,15 +132,13 @@ export default defineComponent({
           href: '/users/dashboard',
         },
         {
-          text: app.i18n.t('exam.exam_title'),
+          text: app.i18n.t('history.title'),
           active: true,
         },
       ],
       categories: [],
-      paymentTypes: [],
-      status: [],
-      levels: [],
       sortBy: [],
+      status: [],
       urlQuery: {
         page: 1,
         pageSize: 10,
@@ -174,7 +147,6 @@ export default defineComponent({
         tags: null,
         statusId: null,
         levelId: null,
-        payement_type_id: null,
         orderBy: 1,
       },
       items: [],
@@ -185,19 +157,16 @@ export default defineComponent({
       $logger.info('load data')
       const [
         { data: categories },
-        { data: paymentTypes },
         { data: listStatus },
         { data: levels },
         { data: sortBy },
       ] = await Promise.all([
         QuestionApi.getCategory(),
-        catalogApi.getPaymentType(),
-        QuestionApi.getListStatus(),
+        catalogApi.getHistoryExamStatus(),
         QuestionApi.getLevel(),
         catalogApi.getExamSortBy(),
       ])
       data.categories = categories.object.items
-      data.paymentTypes = paymentTypes.object.items
       data.status = listStatus.object.items
       data.levels = levels.object.items
       data.sortBy = sortBy.object.items
@@ -206,9 +175,10 @@ export default defineComponent({
 
     const { fetch } = useFetch(async () => {
       $loader()
-      const { data: exams } = await examApi.getUserExams(data.urlQuery)
+      const { data: exams } = await examApi.getUserHistoryExams(data.urlQuery)
       data.items = exams.object.items
       data.total = exams.object.total
+      $logger.info(data.items)
       $loader().close()
     })
 

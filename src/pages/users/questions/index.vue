@@ -1,8 +1,6 @@
 <template>
   <div class="page-container">
-    <div class="heading-page">
-      <h1 class="heading-title">{{ $t('questionBank') }}</h1>
-    </div>
+    <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
 
     <div class="filter-bar">
       <b-card :sub-title="$t('exam.questions.search')">
@@ -98,53 +96,21 @@
                 align-items-end
               "
             >
-              <b-button variant="outline-primary btn-sm" @click="handleSearch">
+              <b-button variant="outline-primary" @click="handleSearch">
                 <b-icon-filter></b-icon-filter> {{ $t('apply') }}
               </b-button>
-              <b-btn
+              <b-button
                 variant="primary"
-                size="sm"
                 @click="$bvModal.show('bv-modal-add-question')"
               >
                 <b-icon-plus></b-icon-plus> {{ $t('add') }}
-              </b-btn>
-              <b-modal id="bv-modal-add-question" hide-footer title="Câu hỏi:">
-                <div class="d-block">
-                  <ul>
-                    <li
-                      v-for="item in items"
-                      :key="item.message"
-                      type="1"
-                      class="text-dark fw-bold"
-                    >
-                      <nuxt-link :to="item.url" class="text-dark">{{
-                        item.title
-                      }}</nuxt-link>
-                    </li>
-                  </ul>
-                  <div class="dropdown-divider"></div>
-                  <nuxt-link
-                    to="/users/questions/question-group/create"
-                    class="text-dark fw-bold"
-                    >Câu chùm</nuxt-link
-                  >
-                </div>
-                <div class="d-flex justify-content-center mt-3">
-                  <b-button
-                    variant="primary"
-                    class="text-center"
-                    block
-                    @click="$bvModal.hide('bv-modal-add-question')"
-                    >{{ $t('close') }}</b-button
-                  >
-                </div>
-              </b-modal>
+              </b-button>
             </div>
           </b-form-row>
         </b-form>
       </b-card>
 
-      <SingleQuestion
+      <SingleListPage
         v-for="question in questionList"
         :key="question.id"
         :questions="question"
@@ -158,6 +124,7 @@
         :per-page="urlQuery.pageSize"
       ></b-pagination>
     </div>
+    <SelectQuestionForAddModal />
   </div>
 </template>
 
@@ -176,20 +143,30 @@ import _ from 'lodash'
 import QuestionApi from '@/api/question-list-page'
 import catalogApi from '@/api/catalogApi'
 import SingleListPage from '@/components/Question/SingleListPage.vue'
-import '../../../assets/scss/single-question.scss'
-
+import SelectQuestionForAddModal from '@/components/Question/SelectQuestionForAddModal.vue'
 export default defineComponent({
   components: {
-    SingleQuestion: SingleListPage,
+    SingleListPage,
+    SelectQuestionForAddModal,
   },
   layout: 'dashboard',
   auth: true,
   setup() {
-    const { $loader, $logger } = useContext()
+    const { $loader, $logger, app } = useContext()
     const route = useRoute()
     const queryPage = route?.value?.query?.page || 1
 
     const data = reactive({
+      breadcrumbs: [
+        {
+          text: app.i18n.t('exam.dashboard'),
+          href: '/users/dashboard',
+        },
+        {
+          text: app.i18n.t('questionBank'),
+          active: true,
+        },
+      ],
       currentPage: queryPage,
       showSingleQuestion: true,
       showMultipleQuestion: false,
@@ -206,7 +183,7 @@ export default defineComponent({
       questionList: [],
       isCallApiGetTag: false,
       urlQuery: {
-        pageSize: 2,
+        pageSize: 10,
         keyword: '',
         categories: [],
         page: 1,
@@ -267,30 +244,6 @@ export default defineComponent({
       handleSearch,
     }
   },
-  data: () => ({
-    items: [
-      { url: '/users/questions/single-choice/create', title: 'Một lựa chọn' },
-      {
-        url: '/users/questions/multiple-choice/create',
-        title: 'Nhiều lựa chọn',
-      },
-      { url: '/users/questions/right-wrong/create', title: 'Đúng sai' },
-      { url: '/users/questions/matching/create', title: 'Ghép đôi' },
-      {
-        url: '/users/questions/fill-blank/create',
-        title: 'Điền vào chỗ trống',
-      },
-      {
-        url: '/users/questions/short-answer/create',
-        title: 'Câu hỏi trả lời ngắn',
-      },
-      {
-        url: '/users/questions/draggable-fill-blank/create',
-        title: 'Sắp thứ tự',
-      },
-    ],
-  }),
-
   computed: {
     availableOptions() {
       this.$logger.debug('computed', this.options)
