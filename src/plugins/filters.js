@@ -36,3 +36,7 @@ Vue.filter('slugify', function (value, separator = '-') {
     .replace(/[^a-z0-9 ]/g, '') // remove all chars not letters, numbers and spaces (to be replaced)
     .replace(/\s+/g, separator)
 })
+
+Vue.filter('displayName', function (value, separator = '-') {
+  //
+})

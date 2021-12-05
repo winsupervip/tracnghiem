@@ -157,11 +157,11 @@ export default defineComponent({
       breadcrumbs: [
         {
           text: 'Danh sách gói dịch vụ',
-          href: '/agency/service',
+          href: '/agency/service/',
         },
         {
           text: 'abc',
-          href: '/agency/service',
+          href: '/agency/service/detail/',
         },
         {
           text: 'Mã kích hoạt',

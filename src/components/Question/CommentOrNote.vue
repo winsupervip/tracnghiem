@@ -44,10 +44,10 @@ export default {
     explainationIfIncorrect() {
       this.addExplainationIfInCorrect(this.explainationIfIncorrect)
     },
-    getExplainationIfCorrect() {
-      this.explainationIfCorrect = this.getExplainationIfCorrect
-      this.explainationIfIncorrect = this.getExplainationIfInCorrect
-    },
+  },
+  mounted() {
+    this.explainationIfCorrect = this.getExplainationIfCorrect
+    this.explainationIfIncorrect = this.getExplainationIfInCorrect
   },
   methods: {
     ...mapActions({

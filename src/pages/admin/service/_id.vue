@@ -27,7 +27,7 @@
               id="keyword"
               v-model="urlQuery.activeDateFrom"
               trim
-              type="search"
+              type="date"
               placeholder="Ngày cấp từ"
             >
             </b-form-input>
@@ -39,7 +39,7 @@
               id="keyword"
               v-model="urlQuery.activeDateTo"
               trim
-              type="search"
+              type="date"
               placeholder="Ngày cấp đến"
             >
             </b-form-input>
@@ -187,6 +187,15 @@ export default defineComponent({
       breadcrumbs: [
         {
           text: 'Danh sách gói dịch vụ',
+          href: '/admin/service/',
+        },
+        {
+          text: 'abc',
+          href: '/admin/service/package/',
+        },
+        {
+          text: 'Đại lý Mr.bean',
+          active: true,
         },
       ],
       listAccount: [],

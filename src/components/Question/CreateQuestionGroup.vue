@@ -51,7 +51,7 @@
         </div>
 
         <div class="p-question__right">
-          <PublishQuestion />
+          <PublishQuestion :is-edit="isEdit" />
           <Category />
           <LevelForm />
           <!-- <UploadImage :get-image="getImage" /> -->
@@ -68,23 +68,18 @@
 </template>
 
 <script>
-import {
-  defineComponent,
-  reactive,
-  toRefs,
-  useStore,
-} from '@nuxtjs/composition-api'
+import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
 import { mapGetters, mapActions } from 'vuex'
-import PublishQuestion from '../../../../components/Question/PublishQuestion.vue'
-import AddSeo from '../../../../components/Question/AddSeo.vue'
-import LevelForm from '../../../../components/Question/LevelForm.vue'
-import Category from '../../../../components/Question/Category.vue'
-import HeaderOfSingleQuestion from '../../../../components/Question/HeaderOfSingleQuestion.vue'
-import QuestionChild from '../../../../components/Question/QuestionChild.vue'
-import AddChildrenQuestion from '../../../../components/Question/AddChildrenQuestion.vue'
-import CauHoiApi from '../../../../api/cauHoi'
-import Uploader from '../../../../components/Uploader.vue'
-import CommentOrNote from '@/components/Question/CommentOrNote.vue'
+import Uploader from '../Uploader.vue'
+import PublishQuestion from './PublishQuestion.vue'
+import AddSeo from './AddSeo.vue'
+import LevelForm from './LevelForm.vue'
+import Category from './Category.vue'
+import HeaderOfSingleQuestion from './HeaderOfSingleQuestion.vue'
+import QuestionChild from './QuestionChild.vue'
+import AddChildrenQuestion from './AddChildrenQuestion.vue'
+import CommentOrNote from './CommentOrNote.vue'
+import CauHoiApi from '@/api/cauHoi'
 // eslint-disable-next-line import/no-unresolved
 import handler from '@/utils/question/handleAnswer.js'
 export default defineComponent({
@@ -101,10 +96,13 @@ export default defineComponent({
   },
   layout: 'dashboard',
   auth: false,
-
+  props: {
+    isEdit: {
+      type: Boolean,
+      default: true,
+    },
+  },
   setup() {
-    const store = useStore()
-    store.dispatch('questions/restData')
     const data = reactive({
       errors: [],
       questionTitle: 'Câu hỏi chùm',
@@ -166,18 +164,18 @@ export default defineComponent({
       return { valid, validateAnswers }
     },
     validateChildQuestion(groupQuestion) {
+      console.log(groupQuestion)
       const result = []
       let value = []
       this.errors = []
       this.isValid = true
-      console.log(groupQuestion)
       if (groupQuestion.childQuestions.length === 0) {
         this.errors.push('Bạn phải nhập vào nội dung câu hỏi')
         this.isValid = false
         return
       }
       groupQuestion.childQuestions.forEach((element, index) => {
-        console.log('emler', element)
+        console.log('element', element.question.questionGroupId)
         if (element.question.questionContent === '') {
           this.errors.push('Bạn phải nhập vào nội dung câu hỏi con')
           this.isValid = false
@@ -204,7 +202,7 @@ export default defineComponent({
         question.explainationIfCorrect =
           groupQuestion.question.explainationIfCorrect
         question.explainationIfIncorrect =
-          groupQuestion.question.explainationIfIncorrect
+          groupQuestion.question.explainationInIfcorrect
         question.statusId = groupQuestion.question.statusId
         question.levelId = groupQuestion.question.levelId
         question.plainText = element.question.plainText
@@ -213,12 +211,14 @@ export default defineComponent({
         question.seoDescription = groupQuestion.question.seoDescription
         question.tags = groupQuestion.question.tags
         question.categories = groupQuestion.question.categories
-        question.questionGroupId = element.questionGroupId
+        question.questionGroupId = element.question.questionGroupId
         question.groupOrder = index + 1
+        question.hashId = element.question.hashId
         const data = {
           question,
           answers: value.data,
         }
+        console.log('data index', data)
         result.push(data)
         this.errors.push(value.errors)
         if (value.errors.length !== 0) {
@@ -227,12 +227,12 @@ export default defineComponent({
       })
       return result
     },
-    onSubmit() {
+    async onSubmit() {
       const questionInGroups = this.validateChildQuestion(this.getGroupQuestion)
       const questionGroup = {
         questionGroup: {
           title: this.getGroupQuestion.question.title,
-          hashId: '',
+          hashId: this.getGroupQuestion.question.hashId,
           questionGroupName: this.getGroupQuestion.question.questionContent,
           description: this.getGroupQuestion.question.questionContent,
           plainText: this.getGroupQuestion.question.plainText,
@@ -245,17 +245,18 @@ export default defineComponent({
         questionInGroups,
       }
       if (this.isValid) {
-        CauHoiApi.createGroupQuestion(
-          questionGroup,
-          () => {
-            // this.restAnswer()
-            this.$toast.success('Thêm Thành Công').goAway(1500)
-            window.location.href = '/users/questions/'
-          },
-          () => {
-            this.$toast.show('Có lỗi xảy ra').goAway(1500)
-          }
-        )
+        console.log('questionGroup questionGroup', questionGroup)
+        try {
+          const result = await CauHoiApi.updateQuestionGroup(questionGroup)
+          console.log('adadad', result)
+          this.$toast.success('Update thành công')
+          // window.location.href = '/users/questions/'
+          //  this.restData()
+        } catch (err) {
+          this.$handleError(err, () => {
+            console.log(err)
+          })
+        }
       } else {
         this.$toast.error('Có lỗi xảy ra ở phần câu hỏi con').goAway(1500)
       }

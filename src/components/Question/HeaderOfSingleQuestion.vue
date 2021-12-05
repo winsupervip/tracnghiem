@@ -13,6 +13,7 @@
             :placeholder="$t('title')"
           >
           </b-form-input>
+          {{ getTitle }}
           <b-form-invalid-feedback id="inputLiveFeedback">
             {{ errors[0] }}
           </b-form-invalid-feedback>
@@ -52,7 +53,13 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  useRoute,
+  computed,
+} from '@nuxtjs/composition-api'
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 import Tag from '@/components/Tag.vue'
@@ -65,12 +72,16 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  setup() {
+    const route = useRoute()
+    const ItemType = computed(() => route.value.query.type)
+
     const data = reactive({
       optionsText: {
         convert_urls: false,
         entity_encoding: 'raw',
       },
+      questionItemType: ItemType.value,
       isTagValid: false,
       questionContent: '',
       questionPlanText: '',
@@ -105,6 +116,7 @@ export default defineComponent({
 
       title: '',
     })
+
     return {
       ...toRefs(data),
     }
@@ -112,6 +124,7 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       getQuestion: 'questions/getQuestion',
+      getTitle: 'questions/getTitle',
     }),
     criteria() {
       // Compute the search criteria
@@ -138,15 +151,11 @@ export default defineComponent({
       this.commitQuestion()
     },
   },
-  updated() {
-    // khi mà edit thì đọc từ store vào
-    console.log('aaa', this.getQuestion.question.questionContent)
-    if (this.getQuestion.question.questionContent !== '') {
-      this.questionContent = this.getQuestion.question.questionContent
-      this.title = this.getQuestion.question.title
-      this.tags = this.getQuestion.question.tags
-      this.questionPlanText = this.getQuestion.question.plainText
-    }
+  mounted() {
+    this.questionContent = this.getQuestion.question.questionContent
+    this.title = this.getQuestion.question.title
+    this.tags = this.getQuestion.question.tags
+    this.questionPlanText = this.getQuestion.question.plainText
   },
   methods: {
     isAddTag(value) {

@@ -66,7 +66,7 @@ export default defineComponent({
       breadcrumbs: [
         {
           text: 'Danh sách gói dịch vụ',
-          href: '/agency/service',
+          href: '/agency/service/',
         },
         {
           text: 'abc',

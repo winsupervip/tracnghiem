@@ -39,9 +39,11 @@
           <b-icon icon="file-code" aria-hidden="true"></b-icon>
         </button>
       </div>
-      <div class="d-inline-block" @click="logout()">
-        <b-icon icon="arrow-counterclockwise" aria-hidden="true"></b-icon>
-        <p class="d-inline-block">{{ $t('info.logOut') }}</p>
+      <div class="w-100 btn btn-outline-primary" @click="logout()">
+        <b-icon-box-arrow-left class="me-auto"></b-icon-box-arrow-left>
+        <span class="me-auto">
+          {{ $t('info.logOut') }}
+        </span>
       </div>
     </div>
     <div v-if="!type">
@@ -126,7 +128,7 @@ export default defineComponent({
       }
     },
     logout() {
-      this.$auth.logout('http://localhost:3000/')
+      this.$auth.logout()
     },
     handleCopy(e) {
       navigator.clipboard.writeText(

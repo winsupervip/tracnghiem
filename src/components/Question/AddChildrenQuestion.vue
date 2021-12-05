@@ -93,6 +93,7 @@ export default defineComponent({
           plainText: '',
           seoAvatar: 'https://placeimg.com/640/480/any',
           groupOrder: 1,
+          questionGroupId: null,
         },
         answers:
           value.questionTypeId !== 3

@@ -242,7 +242,7 @@
                 </ul>
                 <ul>
                   <li>
-                    <nuxt-link to="">
+                    <nuxt-link to="/users/history">
                       <div>
                         <img
                           src="~/assets/img/dashboard/icon_lslambai.svg"

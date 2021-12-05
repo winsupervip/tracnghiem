@@ -7,4 +7,6 @@ export default {
     global.$http.get('/api/v1/Catalog/question-filter-by'),
   getItemSortTypeInExam: () =>
     global.$http.get('/api/v1/Catalog/item-order-type-in-exam'),
+  getHistoryExamStatus: () =>
+    global.$http.get('/api/v1/Catalog/get-history-exam-status'),
 }

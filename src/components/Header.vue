@@ -191,7 +191,7 @@ export default {
       }
     },
     logout() {
-      this.$auth.logout('http://localhost:3000/')
+      this.$auth.logout()
     },
   },
 }

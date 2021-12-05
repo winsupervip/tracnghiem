@@ -170,21 +170,23 @@
               :questions="question"
             >
               <template #header>
-                <button
-                  class="btn btn-sm btn-primary"
-                  @click="onSelectQuestion(question)"
-                >
-                  <b-icon-clipboard-plus></b-icon-clipboard-plus>
-                  {{ $t('modalQToExam.addToExam') }}
-                </button>
-                <div class="mt-3">
-                  <b-form-checkbox
-                    v-model="selectedItems"
-                    :value="question"
-                    name="question"
+                <div class="d-flex justify-content-between">
+                  <div class="mt-3">
+                    <b-form-checkbox
+                      v-model="selectedItems"
+                      :value="question"
+                      name="question"
+                    >
+                      {{ $t('modalQToExam.select') }}
+                    </b-form-checkbox>
+                  </div>
+                  <button
+                    class="btn btn-sm btn-primary"
+                    @click="onSelectQuestion(question)"
                   >
-                    {{ $t('modalQToExam.select') }}
-                  </b-form-checkbox>
+                    <b-icon-clipboard-plus></b-icon-clipboard-plus>
+                    {{ $t('modalQToExam.addToExam') }}
+                  </button>
                 </div>
               </template>
             </SingleListPage>

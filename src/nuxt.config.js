@@ -292,6 +292,13 @@ export default {
     middleware: ['auth'],
   },
   auth: {
+    cookie: {
+      prefix: 'auth.',
+      options: {
+        path: '/',
+        maxAge: 60 * 60 * 5, // Can be dynamic ?
+      }
+    },
     plugins: [{ src: '@/plugins/http.js', ssr: true }],
     strategies: {
       local: false,
@@ -314,7 +321,7 @@ export default {
           property: 'access_token',
           type: 'Bearer',
           name: 'Authorization',
-          maxAge: 300, // Can be dynamic ?
+          maxAge: 60 * 60 * 5, // Can be dynamic ?
         },
         refreshToken: {
           property: 'refresh_token',

@@ -434,6 +434,11 @@ export default defineComponent({
       breadcrumbs: [
         {
           text: 'Danh sách gói dịch vụ',
+          href: '/admin/service/',
+        },
+        {
+          text: 'abc',
+          active: true,
         },
       ],
       listPackage: [],
