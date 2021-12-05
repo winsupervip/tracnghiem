@@ -10,8 +10,8 @@ export default {
     }
 
     if (urlQuery.tags && urlQuery.tags.length > 0) {
-      const categoryUrl = urlQuery.categories.join('&tags=')
-      url = '&tags=' + categoryUrl
+      const tagsUrl = urlQuery.tags.join('&tags=')
+      url = '&tags=' + tagsUrl
     }
 
     if (urlQuery.statusId && urlQuery.statusId > 0) {
@@ -90,6 +90,51 @@ export default {
     if (urlQuery.orderBy && urlQuery.orderBy > 0) {
       url += '&orderBy=' + urlQuery.orderBy
     }
+    return global.$http.get(url)
+  },
+  getUserHistoryExams: (urlQuery) => {
+    let url = `/api/v1/Exam/get-user-exam-history-list-public?Page=${
+      urlQuery.page
+    }&PageSize=${urlQuery.pageSize}&Keyword=${encodeURIComponent(
+      urlQuery.keyword
+    )}`
+
+    if (urlQuery.categoriesId && urlQuery.categoriesId > 0) {
+      url += '&categoriesId=' + urlQuery.categoriesId
+    }
+
+    if (urlQuery.tags && urlQuery.tags.length > 0) {
+      const tagsUrl = urlQuery.categories.join('&tags=')
+      url = '&tags=' + tagsUrl
+    }
+
+    if (urlQuery.statusId && urlQuery.statusId > 0) {
+      url += '&statusId=' + urlQuery.statusId
+    }
+
+    if (urlQuery.levelId && urlQuery.levelId > 0) {
+      url += '&levelId=' + urlQuery.levelId
+    }
+
+    if (urlQuery.orderBy && urlQuery.orderBy > 0) {
+      url += '&orderBy=' + urlQuery.orderBy
+    }
+    return global.$http.get(url)
+  },
+  updateSectionName: (data) => {
+    const url = '/api/v1/Exam/update-exam-section'
+    return global.$http.put(url, data)
+  },
+  deleteSection: (data) => {
+    const url = `/api/v1/Exam/delete-exam-section?hashExamId=${data.hashExamId}&hashExamSectionId=${data.hashExamSectionId}`
+    return global.$http.delete(url, data)
+  },
+  getUserHistoryExamDetails: (urlQuery) => {
+    const url = `/api/v1/Exam/get-detail-user-exam-history?examId=${
+      urlQuery.examId
+    }&Page=${urlQuery.page}&PageSize=${
+      urlQuery.pageSize
+    }&Keyword=${encodeURIComponent(urlQuery.keyword)}`
     return global.$http.get(url)
   },
 }

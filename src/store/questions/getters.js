@@ -2,6 +2,7 @@ export default {
   getListAnswer: (state) => state.answers,
   getUpdateValueAnswer: (state) => state.updateValueAnswer,
   getGroupSelected: (state) => state.selectedGroup,
+  getListChildrenAnswer: (state) => state.childQuestions,
   getQuestion: (state) => {
     return {
       question: state.question,
@@ -24,10 +25,6 @@ export default {
   getCategories: (state) => state.question.categories,
   getExplainationIfCorrect: (state) => state.question.explainationIfCorrect,
   getExplainationIfInCorrect: (state) => state.question.explainationIfIncorrect,
-  getGroupExplainationIfCorrect: (state) =>
-    state.childQuestions[0].explainationIfCorrect,
-  getGroupExplainationIfInCorrect: (state) =>
-    state.childQuestions[0].explainationIfIncorrect,
   getLevel: (state) => state.question.levelId,
   getStatus: (state) => state.question.statusId,
 }

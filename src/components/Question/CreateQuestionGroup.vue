@@ -17,7 +17,10 @@
                   <b-col cols="2">
                     <strong>Câu {{ index + 1 }}</strong>
                   </b-col>
-                  <b-col cols="8 " v-html="question.questionContent"></b-col>
+                  <b-col
+                    cols="8 "
+                    v-html="question.question.questionContent"
+                  ></b-col>
                   <b-col cols="2" class="matching_style">
                     <b-icon icon="shuffle"></b-icon>
                     <b-icon
@@ -48,11 +51,15 @@
         </div>
 
         <div class="p-question__right">
-          <PublishQuestion />
+          <PublishQuestion :is-edit="isEdit" />
           <Category />
           <LevelForm />
-
-          <Uploader :accept="'*/*'" :disabled="false"></Uploader>
+          <!-- <UploadImage :get-image="getImage" /> -->
+          <Uploader
+            v-model="image"
+            :accept="'*/*'"
+            :disabled="false"
+          ></Uploader>
           <AddSeo />
         </div>
       </div>
@@ -61,12 +68,7 @@
 </template>
 
 <script>
-import {
-  defineComponent,
-  reactive,
-  toRefs,
-  useStore,
-} from '@nuxtjs/composition-api'
+import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
 import { mapGetters, mapActions } from 'vuex'
 import Uploader from '../Uploader.vue'
 import PublishQuestion from './PublishQuestion.vue'
@@ -74,10 +76,10 @@ import AddSeo from './AddSeo.vue'
 import LevelForm from './LevelForm.vue'
 import Category from './Category.vue'
 import HeaderOfSingleQuestion from './HeaderOfSingleQuestion.vue'
-
+import QuestionChild from './QuestionChild.vue'
 import AddChildrenQuestion from './AddChildrenQuestion.vue'
+import CommentOrNote from './CommentOrNote.vue'
 import CauHoiApi from '@/api/cauHoi'
-import CommentOrNote from '@/components/Question/CommentOrNote.vue'
 // eslint-disable-next-line import/no-unresolved
 import handler from '@/utils/question/handleAnswer.js'
 export default defineComponent({
@@ -89,21 +91,29 @@ export default defineComponent({
     AddSeo,
     Uploader,
     AddChildrenQuestion,
+    QuestionChild,
     CommentOrNote,
   },
   layout: 'dashboard',
   auth: false,
-
+  props: {
+    isEdit: {
+      type: Boolean,
+      default: true,
+    },
+    isCopy: {
+      type: Boolean,
+      default: false,
+    },
+  },
   setup() {
-    const store = useStore()
-    store.dispatch('questions/restData')
     const data = reactive({
       errors: [],
       questionTitle: 'Câu hỏi chùm',
       dataUpdate: {},
       isUpdate: false,
       isValid: true,
-      question: '',
+      image: '',
     })
 
     return {
@@ -114,16 +124,24 @@ export default defineComponent({
     ...mapGetters({
       getGroupQuestion: 'questions/getGroupQuestion',
       getChildQuestion: 'questions/getChildQuestion',
+      getSeoAvatar: 'questions/getSeoAvatar',
     }),
   },
-
+  watch: {
+    image() {
+      this.addSeoAvater(this.image)
+    },
+  },
+  mounted() {
+    this.image = this.getSeoAvatar
+  },
   methods: {
     ...mapActions({
       restAnswer: 'questions/restAnswer',
       setNullAnswerId: 'questions/setNullAnswerId',
       deleteChildQuestion: 'questions/deleteChildQuestion',
+      addSeoAvater: 'questions/addSeoAvatar',
     }),
-
     openUpdate(data) {
       this.dataUpdate = data
       this.isUpdate = true
@@ -150,12 +168,21 @@ export default defineComponent({
       return { valid, validateAnswers }
     },
     validateChildQuestion(groupQuestion) {
+      console.log(groupQuestion)
       const result = []
       let value = []
       this.errors = []
       this.isValid = true
-      console.log(groupQuestion)
+      if (groupQuestion.childQuestions.length === 0) {
+        this.errors.push('Bạn phải nhập vào nội dung câu hỏi')
+        this.isValid = false
+        return
+      }
       groupQuestion.childQuestions.forEach((element, index) => {
+        if (element.question.questionContent === '') {
+          this.errors.push('Bạn phải nhập vào nội dung câu hỏi con')
+          this.isValid = false
+        }
         if (element.typeQuestion === 'single-choice') {
           value = handler.singleChoiceAndRightWrong(element.answers)
         } else if (element.typeQuestion === 'short-answer') {
@@ -187,32 +214,46 @@ export default defineComponent({
         question.seoDescription = groupQuestion.question.seoDescription
         question.tags = groupQuestion.question.tags
         question.categories = groupQuestion.question.categories
-        question.questionGroupId = null
+        question.questionGroupId = element.question.questionGroupId
         question.groupOrder = index + 1
-        const data = {
-          question,
-          answers: value.data,
+        question.hashId = this.isCopy ? '' : element.question.hashId
+        let data = {}
+        if (this.isCopy) {
+          if (value.data.length > 0) {
+            data = {
+              question,
+              answers: value.data.map((item) => {
+                item.hashId = ''
+                return item
+              }),
+            }
+          }
+        } else {
+          data = {
+            question,
+            answers: value.data,
+          }
         }
-        result.push(data)
-        this.errors.push(value.errors)
+
         if (value.errors.length !== 0) {
           this.isValid = false
         }
+        result.push(data)
+        this.errors.push(value.errors)
       })
       return result
     },
-    onSubmit() {
+    async onSubmit() {
       const questionInGroups = this.validateChildQuestion(this.getGroupQuestion)
       const questionGroup = {
         questionGroup: {
           title: this.getGroupQuestion.question.title,
-          hashId: '',
+          hashId: this.getGroupQuestion.question.hashId,
           questionGroupName: this.getGroupQuestion.question.questionContent,
-          description:
-            'Voluntary work helps foster independence and imparts the ability to deal with different situations, often simulaneously, thus teaching people how to (1)____ their way through different systems. It therefore brings people into touch with the real worls; and, hence, equips them for the future. Initially, young adults in their late teens might not seem to have the expertise or knowledge to impart to others that say a teacher or an agriculturalist or a nurse would have, (2)____ they do have many skills that can help others. And in the absence of any particular talent, their energy and enthusiasm can be harnessed for the benefit (3) ____ their fellow human beings, and ultimately themselves. From all this, the gain to any community no matter how many voluntees are involved is (4)_____ Employers will generally look favorably on people (5)_____ have shown an ability to work as part of a team. It demonstrates a willingness to learn and an independent spirit, which would be desirable qualities in any employee.',
+          description: this.getGroupQuestion.question.questionContent,
           plainText: this.getGroupQuestion.question.plainText,
           random: false,
-          statusId: 1,
+          statusId: this.getGroupQuestion.question.statusId,
           seoAvatar: this.getGroupQuestion.question.seoAvatar,
           seoTitle: this.getGroupQuestion.question.seoTitle,
           seoDescription: this.getGroupQuestion.question.seoDescription,
@@ -220,17 +261,33 @@ export default defineComponent({
         questionInGroups,
       }
       if (this.isValid) {
-        CauHoiApi.createGroupQuestion(
-          questionGroup,
-          () => {
-            // this.restAnswer()
-            this.$toast.success('Thêm Thành Công').goAway(1500)
-            window.location.href = '/users/questions/'
-          },
-          () => {
-            this.$toast.show('Có lỗi xảy ra').goAway(1500)
+        console.log('questionGroup questionGroup', questionGroup)
+        try {
+          if (!this.isCopy) {
+            const result = await CauHoiApi.updateQuestionGroup(questionGroup)
+            console.log('adadad', result)
+            this.$toast.success('Update thành công')
+          } else {
+            CauHoiApi.createGroupQuestion(
+              questionGroup,
+              () => {
+                // this.restAnswer()
+                console.log('day la dataa', questionGroup)
+                this.$toast.success('Thêm Thành Công').goAway(1500)
+                window.location.href = '/users/questions/'
+              },
+              () => {
+                this.$toast.show('Có lỗi xảy ra').goAway(1500)
+              }
+            )
           }
-        )
+          // window.location.href = '/users/questions/'
+          //  this.restData()
+        } catch (err) {
+          this.$handleError(err, () => {
+            console.log(err)
+          })
+        }
       } else {
         this.$toast.error('Có lỗi xảy ra ở phần câu hỏi con').goAway(1500)
       }

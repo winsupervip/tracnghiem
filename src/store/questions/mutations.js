@@ -1,5 +1,42 @@
 import { uuid } from 'vue-uuid'
-
+const checkTypeQuesstion = (value) => {
+  if (value === 1) {
+    return {
+      name: 'Thêm câu hỏi 1 lựa chọn',
+      typeQuestion: 'single-choice',
+    }
+  } else if (value === 2) {
+    return {
+      name: 'Thêm câu hỏi nhiều lựa chọn',
+      typeQuestion: 'multiple-choice',
+    }
+  } else if (value === 3) {
+    return {
+      name: 'Thêm câu hỏi đúng sai',
+      typeQuestion: 'right-wrong',
+    }
+  } else if (value === 4) {
+    return {
+      name: 'Thêm câu hỏi ghép đôi',
+      typeQuestion: 'paring',
+    }
+  } else if (value === 5) {
+    return {
+      name: 'Thêm câu hỏi điền vào chỏ trống',
+      typeQuestion: 'fill-blank',
+    }
+  } else if (value === 6) {
+    return {
+      name: 'Thêm câu hỏi trả lời ngắn',
+      typeQuestion: 'short-answer',
+    }
+  } else if (value === 7) {
+    return {
+      name: 'Thêm câu hỏi sắp xếp thứ tự',
+      typeQuestion: 'draggable',
+    }
+  }
+}
 export default {
   ADD_CATEGORY(state, data) {
     state.question.categories = data
@@ -170,7 +207,7 @@ export default {
       seoTitle: '',
       seoDescription: '',
       explainationIfCorrect: '',
-      explainationIfInCorrect: '',
+      explainationIfIncorrect: '',
       tags: [],
       title: '',
       position: 0,
@@ -189,9 +226,61 @@ export default {
   },
   COPY_GROUP_QUESTION(state, data) {
     const questionGroup = data.object.questionGroup
-    const questions = data.object.questions
-    state.question = questionGroup
-    state.childQuestions = questions
+    console.log('questionGroup', data)
+    if (data.object.questions.length > 0) {
+      const temp = data.object.questions[0]
+      state.question = {
+        ...state.question,
+        hashId: questionGroup.hashId,
+        questionContent: questionGroup.description,
+        explainationIfCorrect: temp.explainationIfCorrect,
+        explainationIfIncorrect: temp.explainationIfIncorrect,
+        seoAvatar: questionGroup.seoAvatar,
+        seoDescription: questionGroup.seoDescription,
+        seoTitle: questionGroup.seoTitle,
+        // statusId: questionGroup.statusId,
+        categories: temp.categories,
+        tags: temp.tags,
+        title: questionGroup.title,
+        levelId: temp.levelId,
+        statusId: questionGroup.statusId,
+        plainText: temp.plainText,
+      }
+      const convertChildQuestion = data.object.questions.map((item) => {
+        console.log('day la imte', item)
+        const child = {
+          id: uuid.v4(),
+          name: checkTypeQuesstion(item.questionTypeId).name,
+          typeQuestion: checkTypeQuesstion(item.questionTypeId).typeQuestion,
+          question: {
+            hashId: item.hashId,
+            title: item.title,
+            questionTypeId: item.questionTypeId,
+            questionContent: item.questionContent,
+            explainationIfCorrect: item.explainationIfCorrect,
+            explainationIfIncorrect: item.explainationIfIncorrect,
+            statusId: item.statusId,
+            levelId: item.levelId,
+            plainText: item.plainText,
+            seoAvatar: item.seoAvatar,
+            seoTitle: item.seoTitle,
+            seoDescription: item.seoDescription,
+            tags: item.tags,
+            categories: item.categories,
+            questionGroupId: item.questionGroupId,
+            groupOrder: item.groupOrder,
+          },
+          answers: item.answers.map((item) => {
+            item.id = uuid.v4()
+            return item
+          }),
+        }
+        return child
+      })
+      console.log('ngockhuexcdf', convertChildQuestion)
+      state.childQuestions = convertChildQuestion
+    }
+    // state.childQuestions = questions
   },
   SET_NULL_ID_ANSWER(state, aIndex) {
     state.answers[aIndex].id = undefined
@@ -252,8 +341,10 @@ export default {
     }
   },
   ADD_CHILD_QUESTION_CONTENT(state, data) {
+    console.log(data)
     const index = state.childQuestions.findIndex((item) => item.id === data.id)
     state.childQuestions[index].question.questionContent = data.value
+    state.childQuestions[index].question.plainText = data.questionPlantext
   },
   DELETE_CHILD_QUESTION(state, data) {
     const index = state.childQuestions.findIndex((item) => item.id === data)

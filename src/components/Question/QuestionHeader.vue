@@ -31,7 +31,7 @@
           {{ $t('update') }}
         </b-dropdown-item>
         <b-dropdown-item
-          :to="`/users/questions/copy/${question.itemType}/${question.hashId}`"
+          :to="`/users/questions/copy/${question.hashId}?type=${question.itemType}`"
           >{{ $t('copy') }}</b-dropdown-item
         >
         <b-dropdown-item href="#" @click="updateState(question)">{{

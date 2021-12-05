@@ -32,13 +32,13 @@
           :src="
             data.teacher && data.teacher.avatar
               ? data.teacher.avatar
-              : 'https://dev.tracnghiem.vn/images/teacher.png'
+              : '/images/teacher.png'
           "
           :alt="
             data.teacher
               ? data.teacher.displayName
                 ? data.displayName
-                : data.teacher.firstName + data.teacher.lastName
+                : data.teacher.firstName + ' ' + data.teacher.lastName
               : ''
           "
         />
@@ -83,6 +83,7 @@
         <span v-if="!data.nonExamTime" class="font-sm"
           >{{ data.examTime }} phút</span
         >
+        <span v-else class="font-sm">Không Tính Giờ</span>
       </div>
       <div class="card-footer-item">
         <i class="icon-exam text-primary"></i>

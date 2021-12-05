@@ -177,6 +177,7 @@ export default defineComponent({
         return
       }
       groupQuestion.childQuestions.forEach((element, index) => {
+        console.log('emler', element)
         if (element.question.questionContent === '') {
           this.errors.push('Bạn phải nhập vào nội dung câu hỏi con')
           this.isValid = false
@@ -203,7 +204,7 @@ export default defineComponent({
         question.explainationIfCorrect =
           groupQuestion.question.explainationIfCorrect
         question.explainationIfIncorrect =
-          groupQuestion.question.explainationInIfcorrect
+          groupQuestion.question.explainationIfIncorrect
         question.statusId = groupQuestion.question.statusId
         question.levelId = groupQuestion.question.levelId
         question.plainText = element.question.plainText
@@ -212,7 +213,7 @@ export default defineComponent({
         question.seoDescription = groupQuestion.question.seoDescription
         question.tags = groupQuestion.question.tags
         question.categories = groupQuestion.question.categories
-        question.questionGroupId = null
+        question.questionGroupId = element.questionGroupId
         question.groupOrder = index + 1
         const data = {
           question,
@@ -236,7 +237,7 @@ export default defineComponent({
           description: this.getGroupQuestion.question.questionContent,
           plainText: this.getGroupQuestion.question.plainText,
           random: false,
-          statusId: 1,
+          statusId: this.getGroupQuestion.question.statusId,
           seoAvatar: this.getGroupQuestion.question.seoAvatar,
           seoTitle: this.getGroupQuestion.question.seoTitle,
           seoDescription: this.getGroupQuestion.question.seoDescription,

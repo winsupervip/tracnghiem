@@ -106,7 +106,7 @@ export default defineComponent({
 
   setup(props) {
     const store = useStore()
-    if (!props.isEdit) {
+    if (!props.isEdit && !props.isCopy) {
       store.dispatch('questions/restData')
     }
     const data = reactive({
@@ -187,6 +187,10 @@ export default defineComponent({
         }
         if (this.isCopy) {
           question.question.hashId = ''
+          question.answers = question.answers.map((item) => {
+            item.hashId = ''
+            return item
+          })
         }
         try {
           if (this.isEdit) {
@@ -194,6 +198,7 @@ export default defineComponent({
             // this.$handleError(data)
             this.$toast.success(this.$i18n.t('errors.00000000'))
           } else if (this.isCopy) {
+            console.log('day la quasetiion copy')
             await QuestionApi.createQuestion(question)
 
             this.$toast.success(this.$i18n.t('errors.00000000'))

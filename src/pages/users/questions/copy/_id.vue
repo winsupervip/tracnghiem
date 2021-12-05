@@ -1,6 +1,7 @@
 <template>
   <div>
     <CreateSingleQuestion
+      v-if="questionItemType === 'question' && doneCall"
       :question-type="questionType"
       :question-type-id="questionTypeId"
       :question-title="questionTitle"
@@ -8,6 +9,12 @@
       :is-pairing="isPairing"
       :have-random-answer="isHaveRandomAnswer"
       :handle-answer="handleAnswer"
+      :is-copy="true"
+      :is-edit="false"
+    />
+    <CreateQuestionGroup
+      v-if="questionItemType === 'group' && doneCall"
+      :is-edit="false"
       :is-copy="true"
     />
   </div>
@@ -22,140 +29,166 @@ import {
   reactive,
   toRefs,
   useStore,
+  useRouter,
 } from '@nuxtjs/composition-api'
 import { uuid } from 'vue-uuid'
 import QuestionApi from '@/api/question-list-page'
 import handler from '@/utils/question/handleAnswer.js'
 import CreateSingleQuestion from '@/components/Question/CreateSingleQuestion.vue'
+
+import CreateQuestionGroup from '@/components/Question/CreateQuestionGroup.vue'
 export default defineComponent({
   auth: true,
   components: {
     CreateSingleQuestion,
+    CreateQuestionGroup,
   },
   layout: 'dashboard',
   setup() {
     const store = useStore()
     const route = useRoute()
+    const router = useRouter()
+    store.dispatch('questions/restData')
     const id = computed(() => route.value.params.id)
+    const ItemType = computed(() => route.value.query.type)
     const data = reactive({
       questionData: {},
-      questionTypeId: '',
+      questionTypeId: 0,
       questionType: '',
       questionTitle: '',
-      ishaveRightAnswer: false,
+      ishaveRightAnswer: true,
       isPairing: false,
       isHaveRandomAnswer: false,
+      doneCall: false,
+      questionItemType: ItemType.value,
     })
     const questionId = id.value
-    console.log(questionId)
 
     const checkQuestionType = (value) => {
       switch (value.questionTypeId) {
         case 1:
           data.questionType = 'single-choice'
-          data.questionTypeId = '1'
+          data.questionTypeId = 1
           data.questionTitle = 'Thêm câu hỏi 1 lựa chọn'
           break
         case 2:
           data.questionType = 'multiple-choice'
-          data.questionTypeId = '2'
+          data.questionTypeId = 2
           data.questionTitle = 'Thêm câu hỏi nhiều lựa chọn'
           break
         case 3:
           data.questionType = 'right-wrong'
-          data.questionTypeId = '3'
+          data.questionTypeId = 3
           data.questionTitle = 'Thêm câu hỏi đúng sai'
           break
         case 4:
           data.questionType = 'pairing'
-          data.questionTypeId = '4'
+          data.questionTypeId = 4
           data.isPairing = true
           data.questionTitle = 'Thêm câu hỏi ghép đôi'
           break
         case 5:
           data.questionType = 'fill-blank'
-          data.questionTypeId = '5'
+          data.questionTypeId = 5
           data.questionTitle = 'Thêm câu hỏi điền vào chổ trống'
           break
         case 6:
           data.questionType = 'short-answer'
-          data.questionTypeId = '6'
+          data.questionTypeId = 6
           data.questionTitle = 'Thêm câu hỏi trả lời ngắn'
           break
         case 7:
           data.questionType = 'draggable'
-          data.questionTypeId = '7'
+          data.questionTypeId = 7
           data.questionTitle = 'Thêm câu hỏi sắp xếp thứ tự'
           break
       }
     }
 
     useAsync(async () => {
-      const { data } = await QuestionApi.getUserQuestionDetails(questionId)
-      data.questionData = data
-      const answers = data.questionData.object.answers
-      let listAnswer = []
-      console.log('answers', answers)
-      if (data.questionData.object.question.questionTypeId === 4) {
-        const lefts = answers.filter((answer) => answer.position === 1)
-        const rights = answers.filter((answer) => answer.position === 2)
-        const convertLeft = lefts.map((left) => {
-          const right = rights.find((x) => x.rightAnswer === left.rightAnswer)
-          return {
-            id: uuid.v4(),
-            left: {
-              id: uuid.v4(),
-              position: 1,
-              hashId: '',
-              plainText: left.plainText,
-              rightAnswer: left.rightAnswer,
-              random: left.random,
-              answerContent: left.answerContent,
-            },
-            right: {
-              id: uuid.v4(),
-              position: 2,
-              hashId: '',
-              plainText: right?.plainText || '',
-              rightAnswer: right?.rightAnswer || '',
-              random: right?.random || false,
-              answerContent: right?.answerContent || '',
-            },
+      debugger
+      let result = {}
+      try {
+        if (data.questionItemType === 'question') {
+          result = await QuestionApi.getUserQuestionDetails(questionId)
+          const answers = result.data.object.answers
+          let listAnswer = []
+          console.log(result)
+          if (result.data.object.question.questionTypeId === 4) {
+            const lefts = answers.filter((answer) => answer.position === 1)
+            const rights = answers.filter((answer) => answer.position === 2)
+            const convertLeft = lefts.map((left) => {
+              const right = rights.find(
+                (x) => x.rightAnswer === left.rightAnswer
+              )
+              return {
+                id: uuid.v4(),
+                left: {
+                  id: uuid.v4(),
+                  position: 1,
+                  hashId: left.hashId || '',
+                  plainText: left.plainText || '',
+                  rightAnswer: left.rightAnswer || 0,
+                  random: left.random || true,
+                  answerContent: left.answerContent,
+                },
+                right: {
+                  id: uuid.v4(),
+                  position: 2,
+                  hashId: right.hashId,
+                  plainText: right?.plainText || '',
+                  rightAnswer: right?.rightAnswer || 0,
+                  random: right?.random || true,
+                  answerContent: right?.answerContent || '',
+                },
+              }
+            })
+            const convertRight = rights
+              .filter(
+                (x) => !lefts.find((l) => l.rightAnswer === x.rightAnswer)
+              )
+              .map((x) => ({
+                id: uuid.v4(),
+                left: {
+                  id: uuid.v4(),
+                  position: 1,
+                  hashId: '',
+                  plainText: '',
+                  rightAnswer: '',
+                  random: false,
+                  answerContent: '',
+                },
+                right: {
+                  id: uuid.v4(),
+                  position: 2,
+                  hashId: '',
+                  plainText: x.plainText,
+                  rightAnswer: x.rightAnswer,
+                  random: x.random,
+                  answerContent: x.answerContent,
+                },
+              }))
+            listAnswer = [...convertLeft, ...convertRight]
+          } else {
+            listAnswer = answers.map((item) => {
+              item.id = uuid.v4()
+              return item
+            })
           }
-        })
-        const convertRight = rights
-          .filter((x) => !lefts.find((l) => l.rightAnswer === x.rightAnswer))
-          .map((x) => ({
-            id: uuid.v4(),
-            left: {
-              id: uuid.v4(),
-              position: 1,
-              hashId: '',
-              plainText: '',
-              rightAnswer: '',
-              random: false,
-              answerContent: '',
-            },
-            right: {
-              id: uuid.v4(),
-              position: 2,
-              hashId: '',
-              plainText: x.plainText,
-              rightAnswer: x.rightAnswer,
-              random: x.random,
-              answerContent: x.answerContent,
-            },
-          }))
-        listAnswer = [...convertLeft, ...convertRight]
-      } else {
-        listAnswer = answers
+          checkQuestionType(result.data.object.question)
+          result.data.object.answers = listAnswer
+          await store.dispatch('questions/copyQuestion', result.data)
+        } else if (data.questionItemType === 'group') {
+          result = await QuestionApi.getUserQuestionGroupDetails(questionId)
+          await store.dispatch('questions/copyGroupQuestion', result.data)
+        }
+
+        data.doneCall = true
+      } catch (error) {
+        router.push('/users/questions/')
       }
-
-      data.questionData.object.answers = listAnswer
-
-      store.dispatch('questions/copyQuestion', data.questionData)
-      checkQuestionType(data.object.question)
     })
+
     return { ...toRefs(data) }
   },
   methods: {
