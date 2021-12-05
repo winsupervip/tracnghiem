@@ -173,6 +173,14 @@
               >
                 <ul v-if="isAdmin">
                   <li>
+                    <nuxt-link to="/admin/service">
+                      <div>
+                        <b-icon-card-checklist></b-icon-card-checklist>
+                      </div>
+                      <span>Gói dịch vụ</span>
+                    </nuxt-link>
+                  </li>
+                  <li>
                     <nuxt-link to="/admin/category">
                       <div>
                         <b-icon-card-checklist></b-icon-card-checklist>
@@ -194,6 +202,41 @@
                         <b-icon-card-checklist></b-icon-card-checklist>
                       </div>
                       <span>TOP danh mục</span>
+                    </nuxt-link>
+                  </li>
+                </ul>
+                <ul v-if="isAgency">
+                  <li>
+                    <nuxt-link to="/agency/service">
+                      <div>
+                        <img
+                          src="~/assets/img/dashboard/icon_lslambai.svg"
+                          alt="icon_lslambai.svg"
+                        />
+                      </div>
+                      <span>Gói dịch vụ</span>
+                    </nuxt-link>
+                  </li>
+                  <li>
+                    <nuxt-link to="/admin/configs/exam">
+                      <div>
+                        <img
+                          src="~/assets/img/dashboard/icon_dethi.svg"
+                          alt="icon_dethi.svg"
+                        />
+                      </div>
+                      <span>Quản lý người dùng</span>
+                    </nuxt-link>
+                  </li>
+                  <li>
+                    <nuxt-link to="/admin/configs/categories">
+                      <div>
+                        <img
+                          src="~/assets/img/dashboard/icon_nhch.svg"
+                          alt="icon_nhch.svg"
+                        />
+                      </div>
+                      <span>Lịch sử kích hoạt</span>
                     </nuxt-link>
                   </li>
                 </ul>

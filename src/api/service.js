@@ -19,6 +19,8 @@ export default {
   getServiceStatusAgencies: () =>
     global.$http.get('/api/v1/Catalog/service-agencies/status'),
   getSericeCategoryAgencies: () => global.$http.get('/api/Account/agency'),
+  getSericeDetail: (hashId) =>
+    global.$http.get(`/api/v1/Admin/services/${hashId}`),
   // delete
   deleteServiceAgencies: (hashId) =>
     global.$http.delete(`/api/v1/Admin/service-agencies/${hashId}`),

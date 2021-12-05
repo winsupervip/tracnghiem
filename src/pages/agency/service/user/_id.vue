@@ -25,7 +25,7 @@
           >
             <b-form-input
               id="keyword"
-              v-model="urlQuery.activeDateFrom"
+              v-model="urlQuery.createDateFrom"
               trim
               type="search"
               placeholder="Ngày cấp từ"
@@ -37,7 +37,7 @@
           >
             <b-form-input
               id="keyword"
-              v-model="urlQuery.activeDateTo"
+              v-model="urlQuery.createDateTo"
               trim
               type="search"
               placeholder="Ngày cấp đến"
@@ -48,7 +48,7 @@
           <b-form-group class="col-12 col-md-3 mb-3">
             <treeselect
               id="status"
-              v-model="urlQuery.isActive"
+              v-model="urlQuery.status"
               :multiple="false"
               :options="status"
               :load-options="loadOptions"
@@ -75,9 +75,11 @@
             "
           >
             <b-button variant="outline-primary btn-sm" @click="search()">
-              <b-icon-filter></b-icon-filter>
               Áp dụng
             </b-button>
+            <b-button variant="outline-primary btn-sm">
+              Thêm tài khoản</b-button
+            >
           </div>
         </b-form-row>
       </b-form>
@@ -88,56 +90,36 @@
         <EmptyData />
       </div>
       <div v-else>
-        <b-table striped hover :items="listAccount" :fields="fields">
+        <!-- <b-table striped hover :items="listActived" :fields="fields">
           <template #cell(actions)="data">
             <b-dropdown class="m-md-2" no-caret size="sm">
               <template #button-content>
                 <b-icon-three-dots></b-icon-three-dots>
               </template>
-              <b-dropdown-item>
+              <b-dropdown-item
+                :to="{
+                  path: `/agency/service/detail/${data.item.hashId}`,
+                }"
+              >
                 <b-icon-file-text></b-icon-file-text>
-                Danh sách tài khoản
-              </b-dropdown-item>
-              <b-dropdown-item @click="updateStatus(data.item.hashId)">
-                <b-icon-check2-circle></b-icon-check2-circle>
-                {{
-                  data.item.status === 1
-                    ? 'Hủy kích hoạt'
-                    : data.item.status === 2
-                    ? 'Kích hoạt'
-                    : 'Giải quyết'
-                }}
+                Chi tiết
               </b-dropdown-item>
               <b-dropdown-item
-                v-b-modal.modal-prevent-closing
-                @click="handleSubmit(data.item.hashId)"
+                @click="updateActive(data.item.hashId, data.item.isActive)"
               >
-                <b-icon-pencil-square></b-icon-pencil-square>
-                Gia hạn
-              </b-dropdown-item>
-              <b-dropdown-divider></b-dropdown-divider>
-              <b-dropdown-item @click="handleDelete(data.item.hashId)">
-                <b-icon-trash></b-icon-trash>
-                Xóa
+                <b-icon-check2-circle></b-icon-check2-circle>
+                {{ data.item.isActive ? 'Tạm dừng' : 'Kích hoạt' }}
               </b-dropdown-item>
             </b-dropdown>
           </template>
-          <template #cell(status)="data">
-            {{
-              data.item.status === 1
-                ? 'Active'
-                : data.item.status === 2
-                ? 'Deactive'
-                : 'Pending'
-            }}
+          <template #cell(isActive)="data">
+            {{ data.item.isActive ? 'Hoạt động' : 'Không hoạt động' }}
           </template>
+          <template #cell(index)="data"> {{ data.index + 1 }} </template>
           <template #cell(createDate)="data">
             {{ data.item.createDate | formatDurationDay }}
           </template>
-          <template #cell(expireDate)="data">
-            {{ data.item.expireDate | formatDurationDay }}
-          </template>
-        </b-table>
+        </b-table> -->
         <b-pagination
           v-if="total > urlQuery.pageSize"
           v-model="urlQuery.page"
@@ -148,16 +130,6 @@
         ></b-pagination>
       </div>
     </b-card>
-    <b-modal
-      id="modal-prevent-closing"
-      ref="modal"
-      title="Thông tin gói dịch vụ"
-      @show="resetModal"
-      @hidden="resetModal"
-      @ok="handleOk"
-    >
-      <AgencyDetailForm :id="serviceHashId" />
-    </b-modal>
   </div>
 </template>
 <script>
@@ -166,106 +138,106 @@ import {
   useContext,
   reactive,
   useFetch,
-  toRefs,
+  computed,
   useRoute,
+  toRefs,
   watch,
 } from '@nuxtjs/composition-api'
-import userAPI from '@/api/service'
-import AgencyDetailForm from '@/components/Admin/Service/AgencyDetailForm.vue'
+import userAPI from '@/api/agency'
 export default defineComponent({
   auth: true,
-  components: { AgencyDetailForm },
+  components: {},
   layout: 'dashboard',
-  middleware: ['isAdmin'],
+  middleware: ['isAgency'],
   setup() {
     const { $loader } = useContext()
     const route = useRoute()
     const queryPage = route?.value?.query?.page || 1
-    const id = route.value.params.id
-
-    console.log('id', id)
     const data = reactive({
-      serviceHashId: 'emecauxop',
       breadcrumbs: [
         {
           text: 'Danh sách gói dịch vụ',
+          href: '/agency/service',
+        },
+        {
+          text: 'abc',
+          href: '/agency/service',
+        },
+        {
+          text: 'Mã kích hoạt',
+          active: true,
         },
       ],
-      listAccount: [],
       sorts: [],
-      status: [],
-      fields: [
-        {
-          label: 'STT',
-        },
-        {
-          key: '',
-          label: 'Tài Khoản',
-        },
-        {
-          key: '',
-          label: 'Ngày kích hoạt',
-        },
-        {
-          key: '',
-          label: 'Ngày hết hạn',
-        },
-        {
-          key: '',
-          label: 'Trạng thái',
-        },
-        {
-          key: '',
-          label: 'Số câu hỏi đã tạo',
-        },
-        {
-          key: 'numberActived',
-          label: 'Số đề thi đã tạo',
-        },
-        {
-          key: 'actions',
-          label: 'Chức năng',
-        },
+      status: [
+        { id: true, label: 'Hoạt động' },
+        { id: false, label: 'Không hoạt động' },
       ],
+      // fields: [
+      //   {
+      //     key: 'index',
+      //     label: 'STT',
+      //   },
+      //   {
+      //     key: 'code',
+      //     label: 'Mã kích hoạt',
+      //   },
+      //   {
+      //     key: 'limitActive',
+      //     label: 'Số lượng kích hoạt',
+      //   },
+      //   {
+      //     key: 'isActive',
+      //     label: 'Trạng thái',
+      //   },
+      //   {
+      //     key: 'numberActived',
+      //     label: 'Số lượt người dùng',
+      //   },
+      //   {
+      //     key: 'createDate',
+      //     label: 'Ngày cấp',
+      //   },
+      //   {
+      //     key: 'actions',
+      //     label: 'Chức năng',
+      //   },
+      // ],
       currentPage: queryPage,
       total: 0,
       urlQuery: {
         page: 1,
-        hashId: id,
         pageSize: 10,
         sort: 1,
         status: '',
         keyword: '',
-        activeDateFrom: '',
-        activeDateTo: '',
-        isActive: '',
+        createDateFrom: '',
+        createDateTo: '',
       },
+      listAccount: [],
+      HashId: '',
     })
+    const id = computed(() => route.value.params.id)
+    data.HashId = id
     const { fetch } = useFetch(async () => {
       $loader()
-      const { data: result } = await userAPI.getServiceDetailAgencies(
-        'emecauxop',
+      const { data: result } = await userAPI.getAgenciesListAccounts(
+        data.HashId,
         data.urlQuery
       )
-      data.listAccount = result?.object?.items
+      data.listAccounts = result?.object?.items
       data.total = result?.object?.total
+      console.log(data.listActived)
       $loader().close()
     })
-    fetch()
-    const statusTypeAgencies = async () => {
-      $loader()
-      const { data: result } = await userAPI.getServiceStatusAgencies()
-      data.status = result?.object?.items
-      $loader().close()
-    }
-    statusTypeAgencies()
     const sortTypeAgencies = async () => {
       $loader()
-      const { data: result } = await userAPI.getServiceAccountSort()
+      const { data: result } = await userAPI.getSortAgenciesActived()
       data.sorts = result?.object?.items
       $loader().close()
     }
     sortTypeAgencies()
+    fetch()
     const search = () => {
       data.urlQuery.page = 1
       fetch()
@@ -282,43 +254,11 @@ export default defineComponent({
     }
   },
   methods: {
-    showModal(id) {
-      this.$bvModal.show(id)
-    },
-    hideModal(id) {
-      this.$bvModal.hide(id)
-    },
-    shown() {
-      this.doShow = true
-    },
-    hide() {
-      this.doShow = false
-    },
-    shownEdit() {
-      this.doShowEdit = true
-    },
-    hideEdit() {
-      this.doShowEdit = false
-    },
-    async handleDelete(hashId) {
-      if (!window.confirm('Bạn thực sự muốn xóa?')) {
-        return
-      }
-      try {
-        const { data } = await userAPI.deleteServiceAgencies(hashId)
-        this.$handleError(data)
-        this.search()
-      } catch (err) {
-        this.$handleError(err, () => {
-          console.log(err)
-        })
-      }
-    },
-    async updateStatus(hashId, status) {
-      if (status === 1) {
-        console.log('hashId ', hashId, ' status ', status)
+    loadOptions({ action, searchQuery, callback }) {},
+    async updateActive(hashId, status) {
+      if (status) {
         try {
-          const { data } = await userAPI.updateServiceAgenciesActive(hashId)
+          const { data } = await userAPI.updateAgenciesListDeactive(hashId)
           this.$handleError(data)
           this.search()
         } catch (err) {
@@ -327,11 +267,8 @@ export default defineComponent({
           })
         }
       } else {
-        console.log('hashId ', hashId, ' status ', status)
         try {
-          const { data } = await userAPI.updateServiceAgenciesDeactivePending(
-            hashId
-          )
+          const { data } = await userAPI.updateAgenciesListActive(hashId)
           this.$handleError(data)
           this.search()
         } catch (err) {
@@ -341,8 +278,6 @@ export default defineComponent({
         }
       }
     },
-
-    loadOptions({ action, searchQuery, callback }) {},
   },
 })
 </script>

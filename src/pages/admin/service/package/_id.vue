@@ -27,7 +27,7 @@
               id="keyword"
               v-model="urlQuery.createDateFrom"
               trim
-              type="search"
+              type="date"
               placeholder="Ngày cấp từ"
             >
             </b-form-input>
@@ -39,7 +39,7 @@
               id="keyword"
               v-model="urlQuery.createDateTo"
               trim
-              type="search"
+              type="date"
               placeholder="Ngày cấp đến"
             >
             </b-form-input>
@@ -72,7 +72,7 @@
               id="keyword"
               v-model="urlQuery.expireDateFrom"
               trim
-              type="search"
+              type="date"
               placeholder="Ngày hết hạn từ"
             >
             </b-form-input>
@@ -84,7 +84,7 @@
               id="keyword"
               v-model="urlQuery.expireDateTo"
               trim
-              type="search"
+              type="date"
               placeholder="Ngày hết hạn đến"
             >
             </b-form-input>
@@ -124,20 +124,20 @@
                 <b-icon-three-dots></b-icon-three-dots>
               </template>
               <b-dropdown-item>
-                <b-icon-file-text></b-icon-file-text>
-                Danh sách tài khoản
+                <nuxt-link
+                  :to="{
+                    path: `/admin/service/${serviceHashId}`,
+                  }"
+                >
+                  <b-icon-file-text></b-icon-file-text>
+                  Danh sách tài khoản
+                </nuxt-link>
               </b-dropdown-item>
               <b-dropdown-item
                 @click="updateStatus(data.item.hashId, data.item.status)"
               >
                 <b-icon-check2-circle></b-icon-check2-circle>
-                {{
-                  data.item.status === 1
-                    ? 'Hủy kích hoạt'
-                    : data.item.status === 2
-                    ? 'Kích hoạt'
-                    : 'Giải quyết'
-                }}
+                {{ data.item.status === 2 ? 'Kích hoạt' : 'Hủy kích hoạt' }}
               </b-dropdown-item>
               <b-dropdown-item v-b-modal.modal-edit @click="edit(data.item)">
                 <b-icon-pencil-square></b-icon-pencil-square>
@@ -225,7 +225,6 @@
                   type="text"
                   autocomplete="off"
                 ></b-form-input>
-                <!-- <b-input-group-append> -->
                 <b-form-datepicker
                   v-model="expireDate"
                   button-only
@@ -233,7 +232,6 @@
                   locale="vi-VN"
                   aria-controls="example-input"
                 ></b-form-datepicker>
-                <!-- </b-input-group-append> -->
               </b-input-group>
               <b-form-invalid-feedback :state="valid">{{
                 errors[0]
@@ -407,6 +405,7 @@ import {
   toRefs,
   useRoute,
   watch,
+  computed,
 } from '@nuxtjs/composition-api'
 import {
   ASYNC_SEARCH,
@@ -424,11 +423,8 @@ export default defineComponent({
     const { $loader } = useContext()
     const route = useRoute()
     const queryPage = route?.value?.query?.page || 1
-    const id = route.value.params.id
-
-    console.log('id', id)
+    const id = computed(() => route.value.params.id)
     const data = reactive({
-      serviceHashId: 'mpjfjuaxd',
       agencyId: '',
       expireDate: '',
       price: 0,
@@ -496,11 +492,13 @@ export default defineComponent({
         expireDateFrom: '',
         expireDateTo: '',
       },
+      serviceHashId: '',
     })
+    data.serviceHashId = id
     const { fetch } = useFetch(async () => {
       $loader()
       const { data: result } = await userAPI.getServiceDetailAgencies(
-        'mpjfjuaxd',
+        data.serviceHashId,
         data.urlQuery
       )
       data.listPackage = result?.object?.items

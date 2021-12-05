@@ -27,7 +27,7 @@
               id="keyword"
               v-model="urlQuery.fromDate"
               trim
-              type="search"
+              type="date"
               placeholder="Ngày tạo từ"
             >
             </b-form-input>
@@ -39,7 +39,7 @@
               id="keyword"
               v-model="urlQuery.toDate"
               trim
-              type="search"
+              type="date"
               placeholder="Ngày tạo đến"
             >
             </b-form-input>
@@ -97,7 +97,11 @@
               <template #button-content>
                 <b-icon-three-dots></b-icon-three-dots>
               </template>
-              <b-dropdown-item @click="detail(data.item.hashId)">
+              <b-dropdown-item
+                :to="{
+                  path: `/admin/service/package/${data.item.hashId}`,
+                }"
+              >
                 <b-icon-file-text></b-icon-file-text>
                 Chi tiết
               </b-dropdown-item>
