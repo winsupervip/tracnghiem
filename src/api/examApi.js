@@ -121,4 +121,12 @@ export default {
     }
     return global.$http.get(url)
   },
+  getUserHistoryExamDetails: (urlQuery) => {
+    const url = `/api/v1/Exam/get-detail-user-exam-history?examId=${
+      urlQuery.examId
+    }&Page=${urlQuery.page}&PageSize=${
+      urlQuery.pageSize
+    }&Keyword=${encodeURIComponent(urlQuery.keyword)}`
+    return global.$http.get(url)
+  },
 }
