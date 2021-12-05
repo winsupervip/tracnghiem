@@ -413,10 +413,17 @@
     <b-modal id="modal-start-exam" class="modal-common" hide-footer centered>
       <div class="text-center mb-4">
         <img class="mb-3" src="/images/bot-icon.svg" alt="bot" />
-        <div class="font-bold text-lmd mb-3">
+        <b-form-textarea
+          id="textarea"
+          v-model="description"
+          placeholder="Mô tả..."
+          rows="3"
+          max-rows="6"
+        ></b-form-textarea>
+        <!-- <div class="font-bold text-lmd mb-3">
           Vui lòng xác nhận bạn không phải là robot
         </div>
-        <img class="" src="/images/gcaptcha.png" alt="captcha" />
+        <img class="" src="/images/gcaptcha.png" alt="captcha" /> -->
       </div>
       <div class="modal-footer-common">
         <b-btn variant="outline" @click="hide()"> Hủy bỏ </b-btn>
@@ -464,51 +471,6 @@ export default defineComponent({
   setup() {
     const { app, $loader, $logger } = useContext()
 
-    // const data = reactive({
-    //   idExam: this.$route.params.id || null,
-    //   selectedBookmark: [],
-    //   configQuiz: {
-    //     showFilterGroup1: true,
-    //     selectedOptions1: [],
-    //     showFilterGroup2: true,
-    //     selectedOptions2: [],
-    //     showFilterGroup3: true,
-    //     selectedOptions3: [],
-    //   },
-    //   dataExam: {
-    //     id: 1,
-    //     name: '400 câu trắc nghiệm Mạo từ trong tiếng Anh có đáp án cực hay',
-    //     description:
-    //       'English speaking course. 77 Hours of English language speaking, English listening practice. 1000 English language words',
-    //     thumbnail: '/images/exam-1.jpg',
-    //     category: 'Thi tốt nghiệp THPT',
-    //     time: '45',
-    //     examCount: '100',
-    //     questionCount: '90',
-    //     teacherId: 1,
-    //     teacherAvatar: '/images/teacher.png',
-    //     teacherName: 'Cô giáo Minh Thu',
-    //     rating: '4.5',
-    //     ratingCount: 20,
-    //     level: 1,
-    //     tags: [
-    //       {
-    //         id: 1,
-    //         name: 'Vật lý 12',
-    //       },
-    //       {
-    //         id: 2,
-    //         name: 'Luyện thi đại học',
-    //       },
-    //       {
-    //         id: 3,
-    //         name: 'Vật lý nâng cao',
-    //       },
-    //     ],
-    //   },
-    //   examSettingsData: null,
-    // })
-
     const store = useStore()
     const route = useRoute()
     const idSlug = computed(() => route.value.params.id)
@@ -537,6 +499,7 @@ export default defineComponent({
     return {
       idExam: this.$route.params.id || null,
       selectedBookmark: [],
+      description: '',
       configQuiz: {
         showFilterGroup1: true,
         sectionConfigIdsChecked: [],
@@ -594,7 +557,7 @@ export default defineComponent({
     hide() {
       this.$bvModal.hide('modal-start-exam')
     },
-    StartExam() {
+    async StartExam() {
       const idSlug = this.idExam
       const arr = idSlug.split('-')
       const examHashId = arr[arr.length - 1]
@@ -605,6 +568,8 @@ export default defineComponent({
         )
       })
 
+      console.log('getCurrentUser', this.userInfo)
+
       // eslint-disable-next-line array-callback-return
       const settingsData = settings.map(function (x) {
         return {
@@ -612,7 +577,7 @@ export default defineComponent({
           numQuestions: x.numberQuestionsTest,
         }
       })
-      const data = {
+      const dataInitExam = {
         quiz: {
           examHashId,
           timeInSeconds: this.examSettings.examTimeSecond,
@@ -623,17 +588,24 @@ export default defineComponent({
         },
         settings: settingsData,
         userInformation: {
-          fullName: 'Mr Vương',
-          description: 'Mô tả nè',
-          email: 'vuongnv@tracnghiem.vn',
+          fullName: this.$auth.user.name,
+          description: this.description,
+          email: this.$auth.user.email,
         },
       }
 
-      console.log('data', data)
-
-      this.$router.push({
-        path: `/de-thi/${this.idExam}/lam-bai`,
-      })
+      try {
+        const { data } = await ExamApi.addQuiz(dataInitExam)
+        this.$handleError(data)
+        console.log('data addquiz', data)
+        this.$router.push({
+          path: `/de-thi/${this.idExam}/lam-bai?quizId=${data.object.data}`,
+        })
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
     },
   },
 })

@@ -295,7 +295,11 @@ export default {
       prefix: 'auth.',
       options: {
         path: '/',
+<<<<<<< HEAD
         maxAge: 3600,
+=======
+        maxAge: 60 * 60 * 5, // Can be dynamic ?
+>>>>>>> 8cffa30... display question
       }
     },
     plugins: [{ src: '@/plugins/http.js', ssr: true }],
