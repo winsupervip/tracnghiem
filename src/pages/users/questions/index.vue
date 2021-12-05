@@ -88,13 +88,7 @@
               />
             </b-form-group>
             <div
-              class="
-                col-12 col-md-3
-                mb-3
-                d-flex
-                justify-content-around
-                align-items-end
-              "
+              class="col-12 col-md-3 mb-3 d-flex justify-content-around align-items-end"
             >
               <b-button variant="outline-primary btn-sm" @click="handleSearch">
                 <b-icon-filter></b-icon-filter> {{ $t('apply') }}
@@ -215,7 +209,7 @@ export default defineComponent({
       questionList: [],
       isCallApiGetTag: false,
       urlQuery: {
-        pageSize: 2,
+        pageSize: 10,
         keyword: '',
         categories: [],
         page: 1,
