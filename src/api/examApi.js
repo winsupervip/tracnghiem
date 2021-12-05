@@ -129,4 +129,12 @@ export default {
     const url = `/api/v1/Exam/delete-exam-section?hashExamId=${data.hashExamId}&hashExamSectionId=${data.hashExamSectionId}`
     return global.$http.delete(url, data)
   },
+  getUserHistoryExamDetails: (urlQuery) => {
+    const url = `/api/v1/Exam/get-detail-user-exam-history?examId=${
+      urlQuery.examId
+    }&Page=${urlQuery.page}&PageSize=${
+      urlQuery.pageSize
+    }&Keyword=${encodeURIComponent(urlQuery.keyword)}`
+    return global.$http.get(url)
+  },
 }

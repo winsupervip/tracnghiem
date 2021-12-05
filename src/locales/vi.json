@@ -275,6 +275,7 @@
     }
   },
   "history":{
-    "title":"Lịch sử làm bài"
+    "title":"Lịch sử làm bài",
+    "detail":"Chi tiết đề thi"
   }
 }
