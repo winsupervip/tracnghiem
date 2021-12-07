@@ -6,17 +6,8 @@ export default {
     global.$http.get(`/api/v1/Catalog/auto-complete-tag?keyword=${key}`),
   createQuestion: (data) =>
     global.$http.post('/api/v1/Question/add-question', data),
-  createGroupQuestion: async (data, successCallApi, errorCallApi) => {
-    const result = await global.$http.post(
-      '/api/v1/Question/add-question-group',
-      data
-    )
-    if ((successCallApi && result.status === 200) || result.status === 201) {
-      successCallApi()
-    } else if (errorCallApi) {
-      errorCallApi()
-    }
-  },
+  createGroupQuestion: (data) =>
+    global.$http.post('/api/v1/Question/add-question-group', data),
   updateQuestionGroup: (data) => {
     global.$http.post('/api/v1/Question/update-question-group', data)
   },

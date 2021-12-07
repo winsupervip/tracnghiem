@@ -43,6 +43,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import _ from 'lodash'
 import AddAnswer from './AddAnswer.vue'
 import ListAnswers from './ListAnswers.vue'
 export default {
@@ -94,12 +95,7 @@ export default {
   },
   watch: {
     questionContent() {
-      const data = {
-        id: this.questionChild.id,
-        value: this.questionContent,
-        questionPlantext: this.questionPlantext,
-      }
-      this.addChildQuestionContent(data)
+      this.commitQuestion()
     },
     modalId() {
       console.log('modal', this.modalId)
@@ -122,10 +118,16 @@ export default {
     hide() {
       this.doShow = false
     },
-    addQuestionContent() {
-      console.log('blur chays')
-      this.addChildQuestionContent(this.questionContent)
-    },
+
+    commitQuestion: _.debounce(function () {
+      const data = {
+        id: this.questionChild.id,
+        value: this.questionContent,
+        questionPlantext: this.questionPlantext,
+      }
+      this.addChildQuestionContent(data)
+    }, 200),
+
     getText(val) {
       if (val) {
         let description = ''

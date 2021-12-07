@@ -47,7 +47,7 @@
             :question-child="dataUpdate"
             modal-id="update-child-question"
           />
-          <CommentOrNote />
+          <CommentOrNote :group="true" />
         </div>
 
         <div class="p-question__right">
@@ -109,7 +109,7 @@ export default defineComponent({
   setup() {
     const data = reactive({
       errors: [],
-      questionTitle: 'Câu hỏi chùm',
+      questionTitle: 'Thêm câu hỏi chùm',
       dataUpdate: {},
       isUpdate: false,
       isValid: true,
@@ -158,7 +158,6 @@ export default defineComponent({
       let valid = true
 
       const result = this.handleAnswer(answers)
-      console.log(result)
       if (result.errors.length === 0) {
         validateAnswers = result.data
       } else {
@@ -168,7 +167,6 @@ export default defineComponent({
       return { valid, validateAnswers }
     },
     validateChildQuestion(groupQuestion) {
-      console.log(groupQuestion)
       const result = []
       let value = []
       this.errors = []
@@ -253,6 +251,7 @@ export default defineComponent({
           description: this.getGroupQuestion.question.questionContent,
           plainText: this.getGroupQuestion.question.plainText,
           random: false,
+          levelId: this.getGroupQuestion.question.levelId,
           statusId: this.getGroupQuestion.question.statusId,
           seoAvatar: this.getGroupQuestion.question.seoAvatar,
           seoTitle: this.getGroupQuestion.question.seoTitle,
@@ -261,28 +260,15 @@ export default defineComponent({
         questionInGroups,
       }
       if (this.isValid) {
-        console.log('questionGroup questionGroup', questionGroup)
         try {
           if (!this.isCopy) {
-            const result = await CauHoiApi.updateQuestionGroup(questionGroup)
-            console.log('adadad', result)
+            await CauHoiApi.updateQuestionGroup(questionGroup)
             this.$toast.success('Update thành công')
           } else {
-            CauHoiApi.createGroupQuestion(
-              questionGroup,
-              () => {
-                // this.restAnswer()
-                console.log('day la dataa', questionGroup)
-                this.$toast.success('Thêm Thành Công').goAway(1500)
-                window.location.href = '/users/questions/'
-              },
-              () => {
-                this.$toast.show('Có lỗi xảy ra').goAway(1500)
-              }
-            )
+            await CauHoiApi.createGroupQuestion(questionGroup)
+            this.$toast.success('Thêm Thành Công').goAway(1500)
           }
-          // window.location.href = '/users/questions/'
-          //  this.restData()
+          window.location.href = '/users/questions/'
         } catch (err) {
           this.$handleError(err, () => {
             console.log(err)

@@ -113,7 +113,6 @@ export default defineComponent({
           result = await QuestionApi.getUserQuestionDetails(questionId)
           const answers = result.data.object.answers
           let listAnswer = []
-          console.log(result)
           if (result.data.object.question.questionTypeId === 4) {
             const lefts = answers.filter((answer) => answer.position === 1)
             const rights = answers.filter((answer) => answer.position === 2)

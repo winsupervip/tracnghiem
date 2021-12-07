@@ -12,6 +12,7 @@
           :placeholder="$t('whenTheAnswerIsCorrect')"
         ></b-form-textarea>
         <b-form-textarea
+          v-if="!group"
           id="textarea-default"
           v-model="explainationIfIncorrect"
           :placeholder="$t('whenTheAnswerIsIncorrect')"
@@ -24,6 +25,12 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 export default {
+  props: {
+    group: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       explainationIfCorrect: '',

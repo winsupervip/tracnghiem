@@ -201,7 +201,7 @@ export default {
       plainText: '',
       isRandom: false,
       categories: [],
-      statusId: 1,
+      statusId: 3,
       levelId: 1,
       seoAvatar: 'https://storage.tracnghiem.vn/tracnghiem-dev/exam-avatar.png',
       seoTitle: '',
