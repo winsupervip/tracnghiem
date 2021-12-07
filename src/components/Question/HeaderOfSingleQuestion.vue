@@ -13,7 +13,6 @@
             :placeholder="$t('title')"
           >
           </b-form-input>
-          {{ getTitle }}
           <b-form-invalid-feedback id="inputLiveFeedback">
             {{ errors[0] }}
           </b-form-invalid-feedback>
