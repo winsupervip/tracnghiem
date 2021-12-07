@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import { murmurHash128 } from 'murmurhash-native'
-
 require('dotenv').config({ path: 'environments/.env.' + process.env.NODE_ENV })
 
 export default {
@@ -296,7 +295,7 @@ export default {
       prefix: 'auth.',
       options: {
         path: '/',
-        maxAge: 60 * 60 * 5, // Can be dynamic ?
+        maxAge: 3600,
       }
     },
     plugins: [{ src: '@/plugins/http.js', ssr: true }],

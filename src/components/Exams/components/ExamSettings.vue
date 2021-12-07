@@ -91,6 +91,18 @@
             </b-form-invalid-feedback>
           </b-form-group>
         </ValidationProvider>
+        <b-form-group
+          :description="$t('exam.form.allowChangeSettingsHelp')"
+          class="col-12 mb-3"
+        >
+          <b-form-checkbox
+            id="allowChangeSettings"
+            v-model="allowChangeSettings"
+            name="allowChangeSettings"
+          >
+            {{ $t('exam.form.allowChangeSettings') }}
+          </b-form-checkbox>
+        </b-form-group>
       </div>
       <div class="col-12 col-md-6">
         <ValidationProvider
@@ -115,21 +127,27 @@
             </b-form-invalid-feedback>
           </b-form-group>
         </ValidationProvider>
+        <h3>Ví dụ có chuyên mục:</h3>
+        <ul>
+          <li>Chuyên mục 1: 5 câu</li>
+          <li>Chuyên mục 2: 5 câu</li>
+          <li>Các câu không thuộc chuyên mục: {{ numberQuestionsTest }} câu</li>
+          <li>
+            Tổng số câu / 1 đề:
+            <span class="fw-bold">
+              {{ 5 + 5 + Number(numberQuestionsTest) }} câu
+            </span>
+          </li>
+        </ul>
+        <h3>Ví dụ không có chuyên mục:</h3>
+        <ul>
+          <li>
+            Tổng số câu / 1 đề:
+            <span class="fw-bold"> {{ Number(numberQuestionsTest) }} câu </span>
+          </li>
+        </ul>
       </div>
-      <div class="col-12">
-        <b-form-group
-          :description="$t('exam.form.allowChangeSettingsHelp')"
-          class="col-12 mb-3"
-        >
-          <b-form-checkbox
-            id="allowChangeSettings"
-            v-model="allowChangeSettings"
-            name="allowChangeSettings"
-          >
-            {{ $t('exam.form.allowChangeSettings') }}
-          </b-form-checkbox>
-        </b-form-group>
-      </div>
+      <div class="col-12"></div>
     </div>
   </div>
 </template>
