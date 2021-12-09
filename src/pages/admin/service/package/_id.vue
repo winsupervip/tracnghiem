@@ -126,7 +126,7 @@
               <b-dropdown-item>
                 <nuxt-link
                   :to="{
-                    path: `/admin/service/${serviceHashId}`,
+                    path: `/admin/service/${data.item.hashId}`,
                   }"
                 >
                   <b-icon-file-text></b-icon-file-text>
@@ -158,6 +158,9 @@
                 ? 'Deactive'
                 : 'Pending'
             }}
+          </template>
+          <template #cell(index)="data">
+            {{ data.index + 1 + (urlQuery.page - 1) * 10 }}
           </template>
           <template #cell(createDate)="data">
             {{ data.item.createDate | formatDurationDay }}
@@ -446,6 +449,7 @@ export default defineComponent({
       status: [],
       fields: [
         {
+          key: 'index',
           label: 'STT',
         },
         {

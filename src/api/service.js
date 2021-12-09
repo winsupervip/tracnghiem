@@ -34,13 +34,23 @@ export default {
   // post
   createServiceAgencies: (data) =>
     global.$http.post('/api/v1/Admin/service-agencies', data),
-  // account
+
+  // user
   getServiceListAccount: (hashId, urlQuery) =>
     global.$http.get(
       `/api/v1/Admin/service-agencies/${hashId}/users?Page=${urlQuery.page}&PageSize=${urlQuery.pageSize}&Keyword=${urlQuery.keyword}&activeDateFrom=${urlQuery.activeDateFrom}&activeDateTo=${urlQuery.activeDateTo}&isActive=${urlQuery.isActive}&sort=${urlQuery.sort}`
     ),
+  getUserService: (hashId) =>
+    global.$http.get(`/api/v1/Admin/service-users/${hashId}`),
   getServiceAccountSort: () =>
     global.$http.get('/api/v1/Catalog/service-users/sort'),
+  // put
+  updateAccountService: (data) =>
+    global.$http.put(`/api/v1/Admin/service-users`, data),
+  updateServiceUserActive: (hashId) =>
+    global.$http.put(`/api/v1/Admin/service-users/${hashId}/active`),
 
-  // Agency
+  // delete
+  deleteServiceUser: (hashId) =>
+    global.$http.delete(`/api/v1/Admin/service-users/${hashId}`),
 }

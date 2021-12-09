@@ -280,7 +280,13 @@
       "limitActive":"Tổng số kích hoạt",
       "paymentAmount":"Số tiền thanh toán",
       "note":"Ghi chú",
-      "comments":"Nhập tên hoặc gmail đại lý"
+      "comments":"Nhập tên hoặc gmail đại lý",
+      "numberQuestion":"Số câu hỏi",
+      "numberExam":"Số đề thi",
+      "infoPackage":"Thông tin gói",
+      "agencies":{
+        "limitActive":"Số lượt kích hoạt tối đa"
+      }
     }
   },
   "history":{

@@ -2,7 +2,7 @@
   <div>
     <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
     <b-card-group>
-      <b-card sub-title="Thông tin gói dịch vụ">
+      <b-card sub-title="Thông tin gói dịch vụ" class="me-2">
         <p>Tên Gói: {{ listDetail.name }}</p>
         <p>Ngày kích hoạt: {{ listDetail.activeDate | formatDurationDay }}</p>
         <p>Ngày hết hạn: {{ listDetail.expriDate | formatDurationDay }}</p>
@@ -13,7 +13,7 @@
         <b-button variant="outline-primary">Tạm dừng kích hoạt user</b-button>
       </b-card>
 
-      <b-card sub-title="Thông tin mã kích hoạt">
+      <b-card sub-title="Thông tin mã kích hoạt" class="ms-2">
         <p>
           Đã kích hoạt /tổng được cấp {{ listDetail.numberActived }}/{{
             listDetail.limitActive
@@ -22,23 +22,88 @@
         <p>Số lượng mã đã tạo: {{ listDetail.numberActiveCode }}</p>
         <p>
           User kích hoạt gần nhất:
-          {{ listDetail.lastUserActive }}
+          <!-- {{ listDetail.lastUserActive.firstName }}
+
+          {{ listDetail.lastUserActive.lastName }}
           -
-          {{ listDetail.lastUserActive }}
+          {{ listDetail.lastUserActive.activeDate | formatDurationDay }} -->
         </p>
         <footer>
-          <nuxt-link
-            class="btn btn-sm btn-primary"
-            :to="{
-              path: `/agency/service/${agencyHashId}`,
-            }"
+          <b-button variant="outline-primary">
+            <nuxt-link
+              :to="{
+                path: `/agency/service/${agencyHashId}`,
+              }"
+            >
+              Danh sách mã kích hoạt
+            </nuxt-link>
+          </b-button>
+          <b-button
+            v-b-modal.modal-edit
+            variant="outline-primary"
+            @click="getData()"
+            >Thêm mã kích hoạt</b-button
           >
-            <b-icon-plus></b-icon-plus> Danh sách mã kích hoạt
-          </nuxt-link>
-          <b-button variant="outline-primary">Thêm mã kích hoạt</b-button>
         </footer>
       </b-card>
     </b-card-group>
+    <b-modal
+      id="modal-edit"
+      ref="modal"
+      :title="$t('admin.service.infoPackage')"
+      hide-footer
+      @shown="shown"
+      @hide="hide"
+      @oke="onSubmit"
+    >
+      <ValidationObserver ref="form" v-slot="{ handleSubmit }">
+        <b-form @submit.prevent="handleSubmit(onSubmit)">
+          <ValidationProvider
+            :name="$t('admin.service.agencies.limitActive')"
+            rules="required|max:255|integer"
+          >
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              :label="$t('admin.service.agencies.limitActive') + ' (*)'"
+              label-for="limitActive"
+              class="mb-3"
+            >
+              <b-form-input
+                id="limitActive"
+                v-model="limitActive"
+                type="number"
+                :state="errors[0] ? false : valid ? true : null"
+              ></b-form-input>
+              <b-form-invalid-feedback>
+                {{ errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <ValidationProvider rules="max:1000" :name="$t('admin.service.note')">
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              :label="$t('admin.service.note')"
+              label-for="note"
+            >
+              <b-form-textarea
+                id="note"
+                v-model="note"
+                :state="errors[0] ? false : valid ? true : null"
+              ></b-form-textarea>
+              <b-form-invalid-feedback id="inputLiveFeedback">
+                {{ errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <footer class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="hide()">
+              Hủy Bỏ
+            </button>
+            <button type="submit" class="btn btn-primary">Lưu</button>
+          </footer>
+        </b-form>
+      </ValidationObserver>
+    </b-modal>
   </div>
 </template>
 <script>
@@ -73,6 +138,8 @@ export default defineComponent({
         },
       ],
 
+      limitActive: '',
+      note: '',
       listDetail: {},
       agencyHashId: '',
     })
@@ -91,6 +158,35 @@ export default defineComponent({
   },
   methods: {
     loadOptions({ action, searchQuery, callback }) {},
+    showModal(id) {
+      this.$bvModal.show(id)
+    },
+    hideModal(id) {
+      this.$bvModal.hide(id)
+    },
+    shown() {
+      this.doShow = true
+    },
+    hide() {
+      this.doShow = false
+    },
+    getData() {},
+    async onSubmit() {
+      const activeCode = {
+        serviceAgencyHashId: this.agencyHashId,
+        limitActive: this.limitActive,
+        note: this.note,
+      }
+      console.log(activeCode)
+      try {
+        const { data } = await userAPI.createCodeServiceAgencies(activeCode)
+        this.$handleError(data)
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
+    },
   },
 })
 </script>

@@ -115,7 +115,9 @@
           <template #cell(isActive)="data">
             {{ data.item.isActive ? 'Hoạt động' : 'Không hoạt động' }}
           </template>
-          <template #cell(index)="data"> {{ data.index + 1 }} </template>
+          <template #cell(index)="data">
+            {{ data.index + 1 + (urlQuery.page - 1) * 10 }}
+          </template>
           <template #cell(createDate)="data">
             {{ data.item.createDate | formatDurationDay }}
           </template>
@@ -153,6 +155,7 @@ export default defineComponent({
     const { $loader } = useContext()
     const route = useRoute()
     const queryPage = route?.value?.query?.page || 1
+    const id = computed(() => route.value.params.id)
     const data = reactive({
       breadcrumbs: [
         {
@@ -161,7 +164,7 @@ export default defineComponent({
         },
         {
           text: 'abc',
-          href: '/agency/service/detail/',
+          href: `/agency/service/detail/${id.value}`,
         },
         {
           text: 'Mã kích hoạt',
@@ -217,7 +220,6 @@ export default defineComponent({
       },
       agencyHashId: '',
     })
-    const id = computed(() => route.value.params.id)
     data.agencyHashId = id
     const { fetch } = useFetch(async () => {
       $loader()

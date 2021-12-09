@@ -112,7 +112,6 @@ export default defineComponent({
       ...toRefs(data),
     }
   },
-  computed: {},
   methods: {
     async handleUpdate() {
       try {

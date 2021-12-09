@@ -119,6 +119,9 @@
                 : 'Pending'
             }}
           </template>
+          <template #cell(index)="data">
+            {{ data.index + 1 + (urlQuery.page - 1) * 10 }}
+          </template>
           <template #cell(createDate)="data">
             {{ data.item.createDate | formatDurationDay }}
           </template>
@@ -169,6 +172,7 @@ export default defineComponent({
       status: [],
       fields: [
         {
+          key: 'index',
           label: 'STT',
         },
         {
@@ -222,7 +226,6 @@ export default defineComponent({
       data.listAgency = result?.object?.items
       data.total = result?.object?.total
       $loader().close()
-      console.log(data.listAgency)
     })
     fetch()
     const statusTypeAgencies = async () => {

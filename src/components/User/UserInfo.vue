@@ -2,14 +2,21 @@
   <div>
     <div class="info">
       <div class="info-image">
-        <img
-          :src="user.avatar ? user.avatar : '/images/logo.svg'"
-          class="card"
-        />
-        <!-- <Uploader :accept="'*/*'" :disabled="false"></Uploader> -->
-        <p v-if="show" class="text-image">{{ $t('userInfo.change') }}</p>
+        <img :src="image" class="card" />
+
+        <b-button v-b-modal.modal-1 class="text-image">
+          {{ $t('userInfo.change') }}
+        </b-button>
       </div>
 
+      <b-modal id="modal-1" title="BootstrapVue" size="ms" @ok="handleSubmit">
+        <Uploader
+          v-model="image"
+          :accept="'*/*'"
+          :disabled="true"
+          class="uploader"
+        ></Uploader>
+      </b-modal>
       <div class="info-content">
         <p>
           <b>{{
@@ -26,11 +33,13 @@
 </template>
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
-// import Uploader from '@/components/Uploader.vue'
+import EventBus from '@/plugins/eventBus'
+
+import Uploader from '@/components/Uploader.vue'
 export default defineComponent({
   name: 'UserlInfo',
   auth: true,
-  components: {},
+  components: { Uploader },
   props: {
     show: {
       type: Boolean,
@@ -41,9 +50,28 @@ export default defineComponent({
       default: () => {},
     },
   },
-  setup() {},
-  computed: {},
-  methods: {},
+  data() {
+    return {
+      isShow: false,
+      image: '',
+    }
+  },
+  watch: {
+    user: {
+      handler(val) {
+        this.image = val.avatar
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.image = this.user.avatar
+  },
+  methods: {
+    handleSubmit() {
+      EventBus.$emit('image', this.image)
+    },
+  },
 })
 </script>
 <style lang="scss" scoped>

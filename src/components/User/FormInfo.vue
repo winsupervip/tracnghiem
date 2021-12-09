@@ -213,6 +213,7 @@ export default defineComponent({
       lastName: '' || props.info.lastName,
       displayName: '' || props.info.displayName,
       bio: '' || props.info.bio,
+      avatar: '' || props.info.avatar,
       isShow: false,
       treeDataGenders: [],
       alwaysOpen: false,
@@ -240,6 +241,7 @@ export default defineComponent({
         this.lastName = val.lastName
         this.displayName = val.displayName
         this.bio = val.bio
+        this.avatar = val.avatar
       },
       deep: true,
     },
@@ -255,6 +257,7 @@ export default defineComponent({
       this.displayName = ''
       this.valueBirthday = ''
       this.treeValueGender = ''
+      this.avatar = ''
     },
     loadOptions({ action, searchQuery, callback }) {
       if (action === ASYNC_SEARCH) {
@@ -269,7 +272,7 @@ export default defineComponent({
       const user = {
         firstName: this.firstName,
         lastName: this.lastName,
-        avatar: '',
+        avatar: this.avatar,
         bio: this.bio,
         schoolId: this.treeValueWorkAt,
         phone: this.phoneNumber,

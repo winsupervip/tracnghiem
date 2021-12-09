@@ -82,7 +82,112 @@
         </b-form-row>
       </b-form>
     </b-card>
-
+    <b-modal
+      id="modal-edit"
+      ref="modal"
+      :title="$t('admin.service.infoPackage')"
+      hide-footer
+      @shown="showModal"
+      @hide="hideModal"
+      @oke="onSubmit"
+    >
+      <ValidationObserver ref="form" v-slot="{ handleSubmit }">
+        <b-form @submit.prevent="handleSubmit(onSubmit)">
+          <p>Tài khoản: {{ user.email }}</p>
+          <ValidationProvider
+            rules="required|max:255"
+            :name="$t('admin.service.expireDate')"
+          >
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              :label="$t('admin.service.expireDate') + ' (*)'"
+              label-for="expireDate"
+            >
+              <b-input-group class="mb-1">
+                <b-form-input
+                  id="expireDate"
+                  v-model="user.expireDate"
+                  type="text"
+                  autocomplete="off"
+                ></b-form-input>
+                <b-form-datepicker
+                  v-model="user.expireDate"
+                  button-only
+                  right
+                  locale="vi-VN"
+                  aria-controls="expireDate"
+                ></b-form-datepicker>
+              </b-input-group>
+              <b-form-invalid-feedback :state="valid">{{
+                errors[0]
+              }}</b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <ValidationProvider
+            :name="$t('admin.service.numberQuestion')"
+            rules="required|max:255|integer"
+          >
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              :label="$t('admin.service.numberQuestion') + ' (*)'"
+              label-for="numberQuestion"
+              class="mb-3"
+            >
+              <b-form-input
+                id="numberQuestion"
+                v-model="user.limitQuestion"
+                type="text"
+                :state="errors[0] ? false : valid ? true : null"
+              ></b-form-input>
+              <b-form-invalid-feedback>
+                {{ errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <ValidationProvider
+            :name="$t('admin.service.numberExam')"
+            rules="required|max:255|integer"
+          >
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              :label="$t('admin.service.numberExam') + ' (*)'"
+              label-for="numberExam"
+              class="mb-3"
+            >
+              <b-form-input
+                id="numberExam"
+                v-model="user.limitExam"
+                type="text"
+                :state="errors[0] ? false : valid ? true : null"
+              ></b-form-input>
+              <b-form-invalid-feedback>
+                {{ errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <ValidationProvider rules="max:1000" :name="$t('admin.service.note')">
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              :label="$t('admin.service.note')"
+              label-for="note"
+            >
+              <b-form-textarea
+                id="note"
+                v-model="user.note"
+                :state="errors[0] ? false : valid ? true : null"
+              ></b-form-textarea>
+              <b-form-invalid-feedback id="inputLiveFeedback">
+                {{ errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <footer class="modal-footer">
+            <button type="button" class="btn btn-secondary">Hủy Bỏ</button>
+            <button type="submit" class="btn btn-primary">Lưu</button>
+          </footer>
+        </b-form>
+      </ValidationObserver>
+    </b-modal>
     <b-card>
       <div v-if="total === 0">
         <EmptyData />
@@ -94,26 +199,16 @@
               <template #button-content>
                 <b-icon-three-dots></b-icon-three-dots>
               </template>
-              <b-dropdown-item>
-                <b-icon-file-text></b-icon-file-text>
-                Danh sách tài khoản
-              </b-dropdown-item>
               <b-dropdown-item @click="updateStatus(data.item.hashId)">
                 <b-icon-check2-circle></b-icon-check2-circle>
-                {{
-                  data.item.status === 1
-                    ? 'Hủy kích hoạt'
-                    : data.item.status === 2
-                    ? 'Kích hoạt'
-                    : 'Giải quyết'
-                }}
+                {{ data.item.isActive ? 'Hủy kích hoạt' : 'Kích hoạt' }}
               </b-dropdown-item>
               <b-dropdown-item
-                v-b-modal.modal-prevent-closing
-                @click="handleSubmit(data.item.hashId)"
+                v-b-modal.modal-edit
+                @click="onEdit(data.item.hashId)"
               >
                 <b-icon-pencil-square></b-icon-pencil-square>
-                Gia hạn
+                Điều chỉnh gói
               </b-dropdown-item>
               <b-dropdown-divider></b-dropdown-divider>
               <b-dropdown-item @click="handleDelete(data.item.hashId)">
@@ -122,17 +217,14 @@
               </b-dropdown-item>
             </b-dropdown>
           </template>
-          <template #cell(status)="data">
-            {{
-              data.item.status === 1
-                ? 'Active'
-                : data.item.status === 2
-                ? 'Deactive'
-                : 'Pending'
-            }}
+          <template #cell(isActive)="data">
+            {{ data.item.isActive ? 'Hoạt động' : 'Không hoạt động' }}
           </template>
-          <template #cell(createDate)="data">
-            {{ data.item.createDate | formatDurationDay }}
+          <template #cell(index)="data">
+            {{ data.index + 1 + (urlQuery.page - 1) * 10 }}
+          </template>
+          <template #cell(activeDate)="data">
+            {{ data.item.activeDate | formatDurationDay }}
           </template>
           <template #cell(expireDate)="data">
             {{ data.item.expireDate | formatDurationDay }}
@@ -148,16 +240,6 @@
         ></b-pagination>
       </div>
     </b-card>
-    <b-modal
-      id="modal-prevent-closing"
-      ref="modal"
-      title="Thông tin gói dịch vụ"
-      @show="resetModal"
-      @hidden="resetModal"
-      @ok="handleOk"
-    >
-      <AgencyDetailForm :id="serviceHashId" />
-    </b-modal>
   </div>
 </template>
 <script>
@@ -172,10 +254,9 @@ import {
   computed,
 } from '@nuxtjs/composition-api'
 import userAPI from '@/api/service'
-import AgencyDetailForm from '@/components/Admin/Service/AgencyDetailForm.vue'
 export default defineComponent({
   auth: true,
-  components: { AgencyDetailForm },
+  components: {},
   layout: 'dashboard',
   middleware: ['isAdmin'],
   setup() {
@@ -191,7 +272,7 @@ export default defineComponent({
         },
         {
           text: 'abc',
-          href: '/admin/service/package/',
+          href: `/admin/service/package/${id.value}`,
         },
         {
           text: 'Đại lý Mr.bean',
@@ -200,33 +281,43 @@ export default defineComponent({
       ],
       listAccount: [],
       sorts: [],
-      status: [],
+      status: [
+        {
+          id: false,
+          label: 'Không hoạt động',
+        },
+        {
+          id: true,
+          label: 'Hoạt động',
+        },
+      ],
       fields: [
         {
+          key: 'index',
           label: 'STT',
         },
         {
-          key: '',
+          key: 'user.lastName',
           label: 'Tài Khoản',
         },
         {
-          key: '',
+          key: 'activeDate',
           label: 'Ngày kích hoạt',
         },
         {
-          key: '',
+          key: 'expireDate',
           label: 'Ngày hết hạn',
         },
         {
-          key: '',
+          key: 'isActive',
           label: 'Trạng thái',
         },
         {
-          key: '',
+          key: 'numberQuestionCreated',
           label: 'Số câu hỏi đã tạo',
         },
         {
-          key: 'numberActived',
+          key: 'numberExamCreated',
           label: 'Số đề thi đã tạo',
         },
         {
@@ -248,11 +339,19 @@ export default defineComponent({
         isActive: '',
       },
       serviceHashId: '',
+      user: {
+        limitQuestion: 0,
+        limitExam: 0,
+        email: '',
+        expireDate: '',
+        hashId: '',
+        note: '',
+      },
     })
     data.serviceHashId = id
     const { fetch } = useFetch(async () => {
       $loader()
-      const { data: result } = await userAPI.getServiceDetailAgencies(
+      const { data: result } = await userAPI.getServiceListAccount(
         data.serviceHashId,
         data.urlQuery
       )
@@ -261,13 +360,6 @@ export default defineComponent({
       $loader().close()
     })
     fetch()
-    const statusTypeAgencies = async () => {
-      $loader()
-      const { data: result } = await userAPI.getServiceStatusAgencies()
-      data.status = result?.object?.items
-      $loader().close()
-    }
-    statusTypeAgencies()
     const sortTypeAgencies = async () => {
       $loader()
       const { data: result } = await userAPI.getServiceAccountSort()
@@ -297,24 +389,12 @@ export default defineComponent({
     hideModal(id) {
       this.$bvModal.hide(id)
     },
-    shown() {
-      this.doShow = true
-    },
-    hide() {
-      this.doShow = false
-    },
-    shownEdit() {
-      this.doShowEdit = true
-    },
-    hideEdit() {
-      this.doShowEdit = false
-    },
     async handleDelete(hashId) {
       if (!window.confirm('Bạn thực sự muốn xóa?')) {
         return
       }
       try {
-        const { data } = await userAPI.deleteServiceAgencies(hashId)
+        const { data } = await userAPI.deleteServiceUser(hashId)
         this.$handleError(data)
         this.search()
       } catch (err) {
@@ -323,31 +403,32 @@ export default defineComponent({
         })
       }
     },
-    async updateStatus(hashId, status) {
-      if (status === 1) {
-        console.log('hashId ', hashId, ' status ', status)
-        try {
-          const { data } = await userAPI.updateServiceAgenciesActive(hashId)
-          this.$handleError(data)
-          this.search()
-        } catch (err) {
-          this.$handleError(err, () => {
-            console.log(err)
-          })
-        }
-      } else {
-        console.log('hashId ', hashId, ' status ', status)
-        try {
-          const { data } = await userAPI.updateServiceAgenciesDeactivePending(
-            hashId
-          )
-          this.$handleError(data)
-          this.search()
-        } catch (err) {
-          this.$handleError(err, () => {
-            console.log(err)
-          })
-        }
+    async updateStatus(hashId) {
+      try {
+        const { data } = await userAPI.updateServiceUserActive(hashId)
+        this.$handleError(data)
+        this.search()
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
+    },
+    async onEdit(hashId) {
+      const { data: result } = await userAPI.getUserService(hashId)
+      this.user = result?.object
+      this.user.email = result?.object?.user?.email
+    },
+    async onSubmit() {
+      try {
+        const { data } = await userAPI.updateAccountService(this.user)
+        this.$handleError(data)
+        this.hideModal('modal-edit')
+        this.search()
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
       }
     },
 

@@ -115,7 +115,9 @@
           <template #cell(isActive)="data">
             {{ data.item.isActive ? 'Hoạt động' : 'Không hoạt động' }}
           </template>
-          <template #cell(index)="data"> {{ data.index + 1 }} </template>
+          <template #cell(index)="data">
+            {{ data.index + 1 + (urlQuery.page - 1) * 10 }}
+          </template>
           <template #cell(createDate)="data">
             {{ data.item.createDate | formatDurationDay }}
           </template>

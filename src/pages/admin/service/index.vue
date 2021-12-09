@@ -123,6 +123,9 @@
           <template #cell(status)="data">
             {{ data.item.status ? 'Hoạt động' : 'Không hoạt động' }}
           </template>
+          <template #cell(index)="data">
+            {{ data.index + 1 + (urlQuery.page - 1) * 10 }}
+          </template>
           <template #cell(createDate)="data">
             {{ data.item.createDate | formatDurationDay }}
           </template>
@@ -464,6 +467,7 @@ export default defineComponent({
       sorts: [],
       fields: [
         {
+          key: 'index',
           label: 'STT',
         },
         {
@@ -501,10 +505,6 @@ export default defineComponent({
       ],
       listActive: [
         {
-          id: '',
-          label: 'Khác',
-        },
-        {
           id: 1,
           label: 'Hoạt động',
         },
@@ -514,10 +514,6 @@ export default defineComponent({
         },
       ],
       status: [
-        {
-          id: '',
-          label: 'Khác',
-        },
         {
           id: false,
           label: 'Không hoạt động',
@@ -640,7 +636,7 @@ export default defineComponent({
       try {
         const { data } = await userAPI.createService(formData)
         this.$handleError(data)
-        this.resetDataForm()
+        // this.resetDataForm()
         this.search()
         this.hideModal('modal-add')
       } catch (err) {
@@ -677,7 +673,9 @@ export default defineComponent({
         const { data } = await userAPI.updateService(result)
         this.$handleError(data)
         this.hideModal('modal-edit')
-        this.resetDataForm()
+        console.log('1', result)
+        // this.resetDataForm()
+        console.log('2', result)
         this.search()
       } catch (err) {
         this.$handleError(err, () => {
@@ -685,18 +683,16 @@ export default defineComponent({
         })
       }
     },
-    resetDataForm() {
-      this.formAdd = {
-        isActive: null,
-        name: '',
-        exp: null,
-        limitQuestion: null,
-        limitExam: null,
-        price: null,
-        isPublic: false,
-        note: '',
-      }
-    },
+    // resetDataForm() {
+    //   this.isActive= null,
+    //   this.name= '',
+    //   this.exp= null,
+    //   this.limitQuestion= null,
+    //   this.limitExam= null,
+    //   this.price=null,
+    //   this.isPublic= false,
+    //   this.note='',
+    // }
   },
 })
 </script>

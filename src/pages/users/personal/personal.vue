@@ -30,9 +30,11 @@ import {
   useFetch,
   toRefs,
 } from '@nuxtjs/composition-api'
+import EventBus from '@/plugins/eventBus'
 import userAPI from '@/api/user'
 import Info from '@/components/User/Info.vue'
 import FormInfo from '@/components/User/FormInfo.vue'
+
 export default defineComponent({
   auth: true,
   components: { Info, FormInfo },
@@ -82,6 +84,18 @@ export default defineComponent({
       isCreateRefBy,
     }
   },
-  methods: {},
+  created() {
+    // Listening the event image
+    EventBus.$on('image', this.handler)
+  },
+  destroyed() {
+    // Stop listening the event image with handler
+    EventBus.$off('image', this.handler)
+  },
+  methods: {
+    handler(e) {
+      this.user.avatar = e
+    },
+  },
 })
 </script>
