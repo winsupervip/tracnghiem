@@ -30,6 +30,7 @@
               v-if="doShow"
               v-model="answerContent"
               :options="optionsText"
+              @text="getText"
             />
           </div>
           <div v-if="isPairing" class="wrapper-right">
@@ -38,6 +39,7 @@
               v-if="doShow"
               v-model="answerContentRight"
               :options="optionsText"
+              @text="getTextRight"
             />
           </div>
         </div>
@@ -122,7 +124,9 @@ export default defineComponent({
         entity_encoding: 'raw',
       },
       answerContent: '',
+      answerContentPlantext: '',
       answerContentRight: '',
+      answerContentRightPlantext: '',
       isRightAnswer: false,
       isRandom: true,
       isUpdate: -1,
@@ -188,7 +192,41 @@ export default defineComponent({
       }
     },
 
-    handleAnswer() {
+    getText(val) {
+      if (val) {
+        let description = ''
+        if (val.length > 500) {
+          description = val.substring(0, 500)
+        } else {
+          description = val
+        }
+        this.answerContentPlantext = description.replace('\n', '')
+      }
+    },
+
+    getTextRight(val) {
+      if (val) {
+        let description = ''
+        if (val.length > 500) {
+          description = val.substring(0, 500)
+        } else {
+          description = val
+        }
+        this.answerContentRightPlantext = description.replace('\n', '')
+      }
+    },
+
+    resetData() {
+      this.isRightAnswer = false
+      this.isRandom = true
+      this.answerContentPlantext = ''
+      this.answerContent = ''
+      if (this.isPairing) {
+        this.answerContentRight = ''
+        this.answerContentRightPlantext = ''
+      }
+    },
+    async handleAnswer() {
       if (this.answerContent === '' && this.answerContentRight === '') {
         // config: https://github.com/shakee93/vue-toasted
         // eslint-disable-next-line no-undef
@@ -204,7 +242,7 @@ export default defineComponent({
               id: uuid.v4(),
               position: 1,
               hashId: '',
-              plainText: this.answerContent,
+              plainText: this.answerContentPlantext,
               rightAnswer: this.isRightAnswer ? 1 : 0,
               random: this.isRandom,
               answerContent: this.answerContent,
@@ -213,7 +251,7 @@ export default defineComponent({
               id: uuid.v4(),
               position: 2,
               hashId: '',
-              plainText: this.answerContentRight,
+              plainText: this.answerContentRightPlantext,
               rightAnswer: this.isRightAnswer ? 1 : 0,
               random: this.isRandom,
               answerContent: this.answerContentRight,
@@ -228,7 +266,7 @@ export default defineComponent({
             id: uuid.v4(),
             position: 0,
             hashId: '',
-            plainText: this.answerContent,
+            plainText: this.answerContentPlantext,
             rightAnswer: this.isRightAnswer || !this.haveRightAnswer ? 1 : 0,
             random: this.isRandom,
             answerContent: this.answerContent,
@@ -239,31 +277,31 @@ export default defineComponent({
       if (this.groupQuestion) {
         if (this.getUpdateValueAnswer?.id) {
           data.answer.id = this.getUpdateValueAnswer.id
-          this.updateAnswerQuestionChild({
+          await this.updateAnswerQuestionChild({
             id: this.childQuestionId,
             answer: data.answer,
           })
           this.$toast.success('Cập nhập câu trả lời thành công').goAway(1000)
+          this.resetData()
         } else {
-          this.addAnswerInChildQuestion({
+          await this.addAnswerInChildQuestion({
             id: this.childQuestionId,
             answer: data?.answer,
           })
           this.$toast.success('Thêm câu trả lời thành công').goAway(1000)
         }
-        this.isRightAnswer = false
-        this.answerContent = ''
-        this.answerContentRight = ''
+        this.resetData()
         return
       }
       if (this.getUpdateValueAnswer?.id) {
         data.answer.id = this.getUpdateValueAnswer.id
-        this.handleUpdateAnswer(data)
+        await this.handleUpdateAnswer(data)
         this.$toast.success('Cập nhập câu trả lời thành công').goAway(1000)
-        this.removeValueUpdateAnswer()
+        await this.removeValueUpdateAnswer()
         this.isRightAnswer = false
         this.answerContent = ''
         this.answerContentRight = ''
+        this.resetData()
         setTimeout(() => {
           this.hideModal()
         }, 200)
@@ -278,11 +316,9 @@ export default defineComponent({
             .goAway(1000)
           return 0
         }
-        this.handleAddAnswer(data)
+        await this.handleAddAnswer(data)
         this.$toast.success('Thêm câu trả lời thành công').goAway(1000)
-        this.isRightAnswer = false
-        this.answerContent = ''
-        this.answerContentRight = ''
+        this.resetData()
       }
     },
   },

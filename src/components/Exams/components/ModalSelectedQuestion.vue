@@ -7,13 +7,16 @@
             {{ $t('modalQToExam.totalQuestion') }}
           </label>
           <div class="col-sm-9">
-            <input
-              id="staticEmail"
+            <!-- <input
+
               type="text"
               readonly
-              class="form-control-plaintext"
+
               :value="questions.length"
-            />
+            /> -->
+            <span id="staticEmail" class="form-control-plaintext">{{
+              questions.length
+            }}</span>
           </div>
         </div>
         <ValidationProvider :name="$t('section.title')">
@@ -91,9 +94,9 @@
           <button type="submit" class="btn btn-primary">
             {{ $t('modalQToExam.save') }}
           </button>
-          <button type="submit" class="btn btn-outline-secondary">
+          <span class="btn btn-outline-secondary" @click="closeFormOnSection()">
             {{ $t('modalQToExam.close') }}
-          </button>
+          </span>
         </div>
       </b-form>
     </ValidationObserver>
@@ -183,7 +186,15 @@ export default defineComponent({
     loadOptions({ action, parentNode, callback }) {},
     async onSubmit() {
       if (!this.questions || this.questions.length === 0) {
-        this.$toast.show(this.i18n.t('modalQToExam.errors.questionEmpty'))
+        this.$toast
+          .show(this.$i18n.t('modalQToExam.errors.questionEmpty'))
+          .goAway(1000)
+        return
+      }
+      if (this.questions.length > 10) {
+        this.$toast
+          .show(this.$i18n.t('modalQToExam.errors.moreThanTen'))
+          .goAway(1000)
         return
       }
       // prepare data
@@ -214,6 +225,9 @@ export default defineComponent({
       this.$bvModal.hide('modal-section')
       await this.fetch()
       this.dataSubmit.sectionHashId = sectionId
+    },
+    closeFormOnSection() {
+      this.$bvModal.hide('modal-selected')
     },
   },
 })

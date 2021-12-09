@@ -47,7 +47,7 @@
             :question-child="dataUpdate"
             modal-id="update-child-question"
           />
-          <CommentOrNote />
+          <CommentOrNote :group="true" />
         </div>
 
         <div class="p-question__right">
@@ -107,7 +107,7 @@ export default defineComponent({
     store.dispatch('questions/restData')
     const data = reactive({
       errors: [],
-      questionTitle: 'Câu hỏi chùm',
+      questionTitle: 'Thêm câu hỏi chùm',
       dataUpdate: {},
       isUpdate: false,
       isValid: true,
@@ -227,7 +227,7 @@ export default defineComponent({
       })
       return result
     },
-    onSubmit() {
+    async onSubmit() {
       const questionInGroups = this.validateChildQuestion(this.getGroupQuestion)
       const questionGroup = {
         questionGroup: {
@@ -237,6 +237,7 @@ export default defineComponent({
           description: this.getGroupQuestion.question.questionContent,
           plainText: this.getGroupQuestion.question.plainText,
           random: false,
+          levelId: this.getGroupQuestion.question.levelId,
           statusId: this.getGroupQuestion.question.statusId,
           seoAvatar: this.getGroupQuestion.question.seoAvatar,
           seoTitle: this.getGroupQuestion.question.seoTitle,
@@ -245,17 +246,9 @@ export default defineComponent({
         questionInGroups,
       }
       if (this.isValid) {
-        CauHoiApi.createGroupQuestion(
-          questionGroup,
-          () => {
-            // this.restAnswer()
-            this.$toast.success('Thêm Thành Công').goAway(1500)
-            window.location.href = '/users/questions/'
-          },
-          () => {
-            this.$toast.show('Có lỗi xảy ra').goAway(1500)
-          }
-        )
+        await CauHoiApi.createGroupQuestion(questionGroup)
+        this.$toast.success('Thêm Thành Công').goAway(1500)
+        window.location.href = '/users/questions/'
       } else {
         this.$toast.error('Có lỗi xảy ra ở phần câu hỏi con').goAway(1500)
       }

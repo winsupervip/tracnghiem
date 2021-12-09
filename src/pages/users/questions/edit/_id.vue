@@ -180,7 +180,6 @@ export default defineComponent({
           checkQuestionType(result.data.object.question)
         } else if (data.questionItemType === 'group') {
           result = await QuestionApi.getUserQuestionGroupDetails(questionId)
-          console.log('longlol', result)
           await store.dispatch('questions/copyGroupQuestion', result.data)
         }
         data.doneCall = true

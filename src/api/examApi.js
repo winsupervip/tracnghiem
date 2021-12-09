@@ -93,7 +93,7 @@ export default {
     return global.$http.get(url)
   },
   getUserHistoryExams: (urlQuery) => {
-    let url = `/api/v1/Exam/get-user-exam-history-list-public?Page=${
+    let url = `/api/v1/Exam/get-user-history-list?Page=${
       urlQuery.page
     }&PageSize=${urlQuery.pageSize}&Keyword=${encodeURIComponent(
       urlQuery.keyword

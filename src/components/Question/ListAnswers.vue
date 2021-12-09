@@ -28,7 +28,7 @@
           <b-icon
             :variant="answer.random ? 'success' : 'dark'"
             icon="shuffle"
-            @click="isRandom(answer.id)"
+            @click="actionRandom(answer.id)"
           ></b-icon>
           <b-icon
             v-b-modal.modal-1
@@ -68,7 +68,7 @@
           <b-icon
             :variant="answer.random ? 'success' : 'dark'"
             icon="shuffle"
-            @click="isRandom(answer.id)"
+            @click="actionRandom(answer.id)"
           ></b-icon>
           <b-icon
             v-b-modal.modal-1
@@ -110,7 +110,7 @@
             <b-icon
               :variant="answer.random ? 'success' : 'dark'"
               icon="shuffle"
-              @click="isRandom(answer.id)"
+              @click="actionRandom(answer.id)"
             ></b-icon>
             <b-icon
               v-b-modal.modal-1
@@ -169,7 +169,7 @@
             <b-icon
               :variant="answer.left.random ? 'success' : 'dark'"
               icon="shuffle"
-              @click="isRandom(answer.id)"
+              @click="actionRandom(answer.id)"
             ></b-icon>
             <b-icon
               v-b-modal.modal-1
@@ -207,7 +207,7 @@
           <b-icon
             :variant="answer.random ? 'success' : 'dark'"
             icon="shuffle"
-            @click="isRandom(answer.id)"
+            @click="actionRandom(answer.id)"
           ></b-icon>
           <b-icon
             v-b-modal.modal-1
@@ -408,6 +408,13 @@ export default defineComponent({
     handleSelected(value) {
       this.isSelected = value
       this.tempSelected = value
+    },
+    actionRandom(id) {
+      if (this.groupQuestion) {
+        //
+      } else {
+        this.isRandom(id)
+      }
     },
   },
 })
