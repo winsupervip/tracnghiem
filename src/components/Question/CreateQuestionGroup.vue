@@ -47,7 +47,7 @@
             :question-child="dataUpdate"
             modal-id="update-child-question"
           />
-          <CommentOrNote />
+          <CommentOrNote :group="true" />
         </div>
 
         <div class="p-question__right">
@@ -101,11 +101,15 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    isCopy: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup() {
     const data = reactive({
       errors: [],
-      questionTitle: 'Câu hỏi chùm',
+      questionTitle: 'Thêm câu hỏi chùm',
       dataUpdate: {},
       isUpdate: false,
       isValid: true,
@@ -154,7 +158,6 @@ export default defineComponent({
       let valid = true
 
       const result = this.handleAnswer(answers)
-      console.log(result)
       if (result.errors.length === 0) {
         validateAnswers = result.data
       } else {
@@ -164,7 +167,6 @@ export default defineComponent({
       return { valid, validateAnswers }
     },
     validateChildQuestion(groupQuestion) {
-      console.log(groupQuestion)
       const result = []
       let value = []
       this.errors = []
@@ -175,7 +177,6 @@ export default defineComponent({
         return
       }
       groupQuestion.childQuestions.forEach((element, index) => {
-        console.log('element', element.question.questionGroupId)
         if (element.question.questionContent === '') {
           this.errors.push('Bạn phải nhập vào nội dung câu hỏi con')
           this.isValid = false
@@ -213,17 +214,30 @@ export default defineComponent({
         question.categories = groupQuestion.question.categories
         question.questionGroupId = element.question.questionGroupId
         question.groupOrder = index + 1
-        question.hashId = element.question.hashId
-        const data = {
-          question,
-          answers: value.data,
+        question.hashId = this.isCopy ? '' : element.question.hashId
+        let data = {}
+        if (this.isCopy) {
+          if (value.data.length > 0) {
+            data = {
+              question,
+              answers: value.data.map((item) => {
+                item.hashId = ''
+                return item
+              }),
+            }
+          }
+        } else {
+          data = {
+            question,
+            answers: value.data,
+          }
         }
-        console.log('data index', data)
-        result.push(data)
-        this.errors.push(value.errors)
+
         if (value.errors.length !== 0) {
           this.isValid = false
         }
+        result.push(data)
+        this.errors.push(value.errors)
       })
       return result
     },
@@ -237,6 +251,7 @@ export default defineComponent({
           description: this.getGroupQuestion.question.questionContent,
           plainText: this.getGroupQuestion.question.plainText,
           random: false,
+          levelId: this.getGroupQuestion.question.levelId,
           statusId: this.getGroupQuestion.question.statusId,
           seoAvatar: this.getGroupQuestion.question.seoAvatar,
           seoTitle: this.getGroupQuestion.question.seoTitle,
@@ -245,13 +260,15 @@ export default defineComponent({
         questionInGroups,
       }
       if (this.isValid) {
-        console.log('questionGroup questionGroup', questionGroup)
         try {
-          const result = await CauHoiApi.updateQuestionGroup(questionGroup)
-          console.log('adadad', result)
-          this.$toast.success('Update thành công')
-          // window.location.href = '/users/questions/'
-          //  this.restData()
+          if (!this.isCopy) {
+            await CauHoiApi.updateQuestionGroup(questionGroup)
+            this.$toast.success('Update thành công')
+          } else {
+            await CauHoiApi.createGroupQuestion(questionGroup)
+            this.$toast.success('Thêm Thành Công').goAway(1500)
+          }
+          window.location.href = '/users/questions/'
         } catch (err) {
           this.$handleError(err, () => {
             console.log(err)
