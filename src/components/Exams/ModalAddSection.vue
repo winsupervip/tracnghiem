@@ -84,9 +84,9 @@
         <button type="submit" class="btn btn-primary">
           {{ $t('modalQToExam.save') }}
         </button>
-        <button type="submit" class="btn btn-outline-secondary">
+        <span class="btn btn-outline-secondary" @click="closseModal">
           {{ $t('modalQToExam.close') }}
-        </button>
+        </span>
       </div>
     </b-form>
   </ValidationObserver>
@@ -152,6 +152,9 @@ export default defineComponent({
           console.log(err)
         })
       }
+    },
+    closseModal() {
+      this.$bvModal.hide('modal-section')
     },
   },
 })

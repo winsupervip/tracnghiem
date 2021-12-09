@@ -260,6 +260,7 @@ export default defineComponent({
       questionTypes: [],
       categories: [],
       isShow: true,
+      windowWidth: window.innerWidth,
       urlQuery: {
         page: 1,
         pageSize: 10,
@@ -335,6 +336,13 @@ export default defineComponent({
       ...toRefs(data),
       searchHandler,
     }
+  },
+  watch: {
+    windowWidth() {
+      if (this.windowWidth < 755) {
+        this.isShow = false
+      }
+    },
   },
   methods: {
     loadOptions({ action, parentNode, callback }) {},

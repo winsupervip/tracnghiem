@@ -2,7 +2,7 @@
   <div>
     <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
     <b-card :sub-title="$t('exam.questions.search')">
-      <b-form>
+      <b-form class="container">
         <b-form-row class="row">
           <b-form-group
             :label="$t('keyword')"

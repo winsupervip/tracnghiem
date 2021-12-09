@@ -196,7 +196,8 @@
     "select": "Chọn",
     "addToExam": "Thêm vào đề thi",
     "errors": {
-      "questionEmpty": "Vui lòng chọn ít nhất 1 câu hỏi"
+      "questionEmpty": "Vui lòng chọn ít nhất 1 câu hỏi",
+      "moreThanTen": "Số câu hỏi tối đa là 10"
     }
   },
   "section": {
