@@ -4,12 +4,16 @@
       <div class="info-image">
         <img :src="image" class="card" />
 
-        <b-button v-b-modal.modal-1 class="text-image">
+        <button
+          v-if="show"
+          v-b-modal.modal-1
+          class="btn text-decoration-underline"
+        >
           {{ $t('userInfo.change') }}
-        </b-button>
+        </button>
       </div>
 
-      <b-modal id="modal-1" title="BootstrapVue" size="ms" @ok="handleSubmit">
+      <b-modal id="modal-1" title="Thay đổi ảnh" size="ms" @ok="handleSubmit">
         <Uploader
           v-model="image"
           :accept="'*/*'"
@@ -80,14 +84,12 @@ export default defineComponent({
   height: 125px;
   border-radius: 50%;
   border: 1px solid transparent;
-}
-.text-image {
-  text-decoration: underline;
-  padding: 5px 0;
+  object-fit: cover;
 }
 p {
   word-break: break-word;
   font-size: 14px;
+  margin-bottom: 10px;
 }
 .info {
   display: flex;

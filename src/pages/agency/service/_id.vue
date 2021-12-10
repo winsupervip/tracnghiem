@@ -27,7 +27,7 @@
               id="keyword"
               v-model="urlQuery.createDateFrom"
               trim
-              type="search"
+              type="date"
               placeholder="Ngày cấp từ"
             >
             </b-form-input>
@@ -39,7 +39,7 @@
               id="keyword"
               v-model="urlQuery.createDateTo"
               trim
-              type="search"
+              type="date"
               placeholder="Ngày cấp đến"
             >
             </b-form-input>
@@ -109,6 +109,10 @@
               >
                 <b-icon-check2-circle></b-icon-check2-circle>
                 {{ data.item.isActive ? 'Tạm dừng' : 'Kích hoạt' }}
+              </b-dropdown-item>
+              <b-dropdown-item @click="deleteAccount(data.item.hashId)"
+                ><b-icon-trash></b-icon-trash>
+                xóa
               </b-dropdown-item>
             </b-dropdown>
           </template>
@@ -278,6 +282,17 @@ export default defineComponent({
             console.log(err)
           })
         }
+      }
+    },
+    async deleteAccount(hashId) {
+      try {
+        const { data } = await userAPI.deleteAccountServiceAgencies(hashId)
+        this.$handleError(data)
+        this.search()
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
       }
     },
   },

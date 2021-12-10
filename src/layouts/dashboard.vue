@@ -102,6 +102,7 @@
                   <div class="p-navItem--dropdown__inner">
                     <div class="p-navItem--dropdown__inner__icon">
                       <nuxt-link to="">
+                        <!-- :src="avatar" -->
                         <img
                           src="~/assets/img/dashboard/user.jpg"
                           alt="user.jpg"
@@ -115,7 +116,10 @@
                     >
                       <div class="p-navItem--dropdown__inner__menu__child">
                         <div class="item item__heading">Recent workspaces</div>
-                        <nuxt-link class="item item__link" to="">
+                        <nuxt-link
+                          class="item item__link"
+                          to="/users/personal/personal"
+                        >
                           {{
                             displayName
                               ? displayName
@@ -128,12 +132,12 @@
                       </div>
                       <div class="p-navItem--dropdown__inner__menu__child">
                         <div class="item item__heading">Settings</div>
-                        <nuxt-link
+                        <!-- <nuxt-link
                           to="/users/personal/personal"
                           class="item item__link"
                         >
                           Personal settings
-                        </nuxt-link>
+                        </nuxt-link> -->
                         <nuxt-link class="item item__link" to="">
                           Labs
                         </nuxt-link>

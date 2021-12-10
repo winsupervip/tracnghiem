@@ -286,7 +286,12 @@
       "numberExam":"Số đề thi",
       "infoPackage":"Thông tin gói",
       "agencies":{
-        "limitActive":"Số lượt kích hoạt tối đa"
+        "limitActive":"Số lượt kích hoạt tối đa",
+        "infoAgencies":"Thông tin cấp gói đại lý",
+        "codeActive":"Mã kích hoạt",
+        "note":"Ghi chú",
+        "username":"Chọn tài khoản",
+        "placeholder":"Nhập tên hoặc email"
       }
     }
   },

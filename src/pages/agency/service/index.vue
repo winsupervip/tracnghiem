@@ -27,7 +27,7 @@
               id="keyword"
               v-model="urlQuery.createDateFrom"
               trim
-              type="search"
+              type="date"
               placeholder="Ngày cấp từ"
             >
             </b-form-input>
@@ -39,7 +39,7 @@
               id="keyword"
               v-model="urlQuery.createDateTo"
               trim
-              type="search"
+              type="date"
               placeholder="Ngày cấp đến"
             >
             </b-form-input>

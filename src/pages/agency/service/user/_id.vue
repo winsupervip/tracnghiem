@@ -27,7 +27,7 @@
               id="keyword"
               v-model="urlQuery.createDateFrom"
               trim
-              type="search"
+              type="date"
               placeholder="Ngày cấp từ"
             >
             </b-form-input>
@@ -39,7 +39,7 @@
               id="keyword"
               v-model="urlQuery.createDateTo"
               trim
-              type="search"
+              type="date"
               placeholder="Ngày cấp đến"
             >
             </b-form-input>
@@ -77,35 +77,111 @@
             <b-button variant="outline-primary btn-sm" @click="search()">
               Áp dụng
             </b-button>
-            <b-button variant="outline-primary btn-sm">
+            <b-button
+              v-b-modal.modal-edit
+              variant="outline-primary btn-sm"
+              @click="onEdit()"
+            >
               Thêm tài khoản</b-button
             >
           </div>
         </b-form-row>
       </b-form>
     </b-card>
-
+    <b-modal
+      id="modal-edit"
+      ref="modal"
+      :title="$t('admin.service.agencies.infoAgencies')"
+      hide-footer
+      @shown="showModal"
+      @hide="hideModal"
+      @oke="onSubmit"
+    >
+      <ValidationObserver ref="form" v-slot="{ handleSubmit }">
+        <b-form @submit.prevent="handleSubmit(onSubmit)">
+          <ValidationProvider
+            rules="required|max:255"
+            :name="$t('admin.service.agencies.username')"
+          >
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              :label="$t('admin.service.agencies.username') + ' (*)'"
+              label-for="userId"
+              class="mb-3"
+            >
+              <treeselect
+                id="userId"
+                v-model="user.userId"
+                :multiple="false"
+                :async="true"
+                :load-options="loadOptions"
+                :placeholder="$t('admin.service.agencies.placeholder')"
+              />
+              <b-form-invalid-feedback :state="valid">
+                {{ errors ? errors[0] : '' }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <ValidationProvider
+            :name="$t('admin.service.agencies.codeActive')"
+            rules="required|max:255"
+          >
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              :label="$t('admin.service.agencies.codeActive') + ' (*)'"
+              label-for="code"
+              class="mb-3"
+            >
+              <b-form-input
+                id="code"
+                v-model="user.code"
+                type="text"
+                :state="errors[0] ? false : valid ? true : null"
+              ></b-form-input>
+              <b-form-invalid-feedback>
+                {{ errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <ValidationProvider
+            rules="max:1000"
+            :name="$t('admin.service.agencies.note') + ' (*)'"
+          >
+            <b-form-group
+              slot-scope="{ valid, errors }"
+              :label="$t('admin.service.agencies.note')"
+              label-for="note"
+            >
+              <b-form-textarea
+                id="note"
+                v-model="user.note"
+                :state="errors[0] ? false : valid ? true : null"
+              ></b-form-textarea>
+              <b-form-invalid-feedback id="inputLiveFeedback">
+                {{ errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </ValidationProvider>
+          <footer class="modal-footer">
+            <button type="button" class="btn btn-secondary">Hủy Bỏ</button>
+            <button type="submit" class="btn btn-primary">Lưu</button>
+          </footer>
+        </b-form>
+      </ValidationObserver>
+    </b-modal>
     <b-card>
       <div v-if="total === 0">
         <EmptyData />
       </div>
       <div v-else>
-        <!-- <b-table striped hover :items="listActived" :fields="fields">
+        <b-table striped hover :items="listAccounts" :fields="fields">
           <template #cell(actions)="data">
             <b-dropdown class="m-md-2" no-caret size="sm">
               <template #button-content>
                 <b-icon-three-dots></b-icon-three-dots>
               </template>
               <b-dropdown-item
-                :to="{
-                  path: `/agency/service/detail/${data.item.hashId}`,
-                }"
-              >
-                <b-icon-file-text></b-icon-file-text>
-                Chi tiết
-              </b-dropdown-item>
-              <b-dropdown-item
-                @click="updateActive(data.item.hashId, data.item.isActive)"
+                @click="updateActive(hashId, data.item.isActive)"
               >
                 <b-icon-check2-circle></b-icon-check2-circle>
                 {{ data.item.isActive ? 'Tạm dừng' : 'Kích hoạt' }}
@@ -118,10 +194,13 @@
           <template #cell(index)="data">
             {{ data.index + 1 + (urlQuery.page - 1) * 10 }}
           </template>
-          <template #cell(createDate)="data">
-            {{ data.item.createDate | formatDurationDay }}
+          <template #cell(activeDate)="data">
+            {{ data.item.activeDate | formatDurationDay }}
           </template>
-        </b-table> -->
+          <template #cell(expireDate)="data">
+            {{ data.item.expireDate | formatDurationDay }}
+          </template>
+        </b-table>
         <b-pagination
           v-if="total > urlQuery.pageSize"
           v-model="urlQuery.page"
@@ -145,7 +224,13 @@ import {
   toRefs,
   watch,
 } from '@nuxtjs/composition-api'
-import userAPI from '@/api/agency'
+import {
+  ASYNC_SEARCH,
+  LOAD_CHILDREN_OPTIONS,
+  LOAD_ROOT_OPTIONS,
+} from '@riophae/vue-treeselect'
+import _ from 'lodash'
+import agencyAPI from '@/api/agency'
 export default defineComponent({
   auth: true,
   components: {},
@@ -175,36 +260,40 @@ export default defineComponent({
         { id: true, label: 'Hoạt động' },
         { id: false, label: 'Không hoạt động' },
       ],
-      // fields: [
-      //   {
-      //     key: 'index',
-      //     label: 'STT',
-      //   },
-      //   {
-      //     key: 'code',
-      //     label: 'Mã kích hoạt',
-      //   },
-      //   {
-      //     key: 'limitActive',
-      //     label: 'Số lượng kích hoạt',
-      //   },
-      //   {
-      //     key: 'isActive',
-      //     label: 'Trạng thái',
-      //   },
-      //   {
-      //     key: 'numberActived',
-      //     label: 'Số lượt người dùng',
-      //   },
-      //   {
-      //     key: 'createDate',
-      //     label: 'Ngày cấp',
-      //   },
-      //   {
-      //     key: 'actions',
-      //     label: 'Chức năng',
-      //   },
-      // ],
+      fields: [
+        {
+          key: 'index',
+          label: 'STT',
+        },
+        {
+          key: 'user.lastName',
+          label: 'Tài khoản',
+        },
+        {
+          key: 'activeDate',
+          label: 'Ngày kích hoạt',
+        },
+        {
+          key: 'expireDate',
+          label: 'Ngày hết hạn',
+        },
+        {
+          key: 'isActive',
+          label: 'Trạng thái',
+        },
+        {
+          key: 'numberQuestionCreated',
+          label: 'Số câu hỏi đã tạo',
+        },
+        {
+          key: 'codeCreated',
+          label: 'Số đề thi đã tạo',
+        },
+        {
+          key: 'actions',
+          label: 'Chức năng',
+        },
+      ],
       currentPage: queryPage,
       total: 0,
       urlQuery: {
@@ -213,28 +302,32 @@ export default defineComponent({
         sort: 1,
         status: '',
         keyword: '',
-        createDateFrom: '',
-        createDateTo: '',
+        activeDateFrom: '',
+        activeDateTo: '',
       },
-      listAccount: [],
-      HashId: '',
+      listAccounts: [],
+      hashId: '',
+      user: {
+        userId: '',
+        code: '',
+        note: '',
+      },
     })
     const id = computed(() => route.value.params.id)
-    data.HashId = id
+    data.hashId = id
     const { fetch } = useFetch(async () => {
       $loader()
-      const { data: result } = await userAPI.getAgenciesListAccounts(
-        data.HashId,
+      const { data: result } = await agencyAPI.getUserAgencies(
+        data.hashId,
         data.urlQuery
       )
       data.listAccounts = result?.object?.items
       data.total = result?.object?.total
-      console.log(data.listActived)
       $loader().close()
     })
     const sortTypeAgencies = async () => {
       $loader()
-      const { data: result } = await userAPI.getSortAgenciesActived()
+      const { data: result } = await agencyAPI.getSortAgenciesActived()
       data.sorts = result?.object?.items
       $loader().close()
     }
@@ -256,11 +349,34 @@ export default defineComponent({
     }
   },
   methods: {
-    loadOptions({ action, searchQuery, callback }) {},
-    async updateActive(hashId, status) {
-      if (status) {
+    loadOptions({ action, searchQuery, callback }) {
+      if (action === ASYNC_SEARCH) {
+        this.searchAsync(callback, searchQuery)
+      } else if (action === LOAD_CHILDREN_OPTIONS) {
+        // eslint-disable-next-line
+      } else if (action === LOAD_ROOT_OPTIONS) {
+        console.log('load root')
+      }
+    },
+    searchAsync: _.debounce(async function (callback, searchQuery) {
+      try {
+        const response = await agencyAPI.getListUser(this.axios, searchQuery)
+        const options = response.data?.object?.items
+        callback(null, options)
+      } catch (err) {
+        callback(null, [])
+      }
+    }, 200),
+    showModal(id) {
+      this.$bvModal.show(id)
+    },
+    hideModal(id) {
+      this.$bvModal.hide(id)
+    },
+    async updateActive(hashId, isActive) {
+      if (isActive) {
         try {
-          const { data } = await userAPI.updateAgenciesListDeactive(hashId)
+          const { data } = await agencyAPI.updateAgenciesListActive(hashId)
           this.$handleError(data)
           this.search()
         } catch (err) {
@@ -270,7 +386,7 @@ export default defineComponent({
         }
       } else {
         try {
-          const { data } = await userAPI.updateAgenciesListActive(hashId)
+          const { data } = await agencyAPI.updateAgenciesListDeactive(hashId)
           this.$handleError(data)
           this.search()
         } catch (err) {
@@ -278,6 +394,25 @@ export default defineComponent({
             console.log(err)
           })
         }
+      }
+    },
+    onEdit() {
+      this.user = {
+        userId: '',
+        code: '',
+        note: '',
+      }
+    },
+    async onSubmit() {
+      try {
+        const { data } = await agencyAPI.createAccountServiceAgencies(this.user)
+        this.$handleError(data)
+        this.hideModal('modal-edit')
+        this.search()
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
       }
     },
   },
