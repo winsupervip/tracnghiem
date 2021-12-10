@@ -46,6 +46,8 @@
   "searchDocument": "Tìm kiếm tài liệu",
   "typeOfDocument":"Loại tài liệu",
   "content":"Nội Dung",
+  "nameOfDocument":"Tên tài liệu",
+  "addToQuestionDocument":"thêm vào tài liệu câu hỏi",
   "apply": "Áp dụng",
   "publishQuestion": "Xuất bản câu hỏi (*)",
   "show": "Hiển thị:",
