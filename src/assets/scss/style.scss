@@ -639,6 +639,25 @@ img {
         margin-left: 0.75rem;
         margin-bottom: 0.25rem;
       }
+      .user-heading {
+        display: flex;
+        align-items: center;
+        .avatar {
+          width: 100px;
+          height: 100px;
+        }
+        .page-title {
+          display: block;
+          margin: 0 0 0.25rem 0;
+        }
+        .user-heading-name {
+          width: calc(100% - 100px);
+          padding-left: 1rem;
+        }
+        .user-heading-username {
+          font-weight: bold;
+        }
+      }
     }
     .breadcrumb {
       margin-bottom: 0;
