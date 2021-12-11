@@ -226,7 +226,6 @@ export default {
   },
   COPY_GROUP_QUESTION(state, data) {
     const questionGroup = data.object.questionGroup
-    console.log('questionGroup', data)
     if (data.object.questions.length > 0) {
       const temp = data.object.questions[0]
       state.question = {
@@ -247,7 +246,6 @@ export default {
         plainText: temp.plainText,
       }
       const convertChildQuestion = data.object.questions.map((item) => {
-        console.log('day la imte', item)
         const child = {
           id: uuid.v4(),
           name: checkTypeQuesstion(item.questionTypeId).name,
@@ -277,7 +275,6 @@ export default {
         }
         return child
       })
-      console.log('ngockhuexcdf', convertChildQuestion)
       state.childQuestions = convertChildQuestion
     }
     // state.childQuestions = questions
@@ -454,5 +451,9 @@ export default {
       (item) => item.id === data.answerId
     )
     state.childQuestions[index].answers[answerIndex].rightAnswer = data.index
+  },
+  HAS_NO_CORRECT_ANSWER_G(state, data) {
+    const index = state.childQuestions.findIndex((item) => item.id === data.id)
+    state.childQuestions[index].question.hasNoCorrectAnswer = data.value
   },
 }

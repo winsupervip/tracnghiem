@@ -20,8 +20,18 @@
             errors[0]
           }}</b-form-invalid-feedback>
         </ValidationProvider>
+        <div class="mt-2">
+          <b-form-checkbox
+            v-model="hasNoCorrectAnswer"
+            name="checkbox-1"
+            @change="actionsHasNoCorrectAnswer($event)"
+          >
+            Chưa có đáp án đúng
+          </b-form-checkbox>
+        </div>
         <AddAnswer
           v-if="questionChild.typeQuestion !== 'short-answer'"
+          :block-right-answer="hasNoCorrectAnswer"
           :group-question="true"
           :child-question-id="questionChild.id"
           :type-question="questionChild.typeQuestion"
@@ -30,6 +40,7 @@
           :is-pairing="questionChild.typeQuestion === 'pairing' ? true : false"
         />
         <ListAnswers
+          :block-right-answer="hasNoCorrectAnswer"
           :child-question-id="questionChild.id"
           :type-question="questionChild.typeQuestion"
           :errors="isErrors"
@@ -69,6 +80,7 @@ export default {
       doShow: false,
       okOnly: true,
       question: {},
+      hasNoCorrectAnswer: false,
     }
   },
   computed: {
@@ -97,16 +109,21 @@ export default {
     questionContent() {
       this.commitQuestion()
     },
-    modalId() {
-      console.log('modal', this.modalId)
-    },
   },
   methods: {
     ...mapActions({
       addChildQuestionContent: 'questions/addChildQuestionContent',
+      hasNoCorrectAnswerG: 'questions/hasNoCorrectAnswerG',
     }),
+    actionsHasNoCorrectAnswer(event) {
+      this.hasNoCorrectAnswerG({
+        id: this.questionChild.id,
+        value: event,
+      })
+    },
     shown() {
       this.doShow = true
+      this.hasNoCorrectAnswer = this.questionChild?.question?.hasNoCorrectAnswer
       // khi mở modal lên sẻ có 2 trường hợp nếu mà questionConten rổng thì là thêm mới
       // ngược lại là mở một câu hỏi có sẳn
       if (this.questionChild.question.questionContent !== '') {
