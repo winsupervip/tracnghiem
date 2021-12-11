@@ -57,21 +57,19 @@
               </b-form-checkbox>
             </template>
           </b-form-checkbox-group>
-          <b-form-checkbox-group>
-            <b-form-checkbox>
-              <div class="d-flex justify-content-between">
-                <span>Câu hỏi khác</span>
-                <div class="group-input-xs">
-                  <input
-                    v-model="numberQuestionsTest"
-                    class="form-control"
-                    type="text"
-                  />
-                  <strong>/ 10</strong>
-                </div>
+          <b-form-checkbox v-model="checkboxQuestionTypeAnother">
+            <div class="d-flex justify-content-between">
+              <span>Câu hỏi khác</span>
+              <div class="group-input-xs">
+                <input
+                  v-model="numberQuestionsTest"
+                  class="form-control"
+                  type="text"
+                />
+                <strong>/ {{ questionOutsideSection }}</strong>
               </div>
-            </b-form-checkbox>
-          </b-form-checkbox-group>
+            </div>
+          </b-form-checkbox>
         </b-collapse>
       </div>
       <hr class="line-divide" />
@@ -260,6 +258,19 @@ export default defineComponent({
       set(val) {
         // eslint-disable-next-line vue/no-mutating-props
         this.$emit('update:data', (this.configQuiz.showFilterGroup3 = val))
+      },
+    },
+    checkboxQuestionTypeAnother: {
+      get() {
+        return get(this.configQuiz, 'checkboxQuestionTypeAnother', null)
+      },
+      set(val) {
+        // eslint-disable-next-line vue/no-mutating-props
+        this.$emit(
+          'update:data',
+          // eslint-disable-next-line vue/no-mutating-props
+          (this.configQuiz.checkboxQuestionTypeAnother = val)
+        )
       },
     },
     suffleQuestions: {

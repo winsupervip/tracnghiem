@@ -1,13 +1,17 @@
 <template>
-  <component
-    :is="dynamicComponent(question.questionTypeId)"
-    ref="questionInExam"
-    :question="question"
-  />
+  <div>
+    <component
+      :is="dynamicComponent(question.questionTypeId)"
+      ref="questionInExam"
+      :question="question"
+      :user-answer="userAnswer"
+    />
+  </div>
 </template>
 
 <script>
 import { defineComponent } from '@vue/composition-api'
+// import get from 'lodash/get'
 import ViewSingleChoice from '@/components/Question/Display/ViewSingleChoice.vue'
 import ViewMultipleChoice from '@/components/Question/Display/ViewMultipleChoice'
 import ViewRightWrong from '@/components/Question/Display/ViewRightWrong.vue'
@@ -32,6 +36,10 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    // eslint-disable-next-line vue/require-prop-types
+    userAnswer: {
+      required: true,
+    },
   },
   setup() {},
   computed: {
@@ -49,6 +57,16 @@ export default defineComponent({
         return listQuestionTypes[questionTypeId]
       }
     },
+  },
+  methods: {
+    // collectUserAnswer(val) {
+    //   console.log('ViewQuestion collectUserAnswer', val)
+    //   this.$emit(
+    //     'update:data',
+    //     // eslint-disable-next-line vue/no-mutating-props
+    //     (this.userAnswer.userChoices = val)
+    //   )
+    // },
   },
 })
 </script>

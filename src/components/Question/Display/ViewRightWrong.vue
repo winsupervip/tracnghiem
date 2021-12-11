@@ -10,24 +10,24 @@
       </div>
       <div class="list-answer">
         <ul class="list-unstyled p-0">
-          <li>
-            <b-form-radio name="anwser-radios" :value="1">
-              <b>{{ String.fromCharCode(65 + 0) + '. ' }}</b>
-              <div>Đúng</div>
-            </b-form-radio>
-          </li>
-          <li>
-            <b-form-radio name="anwser-radios" :value="0">
-              <b>{{ String.fromCharCode(65 + 1) + '. ' }}</b>
-              <div>Sai</div>
-            </b-form-radio>
-          </li>
-          <li>
+          <b-form-group>
+            <li v-for="(item, index) in question.answers" :key="index">
+              <b-form-radio
+                v-model="selected"
+                name="anwser-radios"
+                :value="item.hashId"
+              >
+                <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
+                <div v-html="item.answerContent"></div>
+              </b-form-radio>
+            </li>
+          </b-form-group>
+          <!-- <li>
             <b-form-radio name="anwser-radios" :value="-1">
               <b>{{ String.fromCharCode(65 + 2) + '. ' }}</b>
               <div>Không có đáp án</div>
             </b-form-radio>
-          </li>
+          </li> -->
         </ul>
       </div>
     </div>
@@ -36,6 +36,9 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
+import get from 'lodash/get'
+
+// import findIndex from 'lodash/findIndex'
 
 export default defineComponent({
   name: 'ViewRightWrong',
@@ -44,13 +47,58 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    // eslint-disable-next-line vue/require-prop-types
+    userAnswer: {
+      required: true,
+    },
   },
   setup() {},
+  data() {
+    return {
+      selected: null,
+    }
+  },
+  computed: {
+    answers: {
+      get() {
+        return get(this.question, 'answers', null)
+      },
+      set(val) {
+        // eslint-disable-next-line vue/no-mutating-props
+        this.$emit(
+          'update:data',
+          // eslint-disable-next-line vue/no-mutating-props
+          (this.question.answers = val)
+        )
+      },
+    },
+  },
+  watch: {
+    selected() {
+      const userChoices = [
+        {
+          hashId: this.selected,
+          choice: '1',
+        },
+      ]
+      console.log('ViewRightWrong selected', this.selected)
+      // this.$emit('collect-user-answer', userChoices)
+      this.$emit(
+        'update:data',
+        // eslint-disable-next-line vue/no-mutating-props
+        (this.userAnswer.userChoices = userChoices)
+      )
+    },
+  },
 })
 </script>
 
 <style lang="scss" scoped>
 ::v-deep .list-answer label {
   display: flex !important;
+}
+
+.hidden {
+  display: none !important;
 }
 </style>

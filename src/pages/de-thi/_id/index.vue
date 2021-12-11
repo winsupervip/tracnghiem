@@ -506,6 +506,7 @@ export default defineComponent({
         showFilterGroup2: true,
         showFilterGroup3: true,
         selectedOptions3: [],
+        checkboxQuestionTypeAnother: false,
       },
       dataExam: {
         id: 1,
@@ -568,15 +569,22 @@ export default defineComponent({
         )
       })
 
-      console.log('getCurrentUser', this.userInfo)
-
       // eslint-disable-next-line array-callback-return
-      const settingsData = settings.map(function (x) {
+      // eslint-disable-next-line prefer-const
+      let settingsData = settings.map(function (x) {
         return {
           sectionHashId: x.sectionHashId,
           numQuestions: x.numberQuestionsTest,
         }
       })
+
+      if (this.configQuiz.checkboxQuestionTypeAnother) {
+        settingsData.push({
+          sectionHashId: '',
+          numQuestions: this.examSettings.numberQuestionsTest,
+        })
+      }
+
       const dataInitExam = {
         quiz: {
           examHashId,

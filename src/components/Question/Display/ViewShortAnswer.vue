@@ -9,7 +9,10 @@
         <span class="font-sm text-gray">câu trả lời</span>
       </div>
       <div class="list-answer col-6">
-        <b-form-input placeholder="Nhập đáp án"></b-form-input>
+        <b-form-input
+          v-model="contentAnswer"
+          placeholder="Nhập đáp án"
+        ></b-form-input>
       </div>
     </div>
   </div>
@@ -25,7 +28,32 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    userAnswer: {
+      type: Object,
+      required: true,
+    },
   },
   setup() {},
+  data() {
+    return {
+      contentAnswer: '',
+    }
+  },
+  watch: {
+    contentAnswer() {
+      const userChoices = [
+        {
+          hashId: null,
+          choice: this.contentAnswer,
+        },
+      ]
+      // this.$emit('collect-user-answer', userChoices)
+      this.$emit(
+        'update:data',
+        // eslint-disable-next-line vue/no-mutating-props
+        (this.userAnswer.userChoices = userChoices)
+      )
+    },
+  },
 })
 </script>

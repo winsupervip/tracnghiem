@@ -23,5 +23,6 @@ export default () => ({
     categoryId: null,
     tags: [],
     sectionConfig: [],
+    questionOutsideSection: 0,
   },
 })

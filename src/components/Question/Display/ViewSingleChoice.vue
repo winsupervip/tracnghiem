@@ -11,7 +11,11 @@
       <div class="list-answer">
         <ul class="list-unstyled p-0">
           <li v-for="(item, index) in question.answers" :key="index">
-            <b-form-radio name="anwser-radios" :value="item.hashId">
+            <b-form-radio
+              v-model="selected"
+              name="anwser-radios"
+              :value="item.hashId"
+            >
               <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
               <div v-html="item.answerContent"></div>
             </b-form-radio>
@@ -32,8 +36,34 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    // eslint-disable-next-line vue/require-prop-types
+    userAnswer: {
+      required: true,
+    },
   },
   setup() {},
+  data() {
+    return {
+      selected: null,
+    }
+  },
+  watch: {
+    selected() {
+      const userChoices = [
+        {
+          hashId: this.selected,
+          choice: '1',
+        },
+      ]
+      console.log('ViewRightWrong selected', this.selected)
+      // this.$emit('collect-user-answer', userChoices)
+      this.$emit(
+        'update:data',
+        // eslint-disable-next-line vue/no-mutating-props
+        (this.userAnswer.userChoices = userChoices)
+      )
+    },
+  },
 })
 </script>
 

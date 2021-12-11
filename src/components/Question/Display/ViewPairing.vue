@@ -24,8 +24,9 @@
                 v-html="item.answerContent"
               ></div>
               <b-form-select
-                v-model="selected"
+                v-model="item.userChoice"
                 :options="listTextChoose"
+                @change="checkAnswer"
               ></b-form-select>
             </div>
           </div>
@@ -48,7 +49,8 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
-import _ from 'lodash'
+import map from 'lodash/map'
+import filter from 'lodash/filter'
 
 export default defineComponent({
   name: 'ViewPairing',
@@ -57,24 +59,21 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    userAnswer: {
+      type: Object,
+      required: true,
+    },
   },
   setup() {},
   data() {
-    return {
-      selected: null,
-      options: [
-        { value: null, text: 'Choose' },
-        { value: 'a', text: 'This is First option' },
-        { value: 'b', text: 'Selected Option', disabled: true },
-      ],
-    }
+    return {}
   },
   computed: {
     listAnswerLeft() {
-      return _.filter(this.question.answers, (x) => x.position === 1)
+      return filter(this.question.answers, (x) => x.position === 1)
     },
     listAnswerRight() {
-      return _.filter(this.question.answers, (x) => x.position === 2)
+      return filter(this.question.answers, (x) => x.position === 2)
     },
     listTextChoose() {
       const arr = [{ value: null, text: 'Choose' }]
@@ -91,6 +90,21 @@ export default defineComponent({
   methods: {
     loadOptions({ callback }) {
       callback()
+    },
+    checkAnswer() {
+      const userChoices = map(this.listAnswerLeft, (x, i) => {
+        return {
+          hashId: x.hashId,
+          choice: x.userChoice,
+        }
+      })
+      console.log('userChoices', userChoices)
+      // this.$emit('collect-user-answer', userChoices)
+      this.$emit(
+        'update:data',
+        // eslint-disable-next-line vue/no-mutating-props
+        (this.userAnswer.userChoices = userChoices)
+      )
     },
   },
 })

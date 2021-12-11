@@ -17,6 +17,7 @@ export default {
     checkAnswersAfterTest: state.exam.checkAnswersAfterTest,
     allowChangeSettings: state.exam.allowChangeSettings,
     sectionConfig: state.exam.sectionConfig,
+    questionOutsideSection: state.exam.questionOutsideSection,
   }),
   getExamExtra: (state) => ({
     image: state.exam.image,

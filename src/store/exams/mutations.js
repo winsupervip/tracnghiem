@@ -20,6 +20,7 @@ export default {
     state.exam.allowChangeSettings = examSettings.allowChangeSettings
     state.exam.sectionConfig = examSettings.sectionConfig
     state.exam.examTimeSecond = examSettings.examTimeSecond
+    state.exam.questionOutsideSection = examSettings.questionOutsideSection
   },
   SET_EXAM_EXTRA(state, examExtra) {
     state.exam.image = examExtra.image

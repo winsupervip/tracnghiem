@@ -195,8 +195,8 @@
                       <b-btn
                         :key="index"
                         :data-id="item.id"
-                        :class="indexQuestionChoose == item.id ? 'tick' : ''"
-                        @click="getQuestionById(item.id, index)"
+                        :class="questionItem.id == item.id ? 'tick' : ''"
+                        @click="chooseQuestion(item.id, index)"
                         >{{ index + 1 }}</b-btn
                       >
                     </template>
@@ -236,9 +236,13 @@
                 </div>
               </template>
               <div class="list-question mb-4">
-                <ViewQuestion :question="questionItem"></ViewQuestion>
+                <ViewQuestion
+                  :question="questionItem"
+                  :user-answer="userAnswer"
+                ></ViewQuestion>
               </div>
               <template #footer>
+                <b-btn variant="outline"> Xem đáp án </b-btn>
                 <b-btn variant="outline">
                   <i class="icon-arrow-left me-2"></i>
                   Câu trước
@@ -278,6 +282,7 @@ import {
   useAsync,
 } from '@nuxtjs/composition-api'
 import ExamApi from '@/api/examApi'
+import QuizApi from '@/api/QuizApi'
 import ViewQuestion from '@/components/Question/Display/ViewQuestion.vue'
 
 export default defineComponent({
@@ -372,6 +377,10 @@ export default defineComponent({
       },
       itemQuestions: [],
       questionItem: {},
+      userAnswer: {
+        questionId: null,
+        userChoices: [],
+      },
       indexQuestionChoose: null,
     })
     const idExam = computed(() => route.value.params.id)
@@ -391,6 +400,7 @@ export default defineComponent({
             data.itemQuestions[0].id
           )
           data.questionItem = questionItem.object
+          data.userAnswer.questionId = data.questionItem.id
         }
       } catch (err) {
         app.$handleError(err, () => {
@@ -404,6 +414,14 @@ export default defineComponent({
     }
   },
   methods: {
+    chooseQuestion(id, index) {
+      this.submitQuestion(this.questionItem.id)
+      this.userAnswer = {
+        questionId: null,
+        userChoices: [],
+      }
+      this.getQuestionById(id, index)
+    },
     async getQuestionById(id, index) {
       this.indexQuestionChoose = index + 1
       const { data: questionItem } = await ExamApi.getQuestionById(id)
@@ -413,6 +431,20 @@ export default defineComponent({
       this.$router.push({
         path: `/de-thi/${this.idExam}/ket-qua`,
       })
+    },
+    async submitQuestion(questionId) {
+      if (this.userAnswer.userChoices.length > 0) {
+        this.userAnswer.questionId = questionId
+        try {
+          const { data } = await QuizApi.submitQuestion(this.userAnswer)
+          this.$handleError(data)
+          console.log('submitQuestion', data)
+        } catch (err) {
+          this.$handleError(err, () => {
+            console.log(err)
+          })
+        }
+      }
     },
   },
 })

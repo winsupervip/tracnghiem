@@ -24,8 +24,10 @@
                 v-html="item.answerContent"
               ></div>
               <b-form-select
-                v-model="selected"
+                v-model="item.userChoice"
                 :options="listTextChoose"
+                :value="item.sortOrder"
+                @change="checkAnswer"
               ></b-form-select>
             </div>
           </div>
@@ -37,11 +39,16 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
+import map from 'lodash/map'
 
 export default defineComponent({
-  name: 'ViewPairing',
+  name: 'ViewFillBlank',
   props: {
     question: {
+      type: Object,
+      required: true,
+    },
+    userAnswer: {
       type: Object,
       required: true,
     },
@@ -63,12 +70,15 @@ export default defineComponent({
     },
     listTextChoose() {
       const arr = [{ value: null, text: 'Choose' }]
+
       // eslint-disable-next-line array-callback-return
       this.question.answers.map((x, i) => {
-        arr.push({
-          value: x.hashId,
-          text: String.fromCharCode(65 + i),
-        })
+        if (x.sortOrder > 0) {
+          arr.push({
+            value: x.sortOrder,
+            text: x.sortOrder,
+          })
+        }
       })
       return arr
     },
@@ -76,6 +86,21 @@ export default defineComponent({
   methods: {
     loadOptions({ callback }) {
       callback()
+    },
+    checkAnswer() {
+      const userChoices = map(this.listAnswer, (x, i) => {
+        return {
+          hashId: x.hashId,
+          choice: x.userChoice,
+        }
+      })
+      console.log('userChoices', userChoices)
+      // this.$emit('collect-user-answer', userChoices)
+      this.$emit(
+        'update:data',
+        // eslint-disable-next-line vue/no-mutating-props
+        (this.userAnswer.userChoices = userChoices)
+      )
     },
   },
 })
