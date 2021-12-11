@@ -428,6 +428,7 @@ export default defineComponent({
       this.questionItem = questionItem.object
     },
     SubmitExam() {
+      this.submitQuestion(this.questionItem.id)
       this.$router.push({
         path: `/de-thi/${this.idExam}/ket-qua`,
       })
