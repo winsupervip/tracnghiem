@@ -30,6 +30,8 @@ export default {
     global.$http.put(`/api/Service/active-codes/${hashId}/de-active`),
   updateAgenciesListActive: (hashId) =>
     global.$http.put(`/api/Service/active-codes/${hashId}/active`),
+  updateUserAgenciesActive: (hashId) =>
+    global.$http.put(`/api/Service/users/${hashId}/de-active`),
   // post
   createCodeServiceAgencies: (data) =>
     global.$http.post('/api/Service/agencies/active-code', data),

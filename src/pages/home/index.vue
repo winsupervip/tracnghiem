@@ -50,6 +50,9 @@
               <CardExam :data="item"></CardExam>
             </b-col>
           </b-row>
+          <pre>
+            {{ dataFeatureExam }}
+          </pre>
         </div>
       </b-container>
     </section>

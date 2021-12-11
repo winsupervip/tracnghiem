@@ -246,6 +246,17 @@
                 </ul>
                 <ul>
                   <li>
+                    <nuxt-link to="/users/service">
+                      <div>
+                        <img
+                          src="~/assets/img/dashboard/icon_lslambai.svg"
+                          alt="icon_lslambai.svg"
+                        />
+                      </div>
+                      <span>Gói dịch vụ</span>
+                    </nuxt-link>
+                  </li>
+                  <li>
                     <nuxt-link to="/users/history">
                       <div>
                         <img

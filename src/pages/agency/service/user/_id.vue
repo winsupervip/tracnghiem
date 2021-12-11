@@ -180,9 +180,7 @@
               <template #button-content>
                 <b-icon-three-dots></b-icon-three-dots>
               </template>
-              <b-dropdown-item
-                @click="updateActive(hashId, data.item.isActive)"
-              >
+              <b-dropdown-item @click="updateActive(data.item.hashId)">
                 <b-icon-check2-circle></b-icon-check2-circle>
                 {{ data.item.isActive ? 'Tạm dừng' : 'Kích hoạt' }}
               </b-dropdown-item>
@@ -373,27 +371,15 @@ export default defineComponent({
     hideModal(id) {
       this.$bvModal.hide(id)
     },
-    async updateActive(hashId, isActive) {
-      if (isActive) {
-        try {
-          const { data } = await agencyAPI.updateAgenciesListActive(hashId)
-          this.$handleError(data)
-          this.search()
-        } catch (err) {
-          this.$handleError(err, () => {
-            console.log(err)
-          })
-        }
-      } else {
-        try {
-          const { data } = await agencyAPI.updateAgenciesListDeactive(hashId)
-          this.$handleError(data)
-          this.search()
-        } catch (err) {
-          this.$handleError(err, () => {
-            console.log(err)
-          })
-        }
+    async updateActive(hashId) {
+      try {
+        const { data } = await agencyAPI.updateUserAgenciesActive(hashId)
+        this.$handleError(data)
+        this.search()
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
       }
     },
     onEdit() {
