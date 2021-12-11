@@ -25,7 +25,7 @@
         <div>
           <!-- class="wrapper" -->
           <div class="wrapper-left">
-            <p v-if="isPairing">Vế Phải</p>
+            <p v-if="isPairing">Vế Trái</p>
             <TinyEditor
               v-if="doShow"
               v-model="answerContent"
@@ -56,6 +56,7 @@
             <div v-if="haveRightAnswer" :class="$style.checkBox">
               <input
                 v-model="isRightAnswer"
+                :disabled="blockRightAnswer"
                 type="checkbox"
                 :class="$style.checkBoxInput"
               />
@@ -115,6 +116,10 @@ export default defineComponent({
     childQuestionId: {
       type: String,
       default: '',
+    },
+    blockRightAnswer: {
+      type: Boolean,
+      default: false,
     },
   },
   setup() {
