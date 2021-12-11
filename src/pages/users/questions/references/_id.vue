@@ -1,7 +1,12 @@
 <template>
   <div class="page-container">
     <div
-      class="d-flex align-items-center justify-content-between references-header"
+      class="
+        d-flex
+        align-items-center
+        justify-content-between
+        references-header
+      "
     >
       <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
       <b-button
@@ -46,7 +51,13 @@
               />
             </b-form-group>
             <div
-              class="col-12 col-md-3 mb-3 d-flex justify-content-around align-items-end"
+              class="
+                col-12 col-md-3
+                mb-3
+                d-flex
+                justify-content-around
+                align-items-end
+              "
             >
               <b-button variant="outline-primary" @click="getDocumentByUser">
                 <b-icon-filter></b-icon-filter> {{ $t('apply') }}
@@ -82,7 +93,12 @@
           :key="document.id"
           class="mt-3"
           ><div
-            class="d-flex align-items-center justify-content-between card-question-header"
+            class="
+              d-flex
+              align-items-center
+              justify-content-between
+              card-question-header
+            "
           >
             <div class="d-flex">
               <div class="font-bold me-3">
@@ -179,7 +195,12 @@
         :key="document.id"
         class="mt-3"
         ><div
-          class="d-flex align-items-center justify-content-between card-question-header"
+          class="
+            d-flex
+            align-items-center
+            justify-content-between
+            card-question-header
+          "
         >
           <div class="d-flex">
             <div class="font-bold me-3">

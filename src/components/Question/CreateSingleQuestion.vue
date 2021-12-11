@@ -4,15 +4,26 @@
       <div class="p-question p-question--singleChoice">
         <div class="p-question__left">
           <HeaderOfSingleQuestion :question-title="questionTitle" />
+          <div class="mt-2">
+            <b-form-checkbox v-model="hasNoCorrectAnswer" name="checkbox-1">
+              Chưa có đáp án đúng
+            </b-form-checkbox>
+          </div>
+
           <AddAnswer
             v-if="questionType !== 'short-answer'"
             :type-question="questionType"
             :have-random-answer="haveRandomAnswer"
             :have-right-answer="haveRightAnswer"
             :is-pairing="isPairing"
+            :block-right-answer="hasNoCorrectAnswer"
           />
           <strong v-else>Nhập Câu trả lời (*)</strong>
-          <ListAnswer :type-question="questionType" :errors="errors" />
+          <ListAnswer
+            :type-question="questionType"
+            :errors="errors"
+            :block-right-answer="hasNoCorrectAnswer"
+          />
           <CommentOrNote />
         </div>
         <div class="p-question__right">
@@ -112,6 +123,7 @@ export default defineComponent({
     const data = reactive({
       errors: '',
       image: '',
+      hasNoCorrectAnswer: false,
     })
 
     return {
@@ -152,7 +164,10 @@ export default defineComponent({
         this.$toast.show('Câu trả lời hiện đang bỏ trống').goAway(1000)
         return { valid, validateAnswers }
       }
-      const result = this.handleAnswer(answers)
+      const result = this.handleAnswer({
+        answers,
+        hasNoCorrectAnswer: this.hasNoCorrectAnswer,
+      })
       if (result.errors.length === 0) {
         validateAnswers = result.data
       } else {
@@ -163,9 +178,11 @@ export default defineComponent({
     },
     async onSubmit() {
       const validState = this.isValidAnswer(this.getQuestion.answers)
+
       if (validState.valid) {
         const question = {
           question: {
+            hasNoCorrectAnswer: this.hasNoCorrectAnswer,
             hashId: this.getQuestion.question.hashId,
             title: this.getQuestion.question.title,
             questionTypeId: this.questionTypeId,
@@ -183,7 +200,8 @@ export default defineComponent({
             tags: this.getQuestion.question.tags,
             categories: this.getQuestion.question.categories,
           },
-          answers: validState.validateAnswers,
+          // nếu mà không có đáp án đúng thì trả về []
+          answers: validState?.validateAnswers,
         }
         if (this.isCopy) {
           question.question.hashId = ''
@@ -199,7 +217,7 @@ export default defineComponent({
             this.$toast.success(this.$i18n.t('errors.00000000'))
           } else if (this.isCopy) {
             console.log('day la quasetiion copy')
-            await QuestionApi.createQuestion(question)
+            // await QuestionApi.createQuestion(question)
 
             this.$toast.success(this.$i18n.t('errors.00000000'))
           } else {

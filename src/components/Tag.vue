@@ -5,6 +5,8 @@
     :autocomplete-items="autocompleteItems"
     :placeholder="$t('exam.form.tagHolder')"
     :max-tags="5"
+    :autocomplete-min-length="2"
+    :validation="validation"
     @tags-changed="update"
   />
 </template>
@@ -24,6 +26,13 @@ export default {
       tags: [],
       tag: '',
       autocompleteItems: [],
+      validation: [
+        {
+          classes: 'class' /* css class */,
+          rule: /^.{2,255}$/,
+          disableAdd: true,
+        },
+      ],
     }
   },
   computed: {
@@ -49,11 +58,15 @@ export default {
     },
   },
   methods: {
+    beforeSave() {
+      if (this.tag.length < 2) return false
+    },
     resetTag() {
       console.log('ádasd')
       this.tag = ''
     },
     update(newTags) {
+      console.log('ok')
       this.autocompleteItems = []
       this.tags = newTags
       const getT = newTags.map((x) => x.text)

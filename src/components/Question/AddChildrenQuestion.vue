@@ -94,6 +94,7 @@ export default defineComponent({
           seoAvatar: 'https://placeimg.com/640/480/any',
           groupOrder: 1,
           questionGroupId: null,
+          hasNoCorrectAnswer: false,
         },
         answers:
           value.questionTypeId !== 3
