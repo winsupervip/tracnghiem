@@ -46,6 +46,8 @@
   "searchDocument": "Tìm kiếm tài liệu",
   "typeOfDocument":"Loại tài liệu",
   "content":"Nội Dung",
+  "nameOfDocument":"Tên tài liệu",
+  "addToQuestionDocument":"thêm vào tài liệu câu hỏi",
   "apply": "Áp dụng",
   "publishQuestion": "Xuất bản câu hỏi (*)",
   "show": "Hiển thị:",
@@ -152,9 +154,9 @@
       "examTime": "Hoặc số phút",
       "maximumTest": "Số lượt thi tối đa / user",
       "maximumTestHelper": "Nhập 0 để không giới hạn",
-      "numberQuestionsTest": "Số câu hỏi / lượt thi",
+      "numberQuestionsTest": "Số lượng câu hỏi",
       "allowChangeSettings": "Cho phép thí sinh thay đổi cài đặt",
-      "numberQuestionsTestHelp": "Số câu hỏi tối đa mà thí sinh được phép thi",
+      "numberQuestionsTestHelp": "Số câu hỏi tự do / lượt thi (với trường hợp đề thi có chuyên mục con) hoặc Tổng số câu hỏi (đề thi không có chuyên mục) / lượt thi ",
       "allowChangeSettingsHelp": "Thí sinh được điều chỉnh các cài đặt để tạo đề theo mong muốn",
       "submitPublish": "Xuất bản",
       "submitPrivate": "Xuất bản",
@@ -276,6 +278,7 @@
     }
   },
   "history":{
-    "title":"Lịch sử làm bài"
+    "title":"Lịch sử làm bài",
+    "detail":"Chi tiết đề thi"
   }
 }

@@ -48,13 +48,7 @@
             />
           </b-form-group>
           <div
-            class="
-              col-12 col-md-3
-              mb-3
-              d-flex
-              justify-content-around
-              align-items-end
-            "
+            class="col-12 col-md-3 mb-3 d-flex justify-content-around align-items-end"
           >
             <b-button
               v-b-modal.modal-prevent-closing

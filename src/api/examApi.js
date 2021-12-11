@@ -93,7 +93,7 @@ export default {
     return global.$http.get(url)
   },
   getUserHistoryExams: (urlQuery) => {
-    let url = `/api/v1/Exam/get-user-exam-history-list-public?Page=${
+    let url = `/api/v1/Exam/get-user-history-list?Page=${
       urlQuery.page
     }&PageSize=${urlQuery.pageSize}&Keyword=${encodeURIComponent(
       urlQuery.keyword
@@ -128,5 +128,13 @@ export default {
   deleteSection: (data) => {
     const url = `/api/v1/Exam/delete-exam-section?hashExamId=${data.hashExamId}&hashExamSectionId=${data.hashExamSectionId}`
     return global.$http.delete(url, data)
+  },
+  getUserHistoryExamDetails: (urlQuery) => {
+    const url = `/api/v1/Exam/get-detail-user-exam-history?examId=${
+      urlQuery.examId
+    }&Page=${urlQuery.page}&PageSize=${
+      urlQuery.pageSize
+    }&Keyword=${encodeURIComponent(urlQuery.keyword)}`
+    return global.$http.get(url)
   },
 }
