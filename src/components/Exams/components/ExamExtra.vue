@@ -46,7 +46,7 @@
             :multiple="false"
             :options="categoryItems"
             :load-options="loadOptions"
-            :always-open="true"
+            :always-open="categoryId === null"
             :placeholder="$t('exam.form.categorySelect')"
             @input="validate"
           />

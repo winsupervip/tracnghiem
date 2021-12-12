@@ -108,4 +108,7 @@ export default {
   hasNoCorrectAnswerG({ commit }, data) {
     commit('HAS_NO_CORRECT_ANSWER_G', data)
   },
+  hasNoCorrectAnswerS({ commit }, data) {
+    commit('HAS_NO_CORRECT_ANSWER_S', data)
+  },
 }
