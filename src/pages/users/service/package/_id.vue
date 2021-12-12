@@ -13,87 +13,51 @@
     </b-card>
     <div class="container mb-5">
       <div class="row">
-        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3 col-12">
-          <p class="text-center mt-2"><b>Gói 1</b></p>
-          <p>Thời gian : 30 ngày</p>
-          <p>Câu hỏi : 50</p>
-          <p>Đề thi : 20</p>
-          <p>Giá tiền : 200.000</p>
-          <b-button variant="outline-dark btn-md" class="d-block m-auto mb-3">
-            Đăng ký ngay
-          </b-button>
+        <div v-if="total === 0">
+          <EmptyData />
         </div>
-        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3 col-12">
-          <p class="text-center mt-2"><b>Gói 1</b></p>
-          <p>Thời gian : 30 ngày</p>
-          <p>Câu hỏi : 50</p>
-          <p>Đề thi : 20</p>
-          <p>Giá tiền : 200.000</p>
-          <b-button variant="outline-dark btn-md" class="d-block m-auto mb-3">
-            Đăng ký ngay
-          </b-button>
-        </div>
-        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3 col-12">
-          <p class="text-center mt-2"><b>Gói 1</b></p>
-          <p>Thời gian : 30 ngày</p>
-          <p>Câu hỏi : 50</p>
-          <p>Đề thi : 20</p>
-          <p>Giá tiền : 200.000</p>
-          <b-button variant="outline-dark btn-md" class="d-block m-auto mb-3">
-            Đăng ký ngay
-          </b-button>
-        </div>
-        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3 col-12">
-          <p class="text-center mt-2"><b>Gói 1</b></p>
-          <p>Thời gian : 30 ngày</p>
-          <p>Câu hỏi : 50</p>
-          <p>Đề thi : 20</p>
-          <p>Giá tiền : 200.000</p>
-          <b-button variant="outline-dark btn-md" class="d-block m-auto mb-3">
-            Đăng ký ngay
-          </b-button>
-        </div>
-        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3 col-12">
-          <p class="text-center mt-2"><b>Gói 1</b></p>
-          <p>Thời gian : 30 ngày</p>
-          <p>Câu hỏi : 50</p>
-          <p>Đề thi : 20</p>
-          <p>Giá tiền : 200.000</p>
-          <b-button variant="outline-dark btn-md" class="d-block m-auto mb-3">
-            Đăng ký ngay
-          </b-button>
-        </div>
-        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3 col-12">
-          <p class="text-center mt-2"><b>Gói 1</b></p>
-          <p>Thời gian : 30 ngày</p>
-          <p>Câu hỏi : 50</p>
-          <p>Đề thi : 20</p>
-          <p>Giá tiền : 200.000</p>
-          <b-button variant="outline-dark btn-md" class="d-block m-auto mb-3">
-            Đăng ký ngay
-          </b-button>
+        <div
+          v-for="item in listPackage"
+          v-else
+          :key="item.hashId"
+          class="col-sm-6 col-md-6 col-lg-4 col-xl-3 col-12 mb-4"
+        >
+          <b-card>
+            <p class="text-center mt-2"><b>Gói 1</b></p>
+            <p>Thời gian : {{ item.exp }}</p>
+            <p>Câu hỏi : {{ item.limitQuestion }}</p>
+            <p>Đề thi : {{ item.limitExam }}</p>
+            <p>Giá tiền : {{ item.price | formatMoney }}</p>
+            <b-button variant="outline-dark btn-md" class="d-block m-auto mb-3">
+              Đăng ký ngay
+            </b-button>
+          </b-card>
         </div>
       </div>
     </div>
     <div class="container">
       <div class="row">
-        <b-card class="col-lg-6 col-12">
-          <b-card-text> <b>Hãy liên hệ để được hỗ trợ ngay</b> </b-card-text>
-          <b-card-text>
-            Nếu có bất kỳ thắc mắc nào, hãy liên hệ ngay với chúng tôi để được
-            giải đáp nhanh chóng.
-          </b-card-text>
-          <b-card-text>Hotline: 0932158760 </b-card-text>
-          <b-card-text> Email: sales@tracnghiem.vn </b-card-text>
-        </b-card>
-        <b-card class="col-lg-6 col-12">
-          <b-card-text> <b>Hướng dẫn sử dụng</b> </b-card-text>
-          <b-card-text> Tài liệu hướng dẫn sử dụng: link </b-card-text>
-          <b-card-text
-            >Clip hướng dẫn: https://youtu.be/J98wE8gKN7I
-          </b-card-text>
-          <b-card-text> Hướng dẫn thanh toán: link </b-card-text>
-        </b-card>
+        <div class="col-lg-6 col-12">
+          <b-card>
+            <b-card-text> <b>Hãy liên hệ để được hỗ trợ ngay</b> </b-card-text>
+            <b-card-text>
+              Nếu có bất kỳ thắc mắc nào, hãy liên hệ ngay với chúng tôi để được
+              giải đáp nhanh chóng.
+            </b-card-text>
+            <b-card-text>Hotline: 0932158760 </b-card-text>
+            <b-card-text> Email: sales@tracnghiem.vn </b-card-text>
+          </b-card>
+        </div>
+        <div class="col-lg-6 col-12">
+          <b-card>
+            <b-card-text> <b>Hướng dẫn sử dụng</b> </b-card-text>
+            <b-card-text> Tài liệu hướng dẫn sử dụng: link </b-card-text>
+            <b-card-text
+              >Clip hướng dẫn: https://youtu.be/J98wE8gKN7I
+            </b-card-text>
+            <b-card-text> Hướng dẫn thanh toán: link </b-card-text>
+          </b-card>
+        </div>
       </div>
     </div>
     <!-- <b-card>
@@ -117,23 +81,22 @@
 import {
   defineComponent,
   reactive,
-  // useContext,
-  // useFetch,
+  useContext,
+  useFetch,
   // computed,
   // watch,
   useRoute,
   toRefs,
 } from '@nuxtjs/composition-api'
-// import userAPI from '@/api/agency'
+import userAPI from '@/api/user.js'
 export default defineComponent({
   auth: true,
   components: {},
   layout: 'dashboard',
   setup() {
-    // const { $loader } = useContext()
+    const { $loader } = useContext()
     const route = useRoute()
     const queryPage = route?.value?.query?.page || 1
-    // const id = computed(() => route.value.params.id)
     const data = reactive({
       breadcrumbs: [
         {
@@ -145,33 +108,21 @@ export default defineComponent({
           href: `/agency/service/detail`,
         },
       ],
-      giftCode: 'BLACKFRIDAY',
-      listActived: [],
+      // giftCode: 'BLACKFRIDAY',
+      listPackage: [],
       currentPage: queryPage,
       total: 0,
-      urlQuery: {
-        page: 1,
-        pageSize: 10,
-        sort: 1,
-        status: '',
-        keyword: '',
-        createDateFrom: '',
-        createDateTo: '',
-      },
-      agencyHashId: '',
     })
     // data.agencyHashId = id
-    // const { fetch } = useFetch(async () => {
-    //   $loader()
-    //   const { data: result } = await userAPI.getAgenciesActived(
-    //     data.agencyHashId,
-    //     data.urlQuery
-    //   )
-    //   data.listActived = result?.object?.items
-    //   data.total = result?.object?.total
-    //   console.log(data.listActived)
-    //   $loader().close()
-    // })
+    const { fetch } = useFetch(async () => {
+      $loader()
+      const { data: result } = await userAPI.getListPackage()
+      data.listPackage = result?.object?.items
+      data.total = result?.object?.total
+      console.log(data.listPackage)
+      $loader().close()
+    })
+    fetch()
     // const sortTypeAgencies = async () => {
     //   $loader()
     //   const { data: result } = await userAPI.getSortAgenciesActived()
@@ -205,10 +156,5 @@ export default defineComponent({
   top: 0;
   right: 10%;
   height: 100%;
-}
-.row > div {
-  border: 1px solid #000;
-  border-radius: 5px;
-  max-width: 100%;
 }
 </style>

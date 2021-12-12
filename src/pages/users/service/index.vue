@@ -35,7 +35,9 @@
               >
                 <b-form-input
                   id="code"
+                  v-model="code"
                   type="text"
+                  trim
                   size="lg"
                   :state="errors[0] ? false : valid ? true : null"
                 ></b-form-input>
@@ -46,7 +48,9 @@
             </ValidationProvider>
           </b-form>
         </ValidationObserver>
-        <b-button variant="outline-dark mb-3" @click="check">Xác nhận</b-button>
+        <b-button variant="outline-dark mb-3" type="submit" @click="onSubmit"
+          >Xác nhận</b-button
+        >
         <b-card-text>
           Tôi không có mã kích hoạt?
           <a href="/users/service/package" class="card-link">Đăng ký ngay</a>
@@ -59,15 +63,15 @@
           <b>Chúc mừng bạn đã kích hoạt thành công gói cước</b>
         </b-card-text>
         <b-card-text>
-          <h3 class="font-bold">V.I.P 01</h3>
+          <h3 class="font-bold">{{ service.serviceName }}</h3>
         </b-card-text>
         <b-card-text>
-          <b>Ngày kích hoạt: 21/11/2021</b>
+          <b>Ngày kích hoạt: {{ service.activeDate | formatDurationDay }}</b>
         </b-card-text>
         <b-card-text>
-          <b>Ngày kết thúc: 21/11/2022</b>
+          <b>Ngày kết thúc: {{ service.expireDate | formatDurationDay }}</b>
         </b-card-text>
-        <b-button variant="outline-dark mb-3">Đóng</b-button>
+        <b-button variant="outline-dark mb-3" @click="hide">Đóng</b-button>
       </b-card>
     </b-modal>
     <b-card>
@@ -75,24 +79,18 @@
         <EmptyData />
       </div>
       <div v-else>
-        <b-table striped hover :items="listAgency" :fields="fields">
-          <template #cell(status)="data">
-            {{
-              data.item.status === 1
-                ? 'Active'
-                : data.item.status === 2
-                ? 'Deactive'
-                : 'Pending'
-            }}
-          </template>
+        <b-table striped hover :items="listServices" :fields="fields">
           <template #cell(index)="data">
             {{ data.index + 1 + (urlQuery.page - 1) * 10 }}
           </template>
-          <template #cell(createDate)="data">
-            {{ data.item.createDate | formatDurationDay }}
+          <template #cell(activeDate)="data">
+            {{ data.item.activeDate | formatDurationDay }}
           </template>
-          <template #cell(price)="data">
-            {{ data.item.price | formatMoney }}
+          <template #cell(expireDate)="data">
+            {{ data.item.expireDate | formatDurationDay }}
+          </template>
+          <template #cell(isActive)="data">
+            {{ data.item.isActive ? 'Hoạt động' : 'Không hoạt động' }}
           </template>
         </b-table>
         <b-pagination
@@ -111,19 +109,19 @@
 import {
   defineComponent,
   reactive,
-  // useContext,
-  // useFetch,
-  // watch,
+  useContext,
+  useFetch,
   toRefs,
+  watch,
   useRoute,
 } from '@nuxtjs/composition-api'
-// import userAPI from '@/api/agency'
+import userAPI from '@/api/user.js'
 export default defineComponent({
   auth: true,
   components: {},
   layout: 'dashboard',
   setup() {
-    // const { $loader } = useContext()
+    const { $loader } = useContext()
     const route = useRoute()
     const queryPage = route?.value?.query?.page || 1
     const data = reactive({
@@ -132,25 +130,24 @@ export default defineComponent({
           text: 'Gói dịch vụ',
         },
       ],
+      code: '',
       isCheck: true,
-      listAgency: [],
-      sorts: [],
-      status: [],
+      listServices: [],
       fields: [
         {
           key: 'index',
           label: 'STT',
         },
         {
-          key: 'name',
+          key: 'code',
           label: 'Mã kích hoạt',
         },
         {
-          key: 'exp',
+          key: 'activeDate',
           label: 'Ngày kích hoạt',
         },
         {
-          key: 'status',
+          key: 'expireDate',
           label: 'Ngày hết hạn',
         },
         {
@@ -158,11 +155,11 @@ export default defineComponent({
           label: 'Trạng thái',
         },
         {
-          key: 'limitExam',
+          key: 'numberQuestionCreated',
           label: 'Số câu hỏi đã tạo',
         },
         {
-          key: 'price',
+          key: 'numberExamCreated',
           label: 'Số đề thi đã tạo',
         },
       ],
@@ -171,48 +168,31 @@ export default defineComponent({
       urlQuery: {
         page: 1,
         pageSize: 10,
-        sort: 1,
-        status: '',
         keyword: '',
-        createDateFrom: '',
-        createDateTo: '',
       },
+      service: {},
     })
-    // const { fetch } = useFetch(async () => {
-    //   $loader()
-    //   const { data: result } = await userAPI.getAgency(data.urlQuery)
-    //   data.listAgency = result?.object?.items
-    //   data.total = result?.object?.total
-    //   $loader().close()
-    // })
-    // fetch()
-    // const statusTypeAgencies = async () => {
-    //   $loader()
-    //   const { data: result } = await userAPI.getStatusAgencies()
-    //   data.status = result?.object?.items
-    //   $loader().close()
-    // }
-    // statusTypeAgencies()
-    // const sortTypeAgencies = async () => {
-    //   $loader()
-    //   const { data: result } = await userAPI.getSortType()
-    //   data.sorts = result?.object?.items
-    //   $loader().close()
-    // }
-    // sortTypeAgencies()
-    // const search = () => {
-    //   data.urlQuery.page = 1
-    //   fetch()
-    // }
-    // watch(
-    //   () => data.urlQuery.page,
-    //   () => {
-    //     fetch()
-    //   }
-    // )
+    const { fetch } = useFetch(async () => {
+      $loader()
+      const { data: result } = await userAPI.getListService(data.urlQuery)
+      data.listServices = result?.object?.items
+      data.total = result?.object?.total
+      $loader().close()
+    })
+    fetch()
+    const search = () => {
+      data.urlQuery.page = 1
+      fetch()
+    }
+    watch(
+      () => data.urlQuery.page,
+      () => {
+        fetch()
+      }
+    )
     return {
       ...toRefs(data),
-      // search,
+      search,
     }
   },
   methods: {
@@ -226,8 +206,21 @@ export default defineComponent({
     reset() {
       this.isCheck = true
     },
-    check() {
-      this.isCheck = false
+    async onSubmit() {
+      try {
+        const { data } = await userAPI.createCodeActive({ code: this.code })
+        this.$handleError(data)
+        this.service = data?.object
+        this.isCheck = false
+        this.search()
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
+    },
+    hide() {
+      this.hideModal('modal-edit')
     },
   },
 })

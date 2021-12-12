@@ -83,7 +83,10 @@
     "note":"Lưu ý: Chỉ được cập nhật mã người giới thiệu 1 lần duy nhất",
     "introduce":"Người giới thiệu bạn",
     "changePassword":"Đổi mật khẩu",
-    "referralCode":"Mời nhập mã giới thiệu"
+    "referralCode":"Mời nhập mã giới thiệu",
+    "oldPassword":"Mật khẩu cũ",
+    "newPassword":"Mật khẩu mới",
+    "confirmPassword":"Nhập lại mật khẩu mới"
   },
   "formAffiliate":{
     "createIntroduce":"Bạn chưa có mã giới thiệu? Bấm tạo mã và chia sẻ ngay với bạn bè",

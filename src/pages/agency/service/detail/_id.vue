@@ -38,10 +38,7 @@
               Danh sách mã kích hoạt
             </nuxt-link>
           </b-button>
-          <b-button
-            v-b-modal.modal-edit
-            variant="outline-primary"
-            @click="getData()"
+          <b-button v-b-modal.modal-edit variant="outline-primary"
             >Thêm mã kích hoạt</b-button
           >
         </footer>
@@ -52,9 +49,8 @@
       ref="modal"
       :title="$t('admin.service.infoPackage')"
       hide-footer
-      @shown="shown"
-      @hide="hide"
-      @oke="onSubmit"
+      @shown="showModal"
+      @hide="hideModal"
     >
       <ValidationObserver ref="form" v-slot="{ handleSubmit }">
         <b-form @submit.prevent="handleSubmit(onSubmit)">
@@ -71,6 +67,7 @@
               <b-form-input
                 id="limitActive"
                 v-model="limitActive"
+                :disabled="isDisabled"
                 type="number"
                 :state="errors[0] ? false : valid ? true : null"
               ></b-form-input>
@@ -82,12 +79,17 @@
           <ValidationProvider rules="max:1000" :name="$t('admin.service.note')">
             <b-form-group
               slot-scope="{ valid, errors }"
-              :label="$t('admin.service.note')"
+              :label="
+                isDisabled
+                  ? 'Mã kích hoạt của bạn là:'
+                  : $t('admin.service.note')
+              "
               label-for="note"
             >
               <b-form-textarea
                 id="note"
                 v-model="note"
+                :disabled="isDisabled"
                 :state="errors[0] ? false : valid ? true : null"
               ></b-form-textarea>
               <b-form-invalid-feedback id="inputLiveFeedback">
@@ -96,10 +98,20 @@
             </b-form-group>
           </ValidationProvider>
           <footer class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="hide()">
-              Hủy Bỏ
+            <button v-if="!isDisabled" type="submit" class="btn btn-primary">
+              Lưu
             </button>
-            <button type="submit" class="btn btn-primary">Lưu</button>
+            <button
+              v-else
+              type="button"
+              class="btn btn-primary"
+              @click="handleCopy"
+            >
+              Sao chép
+            </button>
+            <button type="button" class="btn btn-secondary" @click="hide()">
+              Đóng
+            </button>
           </footer>
         </b-form>
       </ValidationObserver>
@@ -115,7 +127,6 @@ import {
   computed,
   toRefs,
   useRoute,
-  // watch,
 } from '@nuxtjs/composition-api'
 import userAPI from '@/api/agency'
 export default defineComponent({
@@ -137,7 +148,7 @@ export default defineComponent({
           text: 'abc',
         },
       ],
-
+      isDisabled: false,
       limitActive: '',
       note: '',
       listDetail: {},
@@ -164,28 +175,36 @@ export default defineComponent({
     hideModal(id) {
       this.$bvModal.hide(id)
     },
-    shown() {
-      this.doShow = true
+    reset() {
+      this.limitActive = ''
+      this.note = ''
+      this.isDisabled = false
     },
     hide() {
-      this.doShow = false
+      this.reset()
+      this.hideModal('modal-edit')
     },
-    getData() {},
     async onSubmit() {
       const activeCode = {
         serviceAgencyHashId: this.agencyHashId,
         limitActive: this.limitActive,
         note: this.note,
       }
-      console.log(activeCode)
+      console.log('123')
       try {
         const { data } = await userAPI.createCodeServiceAgencies(activeCode)
+        this.isDisabled = true
+        this.note = data?.object?.data
         this.$handleError(data)
       } catch (err) {
         this.$handleError(err, () => {
           console.log(err)
         })
       }
+    },
+    handleCopy(e) {
+      navigator.clipboard.writeText(this.note)
+      this.$toast.success('copy thành công').goAway(1000)
     },
   },
 })
