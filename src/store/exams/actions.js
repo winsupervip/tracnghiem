@@ -23,6 +23,7 @@ export default {
       description: '',
       nonExamTime: true,
       examTime: 0,
+      examTimeSecond: 0,
       maximumTest: 0,
       numberQuestionsTest: 60,
       suffleQuestions: true,
@@ -37,6 +38,10 @@ export default {
       slug: '',
       categories: null,
       tags: [],
+      sectionConfig: [],
     })
+  },
+  setSectionConfig({ commit }, { id, value }) {
+    commit('SET_SECTION_CONFIG', { id, value })
   },
 }
