@@ -18,10 +18,10 @@
                     <strong>Câu {{ index + 1 }}</strong>
                   </b-col>
                   <b-col
-                    cols="8 "
+                    cols="8"
                     v-html="question.question.questionContent"
                   ></b-col>
-                  <b-col cols="2" class="matching_style">
+                  <b-col cols="2" class="d-flex justify-content-between">
                     <b-icon icon="shuffle"></b-icon>
                     <b-icon
                       v-b-modal.update-child-question

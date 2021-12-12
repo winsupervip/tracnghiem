@@ -5,12 +5,13 @@
       <div class="answer-head">
         <span class="font-sm text-gray">{{ $t('answer') }}</span>
       </div>
-      <div class="answer-singleChoice">
+      <div class="answer-singleChoice container">
         <ul class="list-unstyled p-0 m-0">
           <li
             v-for="(answer, index) in questionlist.answers"
             :key="index"
             type="none"
+            class="d-flex justify-content-between"
           >
             <span
               v-if="answer"

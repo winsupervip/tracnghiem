@@ -107,8 +107,11 @@
             :disabled="blockRightAnswer"
             @change="isChange(answer.id)"
             ><div class="p-answerItem">
-              <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
-              <p v-html="answer.answerContent"></p>
+              <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
+              <div
+                class="p-answerItem__content"
+                v-html="mathTypeDisplay(answer.answerContent)"
+              ></div>
             </div>
           </b-form-checkbox>
           <div class="p-answerItem__func">

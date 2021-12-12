@@ -88,4 +88,8 @@ export default defineComponent({
 .display {
   display: none;
 }
+.treeClass {
+  max-height: 200px;
+  overflow: auto;
+}
 </style>
