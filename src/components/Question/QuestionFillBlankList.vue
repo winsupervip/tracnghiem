@@ -11,6 +11,7 @@
             v-for="(answer, index) in questionlist.answers"
             :key="index"
             type="none"
+            class="d-flex justify-content-between"
           >
             <span :style="{ display: 'flex' }">
               {{ String.fromCharCode(65 + index) + '. ' }}

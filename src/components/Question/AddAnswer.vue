@@ -329,6 +329,7 @@ export default defineComponent({
       }
       if (this.getUpdateValueAnswer?.id) {
         data.answer.id = this.getUpdateValueAnswer.id
+        data.answer.rightAnswer = this.getUpdateValueAnswer.rightAnswer
         await this.handleUpdateAnswer(data)
         this.$toast.success('Cập nhập câu trả lời thành công').goAway(1000)
         await this.removeValueUpdateAnswer()

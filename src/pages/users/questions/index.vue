@@ -87,18 +87,18 @@
                 :placeholder="$t('sort')"
               />
             </b-form-group>
-            <div
-              class="col-12 col-md-3 mb-3 d-flex justify-content-around align-items-end"
-            >
-              <b-button variant="outline-primary" @click="handleSearch">
-                <b-icon-filter></b-icon-filter> {{ $t('apply') }}
-              </b-button>
-              <b-button
-                variant="primary"
-                @click="$bvModal.show('bv-modal-add-question')"
-              >
-                <b-icon-plus></b-icon-plus> {{ $t('add') }}
-              </b-button>
+            <div class="d-flex justify-content-end">
+              <div class="w-50 d-flex justify-content-end">
+                <b-button variant="outline-primary" @click="handleSearch">
+                  <b-icon-filter></b-icon-filter> {{ $t('apply') }}
+                </b-button>
+                <b-button
+                  variant="primary"
+                  @click="$bvModal.show('bv-modal-add-question')"
+                >
+                  <b-icon-plus></b-icon-plus> {{ $t('add') }}
+                </b-button>
+              </div>
             </div>
           </b-form-row>
         </b-form>

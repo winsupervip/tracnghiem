@@ -96,7 +96,8 @@
               justify-content-around
               align-items-end
             "
-          >
+          ></div>
+          <div class="d-flex justify-content-end">
             <b-button variant="outline-primary" @click="fetch()">
               <b-icon-filter></b-icon-filter> {{ $t('exam.filter') }}
             </b-button>

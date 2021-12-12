@@ -170,23 +170,34 @@
               :questions="question"
             >
               <template #header>
-                <div class="d-flex justify-content-between">
-                  <div class="mt-3">
-                    <b-form-checkbox
-                      v-model="selectedItems"
-                      :value="question"
-                      name="question"
+                <div>
+                  <div class="d-flex justify-content-between">
+                    <div class="mt-3">
+                      <b-form-checkbox
+                        v-model="selectedItems"
+                        :value="question"
+                        name="question"
+                      >
+                        {{ $t('modalQToExam.select') }}
+                      </b-form-checkbox>
+                    </div>
+                    <button
+                      class="btn btn-sm btn-primary"
+                      @click="onSelectQuestion(question)"
                     >
-                      {{ $t('modalQToExam.select') }}
-                    </b-form-checkbox>
+                      <b-icon-clipboard-plus></b-icon-clipboard-plus>
+                      {{ $t('modalQToExam.addToExam') }}
+                    </button>
                   </div>
-                  <button
-                    class="btn btn-sm btn-primary"
-                    @click="onSelectQuestion(question)"
-                  >
-                    <b-icon-clipboard-plus></b-icon-clipboard-plus>
-                    {{ $t('modalQToExam.addToExam') }}
-                  </button>
+                  <div class="mt-2 mb-2">
+                    <div class="answer-head m-2">
+                      <span class="font-sm text-gray">Tiêu đề</span>
+                    </div>
+                    <b>{{ question.title }}</b>
+                    <div class="answer-head m-2">
+                      <span class="font-sm text-gray">Câu hỏi</span>
+                    </div>
+                  </div>
                 </div>
               </template>
             </SingleListPage>
