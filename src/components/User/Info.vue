@@ -44,7 +44,7 @@
                 <b-form-input
                   id="oldPassword"
                   v-model="oldPassword"
-                  type="text"
+                  type="password"
                   trim
                   size="lg"
                   :state="errors[0] ? false : valid ? true : null"

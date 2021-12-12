@@ -54,7 +54,7 @@ export default defineComponent({
           questionTypeId: 4,
         },
         {
-          name: 'Thêm câu hỏi điền vào chổ trống',
+          name: 'Thêm câu hỏi điền vào chỗ trống',
           typeQuestion: 'fill-blank',
           questionTypeId: 5,
         },
@@ -65,7 +65,7 @@ export default defineComponent({
         },
 
         {
-          name: 'Thêm câu hỏi Sắp xếp thứ tự',
+          name: 'Thêm câu hỏi sắp xếp thứ tự',
           typeQuestion: 'draggable',
           questionTypeId: 7,
         },
@@ -94,6 +94,7 @@ export default defineComponent({
           seoAvatar: 'https://placeimg.com/640/480/any',
           groupOrder: 1,
           questionGroupId: null,
+          hasNoCorrectAnswer: false,
         },
         answers:
           value.questionTypeId !== 3

@@ -8,7 +8,7 @@
         <b-icon-pencil-square
           @click="fetchQuestion(itemData.item.hashId)"
         ></b-icon-pencil-square>
-        <b-icon-trash></b-icon-trash>
+        <b-icon-trash @click="showModleDelete"></b-icon-trash>
       </div>
     </div>
     <div class="list-questions-user">
@@ -53,13 +53,15 @@
     </div>
     <b-modal
       :id="`update-question${itemData.item.hashId}`"
-      title="Xóa chuyên mục"
+      title="Sửa câu hỏi"
       ok-title="Cập nhập"
       cancel-title="Đóng"
       size="xl"
+      @shown="shown"
+      @hide="hide"
     >
       <CreateSingleQuestion
-        v-if="doneCall"
+        v-if="doneCall && doShow"
         :question-type="questionType"
         :question-type-id="questionTypeId"
         :question-title="questionTitle"
@@ -74,6 +76,20 @@
         variant="success"
         label="Spinning"
       ></b-spinner>
+      <p v-if="!doneCall">Bạn không phải là chủ sở hửu câu hỏi này</p>
+    </b-modal>
+
+    <b-modal
+      :id="`delete-question${itemData.item.hashId}`"
+      title="Xóa chuyên mục"
+      ok-title="Xóa"
+      cancel-title="Đóng"
+      size="sm"
+      @shown="shown"
+      @hide="hide"
+      @ok="deleteQuestion"
+    >
+      <p>Bạn có chắn chắn muốn xóa không</p>
     </b-modal>
   </div>
 </template>
@@ -123,14 +139,28 @@ export default defineComponent({
       isPairing: false,
       isHaveRandomAnswer: true,
       doneCall: false,
+      doShow: false,
+      questionItemType: 'question',
     }
   },
   computed: {
     questions() {
+      console.log('item', this.itemData)
       return this.itemData.item
     },
   },
   methods: {
+    shown() {
+      this.doShow = true
+    },
+    hide() {
+      this.doShow = false
+      // this.updateAnswer('remove_data')
+    },
+    showModleDelete() {
+      this.$bvModal.show(`delete-question${this.itemData.item.hashId}`)
+    },
+    deleteQuestion() {},
     handleAnswer(data) {
       if (this.questionType === 'single-choice') {
         return handler.singleChoiceAndRightWrong(data)
@@ -208,7 +238,7 @@ export default defineComponent({
       this.$bvModal.show(`update-question${this.itemData.item.hashId}`)
       try {
         let result = {}
-        if (this.questionItemType === 'question') {
+        if (this.itemData.itemType === 'question') {
           result = await QuestionApi.getUserQuestionDetails(questionId)
           const answers = result.data.object.answers
           let listAnswer = []
@@ -286,7 +316,7 @@ export default defineComponent({
         }
         this.doneCall = true
       } catch (error) {
-        this.$router.push('/users/questions/')
+        // this.$router.push('/users/questions/')
       }
     },
   },

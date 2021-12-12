@@ -14,6 +14,7 @@ export default () => ({
     tags: [],
     title: '',
     position: 0,
+    hasNoCorrectAnswer: false,
   },
   answers: [],
   childQuestions: [],

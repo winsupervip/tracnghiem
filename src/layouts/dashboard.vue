@@ -245,7 +245,7 @@
                   </li>
                 </ul>
                 <ul>
-                  <li>
+                  <li v-if="!isAgency && !isAdmin">
                     <nuxt-link to="/users/service">
                       <div>
                         <img

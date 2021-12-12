@@ -11,6 +11,7 @@
       >
         <b-form-radio
           v-model="isSelected"
+          :disabled="blockRightAnswer"
           :aria-describedby="ariaDescribedby"
           name="some-radios"
           :value="answer.id"
@@ -52,6 +53,7 @@
         <b-form-radio
           v-model="isSelected"
           :aria-describedby="ariaDescribedby"
+          :disabled="blockRightAnswer"
           name="some-radios"
           :value="answer.id"
           :aria-checked="true"
@@ -100,7 +102,10 @@
           :key="index"
           class="p-answerItem"
         >
-          <b-form-checkbox :value="answer.id" @change="isChange(answer.id)"
+          <b-form-checkbox
+            :value="answer.id"
+            :disabled="blockRightAnswer"
+            @change="isChange(answer.id)"
             ><div class="p-answerItem">
               <h6>{{ String.fromCharCode(65 + index) + '. ' }}</h6>
               <p v-html="answer.answerContent"></p>
@@ -145,7 +150,6 @@
         :child-question-id="childQuestionId"
       />
     </div>
-
     <div v-if="typeQuestion === 'pairing'">
       <b-container>
         <b-row
@@ -227,7 +231,6 @@
         :list-answer="compareListAnswer"
       />
     </div>
-
     <b-form-invalid-feedback id="error" :state="false">{{
       errors
     }}</b-form-invalid-feedback>
@@ -271,6 +274,10 @@ export default defineComponent({
     childQuestionId: {
       type: String,
       default: '',
+    },
+    blockRightAnswer: {
+      type: Boolean,
+      default: false,
     },
   },
   setup() {
@@ -322,6 +329,7 @@ export default defineComponent({
         const index = this.getListAnswer.findIndex(
           (item) => item.rightAnswer === 1
         )
+        console.log('inbdex tim kiem', index)
         if (index !== -1) {
           this.handleSelected(this.getListAnswer[index].id)
         } else {
@@ -406,6 +414,7 @@ export default defineComponent({
       }
     },
     handleSelected(value) {
+      console.log('handele Selected', value)
       this.isSelected = value
       this.tempSelected = value
     },

@@ -24,8 +24,8 @@
             v-bind="configFeatureTopic"
           >
             <div
-              v-for="item in dataFeatureTopic"
-              :key="item.id"
+              v-for="(item, index) in dataFeatureTopic"
+              :key="index"
               class="slider-item"
             >
               <CardTopic :data="item"></CardTopic>
@@ -40,8 +40,8 @@
         <div class="feature-exam">
           <b-row>
             <b-col
-              v-for="item in dataFeatureExam"
-              :key="item.id"
+              v-for="(item, index) in dataFeatureExam"
+              :key="index"
               cols="12"
               sm="6"
               md="6"
@@ -50,9 +50,6 @@
               <CardExam :data="item"></CardExam>
             </b-col>
           </b-row>
-          <pre>
-            {{ dataFeatureExam }}
-          </pre>
         </div>
       </b-container>
     </section>
@@ -62,8 +59,8 @@
         <div class="list-category">
           <b-row>
             <b-col
-              v-for="category in dataConfigCategories"
-              :key="category.id"
+              v-for="(category, index) in dataConfigCategories"
+              :key="index"
               cols="12"
               sm="6"
               md="6"
@@ -96,141 +93,6 @@
                 </ul>
               </div>
             </b-col>
-            <!-- <b-col cols="12" sm="6" md="6" lg="3">
-              <div class="category-item">
-                <nuxt-link to="#" class="category-title">
-                  <h3 class="font-lg font-bold">Tốt nghiệp THPT</h3>
-                </nuxt-link>
-                <ul class="list-unstyled category-item-list">
-                  <li>
-                    <nuxt-link to="#" class="text-black">
-                      <h4 class="font-lmd font-bold">Toán học</h4>
-                    </nuxt-link>
-                    <div class="exam-count d-flex align-items-center">
-                      <i class="icon-exam me-1 font-lg text-primary"></i>
-                      <span class="font-sm">100+ lượt thi</span>
-                    </div>
-                  </li>
-                  <li>
-                    <nuxt-link to="#" class="text-black">
-                      <h4 class="font-lmd font-bold">Toán học</h4>
-                    </nuxt-link>
-                    <div class="exam-count d-flex align-items-center">
-                      <i class="icon-exam me-1 font-lg text-primary"></i>
-                      <span class="font-sm">100+ lượt thi</span>
-                    </div>
-                  </li>
-                  <li>
-                    <nuxt-link to="#" class="text-black">
-                      <h4 class="font-lmd font-bold">Toán học</h4>
-                    </nuxt-link>
-                    <div class="exam-count d-flex align-items-center">
-                      <i class="icon-exam me-1 font-lg text-primary"></i>
-                      <span class="font-sm">100+ lượt thi</span>
-                    </div>
-                  </li>
-                  <li>
-                    <nuxt-link to="#" class="text-black">
-                      <h4 class="font-lmd font-bold">Toán học</h4>
-                    </nuxt-link>
-                    <div class="exam-count d-flex align-items-center">
-                      <i class="icon-exam me-1 font-lg text-primary"></i>
-                      <span class="font-sm">100+ lượt thi</span>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </b-col>
-            <b-col cols="12" sm="6" md="6" lg="3">
-              <div class="category-item">
-                <nuxt-link to="#" class="category-title">
-                  <h3 class="font-lg font-bold">Tốt nghiệp THPT</h3>
-                </nuxt-link>
-                <ul class="list-unstyled category-item-list">
-                  <li>
-                    <nuxt-link to="#" class="text-black">
-                      <h4 class="font-lmd font-bold">Toán học</h4>
-                    </nuxt-link>
-                    <div class="exam-count d-flex align-items-center">
-                      <i class="icon-exam me-1 font-lg text-primary"></i>
-                      <span class="font-sm">100+ lượt thi</span>
-                    </div>
-                  </li>
-                  <li>
-                    <nuxt-link to="#" class="text-black">
-                      <h4 class="font-lmd font-bold">Toán học</h4>
-                    </nuxt-link>
-                    <div class="exam-count d-flex align-items-center">
-                      <i class="icon-exam me-1 font-lg text-primary"></i>
-                      <span class="font-sm">100+ lượt thi</span>
-                    </div>
-                  </li>
-                  <li>
-                    <nuxt-link to="#" class="text-black">
-                      <h4 class="font-lmd font-bold">Toán học</h4>
-                    </nuxt-link>
-                    <div class="exam-count d-flex align-items-center">
-                      <i class="icon-exam me-1 font-lg text-primary"></i>
-                      <span class="font-sm">100+ lượt thi</span>
-                    </div>
-                  </li>
-                  <li>
-                    <nuxt-link to="#" class="text-black">
-                      <h4 class="font-lmd font-bold">Toán học</h4>
-                    </nuxt-link>
-                    <div class="exam-count d-flex align-items-center">
-                      <i class="icon-exam me-1 font-lg text-primary"></i>
-                      <span class="font-sm">100+ lượt thi</span>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </b-col>
-            <b-col cols="12" sm="6" md="6" lg="3">
-              <div class="category-item">
-                <nuxt-link to="#" class="category-title">
-                  <h3 class="font-lg font-bold">Tốt nghiệp THPT</h3>
-                </nuxt-link>
-                <ul class="list-unstyled category-item-list">
-                  <li>
-                    <nuxt-link to="#" class="text-black">
-                      <h4 class="font-lmd font-bold">Toán học</h4>
-                    </nuxt-link>
-                    <div class="exam-count d-flex align-items-center">
-                      <i class="icon-exam me-1 font-lg text-primary"></i>
-                      <span class="font-sm">100+ lượt thi</span>
-                    </div>
-                  </li>
-                  <li>
-                    <nuxt-link to="#" class="text-black">
-                      <h4 class="font-lmd font-bold">Toán học</h4>
-                    </nuxt-link>
-                    <div class="exam-count d-flex align-items-center">
-                      <i class="icon-exam me-1 font-lg text-primary"></i>
-                      <span class="font-sm">100+ lượt thi</span>
-                    </div>
-                  </li>
-                  <li>
-                    <nuxt-link to="#" class="text-black">
-                      <h4 class="font-lmd font-bold">Toán học</h4>
-                    </nuxt-link>
-                    <div class="exam-count d-flex align-items-center">
-                      <i class="icon-exam me-1 font-lg text-primary"></i>
-                      <span class="font-sm">100+ lượt thi</span>
-                    </div>
-                  </li>
-                  <li>
-                    <nuxt-link to="#" class="text-black">
-                      <h4 class="font-lmd font-bold">Toán học</h4>
-                    </nuxt-link>
-                    <div class="exam-count d-flex align-items-center">
-                      <i class="icon-exam me-1 font-lg text-primary"></i>
-                      <span class="font-sm">100+ lượt thi</span>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </b-col> -->
           </b-row>
           <div class="text-center my-3">
             <nuxt-link to="/chuyen-muc" class="btn btn-outline-primary">
@@ -334,7 +196,7 @@ export default defineComponent({
         data.dataFeatureTopic = result.object?.items
         data.dataConfigCategories = configCategories.object.items
         data.dataCategories = resultCategories.object.items
-        $logger.info('trung log nek hehe 1', result)
+        $logger.info('trung log nek hehe 1', data.dataConfigCategories)
         $loader().close()
       } catch (err) {
         console.log(err)
@@ -360,182 +222,6 @@ export default defineComponent({
         per_page: 10,
         page: this.$route.query.page || 1,
       },
-      // dataFeatureExam: [
-      //   {
-      //     id: 1,
-      //     name: '69 câu hỏi trắc nghiệm vật lý của cô Minh Thu',
-      //     thumbnail: '/images/exam-1.jpg',
-      //     category: 'Thi tốt nghiệp THPT',
-      //     time: '45',
-      //     examCount: '100',
-      //     questionCount: '90',
-      //     teacherId: 1,
-      //     teacherAvatar: '/images/teacher.png',
-      //     teacherName: 'Cô giáo Minh Thu',
-      //     rating: '4.5',
-      //     ratingCount: 20,
-      //     level: 1,
-      //     tags: [
-      //       {
-      //         id: 1,
-      //         name: 'Vật lý 12',
-      //       },
-      //       {
-      //         id: 2,
-      //         name: 'Luyện thi đại học',
-      //       },
-      //       {
-      //         id: 3,
-      //         name: 'Vật lý nâng cao',
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     id: 2,
-      //     name: '69 câu hỏi trắc nghiệm vật lý của cô Thu Minh',
-      //     thumbnail: '/images/exam-1.jpg',
-      //     category: 'Thi tốt nghiệp THPT',
-      //     time: '45',
-      //     examCount: '100',
-      //     questionCount: '90',
-      //     teacherId: 1,
-      //     teacherAvatar: '/images/teacher.png',
-      //     teacherName: 'Cô giáo Minh Thu',
-      //     rating: '4.5',
-      //     ratingCount: 20,
-      //     level: 1,
-      //     tags: [
-      //       {
-      //         id: 1,
-      //         name: 'Vật lý 12',
-      //       },
-      //       {
-      //         id: 2,
-      //         name: 'Luyện thi đại học',
-      //       },
-      //       {
-      //         id: 3,
-      //         name: 'Vật lý nâng cao',
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     id: 3,
-      //     name: '69 câu hỏi trắc nghiệm vật lý của cô Minh Thu',
-      //     thumbnail: '/images/exam-1.jpg',
-      //     category: 'Thi tốt nghiệp THPT',
-      //     time: '45',
-      //     examCount: '100',
-      //     questionCount: '90',
-      //     teacherId: 1,
-      //     teacherAvatar: '/images/teacher.png',
-      //     teacherName: 'Cô giáo Minh Thu',
-      //     rating: '4.5',
-      //     ratingCount: 20,
-      //     level: 1,
-      //     tags: [
-      //       {
-      //         id: 1,
-      //         name: 'Vật lý 12',
-      //       },
-      //       {
-      //         id: 2,
-      //         name: 'Luyện thi đại học',
-      //       },
-      //       {
-      //         id: 3,
-      //         name: 'Vật lý nâng cao',
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     id: 4,
-      //     name: '69 câu hỏi trắc nghiệm vật lý của cô Minh Thu',
-      //     thumbnail: '/images/exam-1.jpg',
-      //     category: 'Thi tốt nghiệp THPT',
-      //     time: '45',
-      //     examCount: '100',
-      //     questionCount: '90',
-      //     teacherId: 1,
-      //     teacherAvatar: '/images/teacher.png',
-      //     teacherName: 'Cô giáo Minh Thu',
-      //     rating: '4.5',
-      //     ratingCount: 20,
-      //     level: 2,
-      //     tags: [
-      //       {
-      //         id: 1,
-      //         name: 'Vật lý 12',
-      //       },
-      //       {
-      //         id: 2,
-      //         name: 'Luyện thi đại học',
-      //       },
-      //       {
-      //         id: 3,
-      //         name: 'Vật lý nâng cao',
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     id: 5,
-      //     name: '69 câu hỏi trắc nghiệm vật lý của cô Minh Thu',
-      //     thumbnail: '/images/exam-1.jpg',
-      //     category: 'Thi tốt nghiệp THPT',
-      //     time: '45',
-      //     examCount: '100',
-      //     questionCount: '90',
-      //     teacherId: 1,
-      //     teacherAvatar: '/images/teacher.png',
-      //     teacherName: 'Cô giáo Minh Thu',
-      //     rating: '4.5',
-      //     ratingCount: 20,
-      //     level: 2,
-      //     tags: [
-      //       {
-      //         id: 1,
-      //         name: 'Vật lý 12',
-      //       },
-      //       {
-      //         id: 2,
-      //         name: 'Luyện thi đại học',
-      //       },
-      //       {
-      //         id: 3,
-      //         name: 'Vật lý nâng cao',
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     id: 6,
-      //     name: '69 câu hỏi trắc nghiệm vật lý của cô Minh Thu',
-      //     thumbnail: '/images/exam-1.jpg',
-      //     category: 'Thi tốt nghiệp THPT',
-      //     time: '45',
-      //     examCount: '100',
-      //     questionCount: '90',
-      //     teacherId: 1,
-      //     teacherAvatar: '/images/teacher.png',
-      //     teacherName: 'Cô giáo Minh Thu',
-      //     rating: '4.5',
-      //     ratingCount: 20,
-      //     level: 1,
-      //     tags: [
-      //       {
-      //         id: 1,
-      //         name: 'Vật lý 12',
-      //       },
-      //       {
-      //         id: 2,
-      //         name: 'Luyện thi đại học',
-      //       },
-      //       {
-      //         id: 3,
-      //         name: 'Vật lý nâng cao',
-      //       },
-      //     ],
-      //   },
-      // ],
     }
   },
   methods: {

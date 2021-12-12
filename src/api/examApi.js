@@ -137,4 +137,9 @@ export default {
     }&Keyword=${encodeURIComponent(urlQuery.keyword)}`
     return global.$http.get(url)
   },
+
+  getExamConfig(examId) {
+    const url = `/api/v1/Exam/get-exam-config/${examId}`
+    return global.$http.get(url)
+  },
 }

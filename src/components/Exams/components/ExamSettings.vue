@@ -59,6 +59,7 @@
               id="examTime"
               v-model="examTime"
               :disabled="nonExamTime"
+              :class="nonExamTime ? 'disiableExamTime' : ''"
               trim
               :state="errors[0] ? false : valid ? true : null"
             ></b-form-input>

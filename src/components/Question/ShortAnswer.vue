@@ -82,7 +82,7 @@ export default defineComponent({
           position: 0,
           hashId: '',
           plainText: this.answerContent,
-          rightAnswer: true,
+          rightAnswer: 1,
           random: false,
           answerContent: this.answerContent,
         },
