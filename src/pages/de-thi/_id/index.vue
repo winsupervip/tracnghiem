@@ -458,6 +458,7 @@ import TabInfoQuiz from '@/components/Quiz/TabInfoQuiz/TabInfoQuiz.vue'
 import Heading from '@/components/Quiz/Heading.vue'
 // eslint-disable-next-line import/no-unresolved
 import ExamApi from '@/api/examApi'
+import QuizApi from '@/api/quizApi'
 
 export default defineComponent({
   components: {
@@ -603,7 +604,7 @@ export default defineComponent({
       }
 
       try {
-        const { data } = await ExamApi.addQuiz(dataInitExam)
+        const { data } = await QuizApi.addQuiz(dataInitExam)
         this.$handleError(data)
         console.log('data addquiz', data)
         this.$router.push({

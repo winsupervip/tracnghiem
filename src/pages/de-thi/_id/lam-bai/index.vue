@@ -287,8 +287,8 @@ import {
   computed,
   useAsync,
 } from '@nuxtjs/composition-api'
-import ExamApi from '@/api/examApi'
-import QuizApi from '@/api/QuizApi'
+// import ExamApi from '@/api/examApi'
+import QuizApi from '@/api/quizApi'
 import ViewQuestion from '@/components/Question/Display/ViewQuestion.vue'
 
 export default defineComponent({
@@ -396,7 +396,7 @@ export default defineComponent({
     useAsync(async () => {
       $loader()
       try {
-        const { data: response } = await ExamApi.getQuestionsBeforeSubmit(
+        const { data: response } = await QuizApi.getQuestionsBeforeSubmit(
           quizId.value
         )
         // eslint-disable-next-line no-undef
@@ -404,7 +404,7 @@ export default defineComponent({
         data.itemQuestions = response.object.items
         if (data.itemQuestions.length > 0) {
           data.indexQuestionChoose = 1
-          const { data: questionItem } = await ExamApi.getQuestionById(
+          const { data: questionItem } = await QuizApi.getQuestionById(
             data.itemQuestions[0].id
           )
           data.questionItem = questionItem.object
@@ -432,7 +432,7 @@ export default defineComponent({
     },
     async getQuestionById(id, index) {
       this.indexQuestionChoose = index + 1
-      const { data: questionItem } = await ExamApi.getQuestionById(id)
+      const { data: questionItem } = await QuizApi.getQuestionById(id)
       this.questionItem = questionItem.object
     },
     SubmitExam() {
@@ -455,7 +455,7 @@ export default defineComponent({
         }
 
         try {
-          const { data: response } = await ExamApi.getQuestionsBeforeSubmit(
+          const { data: response } = await QuizApi.getQuestionsBeforeSubmit(
             this.quizId
           )
           // eslint-disable-next-line no-undef
