@@ -5,7 +5,11 @@
         <div class="p-question__left">
           <HeaderOfSingleQuestion :question-title="questionTitle" />
           <div class="mt-2">
-            <b-form-checkbox v-model="hasNoCorrectAnswer" name="checkbox-1">
+            <b-form-checkbox
+              v-model="hasNoCorrectAnswer"
+              name="checkbox-1"
+              @change="actionsHasNoCorrectAnswer($event)"
+            >
               Chưa có đáp án đúng
             </b-form-checkbox>
           </div>
@@ -154,8 +158,11 @@ export default defineComponent({
       addSeoAvater: 'questions/addSeoAvatar',
       restData: 'questions/restData',
       setNullAnswerId: 'questions/setNullAnswerId',
+      hasNoCorrectAnswerS: 'questions/hasNoCorrectAnswerS',
     }),
-
+    actionsHasNoCorrectAnswer() {
+      this.hasNoCorrectAnswerS(this.hasNoCorrectAnswer)
+    },
     isValidAnswer(answers) {
       this.errors = ''
       let validateAnswers = []
@@ -218,9 +225,7 @@ export default defineComponent({
             // this.$handleError(data)
             this.$toast.success(this.$i18n.t('errors.00000000'))
           } else if (this.isCopy) {
-            console.log('day la quasetiion copy')
-            // await QuestionApi.createQuestion(question)
-
+            await QuestionApi.createQuestion(question)
             this.$toast.success(this.$i18n.t('errors.00000000'))
           } else {
             const { data } = await CauHoiApi.createQuestion(question)

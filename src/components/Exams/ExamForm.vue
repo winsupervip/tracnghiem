@@ -6,7 +6,7 @@
         <ExamSettings />
       </b-card>
     </div>
-    <div class="col-12 col-md-3">
+    <div class="col-12 col-md-4">
       <ExamExtra />
     </div>
   </div>

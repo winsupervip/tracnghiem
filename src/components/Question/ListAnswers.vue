@@ -150,7 +150,6 @@
         :child-question-id="childQuestionId"
       />
     </div>
-
     <div v-if="typeQuestion === 'pairing'">
       <b-container>
         <b-row
@@ -232,7 +231,6 @@
         :list-answer="compareListAnswer"
       />
     </div>
-
     <b-form-invalid-feedback id="error" :state="false">{{
       errors
     }}</b-form-invalid-feedback>

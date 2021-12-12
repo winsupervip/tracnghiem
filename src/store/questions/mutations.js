@@ -18,11 +18,11 @@ const checkTypeQuesstion = (value) => {
   } else if (value === 4) {
     return {
       name: 'Thêm câu hỏi ghép đôi',
-      typeQuestion: 'paring',
+      typeQuestion: 'pairing',
     }
   } else if (value === 5) {
     return {
-      name: 'Thêm câu hỏi điền vào chỏ trống',
+      name: 'Thêm câu hỏi điền vào chỗ trống',
       typeQuestion: 'fill-blank',
     }
   } else if (value === 6) {
@@ -35,6 +35,69 @@ const checkTypeQuesstion = (value) => {
       name: 'Thêm câu hỏi sắp xếp thứ tự',
       typeQuestion: 'draggable',
     }
+  }
+}
+const converListAnswer = (value, questionTypeId) => {
+  console.log(value, questionTypeId)
+  if (questionTypeId !== 4) {
+    const answers = value.map((item) => {
+      item.id = uuid.v4()
+      return item
+    })
+    return answers
+  } else {
+    let listAnswer = []
+    const lefts = value.filter((answer) => answer.position === 1)
+    const rights = value.filter((answer) => answer.position === 2)
+    const convertLeft = lefts.map((left) => {
+      const right = rights.find((x) => x.rightAnswer === left.rightAnswer)
+      return {
+        id: uuid.v4(),
+        left: {
+          id: uuid.v4(),
+          position: 1,
+          hashId: left.hashId || '',
+          plainText: left.plainText || '',
+          rightAnswer: left.rightAnswer || 0,
+          random: left.random || true,
+          answerContent: left.answerContent,
+        },
+        right: {
+          id: uuid.v4(),
+          position: 2,
+          hashId: right.hashId,
+          plainText: right?.plainText || '',
+          rightAnswer: right?.rightAnswer || 0,
+          random: right?.random || true,
+          answerContent: right?.answerContent || '',
+        },
+      }
+    })
+    const convertRight = rights
+      .filter((x) => !lefts.find((l) => l.rightAnswer === x.rightAnswer))
+      .map((x) => ({
+        id: uuid.v4(),
+        left: {
+          id: uuid.v4(),
+          position: 1,
+          hashId: '',
+          plainText: '',
+          rightAnswer: '',
+          random: false,
+          answerContent: '',
+        },
+        right: {
+          id: uuid.v4(),
+          position: 2,
+          hashId: '',
+          plainText: x.plainText,
+          rightAnswer: x.rightAnswer,
+          random: x.random,
+          answerContent: x.answerContent,
+        },
+      }))
+    listAnswer = [...convertLeft, ...convertRight]
+    return listAnswer
   }
 }
 export default {
@@ -226,6 +289,7 @@ export default {
     state.answers = answers
   },
   COPY_GROUP_QUESTION(state, data) {
+    console.log('da', data)
     const questionGroup = data.object.questionGroup
     if (data.object.questions.length > 0) {
       const temp = data.object.questions[0]
@@ -248,6 +312,7 @@ export default {
         hasNoCorrectAnswer: temp.hasNoCorrectAnswer,
       }
       const convertChildQuestion = data.object.questions.map((item) => {
+        console.log('item ne', item)
         const child = {
           id: uuid.v4(),
           name: checkTypeQuesstion(item.questionTypeId).name,
@@ -271,10 +336,7 @@ export default {
             groupOrder: item.groupOrder,
             hasNoCorrectAnswer: item.hasNoCorrectAnswer,
           },
-          answers: item.answers.map((item) => {
-            item.id = uuid.v4()
-            return item
-          }),
+          answers: converListAnswer(item.answers, item.questionTypeId),
         }
         return child
       })
@@ -458,5 +520,8 @@ export default {
   HAS_NO_CORRECT_ANSWER_G(state, data) {
     const index = state.childQuestions.findIndex((item) => item.id === data.id)
     state.childQuestions[index].question.hasNoCorrectAnswer = data.value
+  },
+  HAS_NO_CORRECT_ANSWER_S(state, data) {
+    state.question.hasNoCorrectAnswer = data
   },
 }

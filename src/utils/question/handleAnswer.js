@@ -123,8 +123,8 @@ const fillBlank = (values) => {
     errors: '',
     data: [],
   }
+  let countRigthAnswers = 0
   let sumRight = 0
-  const checkSum = (values.answers.length + 1) * (values.answers.length / 2)
 
   if (values.answers.length < 2) {
     result.errors = 'Loại câu hỏi này phải có ít nhất 2 câu trả lời'
@@ -146,9 +146,13 @@ const fillBlank = (values) => {
       random: item.random,
       answerContent: item.answerContent,
     }
-    sumRight += item.rightAnswer
+    if (item.rightAnswer !== -1) {
+      sumRight += item.rightAnswer
+      countRigthAnswers += 1
+    }
     result.data.push(data)
   })
+  const checkSum = (countRigthAnswers + 1) * (countRigthAnswers / 2)
 
   if (sumRight !== checkSum) {
     result.errors = 'Ví trí điền đang bị trùng'

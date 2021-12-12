@@ -2,7 +2,7 @@
   <CreateSingleQuestion
     question-type="fill-blank"
     question-type-id="5"
-    question-title="Thêm câu hỏi điền vào chổ trống"
+    question-title="Thêm câu hỏi điền vào chỗ trống"
     :have-right-answer="false"
     :handle-answer="handleAnswer"
   />
