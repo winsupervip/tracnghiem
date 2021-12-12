@@ -146,6 +146,8 @@ export default defineComponent({
   },
   mounted() {
     this.image = this.getSeoAvatar
+    this.hasNoCorrectAnswer =
+      this.getQuestion.question?.hasNoCorrectAnswer || false
   },
   methods: {
     ...mapActions({
