@@ -102,6 +102,7 @@
                   <div class="p-navItem--dropdown__inner">
                     <div class="p-navItem--dropdown__inner__icon">
                       <nuxt-link to="">
+                        <!-- :src="avatar" -->
                         <img
                           src="~/assets/img/dashboard/user.jpg"
                           alt="user.jpg"
@@ -115,7 +116,10 @@
                     >
                       <div class="p-navItem--dropdown__inner__menu__child">
                         <div class="item item__heading">Recent workspaces</div>
-                        <nuxt-link class="item item__link" to="">
+                        <nuxt-link
+                          class="item item__link"
+                          to="/users/personal/personal"
+                        >
                           {{
                             displayName
                               ? displayName
@@ -128,12 +132,12 @@
                       </div>
                       <div class="p-navItem--dropdown__inner__menu__child">
                         <div class="item item__heading">Settings</div>
-                        <nuxt-link
+                        <!-- <nuxt-link
                           to="/users/personal/personal"
                           class="item item__link"
                         >
                           Personal settings
-                        </nuxt-link>
+                        </nuxt-link> -->
                         <nuxt-link class="item item__link" to="">
                           Labs
                         </nuxt-link>
@@ -173,6 +177,14 @@
               >
                 <ul v-if="isAdmin">
                   <li>
+                    <nuxt-link to="/admin/service">
+                      <div>
+                        <b-icon-card-checklist></b-icon-card-checklist>
+                      </div>
+                      <span>Gói dịch vụ</span>
+                    </nuxt-link>
+                  </li>
+                  <li>
                     <nuxt-link to="/admin/category">
                       <div>
                         <b-icon-card-checklist></b-icon-card-checklist>
@@ -197,7 +209,53 @@
                     </nuxt-link>
                   </li>
                 </ul>
+                <ul v-if="isAgency">
+                  <li>
+                    <nuxt-link to="/agency/service">
+                      <div>
+                        <img
+                          src="~/assets/img/dashboard/icon_lslambai.svg"
+                          alt="icon_lslambai.svg"
+                        />
+                      </div>
+                      <span>Gói dịch vụ</span>
+                    </nuxt-link>
+                  </li>
+                  <li>
+                    <nuxt-link to="/admin/configs/exam">
+                      <div>
+                        <img
+                          src="~/assets/img/dashboard/icon_dethi.svg"
+                          alt="icon_dethi.svg"
+                        />
+                      </div>
+                      <span>Quản lý người dùng</span>
+                    </nuxt-link>
+                  </li>
+                  <li>
+                    <nuxt-link to="/admin/configs/categories">
+                      <div>
+                        <img
+                          src="~/assets/img/dashboard/icon_nhch.svg"
+                          alt="icon_nhch.svg"
+                        />
+                      </div>
+                      <span>Lịch sử kích hoạt</span>
+                    </nuxt-link>
+                  </li>
+                </ul>
                 <ul>
+                  <li v-if="!isAgency && !isAdmin">
+                    <nuxt-link to="/users/service">
+                      <div>
+                        <img
+                          src="~/assets/img/dashboard/icon_lslambai.svg"
+                          alt="icon_lslambai.svg"
+                        />
+                      </div>
+                      <span>Gói dịch vụ</span>
+                    </nuxt-link>
+                  </li>
                   <li>
                     <nuxt-link to="/users/history">
                       <div>

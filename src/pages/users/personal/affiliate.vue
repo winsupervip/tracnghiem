@@ -21,7 +21,7 @@
               @isCreateRefCode="isCreateRefCode"
             />
             <b-pagination
-              v-if="user.refCode && items.length"
+              v-if="total > urlQuery.pageSize"
               v-model="urlQuery.page"
               class="pagination"
               align="center"
