@@ -10,6 +10,7 @@
         class="p-answerItem"
       >
         <b-form-radio
+          v-model="isSelected"
           :disabled="blockRightAnswer"
           :aria-describedby="ariaDescribedby"
           name="some-radios"
@@ -330,6 +331,7 @@ export default defineComponent({
         const index = this.getListAnswer.findIndex(
           (item) => item.rightAnswer === 1
         )
+        console.log('inbdex tim kiem', index)
         if (index !== -1) {
           this.handleSelected(this.getListAnswer[index].id)
         } else {
@@ -414,6 +416,7 @@ export default defineComponent({
       }
     },
     handleSelected(value) {
+      console.log('handele Selected', value)
       this.isSelected = value
       this.tempSelected = value
     },
