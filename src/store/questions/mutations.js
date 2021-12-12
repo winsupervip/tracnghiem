@@ -211,6 +211,7 @@ export default {
       tags: [],
       title: '',
       position: 0,
+      hasNoCorrectAnswer: false,
     }
     state.answers = []
     state.childQuestions = []
@@ -244,6 +245,7 @@ export default {
         levelId: temp.levelId,
         statusId: questionGroup.statusId,
         plainText: temp.plainText,
+        hasNoCorrectAnswer: temp.hasNoCorrectAnswer,
       }
       const convertChildQuestion = data.object.questions.map((item) => {
         const child = {
@@ -267,6 +269,7 @@ export default {
             categories: item.categories,
             questionGroupId: item.questionGroupId,
             groupOrder: item.groupOrder,
+            hasNoCorrectAnswer: item.hasNoCorrectAnswer,
           },
           answers: item.answers.map((item) => {
             item.id = uuid.v4()

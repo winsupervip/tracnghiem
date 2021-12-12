@@ -4,7 +4,7 @@
       <p style="font-weight: bold">{{ $t('AddAnswer.answer') }}(*)</p>
       <b-button
         v-b-modal.modal-1
-        :disabled="typeQuestion == 'right-wrong' && getListAnswer.length === 3"
+        :disabled="disabledAddAnswer"
         class="btnQuestion"
         variant="outline-primary"
         >{{ $t('addMoreAnswers') }}</b-button
@@ -134,7 +134,6 @@ export default defineComponent({
       answerContentRightPlantext: '',
       isRightAnswer: false,
       isRandom: true,
-      isUpdate: -1,
       doShow: false,
       okOnly: true,
     })
@@ -146,7 +145,31 @@ export default defineComponent({
     ...mapGetters({
       getUpdateValueAnswer: 'questions/getUpdateValueAnswer',
       getListAnswer: 'questions/getListAnswer',
+      getListChildrenAnswer: 'questions/getListChildrenAnswer',
     }),
+    disabledAddAnswer() {
+      if (
+        this.typeQuestion === 'right-wrong' &&
+        !this.getUpdateValueAnswer.id
+      ) {
+        if (this.groupQuestion && this.getListChildrenAnswer.length > 0) {
+          const index = this.getListChildrenAnswer.findIndex(
+            (item) => item.id === this.childQuestionId
+          )
+          if (
+            index !== -1 &&
+            this.getListChildrenAnswer[index].answers?.length >= 3
+          ) {
+            this.$bvModal.hide('modal-1')
+            return true
+          }
+        } else if (this.getListAnswer.length >= 3) {
+          this.$bvModal.hide('modal-1')
+          return true
+        }
+      }
+      return false
+    },
   },
   watch: {
     getUpdateValueAnswer() {
@@ -191,6 +214,12 @@ export default defineComponent({
       // this.updateAnswer('remove_data')
     },
     hideModal() {
+      this.answerContent = ''
+      this.answerContentPlantext = ''
+      this.answerContentRight = ''
+      this.answerContentRightPlantext = ''
+      this.isRightAnswer = false
+      this.isRandom = true
       this.$refs['modal-question'].hide()
       if (this.getUpdateValueAnswer?.id) {
         this.removeValueUpdateAnswer()
