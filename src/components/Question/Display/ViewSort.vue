@@ -70,7 +70,7 @@ export default defineComponent({
       const userChoices = map(this.answers, (x, i) => {
         return {
           hashId: x.hashId,
-          choice: i + 1,
+          choice: i + 1 + '',
         }
       })
       console.log('ViewRightWrong selected', this.selected)
@@ -86,7 +86,7 @@ export default defineComponent({
     const userChoices = map(this.answers, (x, i) => {
       return {
         hashId: x.hashId,
-        choice: i + 1,
+        choice: i + 1 + '',
       }
     })
     console.log('ViewRightWrong selected', this.selected)

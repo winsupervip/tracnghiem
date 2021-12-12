@@ -191,11 +191,17 @@
                     <b-btn class="answered">3</b-btn>
                     <b-btn>4</b-btn>
                     <b-btn class="not-answered">5</b-btn> -->
+                    <!--
+                    :class="
+                          (questionItem.id == item.id ? 'tick' : '') ||
+                          (questionItem.status !== 0 ? 'answered' : '')
+                        " -->
                     <template v-for="(item, index) in itemQuestions">
+                      <!-- :data-id="item.id" -->
                       <b-btn
-                        :key="index"
-                        :data-id="item.id"
-                        :class="questionItem.id == item.id ? 'tick' : ''"
+                        :key="`question${item.id}`"
+                        v-model="indexQuestionChoose"
+                        :class="item.status !== 0 ? 'answered' : ''"
                         @click="chooseQuestion(item.id, index)"
                         >{{ index + 1 }}</b-btn
                       >
@@ -382,9 +388,11 @@ export default defineComponent({
         userChoices: [],
       },
       indexQuestionChoose: null,
+      quizId: null,
     })
     const idExam = computed(() => route.value.params.id)
     data.idExam = idExam.value
+    data.quizId = quizId.value
     useAsync(async () => {
       $loader()
       try {
@@ -438,12 +446,25 @@ export default defineComponent({
         this.userAnswer.questionId = questionId
         try {
           const { data } = await QuizApi.submitQuestion(this.userAnswer)
-          this.$handleError(data)
+          // this.$handleError(data)
           console.log('submitQuestion', data)
         } catch (err) {
-          this.$handleError(err, () => {
-            console.log(err)
-          })
+          // this.$handleError(err, () => {
+          //   console.log(err)
+          // })
+        }
+
+        try {
+          const { data: response } = await ExamApi.getQuestionsBeforeSubmit(
+            this.quizId
+          )
+          // eslint-disable-next-line no-undef
+          console.log('d', data)
+          this.itemQuestions = response.object.items
+        } catch (err) {
+          // this.$handleError(err, () => {
+          //   console.log(err)
+          // })
         }
       }
     },

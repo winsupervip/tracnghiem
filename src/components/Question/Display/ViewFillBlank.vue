@@ -55,14 +55,7 @@ export default defineComponent({
   },
   setup() {},
   data() {
-    return {
-      selected: null,
-      options: [
-        { value: null, text: 'Choose' },
-        { value: 'a', text: 'This is First option' },
-        { value: 'b', text: 'Selected Option', disabled: true },
-      ],
-    }
+    return {}
   },
   computed: {
     listAnswer() {
@@ -75,7 +68,7 @@ export default defineComponent({
       this.question.answers.map((x, i) => {
         if (x.sortOrder > 0) {
           arr.push({
-            value: x.sortOrder,
+            value: x.sortOrder + '',
             text: x.sortOrder,
           })
         }
@@ -83,6 +76,7 @@ export default defineComponent({
       return arr
     },
   },
+  created() {},
   methods: {
     loadOptions({ callback }) {
       callback()

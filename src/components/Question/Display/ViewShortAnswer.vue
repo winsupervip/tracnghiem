@@ -55,5 +55,23 @@ export default defineComponent({
       )
     },
   },
+  created() {
+    if (this.question.answers.length > 0) {
+      const answered = this.question.answers[0]
+      this.contentAnswer = answered.userChoice
+      const userChoices = [
+        {
+          hashId: null,
+          choice: this.contentAnswer,
+        },
+      ]
+      // this.$emit('collect-user-answer', userChoices)
+      this.$emit(
+        'update:data',
+        // eslint-disable-next-line vue/no-mutating-props
+        (this.userAnswer.userChoices = userChoices)
+      )
+    }
+  },
 })
 </script>

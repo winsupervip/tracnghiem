@@ -10,7 +10,7 @@
       </div>
       <div class="list-answer">
         <ul class="list-unstyled p-0">
-          <li v-for="(item, index) in question.answers" :key="index">
+          <li v-for="(item, index) in answers" :key="index">
             <b-form-radio
               v-model="selected"
               name="anwser-radios"
@@ -28,6 +28,8 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
+import find from 'lodash/find'
+import get from 'lodash/get'
 
 export default defineComponent({
   name: 'ViewSingleChoice',
@@ -47,6 +49,31 @@ export default defineComponent({
       selected: null,
     }
   },
+  computed: {
+    answers: {
+      get() {
+        const selected = find(
+          this.question.answers,
+          (x) => x.userChoice === '1'
+        )
+        console.log('selected computed answered', selected)
+        if (selected) {
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+          this.selected = selected ? selected.hashId : null
+        }
+
+        return get(this.question, 'answers', null)
+      },
+      set(val) {
+        // eslint-disable-next-line vue/no-mutating-props
+        this.$emit(
+          'update:data',
+          // eslint-disable-next-line vue/no-mutating-props
+          (this.question.answers = val)
+        )
+      },
+    },
+  },
   watch: {
     selected() {
       const userChoices = [
@@ -55,7 +82,7 @@ export default defineComponent({
           choice: '1',
         },
       ]
-      console.log('ViewRightWrong selected', this.selected)
+      console.log('ViewSingleChoice selected', this.selected)
       // this.$emit('collect-user-answer', userChoices)
       this.$emit(
         'update:data',

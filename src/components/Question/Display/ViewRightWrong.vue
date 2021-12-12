@@ -11,7 +11,7 @@
       <div class="list-answer">
         <ul class="list-unstyled p-0">
           <b-form-group>
-            <li v-for="(item, index) in question.answers" :key="index">
+            <li v-for="(item, index) in answers" :key="index">
               <b-form-radio
                 v-model="selected"
                 name="anwser-radios"
@@ -37,6 +37,7 @@
 <script>
 import { defineComponent } from '@vue/composition-api'
 import get from 'lodash/get'
+import find from 'lodash/find'
 
 // import findIndex from 'lodash/findIndex'
 
@@ -61,6 +62,15 @@ export default defineComponent({
   computed: {
     answers: {
       get() {
+        const selected = find(
+          this.question.answers,
+          (x) => x.userChoice === '1'
+        )
+        console.log('selected computed answered', selected)
+        if (selected) {
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+          this.selected = selected ? selected.hashId : null
+        }
         return get(this.question, 'answers', null)
       },
       set(val) {
