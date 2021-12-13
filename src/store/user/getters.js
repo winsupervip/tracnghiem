@@ -4,4 +4,5 @@ export default {
     rootState.auth.user.role.includes('admin'),
   isAgency: (state, getters, rootState) =>
     rootState.auth.user.role.includes('agency'),
+  getUserId: (state, getters, rootState) => rootState.auth.user.sub,
 }

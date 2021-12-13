@@ -182,19 +182,40 @@ export default defineComponent({
           this.isValid = false
         }
         if (element.typeQuestion === 'single-choice') {
-          value = handler.singleChoiceAndRightWrong(element.answers)
+          value = handler.singleChoiceAndRightWrong({
+            answers: element.answers,
+            hasNoCorrectAnswer: this.hasNoCorrectAnswer,
+          })
         } else if (element.typeQuestion === 'short-answer') {
-          value = handler.shortAnswer(element.answers)
+          value = handler.shortAnswer({
+            answers: element.answers,
+            hasNoCorrectAnswer: this.hasNoCorrectAnswer,
+          })
         } else if (element.typeQuestion === 'right-wrong') {
-          value = handler.singleChoiceAndRightWrong(element.answers)
+          value = handler.singleChoiceAndRightWrong({
+            answers: element.answers,
+            hasNoCorrectAnswer: this.hasNoCorrectAnswer,
+          })
         } else if (element.typeQuestion === 'multiple-choice') {
-          value = handler.multipleChoice(element.answers)
+          value = handler.multipleChoice({
+            answers: element.answers,
+            hasNoCorrectAnswer: this.hasNoCorrectAnswer,
+          })
         } else if (element.typeQuestion === 'pairing') {
-          value = handler.matching(element.answers)
+          value = handler.matching({
+            answers: element.answers,
+            hasNoCorrectAnswer: this.hasNoCorrectAnswer,
+          })
         } else if (element.typeQuestion === 'fill-blank') {
-          value = handler.fillBlank(element.answers)
+          value = handler.fillBlank({
+            answers: element.answers,
+            hasNoCorrectAnswer: this.hasNoCorrectAnswer,
+          })
         } else if (element.typeQuestion === 'draggable') {
-          value = handler.draggable(element.answers)
+          value = handler.draggable({
+            answers: element.answers,
+            hasNoCorrectAnswer: this.hasNoCorrectAnswer,
+          })
         }
         const question = {}
         question.title = groupQuestion.question.title
@@ -215,6 +236,7 @@ export default defineComponent({
         question.questionGroupId = element.question.questionGroupId
         question.groupOrder = index + 1
         question.hashId = this.isCopy ? '' : element.question.hashId
+        question.hasNoCorrectAnswer = element.question.hasNoCorrectAnswer
         let data = {}
         if (this.isCopy) {
           if (value.data.length > 0) {
@@ -250,7 +272,7 @@ export default defineComponent({
           questionGroupName: this.getGroupQuestion.question.questionContent,
           description: this.getGroupQuestion.question.questionContent,
           plainText: this.getGroupQuestion.question.plainText,
-          random: false,
+          random: true,
           levelId: this.getGroupQuestion.question.levelId,
           statusId: this.getGroupQuestion.question.statusId,
           seoAvatar: this.getGroupQuestion.question.seoAvatar,

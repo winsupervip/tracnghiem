@@ -5,9 +5,7 @@
         Câu hỏi: {{ getSortNumber(itemData.sortOrder) }}
       </h3>
       <div>
-        <b-icon-pencil-square
-          @click="fetchQuestion(itemData.item.hashId)"
-        ></b-icon-pencil-square>
+        <b-icon-pencil-square @click="fetchQuestion"></b-icon-pencil-square>
         <b-icon-trash @click="showModleDelete"></b-icon-trash>
       </div>
     </div>
@@ -52,7 +50,7 @@
       </div>
     </div>
     <b-modal
-      :id="`update-question${itemData.item.hashId}`"
+      :id="`update-question-EQS${itemData.hashId}`"
       title="Sửa câu hỏi"
       ok-title="Cập nhập"
       cancel-title="Đóng"
@@ -60,8 +58,11 @@
       @shown="shown"
       @hide="hide"
     >
+      <div v-if="!doneCall">
+        <p>Bạn không phải là chủ sở hửu câu hỏi này</p>
+      </div>
       <CreateSingleQuestion
-        v-if="doneCall && doShow"
+        v-else
         :question-type="questionType"
         :question-type-id="questionTypeId"
         :question-title="questionTitle"
@@ -71,16 +72,10 @@
         :handle-answer="handleAnswer"
         :is-edit="true"
       />
-      <b-spinner
-        v-if="!doneCall"
-        variant="success"
-        label="Spinning"
-      ></b-spinner>
-      <p v-if="!doneCall">Bạn không phải là chủ sở hửu câu hỏi này</p>
     </b-modal>
 
     <b-modal
-      :id="`delete-question${itemData.item.hashId}`"
+      :id="`delete-question${itemData.hashId}`"
       title="Xóa chuyên mục"
       ok-title="Xóa"
       cancel-title="Đóng"
@@ -97,6 +92,7 @@
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
 import { uuid } from 'vue-uuid'
+import { mapGetters } from 'vuex'
 import QuestionTags from '@/components/Question/QuestionTags.vue'
 import QuestionSingleChoiceList from '@/components/Question/QuestionSingleChoiceList.vue'
 import QuestionMultiChoiceList from '@/components/Question/QuestionMultiChoiceList.vue'
@@ -146,8 +142,12 @@ export default defineComponent({
   computed: {
     questions() {
       console.log('item', this.itemData)
-      return this.itemData.item
+      return this.itemData
     },
+    ...mapGetters({
+      getQuestion: 'questions/getQuestion',
+      getUserId: 'user/getUserId',
+    }),
   },
   methods: {
     shown() {
@@ -155,10 +155,9 @@ export default defineComponent({
     },
     hide() {
       this.doShow = false
-      // this.updateAnswer('remove_data')
     },
     showModleDelete() {
-      this.$bvModal.show(`delete-question${this.itemData.item.hashId}`)
+      this.$bvModal.show(`delete-question${this.itemData.hashId}`)
     },
     deleteQuestion() {},
     handleAnswer(data) {
@@ -234,12 +233,18 @@ export default defineComponent({
       return (this.sectionOrder > 0 ? this.sectionOrder - 1 : 0) + sortNumber
     },
     async fetchQuestion(questionId) {
-      console.log('quessstion ididd', this.itemData, this.itemData.hashId)
-      this.$bvModal.show(`update-question${this.itemData.item.hashId}`)
+      console.log('quessstion ididd', this.itemData)
+      this.$bvModal.show(`update-question-EQS${this.itemData.hashId}`)
+      if (this.itemData?.createBy !== this.getUserId) {
+        this.doneCall = false
+        return
+      }
       try {
         let result = {}
-        if (this.itemData.itemType === 'question') {
-          result = await QuestionApi.getUserQuestionDetails(questionId)
+        if (this.itemData.item.itemType === 'question') {
+          result = await QuestionApi.getUserQuestionDetails(
+            this.itemData.hashId
+          )
           const answers = result.data.object.answers
           let listAnswer = []
           if (result.data.object.question.questionTypeId === 4) {
