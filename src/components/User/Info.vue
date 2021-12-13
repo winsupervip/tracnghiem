@@ -33,7 +33,7 @@
           <b-form @submit.prevent="handleSubmit(onSubmit)">
             <ValidationProvider
               :name="$t('info.oldPassword')"
-              rules="required|max:255"
+              rules="required|min:8|max:255"
             >
               <b-form-group
                 slot-scope="{ valid, errors }"
@@ -56,7 +56,7 @@
             </ValidationProvider>
             <ValidationProvider
               :name="$t('info.newPassword')"
-              rules="required|max:255"
+              rules="required|min:8|max:255"
             >
               <b-form-group
                 slot-scope="{ valid, errors }"
@@ -79,7 +79,7 @@
             </ValidationProvider>
             <ValidationProvider
               :name="$t('info.confirmPassword')"
-              rules="required|max:255"
+              rules="required|min:8|max:255"
             >
               <b-form-group
                 slot-scope="{ valid, errors }"
