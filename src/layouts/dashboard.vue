@@ -102,12 +102,8 @@
                   <div class="p-navItem--dropdown__inner">
                     <div class="p-navItem--dropdown__inner__icon">
                       <nuxt-link to="">
-                        <!-- :src="avatar" -->
-                        <img
-                          src="~/assets/img/dashboard/user.jpg"
-                          alt="user.jpg"
-                          class="img-circle"
-                        />
+                        <!-- src="~/assets/img/dashboard/user.jpg" -->
+                        <img :src="avatar" alt="user.jpg" class="img-circle" />
                       </nuxt-link>
                     </div>
                     <div
@@ -365,18 +361,11 @@ import userAPI from '@/api/user'
 export default defineComponent({
   name: 'Dashboard',
   data() {
-    const personal = async () => {
-      const { data: result } = await userAPI.getAccount()
-      this.firstName = result?.object?.firstName
-      this.lastName = result?.object?.lastName
-      this.displayName = result?.object?.displayName
-      this.avatar = result?.object?.avatar
-    }
-    personal()
     return {
       firstName: '',
       lastName: '',
       displayName: '',
+      avatar: '',
       backdrop: false,
       visible: true,
       variant: 'transparent',
@@ -396,6 +385,7 @@ export default defineComponent({
     },
   },
   created() {
+    this.personal()
     if (process.browser) {
       // eslint-disable-next-line nuxt/no-globals-in-created
       if (window.innerWidth < 991) {
@@ -420,6 +410,13 @@ export default defineComponent({
     window.removeEventListener('resize', this.handleWindowResize)
   },
   methods: {
+    async personal() {
+      const { data: result } = await userAPI.getAccount()
+      this.firstName = result?.object?.firstName
+      this.lastName = result?.object?.lastName
+      this.displayName = result?.object?.displayName
+      this.avatar = result?.object?.avatar
+    },
     toggleSidebar() {
       if (this.$refs.bSidebar.$el.children[0].offsetWidth === 304) {
         this.isDisplayMenu = false
