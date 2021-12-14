@@ -204,15 +204,16 @@ export default defineComponent({
   setup(props) {
     const { $loader } = useContext()
     const data = reactive({
-      treeValueWorkAt: props.info.school,
-      treeValueGender: props.info.gender,
-      valueBirthday: props.info.birthday,
-      firstName: props.info.firstName,
-      address: props.info.address,
-      phoneNumber: props.info.phone,
-      lastName: props.info.lastName,
-      displayName: props.info.displayName,
-      bio: props.info.bio,
+      treeValueWorkAt: null || props.info.school,
+      treeValueGender: null || props.info.gender,
+      valueBirthday: '' || props.info.birthday,
+      firstName: '' || props.info.firstName,
+      address: '' || props.info.address,
+      phoneNumber: '' || props.info.phone,
+      lastName: '' || props.info.lastName,
+      displayName: '' || props.info.displayName,
+      bio: '' || props.info.bio,
+      avatar: '' || props.info.avatar,
       isShow: false,
       treeDataGenders: [],
       alwaysOpen: false,
@@ -221,7 +222,6 @@ export default defineComponent({
       $loader()
       const { data: genders } = await userAPI.getListgenders()
       data.treeDataGenders = genders?.object?.items
-      console.log(data.treeDataGenders)
       $loader().close()
     })
     fetch()
@@ -229,7 +229,23 @@ export default defineComponent({
       ...toRefs(data),
     }
   },
-  computed: {},
+  watch: {
+    info: {
+      handler(val) {
+        this.treeValueWorkAt = val.school
+        this.treeValueGender = val.gender
+        this.valueBirthday = val.birthday
+        this.firstName = val.firstName
+        this.address = val.address
+        this.phoneNumber = val.phone
+        this.lastName = val.lastName
+        this.displayName = val.displayName
+        this.bio = val.bio
+        this.avatar = val.avatar
+      },
+      deep: true,
+    },
+  },
   methods: {
     deleteContent() {
       this.firstName = ''
@@ -241,6 +257,7 @@ export default defineComponent({
       this.displayName = ''
       this.valueBirthday = ''
       this.treeValueGender = ''
+      this.avatar = ''
     },
     loadOptions({ action, searchQuery, callback }) {
       if (action === ASYNC_SEARCH) {
@@ -255,7 +272,7 @@ export default defineComponent({
       const user = {
         firstName: this.firstName,
         lastName: this.lastName,
-        avatar: '',
+        avatar: this.avatar,
         bio: this.bio,
         schoolId: this.treeValueWorkAt,
         phone: this.phoneNumber,

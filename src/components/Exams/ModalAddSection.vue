@@ -146,7 +146,10 @@ export default defineComponent({
           examSection: this.dataSubmit,
         })
         this.$handleError(data)
-        this.$emit('on-add-section', data.object.data)
+        this.$emit('on-add-section', {
+          hashId: data.object.data,
+          title: this.dataSubmit.title,
+        })
       } catch (err) {
         this.$handleError(err, () => {
           console.log(err)

@@ -9,7 +9,7 @@
             {{ $t('info.activityHistory') }}
           </nuxt-link>
         </li>
-        <li class="mt-3">
+        <li v-b-modal.modal-edit class="mt-3">
           <nuxt-link to="#" class="btn btn-outline-primary d-block">
             <b-icon icon="key" rotate="135" aria-hidden="true"></b-icon>
             {{ $t('info.changePassword') }}
@@ -22,8 +22,96 @@
           }}</b>
         </li>
       </ul>
+      <b-modal
+        id="modal-edit"
+        ref="modal"
+        hide-footer
+        @shown="showModal"
+        @hide="hideModal"
+      >
+        <ValidationObserver ref="form" v-slot="{ handleSubmit }">
+          <b-form @submit.prevent="handleSubmit(onSubmit)">
+            <ValidationProvider
+              :name="$t('info.oldPassword')"
+              rules="required|min:8|max:255"
+            >
+              <b-form-group
+                slot-scope="{ valid, errors }"
+                :label="$t('info.oldPassword')"
+                label-for="oldPassword"
+                class="mb-3"
+              >
+                <b-form-input
+                  id="oldPassword"
+                  v-model="oldPassword"
+                  type="password"
+                  trim
+                  size="lg"
+                  :state="errors[0] ? false : valid ? true : null"
+                ></b-form-input>
+                <b-form-invalid-feedback>
+                  {{ errors[0] }}
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </ValidationProvider>
+            <ValidationProvider
+              :name="$t('info.newPassword')"
+              rules="required|min:8|max:255"
+            >
+              <b-form-group
+                slot-scope="{ valid, errors }"
+                :label="$t('info.newPassword')"
+                label-for="newPassword"
+                class="mb-3"
+              >
+                <b-form-input
+                  id="newPassword"
+                  v-model="newPassword"
+                  type="password"
+                  trim
+                  size="lg"
+                  :state="errors[0] ? false : valid ? true : null"
+                ></b-form-input>
+                <b-form-invalid-feedback>
+                  {{ errors[0] }}
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </ValidationProvider>
+            <ValidationProvider
+              :name="$t('info.confirmPassword')"
+              rules="required|min:8|max:255"
+            >
+              <b-form-group
+                slot-scope="{ valid, errors }"
+                :label="$t('info.confirmPassword')"
+                label-for="confirmPassword"
+                class="mb-3"
+              >
+                <b-form-input
+                  id="confirmPassword"
+                  v-model="confirmPassword"
+                  type="password"
+                  trim
+                  size="lg"
+                  :state="errors[0] ? false : valid ? true : null"
+                ></b-form-input>
+                <b-form-invalid-feedback>
+                  {{ errors[0] }}
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </ValidationProvider>
+          </b-form>
+        </ValidationObserver>
+        <b-button variant="outline-dark mb-3" @click="hide">{{
+          $t('delete')
+        }}</b-button>
+        <b-button variant="outline-dark mb-3" type="submit" @click="onSubmit">{{
+          $t('save')
+        }}</b-button>
+      </b-modal>
       <div class="input-group mb-3">
         <input
+          ref="clipboard"
           type="text"
           class="form-control"
           :value="
@@ -34,7 +122,7 @@
           readonly
         />
 
-        <button class="btn btn-primary">
+        <button class="btn btn-primary" @click="handleCopy">
           <b-icon icon="file-code" aria-hidden="true"></b-icon>
         </button>
       </div>
@@ -68,14 +156,14 @@
         :placeholder="$t('info.referralCode')"
       />
       <button
-        v-if="!bio.refCode && bio.refBy"
+        v-if="!bio.refBy && !checkRefBy"
         class="btn btn-outline-primary d-block m-auto mt-2 mb-4"
-        :disabled="bio.refBy"
+        :disabled="isDisabled"
         @click="handleUpdate"
       >
         {{ $t('info.btnUpdate') }}
       </button>
-      <p v-if="!bio.refCode">{{ $t('info.note') }}</p>
+      <p v-if="!bio.refBy && !checkRefBy">{{ $t('info.note') }}</p>
     </div>
   </div>
 </template>
@@ -88,6 +176,10 @@ export default defineComponent({
   auth: true,
   components: { UserlInfo },
   props: {
+    checkRefBy: {
+      type: String,
+      default: () => '',
+    },
     type: {
       type: Boolean,
       required: true,
@@ -101,19 +193,56 @@ export default defineComponent({
     const data = reactive({
       inputCode: '',
       isDisabled: false,
+      oldPassword: '',
+      newPassword: '',
+      confirmPassword: '',
     })
 
     return {
       ...toRefs(data),
     }
   },
-  computed: {},
   methods: {
+    loadOptions({ action, searchQuery, callback }) {},
+    showModal(id) {
+      this.$bvModal.show(id)
+    },
+    hideModal(id) {
+      this.$bvModal.hide(id)
+    },
+    hide() {
+      this.reset()
+      this.hideModal('modal-edit')
+    },
+    reset() {
+      this.oldPassword = ''
+      this.newPassword = ''
+      this.confirmPassword = ''
+    },
+    async onSubmit() {
+      const result = {
+        oldPassword: this.oldPassword,
+        newPassword: this.newPassword,
+        confirmPassword: this.confirmPassword,
+      }
+      try {
+        const { data } = await userAPI.updatePassword(result)
+        this.reset()
+        this.hideModal('modal-edit')
+        this.$handleError(data)
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
+    },
     async handleUpdate() {
       try {
         const { data } = await userAPI.postCode({ refCode: this.inputCode })
-        this.$handleError(data)
+        this.$emit('isCreateRefBy', this.inputCode)
+        console.log(this.inputCode)
         this.isDisabled = true
+        this.$handleError(data)
       } catch (err) {
         this.$handleError(err, () => {
           console.log(err)
@@ -122,6 +251,12 @@ export default defineComponent({
     },
     logout() {
       this.$auth.logout()
+    },
+    handleCopy(e) {
+      navigator.clipboard.writeText(
+        `https://tracnghiem.vn/affiliate?ref=${this.bio.refCode}`
+      )
+      this.$toast.success('copy thành công').goAway(1000)
     },
   },
 })

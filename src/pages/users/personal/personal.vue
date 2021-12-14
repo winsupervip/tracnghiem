@@ -5,7 +5,12 @@
       <div class="row">
         <div class="col-12 col-md-4">
           <b-card :sub-title="$t('personal.userInfo')">
-            <Info :type="true" :bio="user" />
+            <Info
+              :type="true"
+              :bio="user"
+              :check-ref-by="user.refCode"
+              @isCreateRefBy="isCreateRefBy"
+            />
           </b-card>
         </div>
         <div class="col-12 col-md-8">
@@ -25,9 +30,11 @@ import {
   useFetch,
   toRefs,
 } from '@nuxtjs/composition-api'
+import EventBus from '@/plugins/eventBus'
 import userAPI from '@/api/user'
 import Info from '@/components/User/Info.vue'
 import FormInfo from '@/components/User/FormInfo.vue'
+
 export default defineComponent({
   auth: true,
   components: { Info, FormInfo },
@@ -69,11 +76,26 @@ export default defineComponent({
       data.user.gender = result?.object?.gender?.label
       $loader().close()
     })
-
+    const isCreateRefBy = (value) => {
+      data.user.refBy = value
+    }
     return {
       ...toRefs(data),
+      isCreateRefBy,
     }
   },
-  methods: {},
+  created() {
+    // Listening the event image
+    EventBus.$on('image', this.handler)
+  },
+  destroyed() {
+    // Stop listening the event image with handler
+    EventBus.$off('image', this.handler)
+  },
+  methods: {
+    handler(e) {
+      this.user.avatar = e
+    },
+  },
 })
 </script>

@@ -141,7 +141,7 @@
           <b-col md="12" lg="4" xl="4" class="do-exam-wrapper">
             <div class="card do-exam-box">
               <div class="text-green do-exam-timer mb-4">
-                <i class="icon-timer" />
+                <i class="icon-clock" />
                 <strong>01:30:00</strong>
               </div>
               <div class="list-type-question">
@@ -186,41 +186,26 @@
                   class="filter-group-body"
                 >
                   <div class="list-question-menu">
-                    <b-btn>1</b-btn>
+                    <!-- <b-btn>1</b-btn>
                     <b-btn class="tick">2</b-btn>
                     <b-btn class="answered">3</b-btn>
                     <b-btn>4</b-btn>
-                    <b-btn class="not-answered">5</b-btn>
-                    <b-btn>6</b-btn>
-                    <b-btn>7</b-btn>
-                    <b-btn>8</b-btn>
-                    <b-btn>9</b-btn>
-                    <b-btn>10</b-btn>
-                    <b-btn>11</b-btn>
-                    <b-btn>12</b-btn>
-                    <b-btn>13</b-btn>
-                    <b-btn>14</b-btn>
-                    <b-btn>15</b-btn>
-                    <b-btn>16</b-btn>
-                    <b-btn>17</b-btn>
-                    <b-btn>18</b-btn>
-                    <b-btn>19</b-btn>
-                    <b-btn>20</b-btn>
-                    <b-btn>21</b-btn>
-                    <b-btn>22</b-btn>
-                    <b-btn>23</b-btn>
-                    <b-btn>24</b-btn>
-                    <b-btn>25</b-btn>
-                    <b-btn>26</b-btn>
-                    <b-btn>27</b-btn>
-                    <b-btn>28</b-btn>
-                    <b-btn>29</b-btn>
-                    <b-btn>30</b-btn>
-                    <b-btn>31</b-btn>
-                    <b-btn>32</b-btn>
-                    <b-btn>33</b-btn>
-                    <b-btn>34</b-btn>
-                    <b-btn>35</b-btn>
+                    <b-btn class="not-answered">5</b-btn> -->
+                    <!--
+                    :class="
+                          (questionItem.id == item.id ? 'tick' : '') ||
+                          (questionItem.status !== 0 ? 'answered' : '')
+                        " -->
+                    <template v-for="(item, index) in itemQuestions">
+                      <!-- :data-id="item.id" -->
+                      <b-btn
+                        :key="`question${item.id}`"
+                        v-model="indexQuestionChoose"
+                        :class="item.status !== 0 ? 'answered' : ''"
+                        @click="chooseQuestion(item.id, index)"
+                        >{{ index + 1 }}</b-btn
+                      >
+                    </template>
                   </div>
                 </b-collapse>
               </div>
@@ -244,7 +229,7 @@
                 <div
                   class="d-flex justify-content-between card-question-header"
                 >
-                  <div class="font-bold">Câu 1</div>
+                  <div class="font-bold">Câu {{ indexQuestionChoose }}</div>
                   <b-form-checkbox
                     id="checkbox-bookmark"
                     v-model="bookmarkQuestion"
@@ -257,63 +242,19 @@
                 </div>
               </template>
               <div class="list-question mb-4">
-                <div class="question-item">
-                  <div class="question-content text-smd">
-                    Which of the following lists all and only the appropriate
-                    descriptions about a 32-bit CPU and a 64-bit CPU? I When a
-                    32-bit CPU and a 64-bit CPU are compared, a 64-bit CPU has a
-                    larger theoretical maximum memory space.. II There is no
-                    32-bit OS that runs on a PC with a 64-bit CPU. III In terms
-                    of the read and write speed of a USB memory, the speed of a
-                    PC with a 64-bit CPU is twice as fast as that of a PC with a
-                    32-bit CPU.
-                  </div>
-                  <div class="question-item-answer">
-                    <div class="answer-head">
-                      <span class="font-sm text-gray">câu trả lời</span>
-                    </div>
-                    <div class="list-answer">
-                      <ul class="list-unstyled p-0">
-                        <li>
-                          <b-form-radio name="anwser-radios" value="A">
-                            <b>A.</b>
-                            Deciding one’s own strategy in a game according to
-                            the strategy of the opponent
-                          </b-form-radio>
-                        </li>
-                        <li>
-                          <b-form-radio name="anwser-radios" value="B">
-                            <b>B.</b>
-                            Deciding one’s own strategy in a game according to
-                            the strategy of the opponent
-                          </b-form-radio>
-                        </li>
-                        <li>
-                          <b-form-radio name="anwser-radios" value="C">
-                            <b>C.</b>
-                            Deciding one’s own strategy in a game according to
-                            the strategy of the opponent
-                          </b-form-radio>
-                        </li>
-                        <li>
-                          <b-form-radio name="anwser-radios" value="A">
-                            <b>D.</b>
-                            Deciding one’s own strategy in a game according to
-                            the strategy of the opponent
-                          </b-form-radio>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
+                <ViewQuestion
+                  :question="questionItem"
+                  :user-answer="userAnswer"
+                ></ViewQuestion>
               </div>
               <template #footer>
+                <b-btn variant="outline"> Xem đáp án </b-btn>
                 <b-btn variant="outline">
                   <i class="icon-arrow-left me-2"></i>
                   Câu trước
                 </b-btn>
                 <b-btn variant="outline">
-                  Câu trước
+                  Câu sau
                   <i class="icon-arrow-right ms-2"></i>
                 </b-btn>
               </template>
@@ -337,16 +278,34 @@
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api'
+import {
+  defineComponent,
+  useContext,
+  reactive,
+  toRefs,
+  useRoute,
+  computed,
+  useAsync,
+} from '@nuxtjs/composition-api'
+// import ExamApi from '@/api/examApi'
+import QuizApi from '@/api/quizApi'
+import ViewQuestion from '@/components/Question/Display/ViewQuestion.vue'
 
 export default defineComponent({
-  components: {},
+  components: {
+    ViewQuestion,
+  },
   layout: 'default',
-  auth: false,
-  setup() {},
-  data() {
-    return {
-      idExam: this.$route.params.id || null,
+  auth: true,
+  setup() {
+    const { app, $loader, $logger } = useContext()
+
+    const route = useRoute()
+    const quizId = computed(() => route.value.query.quizId)
+    console.log('quizId', quizId.value)
+
+    const data = reactive({
+      idExam: null,
       breadcrumbs: [
         {
           text: 'Trang chủ',
@@ -422,13 +381,92 @@ export default defineComponent({
           },
         ],
       },
+      itemQuestions: [],
+      questionItem: {},
+      userAnswer: {
+        questionId: null,
+        userChoices: [],
+      },
+      indexQuestionChoose: null,
+      quizId: null,
+    })
+    const idExam = computed(() => route.value.params.id)
+    data.idExam = idExam.value
+    data.quizId = quizId.value
+    useAsync(async () => {
+      $loader()
+      try {
+        const { data: response } = await QuizApi.getQuestionsBeforeSubmit(
+          quizId.value
+        )
+        // eslint-disable-next-line no-undef
+        console.log('d', data)
+        data.itemQuestions = response.object.items
+        if (data.itemQuestions.length > 0) {
+          data.indexQuestionChoose = 1
+          const { data: questionItem } = await QuizApi.getQuestionById(
+            data.itemQuestions[0].id
+          )
+          data.questionItem = questionItem.object
+          data.userAnswer.questionId = data.questionItem.id
+        }
+      } catch (err) {
+        app.$handleError(err, () => {
+          $logger.info(err)
+        })
+      }
+      $loader().close()
+    })
+    return {
+      ...toRefs(data),
     }
   },
   methods: {
+    chooseQuestion(id, index) {
+      this.submitQuestion(this.questionItem.id)
+      this.userAnswer = {
+        questionId: null,
+        userChoices: [],
+      }
+      this.getQuestionById(id, index)
+    },
+    async getQuestionById(id, index) {
+      this.indexQuestionChoose = index + 1
+      const { data: questionItem } = await QuizApi.getQuestionById(id)
+      this.questionItem = questionItem.object
+    },
     SubmitExam() {
+      this.submitQuestion(this.questionItem.id)
       this.$router.push({
         path: `/de-thi/${this.idExam}/ket-qua`,
       })
+    },
+    async submitQuestion(questionId) {
+      if (this.userAnswer.userChoices.length > 0) {
+        this.userAnswer.questionId = questionId
+        try {
+          const { data } = await QuizApi.submitQuestion(this.userAnswer)
+          // this.$handleError(data)
+          console.log('submitQuestion', data)
+        } catch (err) {
+          // this.$handleError(err, () => {
+          //   console.log(err)
+          // })
+        }
+
+        try {
+          const { data: response } = await QuizApi.getQuestionsBeforeSubmit(
+            this.quizId
+          )
+          // eslint-disable-next-line no-undef
+          console.log('d', data)
+          this.itemQuestions = response.object.items
+        } catch (err) {
+          // this.$handleError(err, () => {
+          //   console.log(err)
+          // })
+        }
+      }
     },
   },
 })

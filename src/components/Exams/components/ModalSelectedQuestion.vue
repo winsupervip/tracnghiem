@@ -221,10 +221,10 @@ export default defineComponent({
         })
       }
     },
-    async onAddSection(sectionId) {
+    async onAddSection(value) {
       this.$bvModal.hide('modal-section')
       await this.fetch()
-      this.dataSubmit.sectionHashId = sectionId
+      this.dataSubmit.sectionHashId = value.hashId
     },
     closeFormOnSection() {
       this.$bvModal.hide('modal-selected')
