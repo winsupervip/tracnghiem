@@ -65,8 +65,7 @@
     <b-modal
       :id="`sort${itemData.hashId}`"
       title="Đổi vị trí câu hỏi"
-      ok-title="Lưu"
-      cancel-title="Đóng"
+      hide-footer
       size="lg"
       @shown="shown"
       @hide="hide"
@@ -138,6 +137,18 @@
             <b-col cols="5"></b-col>
             <b-col>{{ error.length > 0 ? error : null }}</b-col>
           </b-row>
+          <div class="d-flex justify-content-end">
+            <b-button variant="primary" class="m-1" @click="closeSortOrder"
+              >Đóng</b-button
+            >
+            <b-button
+              variant="primary"
+              class="m-1"
+              :disabled="!valid"
+              @click="sortOrder"
+              >Lưu</b-button
+            >
+          </div>
         </div>
       </div>
     </b-modal>
@@ -216,6 +227,7 @@ export default defineComponent({
       isDisable: true,
       newPosition: this.itemData.sortOrder,
       error: '',
+      valid: false,
     }
   },
   computed: {
@@ -249,12 +261,33 @@ export default defineComponent({
     }),
   },
   methods: {
+    async sortOrder() {
+      const data = {
+        hashId: this.examHashId,
+        oldSortOrder: this.itemData.sortOrder,
+        newSortOrder: this.newPosition,
+      }
+      console.log(data)
+      try {
+        const result = await ExamApi.sortOrder(data)
+        this.$toast.success('Cập nhập vị trí thành công').goAway(1000)
+        window.location.reload()
+        console.log(result)
+      } catch (error) {
+        this.$toast.show('Có lỗi sảy ra').goAway(1000)
+      }
+    },
     changeSortOrder() {
       this.isDisable = !this.isDisable
       if (this.newPosition < 1 || this.newPosition > this.total) {
         this.error = 'Vị trí mới cho câu hỏi không hợp lệ'
+        this.valid = false
       } else if (this.newPosition === this.itemData.sortOrder) {
-        this.error = 'Vị trí mới trùng với vị trí củ'
+        this.error = 'Vị trí mới trùng với vị trí cũ'
+        this.valid = false
+      } else {
+        this.error = ''
+        this.valid = true
       }
     },
     opentAddSectionModal() {
@@ -275,16 +308,35 @@ export default defineComponent({
     hide() {
       this.doShow = false
     },
+    closeSortOrder() {
+      this.$bvModal.hide(`sort${this.itemData.hashId}`)
+    },
     showModalSort() {
       this.$bvModal.show(`sort${this.itemData.hashId}`)
-
       this.getListExamSection()
     },
     showModleDelete() {
       this.$bvModal.show(`delete-question${this.itemData.hashId}`)
     },
-    deleteQuestion() {},
-    handlerSort() {},
+    async deleteQuestion() {
+      const data = {
+        examHashId: this.examHashId,
+        questionHashId: this.itemData.hashId,
+      }
+      try {
+        const result = await ExamApi.deleteQuestionInExam(data)
+        if (result.status === 200) {
+          this.$toast.success('Xóa câu hỏi khỏi đề thi thành công').goAway(1000)
+
+          window.location.reload()
+        } else {
+          this.$toast.show('Có lỗi sảy ra').goAway(1000)
+        }
+        console.log(result)
+      } catch (error) {
+        this.$toast.show('Có lỗi sảy ra').goAway(1000)
+      }
+    },
     handleAnswer(data) {
       if (this.questionType === 'single-choice') {
         return handler.singleChoiceAndRightWrong(data)
