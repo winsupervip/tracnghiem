@@ -27,6 +27,7 @@
             >
               <treeselect
                 id="categories"
+                v-model="urlQuery.categories"
                 :multiple="true"
                 :options="category"
                 :load-options="loadOptions"
@@ -114,7 +115,8 @@
 
       <b-pagination
         v-model="urlQuery.page"
-        class="pagination"
+        align="center"
+        class="pagination pt-3"
         :total-rows="total"
         :per-page="urlQuery.pageSize"
       ></b-pagination>

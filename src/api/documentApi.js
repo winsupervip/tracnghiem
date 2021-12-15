@@ -19,4 +19,6 @@ export default {
     global.$http.post('/api/Document/add-question-document', data),
   deleteQuestionDocument: (data) =>
     global.$http.delete('/api/Document/delete-question-document', data),
+  updateQuestionDocument: (data) =>
+    global.$http.post('/api/Document/update-document', data),
 }

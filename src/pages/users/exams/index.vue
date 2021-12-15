@@ -89,13 +89,7 @@
             />
           </b-form-group>
           <div
-            class="
-              col-12 col-md-3
-              mb-3
-              d-flex
-              justify-content-around
-              align-items-end
-            "
+            class="col-12 col-md-3 mb-3 d-flex justify-content-around align-items-end"
           >
             <b-button variant="outline-primary" @click="fetch()">
               <b-icon-filter></b-icon-filter> {{ $t('exam.filter') }}

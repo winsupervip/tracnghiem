@@ -36,6 +36,7 @@
   "publish": "Xuất bản",
   "share": "Chia sẻ",
   "documentation": "Tài liệu tham khảo",
+  "editDocument":"chỉnh sửa tài liệu",
   "statistic": "Thống kê",
   "delete": "Xóa",
   "search": "Tìm kiếm",
@@ -45,6 +46,7 @@
   "preview":"Xem trước",
   "searchDocument": "Tìm kiếm tài liệu",
   "typeOfDocument":"Loại tài liệu",
+  "pleaseFillInTheDocumentType":"Bắt buộc nhập loại tài liệu",
   "content":"Nội Dung",
   "nameOfDocument":"Tên tài liệu",
   "addToQuestionDocument":"thêm vào tài liệu câu hỏi",
@@ -243,7 +245,8 @@
     "00011110": "Token đã tồn tại",
     "00011111": "Mật khẩu mới phải khác mật khẩu hiện tại",
     "00100010": "Vui lòng đính kèm ít nhất 1 tệp tin minh chứng trước khi gửi duyệt",
-    "405": "HTTP 405 - Method Not Allowed"
+    "405": "HTTP 405 - Method Not Allowed",
+    "01001101":"Trùng Dữ Liệu"
   },
   "admin": {
     "dashboard":"Trang tổng quan",
