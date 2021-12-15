@@ -177,7 +177,7 @@
       "draft": "Chỉ có bạn mới có thể xem đề thi này.",
       "slug": "Đường dẫn",
       "tagHelper": "Nhập tối thiểu 1 thẻ, tối đa 5 thẻ",
-      "tagHolder": "Nhập ít nhất 2 ký tự"
+      "tagHolder": "Mỗi thẻ cần ít nhất 2 ký tự"
     },
     "edit": "Cập nhật",
     "questions": {

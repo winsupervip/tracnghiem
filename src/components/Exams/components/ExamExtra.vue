@@ -176,9 +176,9 @@ export default defineComponent({
     const { $loader, $logger } = useContext()
     const data = reactive({
       image: '',
-      payementTypeId: 0,
-      statusId: 0,
-      levelId: 0,
+      payementTypeId: 1,
+      statusId: 1,
+      levelId: 1,
       seoTitle: '',
       seoDescription: '',
       slug: '',
