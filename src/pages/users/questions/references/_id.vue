@@ -37,113 +37,12 @@
             {{ data.index + 1 }}
           </template>
         </b-table>
+        <UpdateQuestionDocument
+          :update-question-document="updateQuestionDocument"
+          :get-question-document="getQuestionDocument"
+        />
       </b-card>
     </div>
-    <b-modal
-      id="modal-edit"
-      ref="modal"
-      :title="$t('editDocument')"
-      hide-footer
-      size="lg"
-      @shown="showModal"
-      @hide="hideModal"
-    >
-      <ValidationObserver ref="form">
-        <b-form>
-          <ValidationProvider
-            rules="required"
-            :name="$t('pleaseFillInTheDocumentType')"
-          >
-            <b-form-group
-              slot-scope="{ valid, errors }"
-              :label="$t('typeOfDocument') + ' (*)'"
-              class="mb-3"
-            >
-              <treeselect
-                v-model="updateQuestionDocument.documentTypeId"
-                :options="documentType"
-                size="xl"
-                :load-options="loadOptions"
-                :placeholder="$t('typeOfDocument')"
-              />
-              <b-form-invalid-feedback :state="valid">
-                {{ errors ? errors[0] : '' }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </ValidationProvider>
-          <ValidationProvider name="Tên tài liệu" rules="required|max:255">
-            <b-form-group
-              slot-scope="{ valid, errors }"
-              label="Tên tài liệu (*)"
-              class="mb-3"
-            >
-              <b-form-input
-                v-model="updateQuestionDocument.documentName"
-                type="text"
-                :state="errors[0] ? false : valid ? true : null"
-              ></b-form-input>
-              <b-form-invalid-feedback>
-                {{ errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </ValidationProvider>
-          <ValidationProvider rules="max:1000" name="Nội dung">
-            <b-form-group
-              v-if="updateQuestionDocument.documentTypeId === 1"
-              slot-scope="{ valid, errors }"
-              label="Nội dung (*)"
-            >
-              <TinyEditor
-                v-model="updateQuestionDocument.documentContent"
-                :state="errors[0] ? false : valid ? true : null"
-              ></TinyEditor>
-              <b-form-invalid-feedback id="inputLiveFeedback">
-                {{ errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </ValidationProvider>
-          <ValidationProvider rules="max:1000" name="Nội dung">
-            <b-form-group
-              v-if="updateQuestionDocument.documentTypeId === 2"
-              slot-scope="{ valid, errors }"
-              label="Nội dung (*)"
-            >
-              <b-form-input
-                v-model="updateQuestionDocument.documentContent"
-                trim
-                type="text"
-                :placeholder="$t('search')"
-                autocomplete="off"
-                :state="errors[0] ? false : valid ? true : null"
-              ></b-form-input>
-              <b-form-invalid-feedback id="inputLiveFeedback">
-                {{ errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </ValidationProvider>
-          <ValidationProvider rules="max:1000" name="Nội dung">
-            <b-form-group
-              v-if="updateQuestionDocument.documentTypeId === 3"
-              slot-scope="{ valid, errors }"
-              label="Nội dung (*)"
-            >
-              <b-form-textarea
-                id="note"
-                v-model="updateQuestionDocument.documentContent"
-                :state="errors[0] ? false : valid ? true : null"
-              ></b-form-textarea>
-              <b-form-invalid-feedback id="inputLiveFeedback">
-                {{ errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </ValidationProvider>
-          <footer class="modal-footer">
-            <button type="button" class="btn btn-secondary">Hủy Bỏ</button>
-            <button type="button" class="btn btn-primary">Lưu</button>
-          </footer>
-        </b-form>
-      </ValidationObserver>
-    </b-modal>
   </div>
 </template>
 
@@ -159,9 +58,10 @@ import {
 import DocumentApi from '../../../../api/documentApi'
 
 import QuestionApi from '@/api/question-list-page'
+import UpdateQuestionDocument from '@/components/Document/UpdateQuestionDocument.vue'
 import DocumentByUser from '@/components/Document/DocumentByUser.vue'
 export default defineComponent({
-  components: { DocumentByUser },
+  components: { DocumentByUser, UpdateQuestionDocument },
   layout: 'dashboard',
   auth: true,
   setup() {
@@ -260,50 +160,14 @@ export default defineComponent({
     loadOptions({ callback }) {
       callback()
     },
-
-    async addDocument(documentValue) {
-      try {
-        const { data } = await DocumentApi.addDocument(documentValue)
-        this.getDocumentByUser()
-        this.hideModal('bv-modal-add-user-references')
-        this.documentValue = {
-          document: {
-            hashId: '',
-            documentName: '',
-            documentContent: '',
-            documentTypeId: 2,
-          },
-        }
-        this.$handleError(data)
-      } catch (err) {
-        this.$handleError(err, () => {
-          console.log(err)
-        })
-      }
+    updateDocument(val) {
+      this.updateQuestionDocument = val
     },
-
     deleteQuestionDocument(documentId) {
       console.log(
         '🚀 ~ file: _id.vue ~ line 278 ~ deleteQuestionDocument ~ documentId',
         documentId
       )
-      // const questionDocument = {
-      //   hashIdQuestion: this.hashIdQuestion,
-      //   hashIdDocument: documentId,
-      //   typeId: this.typeId,
-      // }
-      // console.log(this.questionDocument)
-      // try {
-      //   const { data } = await DocumentApi.deleteQuestionDocument(
-      //     questionDocument
-      //   )
-      //   this.getQuestionDocument()
-      //   this.$handleError(data)
-      // } catch (err) {
-      //   this.$handleError(err, () => {
-      //     console.log(err)
-      //   })
-      // }
     },
   },
 })

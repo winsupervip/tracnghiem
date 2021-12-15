@@ -1,5 +1,6 @@
 <template>
   <b-modal id="modal-update-document-by-user" hide-footer size="lg">
+    {{ document }}
     <ValidationObserver>
       <b-form>
         <ValidationProvider rules="required" :name="$t('typeOfDocument')">
@@ -9,7 +10,7 @@
             :label="$t('typeOfDocument') + ' (*)'"
           >
             <treeselect
-              v-model="documentUserUpdate.documentTypeId"
+              v-model="document.documentTypeId"
               :options="documentType"
               size="xl"
               :load-options="loadOptions"
@@ -27,7 +28,7 @@
             :label="$t('nameOfDocument') + ' (*)'"
           >
             <b-form-input
-              v-model="documentUserUpdate.documentName"
+              v-model="document.documentName"
               trim
               type="text"
               :placeholder="$t('nameOfDocument')"
@@ -39,23 +40,21 @@
           </b-form-group>
         </ValidationProvider>
 
-        <div v-if="documentUserUpdate.documentTypeId == 1" class="d-block">
+        <div v-if="document.documentTypeId == 1" class="d-block">
           <ValidationProvider rules="required" :name="$t('content')">
             <b-form-group
               slot-scope="{ valid, errors }"
               class="mb-1"
               :label="$t('content') + ' (*)'"
             >
-              <TinyEditor
-                v-model="documentUserUpdate.documentContent"
-              ></TinyEditor>
+              <TinyEditor v-model="document.documentContent" />
               <b-form-invalid-feedback :state="valid">{{
                 errors[0]
               }}</b-form-invalid-feedback>
             </b-form-group>
           </ValidationProvider>
         </div>
-        <div v-if="documentUserUpdate.documentTypeId == 2">
+        <div v-if="document.documentTypeId == 2">
           <ValidationProvider rules="required" :name="$t('content')">
             <b-form-group
               slot-scope="{ valid, errors }"
@@ -63,7 +62,7 @@
               :label="$t('content') + ' (*)'"
             >
               <b-form-input
-                v-model="documentUserUpdate.documentContent"
+                v-model="document.documentContent"
                 trim
                 type="text"
                 :placeholder="$t('search')"
@@ -75,7 +74,7 @@
             </b-form-group>
           </ValidationProvider>
         </div>
-        <div v-if="documentUserUpdate.documentTypeId == 3" class="d-flex">
+        <div v-if="document.documentTypeId == 3" class="d-flex">
           <ValidationProvider rules="required" :name="$t('content')">
             <b-form-group
               slot-scope="{ valid, errors }"
@@ -84,7 +83,7 @@
             >
               <textarea
                 id="embed-code"
-                v-model="documentUserUpdate.documentContent"
+                v-model="document.documentContent"
                 rows="6"
                 cols="89"
               >
@@ -97,9 +96,12 @@
           </ValidationProvider>
         </div>
         <div class="d-flex justify-content-around mt-3">
-          <b-button variant="outline-primary btn-md" block @click="test()">{{
-            $t('save')
-          }}</b-button>
+          <b-button
+            variant="outline-primary btn-md"
+            block
+            @click="updateUserDocument()"
+            >{{ $t('save') }}</b-button
+          >
           <b-button
             variant="outline-primary btn-md "
             block
@@ -127,12 +129,16 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    getDocumentByUser: {
+      type: Function,
+      required: true,
+    },
   },
-  setup(props) {
+  setup() {
     const { $loader } = useContext()
     const data = reactive({
-      documentUserUpdate: props.documentUserUpdateValue,
       documentType: [],
+      document: {},
     })
     const { fetch } = useFetch(async () => {
       $loader()
@@ -144,13 +150,34 @@ export default defineComponent({
       ...toRefs(data),
     }
   },
+  watch: {
+    documentUserUpdateValue(val) {
+      this.document = val
+    },
+  },
   methods: {
     loadOptions({ callback }) {
       callback()
     },
-    test() {
-      console.log('123456789', this.documentUserUpdateValue)
-      console.log('000000000', this.documentUserUpdate)
+    async updateUserDocument() {
+      const documentUpdateValue = {
+        document: {
+          hashId: this.document.hashId,
+          documentName: this.document.documentName,
+          documentContent: this.document.documentContent,
+          documentTypeId: this.document.documentTypeId,
+        },
+      }
+      try {
+        const { data } = await DocumentApi.updateDocument(documentUpdateValue)
+        this.getDocumentByUser()
+
+        this.$handleError(data)
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
     },
   },
 })

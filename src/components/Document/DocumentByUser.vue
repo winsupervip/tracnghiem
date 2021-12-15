@@ -73,7 +73,7 @@
             <template #button-content>
               <b-icon-three-dots></b-icon-three-dots>
             </template>
-            <b-dropdown-item @click="addToQuestionDocument(document.hashId)"
+            <b-dropdown-item @click="addToQuestionDocument(data.item.hashId)"
               ><b-icon-plus-circle></b-icon-plus-circle>
               {{ $t('addToQuestionDocument') }}
             </b-dropdown-item>
@@ -97,6 +97,7 @@
       </b-table>
       <UpdateDocumentByUser
         :document-user-update-value="documentUserUpdateValue"
+        :get-document-by-user="getDocumentByUser"
       />
       <b-pagination
         v-model="urlQuery.page"
