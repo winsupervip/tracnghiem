@@ -67,12 +67,12 @@ export default {
       target: '/ho-tro',
     },
     {
-      name: 'Điều khoản',
-      target: '/dieu-khoan',
+      name: 'Chính sách bảo mật',
+      target: '/privacy',
     },
     {
-      name: 'Góp ý',
-      target: '/gop-y',
+      name: 'Điều khoản dịch vụ',
+      target: '/terms',
     },
     {
       name: 'Đóng góp câu hỏi',
