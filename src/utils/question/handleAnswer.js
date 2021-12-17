@@ -123,8 +123,6 @@ const fillBlank = (values) => {
     errors: '',
     data: [],
   }
-  let countRigthAnswers = 0
-  let sumRight = 0
 
   if (values.answers.length < 2) {
     result.errors = 'Loại câu hỏi này phải có ít nhất 2 câu trả lời'
@@ -136,7 +134,7 @@ const fillBlank = (values) => {
     console.log('chay vo day')
     return result
   }
-
+  const position = []
   values.answers.forEach((item) => {
     const data = {
       position: item.position,
@@ -147,14 +145,14 @@ const fillBlank = (values) => {
       answerContent: item.answerContent,
     }
     if (item.rightAnswer !== -1) {
-      sumRight += item.rightAnswer
-      countRigthAnswers += 1
+      position.push(item.rightAnswer)
     }
     result.data.push(data)
   })
-  const checkSum = (countRigthAnswers + 1) * (countRigthAnswers / 2)
-
-  if (sumRight !== checkSum) {
+  console.log(position)
+  const checkPosition = [...new Set(position)]
+  console.log(checkPosition)
+  if (checkPosition.length !== position.length) {
     result.errors = 'Ví trí điền đang bị trùng'
   }
 
