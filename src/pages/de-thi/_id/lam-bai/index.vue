@@ -142,7 +142,7 @@
             <div class="card do-exam-box">
               <div class="text-green do-exam-timer mb-4">
                 <i class="icon-clock" />
-                <strong>01:30:00</strong>
+                <strong>{{ timeRemaining }}</strong>
               </div>
               <div class="list-type-question">
                 <ul class="list-unstyled">
@@ -186,18 +186,7 @@
                   class="filter-group-body"
                 >
                   <div class="list-question-menu">
-                    <!-- <b-btn>1</b-btn>
-                    <b-btn class="tick">2</b-btn>
-                    <b-btn class="answered">3</b-btn>
-                    <b-btn>4</b-btn>
-                    <b-btn class="not-answered">5</b-btn> -->
-                    <!--
-                    :class="
-                          (questionItem.id == item.id ? 'tick' : '') ||
-                          (questionItem.status !== 0 ? 'answered' : '')
-                        " -->
                     <template v-for="(item, index) in itemQuestions">
-                      <!-- :data-id="item.id" -->
                       <b-btn
                         :key="`question${item.id}`"
                         v-model="indexQuestionChoose"
@@ -245,15 +234,20 @@
                 <ViewQuestion
                   :question="questionItem"
                   :user-answer="userAnswer"
-                ></ViewQuestion>
+                />
               </div>
               <template #footer>
-                <b-btn variant="outline"> Xem đáp án </b-btn>
-                <b-btn variant="outline">
+                <b-btn
+                  v-if="examSettings.showRightAnswerAfterSubmit"
+                  variant="outline"
+                >
+                  Xem đáp án
+                </b-btn>
+                <b-btn variant="outline" @click="prevQuestion()">
                   <i class="icon-arrow-left me-2"></i>
                   Câu trước
                 </b-btn>
-                <b-btn variant="outline">
+                <b-btn variant="primary" @click="nextQuestion()">
                   Câu sau
                   <i class="icon-arrow-right ms-2"></i>
                 </b-btn>
@@ -290,7 +284,6 @@ import {
 // import ExamApi from '@/api/examApi'
 import QuizApi from '@/api/quizApi'
 import ViewQuestion from '@/components/Question/Display/ViewQuestion.vue'
-
 export default defineComponent({
   components: {
     ViewQuestion,
@@ -298,7 +291,7 @@ export default defineComponent({
   layout: 'default',
   auth: false,
   setup() {
-    const { app, $loader, $logger } = useContext()
+    const { $handleError, $loader, $logger } = useContext()
 
     const route = useRoute()
     const quizId = computed(() => route.value.query.quizId)
@@ -326,24 +319,7 @@ export default defineComponent({
       ],
       showListQuestionMenu: true,
       bookmarkQuestion: false,
-      listAnswer: [
-        {
-          text: 'A. Deciding one own strategy in a game according to the strategy of the opponent',
-          value: 'a',
-        },
-        {
-          text: 'B. Deciding one own strategy in a game according to the strategy of the opponent',
-          value: 'b',
-        },
-        {
-          text: 'B. Deciding one own strategy in a game according to the strategy of the opponent',
-          value: 'a',
-        },
-        {
-          text: 'A. Deciding one own strategy in a game according to the strategy of the opponent',
-          value: 'a',
-        },
-      ],
+      listAnswer: [],
       expandHeading: false,
       selectedBookmark: [],
       optionsBookmark: [
@@ -389,18 +365,71 @@ export default defineComponent({
       },
       indexQuestionChoose: null,
       quizId: null,
+      examSettings: {},
+      timeRemaining: '00:00:00',
+      timer: null,
     })
     const idExam = computed(() => route.value.params.id)
     data.idExam = idExam.value
     data.quizId = quizId.value
+    const clearClock = () => {
+      if (data.timer) {
+        console.log('clear Clock')
+        clearInterval(data.timer)
+        data.timer = null
+      }
+    }
+    const createClock = (time) => {
+      clearClock()
+      const countDownDate = new Date().getTime() + Number(time * 1000)
+      data.timer = setInterval(function () {
+        // Get today's date and time
+        const now = new Date().getTime()
+
+        // Find the distance between now and the count down date
+        const distance = countDownDate - now
+
+        // Time calculations for days, hours, minutes and seconds
+        // const days =
+        //   Math.floor(distance / (1000 * 60 * 60 * 24)) > 10
+        //     ? Math.floor(distance / (1000 * 60 * 60 * 24))
+        //     : '0' + Math.floor(distance / (1000 * 60 * 60 * 24))
+        const hours =
+          Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) > 9
+            ? Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+            : '0' +
+              Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+        const minutes =
+          Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)) > 9
+            ? Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+            : '0' + Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+        const seconds =
+          Math.floor((distance % (1000 * 60)) / 1000) > 9
+            ? Math.floor((distance % (1000 * 60)) / 1000)
+            : '0' + Math.floor((distance % (1000 * 60)) / 1000)
+
+        // Output the result in an element with id="demo"
+        data.timeRemaining = hours + ':' + minutes + ':' + seconds
+        // If the count down is over, write some text
+        if (distance < 0) {
+          clearClock()
+          // vm.disabled = true
+          data.timeRemaining = 'HẾT GIỜ'
+          // tính theo cả bài
+          // vm.endExam();
+        }
+      }, 1000)
+    }
+
     useAsync(async () => {
       $loader()
       try {
-        const { data: response } = await QuizApi.getQuestionsBeforeSubmit(
-          quizId.value
-        )
-        // eslint-disable-next-line no-undef
-        console.log('d', data)
+        const [{ data: response }, { data: quizSettingRes }] =
+          await Promise.all([
+            QuizApi.getQuestionsBeforeSubmit(quizId.value),
+            QuizApi.getQuizInfo(quizId.value),
+          ])
+        data.examSettings = quizSettingRes.object
         data.itemQuestions = response.object.items
         if (data.itemQuestions.length > 0) {
           data.indexQuestionChoose = 1
@@ -410,8 +439,10 @@ export default defineComponent({
           data.questionItem = questionItem.object
           data.userAnswer.questionId = data.questionItem.id
         }
+
+        createClock(data.examSettings.timeRemainingInSeconds)
       } catch (err) {
-        app.$handleError(err, () => {
+        $handleError(err, () => {
           $logger.info(err)
         })
       }
@@ -419,7 +450,13 @@ export default defineComponent({
     })
     return {
       ...toRefs(data),
+      clearClock,
     }
+  },
+  created() {},
+  mounted() {},
+  beforeDestroy() {
+    this.clearClock()
   },
   methods: {
     hide() {
@@ -438,38 +475,43 @@ export default defineComponent({
       const { data: questionItem } = await QuizApi.getQuestionById(id)
       this.questionItem = questionItem.object
     },
-    SubmitExam() {
-      this.submitQuestion(this.questionItem.id)
+    async SubmitExam() {
+      await QuizApi.submitQuiz(this.quizId)
       this.$router.push({
-        path: `/de-thi/${this.idExam}/ket-qua`,
+        path: `/de-thi/${this.idExam}/ket-qua?quizId=${this.quizId}`,
       })
     },
     async submitQuestion(questionId) {
       if (this.userAnswer.userChoices.length > 0) {
         this.userAnswer.questionId = questionId
         try {
-          const { data } = await QuizApi.submitQuestion(this.userAnswer)
-          // this.$handleError(data)
-          console.log('submitQuestion', data)
+          await QuizApi.submitQuestion(this.userAnswer)
         } catch (err) {
-          // this.$handleError(err, () => {
-          //   console.log(err)
-          // })
+          this.$handleError(err, () => {
+            console.log(err)
+          })
         }
-
-        // try {
-        //   const { data: response } = await QuizApi.getQuestionsBeforeSubmit(
-        //     this.quizId
-        //   )
-        //   // eslint-disable-next-line no-undef
-        //   console.log('d', data)
-        //   this.itemQuestions = response.object.items
-        // } catch (err) {
-        //   // this.$handleError(err, () => {
-        //   //   console.log(err)
-        //   // })
-        // }
       }
+    },
+    nextQuestion() {
+      let currentIndex = this.indexQuestionChoose - 1
+      const total = this.itemQuestions.length
+      if (currentIndex < total - 1) {
+        currentIndex++
+      } else {
+        currentIndex = 0
+      }
+      this.chooseQuestion(this.itemQuestions[currentIndex].id, currentIndex)
+    },
+    prevQuestion() {
+      let currentIndex = this.indexQuestionChoose - 1
+      const total = this.itemQuestions.length
+      if (currentIndex > 0) {
+        currentIndex--
+      } else {
+        currentIndex = total - 1
+      }
+      this.chooseQuestion(this.itemQuestions[currentIndex].id, currentIndex)
     },
   },
 })
