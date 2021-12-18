@@ -296,7 +296,7 @@ export default defineComponent({
     ViewQuestion,
   },
   layout: 'default',
-  auth: true,
+  auth: false,
   setup() {
     const { app, $loader, $logger } = useContext()
 

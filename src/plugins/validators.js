@@ -14,6 +14,8 @@ import {
   length,
   // eslint-disable-next-line camelcase
   alpha_num,
+  // eslint-disable-next-line camelcase
+  alpha_spaces,
 } from 'vee-validate/dist/rules'
 import { messages } from 'vee-validate/dist/locale/vi.json'
 
@@ -60,6 +62,12 @@ extend('alpha_num', {
   message: messages.alpha_num,
 })
 
+extend('alpha_spaces', {
+  // eslint-disable-next-line camelcase
+  ...alpha_spaces,
+  message: messages.alpha_spaces,
+})
+
 extend('integer', {
   ...integer,
   message: messages.integer,
@@ -80,6 +88,17 @@ const paramNames = ['min', 'max']
 extend('arr_len', validArrayLength, {
   paramNames, //  pass it in the extend options.
   message: (field, [a, b]) => 'The {_field_} field must be {min} {max} long',
+})
+
+const validFullName = (value) => {
+  const tester = /[`~!@#$%^&*()_|+\-=?;:'",.<>\\{\\}\\[\]\\\\/]/g
+  const isMatch = tester.test(String(value))
+  return !isMatch
+}
+
+extend('fullName', validFullName, {
+  paramNames, //  pass it in the extend options.
+  message: (field) => '{_field_} chỉ gồm ký tự A-Z và số',
 })
 
 Vue.component('ValidationObserver', ValidationObserver)

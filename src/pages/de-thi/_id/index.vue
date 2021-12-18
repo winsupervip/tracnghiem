@@ -410,25 +410,68 @@
         </b-row>
       </b-container>
     </section>
-    <b-modal id="modal-start-exam" class="modal-common" hide-footer centered>
-      <div class="text-center mb-4">
-        <img class="mb-3" src="/images/bot-icon.svg" alt="bot" />
-        <b-form-textarea
-          id="textarea"
-          v-model="description"
-          placeholder="Mô tả..."
-          rows="3"
-          max-rows="6"
-        ></b-form-textarea>
-        <!-- <div class="font-bold text-lmd mb-3">
-          Vui lòng xác nhận bạn không phải là robot
-        </div>
-        <img class="" src="/images/gcaptcha.png" alt="captcha" /> -->
-      </div>
-      <div class="modal-footer-common">
-        <b-btn variant="outline" @click="hide()"> Hủy bỏ </b-btn>
-        <b-btn variant="primary" @click="StartExam()"> Bắt đầu </b-btn>
-      </div>
+    <b-modal
+      id="modal-start-exam"
+      class="modal-common"
+      hide-footer
+      title="Thông tin thí sinh"
+    >
+      <ValidationObserver v-slot="{ handleSubmit }">
+        <b-form class="exam-form" @submit.prevent="handleSubmit(StartExam)">
+          <div class="mb-4">
+            <ValidationProvider
+              name="Họ và tên"
+              rules="required|fullName|max:255"
+            >
+              <b-form-group slot-scope="{ valid, errors }" class="mb-2">
+                <b-form-input
+                  v-model="userInformation.fullName"
+                  placeholder="Họ và tên (*)"
+                  trim
+                  :state="errors[0] ? false : valid ? true : null"
+                ></b-form-input>
+                <b-form-invalid-feedback>
+                  {{ errors[0] }}
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </ValidationProvider>
+            <ValidationProvider name="Email" rules="email|max:255">
+              <b-form-group slot-scope="{ valid, errors }" class="mb-2">
+                <b-form-input
+                  v-model="userInformation.email"
+                  placeholder="Email"
+                  trim
+                  :state="errors[0] ? false : valid ? true : null"
+                ></b-form-input>
+                <b-form-invalid-feedback>
+                  {{ errors[0] }}
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </ValidationProvider>
+            <ValidationProvider name="Thông tin khác" rules="max:1000">
+              <b-form-group slot-scope="{ errors }" class="mb-2">
+                <b-form-textarea
+                  v-model="userInformation.description"
+                  trim
+                  rows="3"
+                  max-rows="6"
+                  placeholder="Thông tin khác"
+                ></b-form-textarea>
+                <b-form-invalid-feedback>
+                  {{ errors[0] }}
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </ValidationProvider>
+            <recaptcha />
+          </div>
+          <div class="modal-footer-common d-flex justify-content-center">
+            <b-btn variant="outline" class="me-3" type="button" @click="hide()">
+              Hủy bỏ
+            </b-btn>
+            <b-btn variant="primary" type="submit">Bắt đầu</b-btn>
+          </div>
+        </b-form>
+      </ValidationObserver>
     </b-modal>
   </div>
 </template>
@@ -500,7 +543,11 @@ export default defineComponent({
     return {
       idExam: this.$route.params.id || null,
       selectedBookmark: [],
-      description: '',
+      userInformation: {
+        fullName: '',
+        email: '',
+        description: '',
+      },
       configQuiz: {
         showFilterGroup1: true,
         sectionConfigIdsChecked: [],
@@ -555,11 +602,22 @@ export default defineComponent({
       console.log('configQuizData', this.configQuizData)
     },
   },
+  created() {
+    if (this.$auth.loggedIn) {
+      this.userInformation.fullName = this.$auth.user.name
+      this.userInformation.email = this.$auth.user.email
+    }
+  },
   methods: {
     hide() {
       this.$bvModal.hide('modal-start-exam')
     },
     async StartExam() {
+      const token = await this.$recaptcha.getResponse()
+      this.$logger.info('ReCaptcha token:', token)
+
+      // send token to server alongside your form data
+
       const idSlug = this.idExam
       const arr = idSlug.split('-')
       const examHashId = arr[arr.length - 1]
@@ -596,11 +654,8 @@ export default defineComponent({
           showRightAnswerAfterSubmit: this.examSettings.checkAnswersAfterTest,
         },
         settings: settingsData,
-        userInformation: {
-          fullName: this.$auth.user.name,
-          description: this.description,
-          email: this.$auth.user.email,
-        },
+        userInformation: this.userInformation,
+        googleToken: token,
       }
 
       try {
@@ -615,6 +670,8 @@ export default defineComponent({
           console.log(err)
         })
       }
+      // at the end you need to reset recaptcha
+      await this.$recaptcha.reset()
     },
   },
 })
