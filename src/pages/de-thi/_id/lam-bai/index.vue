@@ -454,18 +454,18 @@ export default defineComponent({
           // })
         }
 
-        try {
-          const { data: response } = await QuizApi.getQuestionsBeforeSubmit(
-            this.quizId
-          )
-          // eslint-disable-next-line no-undef
-          console.log('d', data)
-          this.itemQuestions = response.object.items
-        } catch (err) {
-          // this.$handleError(err, () => {
-          //   console.log(err)
-          // })
-        }
+        // try {
+        //   const { data: response } = await QuizApi.getQuestionsBeforeSubmit(
+        //     this.quizId
+        //   )
+        //   // eslint-disable-next-line no-undef
+        //   console.log('d', data)
+        //   this.itemQuestions = response.object.items
+        // } catch (err) {
+        //   // this.$handleError(err, () => {
+        //   //   console.log(err)
+        //   // })
+        // }
       }
     },
   },
