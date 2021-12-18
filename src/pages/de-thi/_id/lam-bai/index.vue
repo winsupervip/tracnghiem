@@ -269,8 +269,8 @@
         <div class="font-bold text-lmd mb-3">Xác nhận nộp bài</div>
         <p>Bạn đã hoàn thành hết bài thi và muốn nộp bài</p>
       </div>
-      <div class="modal-footer-common">
-        <b-btn variant="outline" @click="hide()">Quay lại</b-btn>
+      <div class="modal-footer-common d-flex justify-content-center">
+        <b-btn variant="outline" class="me-3" @click="hide()">Quay lại</b-btn>
         <b-btn variant="primary" @click="SubmitExam()">Nộp bài</b-btn>
       </div>
     </b-modal>
@@ -422,6 +422,9 @@ export default defineComponent({
     }
   },
   methods: {
+    hide() {
+      this.$bvModal.hide('modal-submit-exam')
+    },
     chooseQuestion(id, index) {
       this.submitQuestion(this.questionItem.id)
       this.userAnswer = {

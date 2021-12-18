@@ -1,5 +1,6 @@
 <template>
   <div class="question-item">
+    <h3>Multiple choice</h3>
     <div
       class="question-content text-smd"
       v-html="question.questionContent"
@@ -18,7 +19,7 @@
               :checked="item.userChoice == 1"
             >
               <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
-              <div v-html="item.answerContent"></div>
+              <div class="ms-1" v-html="item.answerContent"></div>
             </b-form-checkbox>
           </li>
         </ul>
@@ -48,7 +49,7 @@ export default defineComponent({
   setup() {},
   data() {
     return {
-      selected: null,
+      selected: [],
     }
   },
   computed: {

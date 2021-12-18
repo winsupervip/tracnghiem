@@ -17,7 +17,7 @@
               :value="item.hashId"
             >
               <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
-              <div v-html="item.answerContent"></div>
+              <div class="ms-1" v-html="item.answerContent"></div>
             </b-form-radio>
           </li>
         </ul>
