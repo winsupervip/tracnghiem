@@ -29,4 +29,20 @@ export default {
     const url = `/api/v1/Quiz/question/${questionId}/right-answer`
     return global.$http.get(url)
   },
+  summarizeResult(quizId) {
+    const url = `/api/v1/Quiz/summarize-quiz-result?quizId=${quizId}`
+    return global.$http.get(url)
+  },
+  analysisResult(quizId) {
+    const url = `/api/v1/Quiz/analysis-quiz?QuizId=${quizId}`
+    return global.$http.get(url)
+  },
+  getQuestionsAfterSubmit(quizId) {
+    const url = `/api/v1/Quiz/get-questions-after-submit?quizId=${quizId}`
+    return global.$http.get(url)
+  },
+  checkQuizProcess(examId) {
+    const url = `/api/v1/Quiz/check-quiz-progress?examHashId=${examId}`
+    return global.$http.get(url)
+  },
 }

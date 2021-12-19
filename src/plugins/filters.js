@@ -40,3 +40,8 @@ Vue.filter('slugify', function (value, separator = '-') {
 Vue.filter('displayName', function (value, separator = '-') {
   //
 })
+
+Vue.filter('date', function (value) {
+  const inputTime = moment(value).locale('vi')
+  return inputTime.format('DD/MM/YYYY')
+})

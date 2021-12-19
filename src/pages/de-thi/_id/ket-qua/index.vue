@@ -141,7 +141,7 @@
           <b-col md="12" lg="4" xl="4" class="do-exam-wrapper">
             <div class="card do-exam-box">
               <div class="do-exam-timer mb-3">
-                <strong class="text-green">70</strong>
+                <strong class="text-green">{{ summaryQuiz.quizScore }}</strong>
                 <span class="ms-2 text-black font-smd">điểm</span>
               </div>
               <div class="list-type-question">
@@ -158,11 +158,15 @@
               </div>
               <div class="row mb-2">
                 <div class="col col-6 text-center d-flex flex-column">
-                  <strong class="text-green font-md">70</strong>
+                  <strong class="text-green font-md">{{
+                    summaryQuiz.numCorrectQuestions
+                  }}</strong>
                   <span>câu đúng</span>
                 </div>
                 <div class="col col-6 text-center d-flex flex-column">
-                  <strong class="text-red font-md">30</strong>
+                  <strong class="text-red font-md">{{
+                    summaryQuiz.numIncorrectQuestions
+                  }}</strong>
                   <span>câu sai</span>
                 </div>
               </div>
@@ -188,121 +192,23 @@
                   class="filter-group-body"
                 >
                   <div class="list-question-menu">
-                    <b-btn class="true">1</b-btn>
-                    <b-btn class="true">2</b-btn>
-                    <b-btn class="false">3</b-btn>
-                    <b-btn class="true">4</b-btn>
-                    <b-btn class="false">5</b-btn>
-                    <b-btn class="false">6</b-btn>
-                    <b-btn class="true">7</b-btn>
-                    <b-btn class="true">8</b-btn>
-                    <b-btn class="true">9</b-btn>
-                    <b-btn class="true">10</b-btn>
-                    <b-btn class="true">11</b-btn>
-                    <b-btn class="true">12</b-btn>
-                    <b-btn class="true">13</b-btn>
-                    <b-btn class="true">14</b-btn>
-                    <b-btn class="true">15</b-btn>
-                    <b-btn class="true">16</b-btn>
-                    <b-btn class="true">17</b-btn>
-                    <b-btn class="true">18</b-btn>
-                    <b-btn class="true">19</b-btn>
-                    <b-btn class="true">20</b-btn>
-                    <b-btn class="true">21</b-btn>
-                    <b-btn class="false">22</b-btn>
-                    <b-btn class="true">23</b-btn>
-                    <b-btn class="true">24</b-btn>
-                    <b-btn class="true">25</b-btn>
-                    <b-btn class="true">26</b-btn>
-                    <b-btn class="true">27</b-btn>
-                    <b-btn class="true">28</b-btn>
-                    <b-btn class="true">29</b-btn>
-                    <b-btn class="true">30</b-btn>
+                    <template v-for="(item, index) in itemQuestions">
+                      <b-btn :key="index" :class="getColorOfQuestion(item)">{{
+                        item.sortOrder
+                      }}</b-btn>
+                    </template>
                   </div>
                 </b-collapse>
               </div>
             </div>
           </b-col>
           <b-col md="12" lg="8" xl="8" class="exam-main-content">
-            <b-card
-              class="card-question"
-              header-tag="header"
-              footer-tag="footer"
-            >
-              <template #header>
-                <div
-                  class="d-flex justify-content-between card-question-header"
-                >
-                  <div class="font-bold">Câu 1</div>
-                  <b-form-checkbox
-                    id="checkbox-bookmark"
-                    v-model="bookmarkQuestion"
-                    name="checkbox-bookmark"
-                    :value="true"
-                    :unchecked-value="false"
-                  >
-                    Đánh dấu
-                  </b-form-checkbox>
-                </div>
-              </template>
-              <div class="list-question mb-4">
-                <div class="question-item">
-                  <div class="question-content text-smd">
-                    Which of the following lists all and only the appropriate
-                    descriptions about a 32-bit CPU and a 64-bit CPU? I When a
-                    32-bit CPU and a 64-bit CPU are compared, a 64-bit CPU has a
-                    larger theoretical maximum memory space.. II There is no
-                    32-bit OS that runs on a PC with a 64-bit CPU. III In terms
-                    of the read and write speed of a USB memory, the speed of a
-                    PC with a 64-bit CPU is twice as fast as that of a PC with a
-                    32-bit CPU.
-                  </div>
-                  <div class="question-item-answer">
-                    <div class="answer-head">
-                      <span class="font-sm text-gray">câu trả lời</span>
-                    </div>
-                    <div class="list-answered">
-                      <ul class="list-unstyled p-0">
-                        <li class="true">
-                          <div class="check"></div>
-                          <b class="me-1">A.</b>
-                          Deciding one’s own strategy in a game according to the
-                          strategy of the opponent
-                        </li>
-                        <li class="">
-                          <div class="check"></div>
-                          <b class="me-1">B.</b>
-                          Deciding one’s own strategy in a game according to the
-                          strategy of the opponent
-                        </li>
-                        <li class="">
-                          <div class="check"></div>
-                          <b class="me-1">C.</b>
-                          Deciding one’s own strategy in a game according to the
-                          strategy of the opponent
-                        </li>
-                        <li class="false">
-                          <div class="check"></div>
-                          <b class="me-1">D.</b>
-                          Deciding one’s own strategy in a game according to the
-                          strategy of the opponent
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <template #footer>
-                <b-btn variant="outline">
-                  <i class="icon-arrow-left me-2"></i>
-                  Câu trước
-                </b-btn>
-                <b-btn variant="outline">
-                  Câu trước
-                  <i class="icon-arrow-right ms-2"></i>
-                </b-btn>
-              </template>
-            </b-card>
+            <ResultQuestion
+              :question="questionItem"
+              :settings="settings"
+              @prev="prevQuestion"
+              @next="nextQuestion"
+            />
           </b-col>
         </b-row>
         <div class="exam-information-detail card p-3">
@@ -314,19 +220,19 @@
                   <ul class="list-unstyled p-0 m-0">
                     <li class="d-flex justify-content-between mt-2">
                       <span>Thí sinh:</span>
-                      <strong>Phùng Văn Việt</strong>
+                      <strong>{{ summaryQuiz.user }}</strong>
                     </li>
                     <li class="d-flex justify-content-between mt-2">
                       <span>Thứ hạng lượt thi:</span>
-                      <strong>10</strong>
+                      <strong>{{ summaryQuiz.rank }}</strong>
                     </li>
                     <li class="d-flex justify-content-between mt-2">
                       <span>Điểm:</span>
-                      <strong>70</strong>
+                      <strong>{{ summaryQuiz.quizScore }}</strong>
                     </li>
                     <li class="d-flex justify-content-between mt-2">
                       <span>Ngày thi:</span>
-                      <strong>22-08-2021</strong>
+                      <strong>{{ summaryQuiz.quizEndTime | date }}</strong>
                     </li>
                   </ul>
                 </div>
@@ -339,33 +245,22 @@
                 </h3>
                 <div>
                   <div class="list-exam-analytic">
-                    <div class="exam-analytic-item font-smd">
-                      <strong class="item-title">Listening</strong>
+                    <div
+                      v-for="(item, index) in analysisQuiz"
+                      :key="index"
+                      class="exam-analytic-item font-smd"
+                    >
+                      <strong class="item-title">
+                        {{ item.sectionTitle || 'Tổng quát' }}
+                      </strong>
                       <div class="item-progress">
-                        <b-progress variant="success" value="54" max="100" />
+                        <b-progress
+                          variant="success"
+                          :value="item.percentage"
+                          max="100"
+                        />
                       </div>
-                      <div class="item-number">54%</div>
-                    </div>
-                    <div class="exam-analytic-item font-smd">
-                      <strong class="item-title">Reading</strong>
-                      <div class="item-progress">
-                        <b-progress variant="success" value="25" max="100" />
-                      </div>
-                      <div class="item-number">25%</div>
-                    </div>
-                    <div class="exam-analytic-item font-smd">
-                      <strong class="item-title">Writing</strong>
-                      <div class="item-progress">
-                        <b-progress variant="success" value="15" max="100" />
-                      </div>
-                      <div class="item-number">15%</div>
-                    </div>
-                    <div class="exam-analytic-item font-smd">
-                      <strong class="item-title">Speaking</strong>
-                      <div class="item-progress">
-                        <b-progress variant="success" value="6" max="100" />
-                      </div>
-                      <div class="item-number">6%</div>
+                      <div class="item-number">{{ item.percentage }}%</div>
                     </div>
                   </div>
                   <hr />
@@ -408,28 +303,92 @@
         </div>
       </b-container>
     </section>
-    <b-modal id="modal-submit-exam" class="modal-common" hide-footer centered>
-      <div class="text-center mb-4">
-        <img class="mb-3" src="/images/document.svg" alt="bot" />
-        <div class="font-bold text-lmd mb-3">Xác nhận nộp bài</div>
-        <p>Bạn đã hoàn thành hết bài thi và muốn nộp bài</p>
-      </div>
-      <div class="modal-footer-common">
-        <b-btn variant="outline" @click="hide()">Quay lại</b-btn>
-        <b-btn variant="primary" @click="SubmitExam()">Nộp bài</b-btn>
-      </div>
-    </b-modal>
   </div>
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api'
-
+import {
+  defineComponent,
+  useContext,
+  computed,
+  useRoute,
+  useAsync,
+  reactive,
+  toRefs,
+} from '@nuxtjs/composition-api'
+import QuizApi from '@/api/quizApi'
+import ResultQuestion from '@/components/Quiz/Result/ResultQuestion.vue'
 export default defineComponent({
-  components: {},
+  components: { ResultQuestion },
   layout: 'default',
   auth: false,
-  setup() {},
+  setup() {
+    const { $handleError, $loader, $logger } = useContext()
+    const route = useRoute()
+    const quizId = computed(() => route.value.query.quizId)
+    console.log('quizId', quizId.value)
+    const data = reactive({
+      itemQuestions: [],
+      analysisQuiz: [],
+      summaryQuiz: {},
+      questionItem: {},
+      userAnswer: {
+        questionId: null,
+        userChoices: [],
+      },
+      settings: {},
+    })
+
+    const getQuestionById = async (qId) => {
+      try {
+        const { data: item } = await QuizApi.getQuestionById(qId)
+        data.questionItem = item.object
+        console.log(data.questionItem)
+      } catch (err) {
+        $handleError(err, () => {
+          console.log(err)
+        })
+      }
+    }
+
+    useAsync(async () => {
+      $loader()
+      $logger.info('Get Quiz Result Data')
+      try {
+        const [
+          { data: questions },
+          { data: analysisResult },
+          { data: summaryResult },
+          { data: quizSettingRes },
+        ] = await Promise.all([
+          QuizApi.getQuestionsAfterSubmit(quizId.value),
+          QuizApi.analysisResult(quizId.value),
+          QuizApi.summarizeResult(quizId.value),
+          QuizApi.getQuizInfo(quizId.value),
+        ])
+
+        data.itemQuestions = questions.object.items
+        data.analysisQuiz = analysisResult.object.items
+        data.summaryQuiz = summaryResult.object
+        data.settings = quizSettingRes.object
+        $logger.info(data.settings)
+        // $logger.info(data.analysisQuiz)
+        // $logger.info(data.summaryQuiz)
+        const firstQuestion = data.itemQuestions[0]
+        await getQuestionById(firstQuestion.id)
+      } catch (err) {
+        $handleError(err, () => {
+          console.log(err)
+        })
+      }
+      $loader().close()
+    })
+
+    return {
+      ...toRefs(data),
+      getQuestionById,
+    }
+  },
   data() {
     return {
       ratingExam: 5,
@@ -512,10 +471,42 @@ export default defineComponent({
     }
   },
   methods: {
-    SubmitExam() {
-      this.$router.push({
-        path: `/de-thi/${this.idExam}/ket-qua`,
-      })
+    getColorOfQuestion(question) {
+      if (question.isCorrect) return 'true'
+      return 'false'
+    },
+    async prevQuestion($evt) {
+      let currentIndex = $evt
+      const total = this.itemQuestions.length
+      console.log(total)
+      if (currentIndex > 2) {
+        currentIndex--
+      } else {
+        currentIndex = total
+      }
+      await this.getQuestionBySortOrder(currentIndex)
+    },
+    async nextQuestion($evt) {
+      let currentIndex = $evt
+      const total = this.itemQuestions.length
+      console.log(total)
+      if (currentIndex < total) {
+        currentIndex++
+      } else {
+        currentIndex = 1
+      }
+      await this.getQuestionBySortOrder(currentIndex)
+    },
+    async getQuestionBySortOrder(currentIndex) {
+      console.log(currentIndex)
+      const questions = this.itemQuestions.filter(
+        (x) => x.sortOrder === currentIndex
+      )
+      console.log(questions)
+      if (questions) {
+        const qId = questions[0].id
+        await this.getQuestionById(qId)
+      }
     },
   },
 })

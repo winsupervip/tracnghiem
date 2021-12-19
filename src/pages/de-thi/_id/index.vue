@@ -390,7 +390,20 @@
           </b-col>
           <b-col md="12" lg="4" class="do-exam-sidebar-wrapper">
             <div class="do-exam-sidebar text-black">
+              <div v-if="quizState.state">
+                <div class="card-do-exam card-filter mb-3">
+                  <b-btn
+                    variant="success"
+                    block
+                    class="font-lmd w-100"
+                    @click="continueQuiz"
+                  >
+                    TIẾP TỤC LÀM BÀI
+                  </b-btn>
+                </div>
+              </div>
               <ConfigQuiz
+                v-else
                 :config-quiz="configQuiz"
                 :config-quiz-data="examSettings"
                 @showModalStartExam="$bvModal.show('modal-start-exam')"
@@ -421,7 +434,7 @@
           <div class="mb-4">
             <ValidationProvider
               name="Họ và tên"
-              rules="required|fullName|max:255"
+              rules="required|fullName|max:30"
             >
               <b-form-group slot-scope="{ valid, errors }" class="mb-2">
                 <b-form-input
@@ -468,7 +481,16 @@
             <b-btn variant="outline" class="me-3" type="button" @click="hide()">
               Hủy bỏ
             </b-btn>
-            <b-btn variant="primary" type="submit">Bắt đầu</b-btn>
+            <b-overlay
+              :show="busy"
+              rounded
+              opacity="0.6"
+              spinner-small
+              spinner-variant="primary"
+              class="d-inline-block"
+            >
+              <b-btn variant="primary" type="submit">Bắt đầu</b-btn>
+            </b-overlay>
           </div>
         </b-form>
       </ValidationObserver>
@@ -481,8 +503,8 @@
 import {
   defineComponent,
   useContext,
-  // reactive,
-  // toRefs,
+  reactive,
+  toRefs,
   useRoute,
   computed,
   useAsync,
@@ -520,13 +542,22 @@ export default defineComponent({
     const idSlug = computed(() => route.value.params.id)
     const arr = idSlug.value.split('-')
     const id = arr[arr.length - 1]
-
+    const data = reactive({
+      quizState: {
+        state: false,
+        quizId: '',
+      },
+      busy: false,
+    })
     useAsync(async () => {
       $loader()
       try {
-        const { data: examData } = await ExamApi.getExamConfig(id)
-        store.dispatch('exams/setExam', examData.object)
-        // console.log('d', data)
+        const [{ data: examData }, { data: examUserState }] = await Promise.all(
+          [ExamApi.getExamConfig(id), QuizApi.checkQuizProcess(id)]
+        )
+        await store.dispatch('exams/setExam', examData.object)
+        data.quizState.state = examUserState.state
+        data.quizState.quizId = examUserState.object?.id
       } catch (err) {
         app.$handleError(err, () => {
           $logger.info(err)
@@ -535,9 +566,9 @@ export default defineComponent({
       $loader().close()
     })
 
-    // return {
-    //   ...toRefs(data),
-    // }
+    return {
+      ...toRefs(data),
+    }
   },
   data() {
     return {
@@ -554,7 +585,7 @@ export default defineComponent({
         showFilterGroup2: true,
         showFilterGroup3: true,
         selectedOptions3: [],
-        checkboxQuestionTypeAnother: false,
+        checkboxQuestionTypeAnother: true,
       },
       dataExam: {
         id: 1,
@@ -613,11 +644,7 @@ export default defineComponent({
       this.$bvModal.hide('modal-start-exam')
     },
     async StartExam() {
-      const token = await this.$recaptcha.getResponse()
-      this.$logger.info('ReCaptcha token:', token)
-
-      // send token to server alongside your form data
-
+      this.busy = true
       const idSlug = this.idExam
       const arr = idSlug.split('-')
       const examHashId = arr[arr.length - 1]
@@ -627,41 +654,57 @@ export default defineComponent({
           (item) => item.sectionHashId === x
         )
       })
-
-      // eslint-disable-next-line array-callback-return
-      // eslint-disable-next-line prefer-const
-      let settingsData = settings.map(function (x) {
+      const settingsData = settings.map(function (x) {
         return {
           sectionHashId: x.sectionHashId,
           numQuestions: x.numberQuestionsTest,
+          totalQuestion: x.totalQuestion,
         }
       })
 
       if (this.configQuiz.checkboxQuestionTypeAnother) {
-        settingsData.push({
-          sectionHashId: '',
-          numQuestions: this.examSettings.numberQuestionsTest,
-        })
+        if (this.configQuizData.questionOutsideSection > 0) {
+          settingsData.push({
+            sectionHashId: '',
+            numQuestions: this.examSettings.numberQuestionsTest,
+            totalQuestion: this.configQuizData.questionOutsideSection,
+          })
+        }
       }
 
-      const dataInitExam = {
-        quiz: {
-          examHashId,
-          timeInSeconds: this.examSettings.examTimeSecond,
-          shuffleQuestion: this.examSettings.suffleQuestions,
-          shuffleAnswer: this.examSettings.suffleAnswers,
-          showRightAnswer: this.examSettings.checkAnswersWhileTest,
-          showRightAnswerAfterSubmit: this.examSettings.checkAnswersAfterTest,
-        },
-        settings: settingsData,
-        userInformation: this.userInformation,
-        googleToken: token,
+      if (settingsData.length === 0) {
+        this.$toast.error('Vui lòng chọn số lượng câu hỏi').goAway(1500)
+        this.busy = false
+        return
+      }
+
+      // valid
+      const isValidSettingSection = settingsData.filter(
+        (x) => x.numQuestions > x.totalQuestion
+      )
+      if (isValidSettingSection && isValidSettingSection.length > 0) {
+        this.$toast.error('Vui lòng chọn số lượng câu hỏi phù hợp').goAway(1500)
+        this.busy = false
+        return
       }
 
       try {
+        // send token to server alongside your form data
+        const token = await this.$recaptcha.getResponse()
+        const dataInitExam = {
+          quiz: {
+            examHashId,
+            timeInSeconds: this.examSettings.examTimeSecond,
+            shuffleQuestion: this.examSettings.suffleQuestions,
+            shuffleAnswer: this.examSettings.suffleAnswers,
+            showRightAnswer: this.examSettings.checkAnswersWhileTest,
+            showRightAnswerAfterSubmit: this.examSettings.checkAnswersAfterTest,
+          },
+          settings: settingsData,
+          userInformation: this.userInformation,
+          googleToken: token,
+        }
         const { data } = await QuizApi.addQuiz(dataInitExam)
-        this.$handleError(data)
-        console.log('data addquiz', data)
         this.$router.push({
           path: `/de-thi/${this.idExam}/lam-bai?quizId=${data.object.data}`,
         })
@@ -670,8 +713,18 @@ export default defineComponent({
           console.log(err)
         })
       }
-      // at the end you need to reset recaptcha
-      await this.$recaptcha.reset()
+      try {
+        // at the end you need to reset recaptcha
+        await this.$recaptcha.reset()
+      } catch {
+        console.log('could not reset google captcha')
+      }
+      this.busy = false
+    },
+    continueQuiz() {
+      this.$router.push({
+        path: `/de-thi/${this.idExam}/lam-bai?quizId=${this.quizState.quizId}`,
+      })
     },
   },
 })

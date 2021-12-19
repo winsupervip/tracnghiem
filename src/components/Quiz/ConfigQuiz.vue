@@ -3,14 +3,6 @@
     <b-btn
       variant="success"
       block
-      class="font-lmd mb-3 button-do-exam button-do-exam-sp"
-      @click="$emit('showModalStartExam')"
-    >
-      BẮT ĐẦU LÀM BÀI
-    </b-btn>
-    <b-btn
-      variant="success"
-      block
       class="font-lmd mb-3 button-do-exam"
       @click="$emit('showModalStartExam')"
     >
@@ -36,6 +28,7 @@
                 :key="item.sectionHashId"
                 :value="item.sectionHashId"
                 :disabled="!allowChangeSettings"
+                :checked="true"
               >
                 <div class="d-flex justify-content-between">
                   <span>{{ item.title }}</span>
@@ -57,7 +50,10 @@
               </b-form-checkbox>
             </template>
           </b-form-checkbox-group>
-          <b-form-checkbox v-model="checkboxQuestionTypeAnother">
+          <b-form-checkbox
+            v-if="questionOutsideSection > 0"
+            v-model="checkboxQuestionTypeAnother"
+          >
             <div class="d-flex justify-content-between">
               <span>Câu hỏi khác</span>
               <div class="group-input-xs">
@@ -193,7 +189,7 @@ export default defineComponent({
   computed: {
     sectionConfigIdsChecked: {
       get() {
-        return get(this.configQuiz, 'sectionConfigIdsChecked', null)
+        return get(this.configQuiz, 'sectionConfigIdsChecked', true)
       },
       set(val) {
         // eslint-disable-next-line vue/no-mutating-props
@@ -428,6 +424,13 @@ export default defineComponent({
       },
     },
   },
+  created() {
+    const selectedSections = this.configQuizData.sectionConfig
+    if (selectedSections && selectedSections.length > 0) {
+      const sectionIds = selectedSections.map((x) => x.sectionHashId)
+      this.sectionConfigIdsChecked = sectionIds
+    }
+  },
   methods: {
     ...mapActions({
       setSectionConfig: 'exams/setSectionConfig',
@@ -437,6 +440,7 @@ export default defineComponent({
       this.setSectionConfig({ id, value })
     },
   },
+
   // watch: {
   //   sectionConfig() {
   //     this.sectionConfigData = this.sectionConfig

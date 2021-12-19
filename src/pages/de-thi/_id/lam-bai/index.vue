@@ -236,21 +236,48 @@
                 />
               </div>
               <template #footer>
-                <b-btn
-                  v-if="examSettings.showRightAnswerAfterSubmit"
-                  variant="outline"
-                  @click="getRightAnswer(questionItem.id)"
+                <b-overlay
+                  :show="busy"
+                  rounded
+                  opacity="0.6"
+                  spinner-small
+                  spinner-variant="primary"
+                  class="d-inline-block"
                 >
-                  Xem đáp án
-                </b-btn>
-                <b-btn variant="outline" @click="prevQuestion()">
-                  <i class="icon-arrow-left me-2"></i>
-                  Câu trước
-                </b-btn>
-                <b-btn variant="primary" @click="nextQuestion()">
-                  Câu sau
-                  <i class="icon-arrow-right ms-2"></i>
-                </b-btn>
+                  <b-btn
+                    v-if="examSettings.showRightAnswerAfterSubmit"
+                    variant="outline"
+                    @click="getRightAnswer(questionItem.id)"
+                  >
+                    Xem đáp án
+                  </b-btn>
+                </b-overlay>
+                <b-overlay
+                  :show="busy"
+                  rounded
+                  opacity="0.6"
+                  spinner-small
+                  spinner-variant="primary"
+                  class="d-inline-block"
+                >
+                  <b-btn variant="outline" @click="prevQuestion()">
+                    <i class="icon-arrow-left me-2"></i>
+                    Câu trước
+                  </b-btn>
+                </b-overlay>
+                <b-overlay
+                  :show="busy"
+                  rounded
+                  opacity="0.6"
+                  spinner-small
+                  spinner-variant="primary"
+                  class="d-inline-block"
+                >
+                  <b-btn variant="primary" @click="nextQuestion()">
+                    Câu sau
+                    <i class="icon-arrow-right ms-2"></i>
+                  </b-btn>
+                </b-overlay>
               </template>
             </b-card>
           </b-col>
@@ -265,8 +292,25 @@
       </div>
       <div class="modal-footer-common d-flex justify-content-center">
         <b-btn variant="outline" class="me-3" @click="hide()">Quay lại</b-btn>
-        <b-btn variant="primary" @click="SubmitExam()">Nộp bài</b-btn>
+        <b-overlay
+          :show="busy"
+          rounded
+          opacity="0.6"
+          spinner-small
+          spinner-variant="primary"
+          class="d-inline-block"
+        >
+          <b-btn variant="primary" @click="SubmitExam()">Nộp bài</b-btn>
+        </b-overlay>
       </div>
+    </b-modal>
+    <b-modal id="modal-show-answer" class="modal-common" hide-footer size="lg">
+      <ResultQuestion
+        v-if="questionRightAns"
+        :question="questionRightAns"
+        :settings="examSettings"
+        :hide-button="true"
+      />
     </b-modal>
   </div>
 </template>
@@ -285,9 +329,11 @@ import {
 // import ExamApi from '@/api/examApi'
 import QuizApi from '@/api/quizApi'
 import ViewQuestion from '@/components/Question/Display/ViewQuestion.vue'
+import ResultQuestion from '@/components/Quiz/Result/ResultQuestion.vue'
 export default defineComponent({
   components: {
     ViewQuestion,
+    ResultQuestion,
   },
   layout: 'default',
   auth: false,
@@ -370,6 +416,8 @@ export default defineComponent({
       examSettings: {},
       timeRemaining: '00:00:00',
       timer: null,
+      questionRightAns: null,
+      busy: false,
     })
     const idExam = computed(() => route.value.params.id)
     data.idExam = idExam.value
@@ -382,10 +430,12 @@ export default defineComponent({
       }
     }
     const SubmitExam = async () => {
+      data.busy = true
       await QuizApi.submitQuiz(data.quizId)
       router.push({
         path: `/de-thi/${data.idExam}/ket-qua?quizId=${data.quizId}`,
       })
+      data.busy = false
     }
     const createClock = (time) => {
       clearClock()
@@ -470,13 +520,15 @@ export default defineComponent({
     hide() {
       this.$bvModal.hide('modal-submit-exam')
     },
-    chooseQuestion(id, index) {
-      this.submitQuestion(this.questionItem.id)
+    async chooseQuestion(id, index) {
+      this.busy = true
+      await this.submitQuestion(this.questionItem.id)
       this.userAnswer = {
         questionId: null,
         userChoices: [],
       }
-      this.getQuestionById(id, index)
+      await this.getQuestionById(id, index)
+      this.busy = false
     },
     async getQuestionById(id, index) {
       this.indexQuestionChoose = index + 1
@@ -550,15 +602,17 @@ export default defineComponent({
       return 'not-answered'
     },
     async getRightAnswer(questionId) {
+      this.busy = true
       try {
         const { data } = await QuizApi.showRightAnswer(questionId)
-        console.log(data)
-        this.questionItem = data.object
+        this.questionRightAns = data.object
+        await this.$bvModal.show('modal-show-answer')
       } catch (err) {
         this.$handleError(err, () => {
           console.log(err)
         })
       }
+      this.busy = false
     },
   },
 })

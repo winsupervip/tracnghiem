@@ -1,5 +1,48 @@
 <template>
   <div>
+    <div
+      v-if="
+        question.sectionInformation &&
+        question.sectionInformation.title.length > 0
+      "
+      class="section-question question-content text-smd"
+    >
+      <strong
+        :class="
+          showFilterGroupSection
+            ? 'filter-group-header'
+            : 'filter-group-header collapsed'
+        "
+        @click="showFilterGroupSection = !showFilterGroupSection"
+      >
+        {{ question.sectionInformation.title }}
+        <i class="icon-caret-down"></i>
+      </strong>
+      <b-collapse v-model="showFilterGroupSection" class="filter-group-body">
+        <p>{{ question.sectionInformation.descrription }}</p>
+      </b-collapse>
+    </div>
+    <div
+      v-if="
+        question.groupInformation && question.groupInformation.title.length > 0
+      "
+      class="question-group question-content text-smd"
+    >
+      <strong
+        :class="
+          showFilterGroupQuestion
+            ? 'filter-group-header'
+            : 'filter-group-header collapsed'
+        "
+        @click="showFilterGroupQuestion = !showFilterGroupQuestion"
+      >
+        {{ question.groupInformation.title }}
+        <i class="icon-caret-down"></i>
+      </strong>
+      <b-collapse v-model="showFilterGroupQuestion" class="filter-group-body">
+        <p>{{ question.groupInformation.descrription }}</p>
+      </b-collapse>
+    </div>
     <component
       :is="dynamicComponent(question.questionTypeId)"
       ref="questionInExam"
@@ -42,6 +85,12 @@ export default defineComponent({
     },
   },
   setup() {},
+  data() {
+    return {
+      showFilterGroupSection: false,
+      showFilterGroupQuestion: true,
+    }
+  },
   computed: {
     dynamicComponent() {
       const listQuestionTypes = {
