@@ -6,12 +6,9 @@
 
     <div class="p-question__box__body">
       <div class="p-question__box__body__item">
+        <b class="d-block">{{ $t('title') }}</b>
         <ValidationProvider rules="required" name="Tiêu Đề SEO">
-          <b-form-group
-            slot-scope="{ valid, errors }"
-            :label="$t('title')"
-            :label-for="$t('title')"
-          >
+          <b-form-group slot-scope="{ valid, errors }" :label-for="$t('title')">
             <b-form-input
               v-model="seoTitle"
               :class="[$style.container, $style.inputF]"
@@ -25,18 +22,15 @@
             </b-form-invalid-feedback>
           </b-form-group>
         </ValidationProvider>
+        <b class="d-block">{{ $t('SEOdescription (*)') }}</b>
         <ValidationProvider rules="required" name="Mô tả SEO">
-          <b-form-group
-            slot-scope="{ valid, errors }"
-            :label="$t('SEOdescription (*)')"
-            :label-for="$t('SEOdescription (*)')"
-          >
+          <b-form-group slot-scope="{ valid, errors }">
             <b-form-textarea
               id="textarea-default"
               v-model="seoDescription"
               :placeholder="$t('SEOdescription (*)')"
               :state="errors[0] ? false : valid ? true : null"
-              :class="$style.inputF"
+              :class="[$style.container, $style.inputF]"
             ></b-form-textarea>
             <b-form-invalid-feedback id="inputLiveFeedback">
               {{ errors[0] }}

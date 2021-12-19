@@ -18,10 +18,10 @@
                     <strong>Câu {{ index + 1 }}</strong>
                   </b-col>
                   <b-col
-                    cols="8 "
+                    cols="8"
                     v-html="question.question.questionContent"
                   ></b-col>
-                  <b-col cols="2" class="matching_style">
+                  <b-col cols="2" class="d-flex justify-content-between">
                     <b-icon icon="shuffle"></b-icon>
                     <b-icon
                       v-b-modal.update-child-question
@@ -183,21 +183,43 @@ export default defineComponent({
           this.isValid = false
         }
         if (element.typeQuestion === 'single-choice') {
-          value = handler.singleChoiceAndRightWrong(element.answers)
+          value = handler.singleChoiceAndRightWrong({
+            answers: element.answers,
+            hasNoCorrectAnswer: element.question.hasNoCorrectAnswer,
+          })
         } else if (element.typeQuestion === 'short-answer') {
-          value = handler.shortAnswer(element.answers)
+          value = handler.shortAnswer({
+            answers: element.answers,
+            hasNoCorrectAnswer: element.question.hasNoCorrectAnswer,
+          })
         } else if (element.typeQuestion === 'right-wrong') {
-          value = handler.singleChoiceAndRightWrong(element.answers)
+          value = handler.singleChoiceAndRightWrong({
+            answers: element.answers,
+            hasNoCorrectAnswer: element.question.hasNoCorrectAnswer,
+          })
         } else if (element.typeQuestion === 'multiple-choice') {
-          value = handler.multipleChoice(element.answers)
+          value = handler.multipleChoice({
+            answers: element.answers,
+            hasNoCorrectAnswer: element.question.hasNoCorrectAnswer,
+          })
         } else if (element.typeQuestion === 'pairing') {
-          value = handler.matching(element.answers)
+          value = handler.matching({
+            answers: element.answers,
+            hasNoCorrectAnswer: element.question.hasNoCorrectAnswer,
+          })
         } else if (element.typeQuestion === 'fill-blank') {
-          value = handler.fillBlank(element.answers)
+          value = handler.fillBlank({
+            answers: element.answers,
+            hasNoCorrectAnswer: element.question.hasNoCorrectAnswer,
+          })
         } else if (element.typeQuestion === 'draggable') {
-          value = handler.draggable(element.answers)
+          value = handler.draggable({
+            answers: element.answers,
+            hasNoCorrectAnswer: element.question.hasNoCorrectAnswer,
+          })
         }
         const question = {}
+        question.hasNoCorrectAnswer = element.question.hasNoCorrectAnswer
         question.title = groupQuestion.question.title
         question.questionTypeId = element.question.questionTypeId
         question.questionContent = element.question.questionContent

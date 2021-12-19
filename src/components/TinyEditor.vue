@@ -13,12 +13,14 @@
 
 <script>
 // upload handler
+// eslint-disable-next-line import/no-named-as-default
+import { uuid } from 'vue-uuid'
 import uploadHandler from '@/extensions/uploadHandler'
 export default {
   name: 'TinyEditor',
   props: {
     id: {
-      default: 'tracnghiem-editor-' + new Date().getTime(),
+      default: 'tracnghiem-editor-' + uuid.v4(),
       type: String,
     },
     // eslint-disable-next-line vue/require-prop-types
@@ -40,7 +42,7 @@ export default {
   },
   data() {
     return {
-      inputId: 'tiny-editor-' + new Date().getTime(),
+      inputId: 'tiny-editor-' + uuid.v4(),
       content: '',
       editor: null,
       checkerTimeout: null,

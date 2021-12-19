@@ -105,4 +105,10 @@ export default {
   handleUpdateSelectFillBlankGroupQuestion({ commit }, data) {
     commit('HANDLE_UPDATE_SELECT_FILL_BLANK_GROUP_QUESTION', data)
   },
+  hasNoCorrectAnswerG({ commit }, data) {
+    commit('HAS_NO_CORRECT_ANSWER_G', data)
+  },
+  hasNoCorrectAnswerS({ commit }, data) {
+    commit('HAS_NO_CORRECT_ANSWER_S', data)
+  },
 }

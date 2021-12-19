@@ -141,8 +141,8 @@
           <b-col md="12" lg="4" xl="4" class="do-exam-wrapper">
             <div class="card do-exam-box">
               <div class="text-green do-exam-timer mb-4">
-                <i class="icon-timer" />
-                <strong>01:30:00</strong>
+                <i class="icon-clock" />
+                <strong>{{ timeRemaining }}</strong>
               </div>
               <div class="list-type-question">
                 <ul class="list-unstyled">
@@ -186,41 +186,15 @@
                   class="filter-group-body"
                 >
                   <div class="list-question-menu">
-                    <b-btn>1</b-btn>
-                    <b-btn class="tick">2</b-btn>
-                    <b-btn class="answered">3</b-btn>
-                    <b-btn>4</b-btn>
-                    <b-btn class="not-answered">5</b-btn>
-                    <b-btn>6</b-btn>
-                    <b-btn>7</b-btn>
-                    <b-btn>8</b-btn>
-                    <b-btn>9</b-btn>
-                    <b-btn>10</b-btn>
-                    <b-btn>11</b-btn>
-                    <b-btn>12</b-btn>
-                    <b-btn>13</b-btn>
-                    <b-btn>14</b-btn>
-                    <b-btn>15</b-btn>
-                    <b-btn>16</b-btn>
-                    <b-btn>17</b-btn>
-                    <b-btn>18</b-btn>
-                    <b-btn>19</b-btn>
-                    <b-btn>20</b-btn>
-                    <b-btn>21</b-btn>
-                    <b-btn>22</b-btn>
-                    <b-btn>23</b-btn>
-                    <b-btn>24</b-btn>
-                    <b-btn>25</b-btn>
-                    <b-btn>26</b-btn>
-                    <b-btn>27</b-btn>
-                    <b-btn>28</b-btn>
-                    <b-btn>29</b-btn>
-                    <b-btn>30</b-btn>
-                    <b-btn>31</b-btn>
-                    <b-btn>32</b-btn>
-                    <b-btn>33</b-btn>
-                    <b-btn>34</b-btn>
-                    <b-btn>35</b-btn>
+                    <template v-for="(item, index) in itemQuestions">
+                      <b-btn
+                        :key="`question${item.id}`"
+                        v-model="indexQuestionChoose"
+                        :class="getColorOfQuestion(item)"
+                        @click="chooseQuestion(item.id, index)"
+                        >{{ index + 1 }}</b-btn
+                      >
+                    </template>
                   </div>
                 </b-collapse>
               </div>
@@ -244,78 +218,66 @@
                 <div
                   class="d-flex justify-content-between card-question-header"
                 >
-                  <div class="font-bold">Câu 1</div>
+                  <div class="font-bold">Câu {{ indexQuestionChoose }}</div>
                   <b-form-checkbox
                     id="checkbox-bookmark"
-                    v-model="bookmarkQuestion"
+                    v-model="questionItem.flag"
                     name="checkbox-bookmark"
-                    :value="true"
-                    :unchecked-value="false"
+                    @change="setFlag()"
                   >
                     Đánh dấu
                   </b-form-checkbox>
                 </div>
               </template>
               <div class="list-question mb-4">
-                <div class="question-item">
-                  <div class="question-content text-smd">
-                    Which of the following lists all and only the appropriate
-                    descriptions about a 32-bit CPU and a 64-bit CPU? I When a
-                    32-bit CPU and a 64-bit CPU are compared, a 64-bit CPU has a
-                    larger theoretical maximum memory space.. II There is no
-                    32-bit OS that runs on a PC with a 64-bit CPU. III In terms
-                    of the read and write speed of a USB memory, the speed of a
-                    PC with a 64-bit CPU is twice as fast as that of a PC with a
-                    32-bit CPU.
-                  </div>
-                  <div class="question-item-answer">
-                    <div class="answer-head">
-                      <span class="font-sm text-gray">câu trả lời</span>
-                    </div>
-                    <div class="list-answer">
-                      <ul class="list-unstyled p-0">
-                        <li>
-                          <b-form-radio name="anwser-radios" value="A">
-                            <b>A.</b>
-                            Deciding one’s own strategy in a game according to
-                            the strategy of the opponent
-                          </b-form-radio>
-                        </li>
-                        <li>
-                          <b-form-radio name="anwser-radios" value="B">
-                            <b>B.</b>
-                            Deciding one’s own strategy in a game according to
-                            the strategy of the opponent
-                          </b-form-radio>
-                        </li>
-                        <li>
-                          <b-form-radio name="anwser-radios" value="C">
-                            <b>C.</b>
-                            Deciding one’s own strategy in a game according to
-                            the strategy of the opponent
-                          </b-form-radio>
-                        </li>
-                        <li>
-                          <b-form-radio name="anwser-radios" value="A">
-                            <b>D.</b>
-                            Deciding one’s own strategy in a game according to
-                            the strategy of the opponent
-                          </b-form-radio>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
+                <ViewQuestion
+                  :question="questionItem"
+                  :user-answer="userAnswer"
+                />
               </div>
               <template #footer>
-                <b-btn variant="outline">
-                  <i class="icon-arrow-left me-2"></i>
-                  Câu trước
-                </b-btn>
-                <b-btn variant="outline">
-                  Câu trước
-                  <i class="icon-arrow-right ms-2"></i>
-                </b-btn>
+                <b-overlay
+                  :show="busy"
+                  rounded
+                  opacity="0.6"
+                  spinner-small
+                  spinner-variant="primary"
+                  class="d-inline-block"
+                >
+                  <b-btn
+                    v-if="examSettings.showRightAnswerAfterSubmit"
+                    variant="outline"
+                    @click="getRightAnswer(questionItem.id)"
+                  >
+                    Xem đáp án
+                  </b-btn>
+                </b-overlay>
+                <b-overlay
+                  :show="busy"
+                  rounded
+                  opacity="0.6"
+                  spinner-small
+                  spinner-variant="primary"
+                  class="d-inline-block"
+                >
+                  <b-btn variant="outline" @click="prevQuestion()">
+                    <i class="icon-arrow-left me-2"></i>
+                    Câu trước
+                  </b-btn>
+                </b-overlay>
+                <b-overlay
+                  :show="busy"
+                  rounded
+                  opacity="0.6"
+                  spinner-small
+                  spinner-variant="primary"
+                  class="d-inline-block"
+                >
+                  <b-btn variant="primary" @click="nextQuestion()">
+                    Câu sau
+                    <i class="icon-arrow-right ms-2"></i>
+                  </b-btn>
+                </b-overlay>
               </template>
             </b-card>
           </b-col>
@@ -328,25 +290,63 @@
         <div class="font-bold text-lmd mb-3">Xác nhận nộp bài</div>
         <p>Bạn đã hoàn thành hết bài thi và muốn nộp bài</p>
       </div>
-      <div class="modal-footer-common">
-        <b-btn variant="outline" @click="hide()">Quay lại</b-btn>
-        <b-btn variant="primary" @click="SubmitExam()">Nộp bài</b-btn>
+      <div class="modal-footer-common d-flex justify-content-center">
+        <b-btn variant="outline" class="me-3" @click="hide()">Quay lại</b-btn>
+        <b-overlay
+          :show="busy"
+          rounded
+          opacity="0.6"
+          spinner-small
+          spinner-variant="primary"
+          class="d-inline-block"
+        >
+          <b-btn variant="primary" @click="SubmitExam()">Nộp bài</b-btn>
+        </b-overlay>
       </div>
+    </b-modal>
+    <b-modal id="modal-show-answer" class="modal-common" hide-footer size="lg">
+      <ResultQuestion
+        v-if="questionRightAns"
+        :question="questionRightAns"
+        :settings="examSettings"
+        :hide-button="true"
+      />
     </b-modal>
   </div>
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api'
-
+import {
+  defineComponent,
+  useContext,
+  reactive,
+  toRefs,
+  useRoute,
+  useRouter,
+  computed,
+  useAsync,
+} from '@nuxtjs/composition-api'
+// import ExamApi from '@/api/examApi'
+import QuizApi from '@/api/quizApi'
+import ViewQuestion from '@/components/Question/Display/ViewQuestion.vue'
+import ResultQuestion from '@/components/Quiz/Result/ResultQuestion.vue'
 export default defineComponent({
-  components: {},
+  components: {
+    ViewQuestion,
+    ResultQuestion,
+  },
   layout: 'default',
   auth: false,
-  setup() {},
-  data() {
-    return {
-      idExam: this.$route.params.id || null,
+  setup() {
+    const { $handleError, $loader, $logger } = useContext()
+
+    const route = useRoute()
+    const router = useRouter()
+    const quizId = computed(() => route.value.query.quizId)
+    console.log('quizId', quizId.value)
+
+    const data = reactive({
+      idExam: null,
       breadcrumbs: [
         {
           text: 'Trang chủ',
@@ -367,24 +367,7 @@ export default defineComponent({
       ],
       showListQuestionMenu: true,
       bookmarkQuestion: false,
-      listAnswer: [
-        {
-          text: 'A. Deciding one own strategy in a game according to the strategy of the opponent',
-          value: 'a',
-        },
-        {
-          text: 'B. Deciding one own strategy in a game according to the strategy of the opponent',
-          value: 'b',
-        },
-        {
-          text: 'B. Deciding one own strategy in a game according to the strategy of the opponent',
-          value: 'a',
-        },
-        {
-          text: 'A. Deciding one own strategy in a game according to the strategy of the opponent',
-          value: 'a',
-        },
-      ],
+      listAnswer: [],
       expandHeading: false,
       selectedBookmark: [],
       optionsBookmark: [
@@ -422,13 +405,214 @@ export default defineComponent({
           },
         ],
       },
+      itemQuestions: [],
+      questionItem: {},
+      userAnswer: {
+        questionId: null,
+        userChoices: [],
+      },
+      indexQuestionChoose: null,
+      quizId: null,
+      examSettings: {},
+      timeRemaining: '00:00:00',
+      timer: null,
+      questionRightAns: null,
+      busy: false,
+    })
+    const idExam = computed(() => route.value.params.id)
+    data.idExam = idExam.value
+    data.quizId = quizId.value
+    const clearClock = () => {
+      if (data.timer) {
+        console.log('clear Clock')
+        clearInterval(data.timer)
+        data.timer = null
+      }
+    }
+    const SubmitExam = async () => {
+      data.busy = true
+      await QuizApi.submitQuiz(data.quizId)
+      router.push({
+        path: `/de-thi/${data.idExam}/ket-qua?quizId=${data.quizId}`,
+      })
+      data.busy = false
+    }
+    const createClock = (time) => {
+      clearClock()
+      const countDownDate = new Date().getTime() + Number(time * 1000)
+      data.timer = setInterval(function () {
+        // Get today's date and time
+        const now = new Date().getTime()
+
+        // Find the distance between now and the count down date
+        const distance = countDownDate - now
+
+        // Time calculations for days, hours, minutes and seconds
+        // const days =
+        //   Math.floor(distance / (1000 * 60 * 60 * 24)) > 10
+        //     ? Math.floor(distance / (1000 * 60 * 60 * 24))
+        //     : '0' + Math.floor(distance / (1000 * 60 * 60 * 24))
+        const hours =
+          Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) > 9
+            ? Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+            : '0' +
+              Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+        const minutes =
+          Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)) > 9
+            ? Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+            : '0' + Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+        const seconds =
+          Math.floor((distance % (1000 * 60)) / 1000) > 9
+            ? Math.floor((distance % (1000 * 60)) / 1000)
+            : '0' + Math.floor((distance % (1000 * 60)) / 1000)
+
+        // Output the result in an element with id="demo"
+        data.timeRemaining = hours + ':' + minutes + ':' + seconds
+        // If the count down is over, write some text
+        if (distance < 0) {
+          clearClock()
+          data.timeRemaining = 'HẾT GIỜ'
+          SubmitExam()
+        }
+      }, 1000)
+    }
+
+    useAsync(async () => {
+      $loader()
+      try {
+        const [{ data: response }, { data: quizSettingRes }] =
+          await Promise.all([
+            QuizApi.getQuestionsBeforeSubmit(quizId.value),
+            QuizApi.getQuizInfo(quizId.value),
+          ])
+        data.examSettings = quizSettingRes.object
+        data.itemQuestions = response.object.items
+        if (data.itemQuestions.length > 0) {
+          data.indexQuestionChoose = 1
+          const { data: questionItem } = await QuizApi.getQuestionById(
+            data.itemQuestions[0].id
+          )
+          data.itemQuestions[0].status = 1
+          data.questionItem = questionItem.object
+          data.userAnswer.questionId = data.questionItem.id
+        }
+
+        createClock(data.examSettings.timeRemainingInSeconds)
+      } catch (err) {
+        $handleError(err, () => {
+          $logger.info(err)
+        })
+      }
+      $loader().close()
+    })
+    return {
+      ...toRefs(data),
+      clearClock,
+      SubmitExam,
     }
   },
+  created() {},
+  mounted() {},
+  beforeDestroy() {
+    this.clearClock()
+  },
   methods: {
-    SubmitExam() {
-      this.$router.push({
-        path: `/de-thi/${this.idExam}/ket-qua`,
-      })
+    hide() {
+      this.$bvModal.hide('modal-submit-exam')
+    },
+    async chooseQuestion(id, index) {
+      this.busy = true
+      await this.submitQuestion(this.questionItem.id)
+      this.userAnswer = {
+        questionId: null,
+        userChoices: [],
+      }
+      await this.getQuestionById(id, index)
+      this.busy = false
+    },
+    async getQuestionById(id, index) {
+      this.indexQuestionChoose = index + 1
+      const { data: questionItem } = await QuizApi.getQuestionById(id)
+      this.questionItem = questionItem.object
+      // update status question
+      if (this.questionItem.status === 0) {
+        this.itemQuestions[index].status = 1
+      }
+    },
+    async submitQuestion(questionId) {
+      if (this.userAnswer.userChoices.length > 0) {
+        this.userAnswer.questionId = questionId
+        try {
+          await QuizApi.submitQuestion(this.userAnswer)
+          // update status question
+          const question = this.itemQuestions.filter((x) => x.id === questionId)
+          if (question) {
+            question[0].status = 2
+          }
+        } catch (err) {
+          this.$handleError(err, () => {
+            console.log(err)
+          })
+        }
+      }
+    },
+    nextQuestion() {
+      let currentIndex = this.indexQuestionChoose - 1
+      const total = this.itemQuestions.length
+      if (currentIndex < total - 1) {
+        currentIndex++
+      } else {
+        currentIndex = 0
+      }
+      this.chooseQuestion(this.itemQuestions[currentIndex].id, currentIndex)
+    },
+    prevQuestion() {
+      let currentIndex = this.indexQuestionChoose - 1
+      const total = this.itemQuestions.length
+      if (currentIndex > 0) {
+        currentIndex--
+      } else {
+        currentIndex = total - 1
+      }
+      this.chooseQuestion(this.itemQuestions[currentIndex].id, currentIndex)
+    },
+    async setFlag() {
+      const currentIndex = this.indexQuestionChoose - 1
+      const questionId = this.itemQuestions[currentIndex].id
+      try {
+        await QuizApi.flagQuestion(questionId)
+        this.itemQuestions[currentIndex].flag =
+          !this.itemQuestions[currentIndex].flag
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
+    },
+    getColorOfQuestion(questionItem) {
+      if (questionItem.flag) {
+        return 'tick'
+      }
+      if (questionItem.status === 2) {
+        return 'answered'
+      }
+      if (questionItem.status === 0) {
+        return ''
+      }
+      return 'not-answered'
+    },
+    async getRightAnswer(questionId) {
+      this.busy = true
+      try {
+        const { data } = await QuizApi.showRightAnswer(questionId)
+        this.questionRightAns = data.object
+        await this.$bvModal.show('modal-show-answer')
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
+      this.busy = false
     },
   },
 })

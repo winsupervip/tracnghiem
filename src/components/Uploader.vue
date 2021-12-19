@@ -20,6 +20,7 @@
           </div>
           <div class="fallback">
             <input
+              id="fileupload"
               ref="fileupload"
               name="formFile"
               type="file"
@@ -68,8 +69,21 @@
     <div class="p-question__box__body">
       <div class="p-question__box__body__item">
         <p>
-          <b>Vui lòng sử dụng hình ảnh chất lượng cao để thu hút người dùng</b>
+          <b>Vui lòng tải ảnh của bạn hoặc chọn sử dụng hình ảnh bên dưới</b>
         </p>
+        <div class="list-img-select">
+          <a
+            v-for="(item, index) in defaultImages"
+            :key="index"
+            href="#"
+            :title="item.label"
+            class="select-avatar"
+            @click.prevent="selectAvatar(item.id)"
+          >
+            <img :src="item.id" :alt="item.label" />
+          </a>
+        </div>
+
         <div class="wrapper d-flex justify-content-between">
           <b-button
             v-b-modal.modal-prevent-closing
@@ -82,12 +96,7 @@
             type="button"
             @click="reup()"
           >
-            <b-icon
-              icon="cloud-upload"
-              aria-hidden="true"
-              class="icon"
-            ></b-icon>
-            Tải lại
+            <b-icon icon="trash" aria-hidden="true" class="icon"></b-icon>
           </button>
           <b-modal id="modal-prevent-closing" ref="modal" title="Link ảnh">
             <form ref="form">
@@ -112,6 +121,7 @@
 // eslint-disable-next-line import/no-unresolved
 import { mapGetters } from 'vuex'
 import fileApi from '@/api/fileApi'
+import catalogApi from '@/api/catalogApi'
 const STATUS_INITIAL = 0
 const STATUS_SAVING = 1
 const STATUS_SUCCESS = 2
@@ -139,6 +149,7 @@ export default {
     currentStatus: null,
     uploadFieldName: 'photos',
     image: '',
+    defaultImages: [],
   }),
   computed: {
     isInitial() {
@@ -172,7 +183,9 @@ export default {
       this.$emit('input', this.image)
     },
   },
-
+  async created() {
+    await this.getDefaultImage()
+  },
   methods: {
     reup() {
       this.$emit('reupload')
@@ -195,8 +208,7 @@ export default {
         const { data } = await fileApi.upload(formData)
         if (data.state) {
           this.currentStatus = STATUS_SUCCESS
-          this.$emit('input', data.object.url)
-          this.image = data.object.url
+          this.selectAvatar(data.object.url)
         } else {
           // console.log("upload fail");
           this.uploadError = data.data.message
@@ -243,6 +255,21 @@ export default {
     isInArray(value, array) {
       return array.includes(value)
     },
+    async getDefaultImage() {
+      try {
+        const { data } = await catalogApi.getAvatarImages()
+        console.log(data)
+        this.defaultImages = data.object.items
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
+    },
+    selectAvatar(url) {
+      this.$emit('input', url)
+      this.image = url
+    },
   },
 }
 </script>
@@ -264,5 +291,32 @@ export default {
 }
 .p-question__box__body {
   border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.list-img-select {
+  position: relative;
+  z-index: 2;
+  overflow-y: hidden;
+  display: flex;
+  margin-bottom: 10px;
+}
+.select-avatar {
+  flex: 0 0 60px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  text-align: center;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid #ddd;
+  width: 60px;
+  padding: 3px;
+  margin: 0 5px;
+
+  img {
+    width: 100%;
+  }
 }
 </style>

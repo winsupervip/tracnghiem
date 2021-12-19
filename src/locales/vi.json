@@ -24,7 +24,7 @@
   "whenTheAnswerIsCorrect": "Khi trả lời đúng",
   "whenTheAnswerIsIncorrect": "Khi trả lời sai",
   "title": "Tiêu Đề (*)",
-  "add": "Thêm",
+  "add": "Thêm mới",
   "highSchoolGraduationExam": "Thi tốt nghiệp THPT",
   "addChildrenQuestion": "Thêm câu hỏi con",
   "basic": "Cơ bản",
@@ -59,7 +59,7 @@
   "saveDraft": "Lưu bản nháp",
   "saveQuestion": "Lưu câu hỏi",
   "editQuestion": "Sửa câu hỏi",
-  "-- choose --": "-- Chọn --",
+  "-- choose --": "-- Đáp án nhiễu --",
   "anOption": "Một lựa chọn",
   "draft": "Bản nháp",
   "category": "Danh mục",
@@ -87,7 +87,10 @@
     "note":"Lưu ý: Chỉ được cập nhật mã người giới thiệu 1 lần duy nhất",
     "introduce":"Người giới thiệu bạn",
     "changePassword":"Đổi mật khẩu",
-    "referralCode":"Mời nhập mã giới thiệu"
+    "referralCode":"Mời nhập mã giới thiệu",
+    "oldPassword":"Mật khẩu cũ",
+    "newPassword":"Mật khẩu mới",
+    "confirmPassword":"Nhập lại mật khẩu mới"
   },
   "formAffiliate":{
     "createIntroduce":"Bạn chưa có mã giới thiệu? Bấm tạo mã và chia sẻ ngay với bạn bè",
@@ -178,7 +181,7 @@
       "draft": "Chỉ có bạn mới có thể xem đề thi này.",
       "slug": "Đường dẫn",
       "tagHelper": "Nhập tối thiểu 1 thẻ, tối đa 5 thẻ",
-      "tagHolder": "Nhập ít nhất 2 ký tự"
+      "tagHolder": "Mỗi thẻ cần ít nhất 2 ký tự"
     },
     "edit": "Cập nhật",
     "questions": {
@@ -248,7 +251,14 @@
     "00011111": "Mật khẩu mới phải khác mật khẩu hiện tại",
     "00100010": "Vui lòng đính kèm ít nhất 1 tệp tin minh chứng trước khi gửi duyệt",
     "405": "HTTP 405 - Method Not Allowed",
-    "01001101":"Trùng Dữ Liệu"
+    "01001101":"Trùng Dữ Liệu",
+    "01011010": "Sai thông tin người dùng",
+    "01011011": "Dữ liệu bị trùng",
+    "01011100": "Mã xác nhận robot không hợp lệ",
+    "01011101": "Không tìm thấy bài thi",
+    "01011110": "Hết giờ làm bài",
+    "01011111": "Câu hỏi không tồn tại",
+    "01100000": "Bài thi đã kết thúc"
   },
   "admin": {
     "dashboard":"Trang tổng quan",
@@ -279,6 +289,26 @@
         "children":"Danh mục cấp con",
         "emptySelected": "Vui lòng chọn ít nhất 1 danh mục",
         "clear":"Xóa tất cả"
+      }
+    },
+    "service":{
+      "agency":"Chọn đại lý",
+      "expireDate":"Ngày hết hạn",
+      "expireDateNew":"Ngày hết hạn mới",
+      "limitActive":"Tổng số kích hoạt",
+      "paymentAmount":"Số tiền thanh toán",
+      "note":"Ghi chú",
+      "comments":"Nhập tên hoặc gmail đại lý",
+      "numberQuestion":"Số câu hỏi",
+      "numberExam":"Số đề thi",
+      "infoPackage":"Thông tin gói",
+      "agencies":{
+        "limitActive":"Số lượt kích hoạt tối đa",
+        "infoAgencies":"Thông tin cấp gói đại lý",
+        "codeActive":"Mã kích hoạt",
+        "note":"Ghi chú",
+        "username":"Chọn tài khoản",
+        "placeholder":"Nhập tên hoặc email"
       }
     }
   },

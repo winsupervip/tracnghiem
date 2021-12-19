@@ -53,7 +53,7 @@
           </tr>
           <tr v-for="(item, index) in refList" :key="index">
             <th scope="row">
-              {{ index + 1 }}
+              {{ index + 1 + (urlQuery.page - 1) * 10 }}
             </th>
             <td>{{ item.username }}</td>
             <td>

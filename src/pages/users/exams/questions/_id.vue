@@ -85,7 +85,7 @@
       </div>
       <div v-else>
         <div v-for="(item, index) in items" :key="index">
-          <ExamQuestionItem :item-data="item" />
+          <ExamQuestionItem :item-data="item" :total="total" />
         </div>
         <div class="mt-2">
           <b-pagination
@@ -209,7 +209,7 @@ export default defineComponent({
       )
       data.items = response.object.items
       data.total = response.object.total
-      $logger.info(data.items)
+      $logger.info(data)
       $loader().close()
     })
 

@@ -1,6 +1,6 @@
 <template>
   <b-form-select v-model="isSelected" class="mb-3" @change="changeSelected">
-    <b-form-select-option :value="null" disabled>{{
+    <b-form-select-option :value="-1">{{
       $t('-- choose --')
     }}</b-form-select-option>
     <b-form-select-option

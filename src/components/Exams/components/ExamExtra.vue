@@ -39,14 +39,13 @@
         <div class="list-group-item disabled border-bottom-0">
           <h3>{{ $t('exam.form.categoryTitle') }} (*):</h3>
         </div>
-        <div class="list-group-item tree-select-container border-0 p-0 m-0">
+        <div class="list-group-item border-0 p-0 m-0">
           <treeselect
             id="categories"
             v-model="categoryId"
             :multiple="false"
             :options="categoryItems"
             :load-options="loadOptions"
-            :always-open="true"
             :placeholder="$t('exam.form.categorySelect')"
             @input="validate"
           />
@@ -167,6 +166,7 @@ import { mapGetters, mapActions } from 'vuex'
 import QuestionApi from '@/api/question-list-page'
 import catalogApi from '@/api/catalogApi'
 import Uploader from '@/components/Uploader.vue'
+// import CategoryPicker from '@/components/CategoryPicker.vue'
 const STATUS_PUBLIC = 1
 const STATUS_PRIVATE = 2
 const STATUS_DRAFT = 3
@@ -176,9 +176,9 @@ export default defineComponent({
     const { $loader, $logger } = useContext()
     const data = reactive({
       image: '',
-      payementTypeId: 0,
-      statusId: 0,
-      levelId: 0,
+      payementTypeId: 1,
+      statusId: 1,
+      levelId: 1,
       seoTitle: '',
       seoDescription: '',
       slug: '',

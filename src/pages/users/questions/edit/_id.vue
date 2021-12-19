@@ -24,7 +24,7 @@ import {
   reactive,
   toRefs,
   useStore,
-  useRouter,
+  // useRouter,
 } from '@nuxtjs/composition-api'
 import { uuid } from 'vue-uuid'
 import QuestionApi from '@/api/question-list-page'
@@ -41,7 +41,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const route = useRoute()
-    const router = useRouter()
+    // const router = useRouter()
     store.dispatch('questions/restData')
     const id = computed(() => route.value.params.id)
 
@@ -184,7 +184,8 @@ export default defineComponent({
         }
         data.doneCall = true
       } catch (error) {
-        router.push('/users/questions/')
+        // router.push('/users/questions/')
+        console.log(error)
       }
     })
 

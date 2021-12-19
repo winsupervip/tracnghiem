@@ -137,4 +137,14 @@ export default {
     }&Keyword=${encodeURIComponent(urlQuery.keyword)}`
     return global.$http.get(url)
   },
+  getExamConfig(examId) {
+    const url = `/api/v1/Exam/get-exam-config/${examId}`
+    return global.$http.get(url)
+  },
+  sortOrder: (data) =>
+    global.$http.put('/api/v1/Exam/questions/sort-order', data),
+  deleteQuestionInExam: (data) =>
+    global.$http.delete(
+      `/api/v1/Exam/${data.examHashId}/${data.questionHashId}`
+    ),
 }

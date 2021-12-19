@@ -1,6 +1,7 @@
 export default (context, inject) => {
   const app = context.app
   const handleError = (error, callback = null) => {
+    console.log(error)
     if (error && error.response) {
       if (error.response.status !== 405) {
         console.log(error.response.data.message)
@@ -17,8 +18,8 @@ export default (context, inject) => {
       }
     } else {
       // success
-      console.log(error)
-      app.$toast.success(app.i18n.t('errors.' + error.message)).goAway(1500)
+      // console.log(app)
+      app.$toast?.success(app.i18n.t('errors.' + error.message)).goAway(1500)
       if (typeof callback === 'function') {
         callback()
       }
