@@ -39,11 +39,11 @@
             </b-form-invalid-feedback>
           </b-form-group>
         </ValidationProvider>
-        <ValidationProvider rules="max:1000" name="Nội dung">
+        <ValidationProvider rules="required|max:1000" name="Nội dung">
           <b-form-group
             v-if="updateQuestionDocument.documentTypeId === 1"
             slot-scope="{ valid, errors }"
-            label="Nội dung (*)"
+            :label="$t('content') + ' (*)'"
           >
             <TinyEditor
               v-model="document.documentContent"
@@ -54,11 +54,11 @@
             </b-form-invalid-feedback>
           </b-form-group>
         </ValidationProvider>
-        <ValidationProvider rules="max:1000" name="Nội dung">
+        <ValidationProvider rules="required|max:1000" name="Nội dung">
           <b-form-group
             v-if="updateQuestionDocument.documentTypeId === 2"
             slot-scope="{ valid, errors }"
-            label="Nội dung (*)"
+            :label="$t('link') + ' (*)'"
           >
             <b-form-input
               v-model="document.documentContent"
@@ -73,11 +73,11 @@
             </b-form-invalid-feedback>
           </b-form-group>
         </ValidationProvider>
-        <ValidationProvider rules="max:1000" name="Nội dung">
+        <ValidationProvider rules="required|max:1000" :name="$t('content')">
           <b-form-group
             v-if="updateQuestionDocument.documentTypeId === 3"
             slot-scope="{ valid, errors }"
-            label="Nội dung (*)"
+            :label="$t('iframeCode') + ' (*)'"
           >
             <b-form-textarea
               id="note"
@@ -154,7 +154,7 @@ export default defineComponent({
     async updateDocument() {
       const documentUpdateValue = {
         document: {
-          hashId: this.document.hashId,
+          hashId: this.document.hashIdDocument,
           documentName: this.document.documentName,
           documentContent: this.document.documentContent,
           documentTypeId: this.document.documentTypeId,

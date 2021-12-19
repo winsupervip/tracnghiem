@@ -1,6 +1,11 @@
 <template>
-  <b-modal id="modal-update-document-by-user" hide-footer size="lg">
-    {{ document }}
+  <b-modal
+    id="modal-update-document-by-user"
+    ref="modal-update-document-by-user"
+    hide-footer
+    size="lg"
+    :ok-only="okOnly"
+  >
     <ValidationObserver>
       <b-form>
         <ValidationProvider rules="required" :name="$t('typeOfDocument')">
@@ -21,7 +26,10 @@
             }}</b-form-invalid-feedback>
           </b-form-group>
         </ValidationProvider>
-        <ValidationProvider rules="required" :name="$t('nameOfDocument')">
+        <ValidationProvider
+          rules="required|max:255"
+          :name="$t('nameOfDocument')"
+        >
           <b-form-group
             slot-scope="{ valid, errors }"
             class="mb-1"
@@ -33,6 +41,7 @@
               type="text"
               :placeholder="$t('nameOfDocument')"
               autocomplete="off"
+              :state="errors[0] ? false : valid ? true : null"
             ></b-form-input>
             <b-form-invalid-feedback :state="valid">{{
               errors[0]
@@ -41,13 +50,17 @@
         </ValidationProvider>
 
         <div v-if="document.documentTypeId == 1" class="d-block">
-          <ValidationProvider rules="required" :name="$t('content')">
+          <ValidationProvider rules="required|max:1000" :name="$t('content')">
             <b-form-group
               slot-scope="{ valid, errors }"
               class="mb-1"
               :label="$t('content') + ' (*)'"
             >
-              <TinyEditor v-model="document.documentContent" />
+              <TinyEditor
+                v-model="document.documentContent"
+                :options="optionsText"
+                :state="errors[0] ? false : valid ? true : null"
+              />
               <b-form-invalid-feedback :state="valid">{{
                 errors[0]
               }}</b-form-invalid-feedback>
@@ -55,11 +68,11 @@
           </ValidationProvider>
         </div>
         <div v-if="document.documentTypeId == 2">
-          <ValidationProvider rules="required" :name="$t('content')">
+          <ValidationProvider rules="required|max:1000" :name="$t('content')">
             <b-form-group
               slot-scope="{ valid, errors }"
               class="mb-1"
-              :label="$t('content') + ' (*)'"
+              :label="$t('link') + ' (*)'"
             >
               <b-form-input
                 v-model="document.documentContent"
@@ -67,6 +80,7 @@
                 type="text"
                 :placeholder="$t('search')"
                 autocomplete="off"
+                :state="errors[0] ? false : valid ? true : null"
               ></b-form-input>
               <b-form-invalid-feedback :state="valid">{{
                 errors[0]
@@ -75,17 +89,18 @@
           </ValidationProvider>
         </div>
         <div v-if="document.documentTypeId == 3" class="d-flex">
-          <ValidationProvider rules="required" :name="$t('content')">
+          <ValidationProvider rules="required|max:1000" :name="$t('content')">
             <b-form-group
               slot-scope="{ valid, errors }"
               class="mb-1"
-              :label="$t('content') + ' (*)'"
+              :label="$t('iframeCode') + ' (*)'"
             >
               <textarea
                 id="embed-code"
                 v-model="document.documentContent"
                 rows="6"
                 cols="89"
+                :state="errors[0] ? false : valid ? true : null"
               >
               </textarea>
 
@@ -123,6 +138,8 @@ import {
   useContext,
 } from '@nuxtjs/composition-api'
 import DocumentApi from '../../api/documentApi'
+import EventBus from '@/plugins/eventBus'
+
 export default defineComponent({
   props: {
     documentUserUpdateValue: {
@@ -139,6 +156,11 @@ export default defineComponent({
     const data = reactive({
       documentType: [],
       document: {},
+      optionsText: {
+        convert_urls: false,
+        entity_encoding: 'raw',
+      },
+      okOnly: true,
     })
     const { fetch } = useFetch(async () => {
       $loader()
@@ -171,7 +193,7 @@ export default defineComponent({
       try {
         const { data } = await DocumentApi.updateDocument(documentUpdateValue)
         this.getDocumentByUser()
-
+        EventBus.$emit('update-page-document')
         this.$handleError(data)
       } catch (err) {
         this.$handleError(err, () => {

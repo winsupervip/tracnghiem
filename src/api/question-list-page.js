@@ -58,4 +58,7 @@ export default {
   updateQuestion: async (data) => {
     await global.$http.post('/api/v1/Question/update-question', data)
   },
+  getDocumentDetail: (hashId) => {
+    global.$http.get('/api/Document/get-document-detail/', hashId)
+  },
 }

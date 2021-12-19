@@ -5,8 +5,8 @@
     >
       <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
       <b-button
+        v-b-modal.bv-modal-user-references
         variant="outline-primary btn-sm rounded-pill"
-        @click="$bvModal.show('bv-modal-add-references')"
       >
         {{ $t('add') }}
       </b-button>
@@ -29,7 +29,7 @@
               </b-dropdown-item>
               <b-dropdown-item @click="deleteQuestionDocument(data.item.hashId)"
                 ><b-icon-trash></b-icon-trash>
-                xóa
+                {{ $t('delete') }}
               </b-dropdown-item>
             </b-dropdown>
           </template>
@@ -60,6 +60,7 @@ import DocumentApi from '../../../../api/documentApi'
 import QuestionApi from '@/api/question-list-page'
 import UpdateQuestionDocument from '@/components/Document/UpdateQuestionDocument.vue'
 import DocumentByUser from '@/components/Document/DocumentByUser.vue'
+import EventBus from '@/plugins/eventBus'
 export default defineComponent({
   components: { DocumentByUser, UpdateQuestionDocument },
   layout: 'dashboard',
@@ -148,7 +149,9 @@ export default defineComponent({
       getQuestionDocument,
     }
   },
-
+  created() {
+    EventBus.$on('update-page-document', this.getQuestionDocument)
+  },
   methods: {
     showModal(id) {
       this.$bvModal.show(id)
@@ -163,11 +166,17 @@ export default defineComponent({
     updateDocument(val) {
       this.updateQuestionDocument = val
     },
-    deleteQuestionDocument(documentId) {
-      console.log(
-        '🚀 ~ file: _id.vue ~ line 278 ~ deleteQuestionDocument ~ documentId',
-        documentId
-      )
+    async deleteQuestionDocument(documentId) {
+      try {
+        const { data } = await DocumentApi.deleteQuestionDocument(documentId)
+        this.getQuestionDocument()
+
+        this.$handleError(data)
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
     },
   },
 })

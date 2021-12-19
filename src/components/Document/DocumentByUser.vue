@@ -1,6 +1,6 @@
 <template>
   <b-modal
-    id="bv-modal-add-references"
+    id="bv-modal-user-references"
     hide-footer
     size="xl"
     title="Tìm kiếm tài liệu tham khảo"
@@ -122,6 +122,7 @@ import {
 import DocumentApi from '../../api/documentApi'
 import AddDocumentByUser from './AddDocumentByUser.vue'
 import UpdateDocumentByUser from './UpdateDocumentByUser.vue'
+
 import catalogApi from '@/api/catalogApi'
 export default defineComponent({
   auth: true,
@@ -205,16 +206,19 @@ export default defineComponent({
     },
     updateDocumentUserValue(item) {
       this.documentUserUpdateValue = { ...item }
-      console.log(
-        '🚀 ~ file: DocumentByUser.vue ~ line 205 ~ updateDocumentUserValue ~ this.documentUserUpdateValue',
-        this.documentUserUpdateValue
-      )
     },
-    deleteDocument(hashId) {
-      console.log(
-        '🚀 ~ file: DocumentByUser.vue ~ line 201 ~ deleteDocument ~ hashId',
-        hashId
-      )
+
+    async deleteDocument(hashId) {
+      try {
+        const { data } = await DocumentApi.deleteDocument(hashId)
+        this.getQuestionDocument()
+        this.getDocumentByUser()
+        this.$handleError(data)
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
     },
     async addToQuestionDocument(documentId) {
       const questionDocument = {

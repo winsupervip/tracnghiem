@@ -32,6 +32,7 @@
               type="text"
               :placeholder="$t('nameOfDocument')"
               autocomplete="off"
+              :state="errors[0] ? false : valid ? true : null"
             ></b-form-input>
             <b-form-invalid-feedback :state="valid">{{
               errors[0]
@@ -48,6 +49,7 @@
             >
               <TinyEditor
                 v-model="documentValue.document.documentContent"
+                :state="errors[0] ? false : valid ? true : null"
               ></TinyEditor>
               <b-form-invalid-feedback :state="valid">{{
                 errors[0]
@@ -60,7 +62,7 @@
             <b-form-group
               slot-scope="{ valid, errors }"
               class="mb-1"
-              :label="$t('content') + ' (*)'"
+              :label="$t('link') + ' (*)'"
             >
               <b-form-input
                 v-model="documentValue.document.documentContent"
@@ -68,6 +70,7 @@
                 type="text"
                 :placeholder="$t('search')"
                 autocomplete="off"
+                :state="errors[0] ? false : valid ? true : null"
               ></b-form-input>
               <b-form-invalid-feedback :state="valid">{{
                 errors[0]
@@ -80,13 +83,14 @@
             <b-form-group
               slot-scope="{ valid, errors }"
               class="mb-1"
-              :label="$t('content') + ' (*)'"
+              :label="$t('iframeCode') + ' (*)'"
             >
               <textarea
                 id="embed-code"
                 v-model="documentValue.document.documentContent"
                 rows="6"
                 cols="89"
+                :state="errors[0] ? false : valid ? true : null"
               >
               </textarea>
 
