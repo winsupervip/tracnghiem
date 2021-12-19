@@ -11,9 +11,13 @@
           <b-col md="12" lg="8" class="exam-main-content">
             <b-tabs class="common-tabs">
               <b-tab title="Thông tin đề thi" active>
-                <TabInfoQuiz />
+                <TabInfoQuiz
+                  :list-exam-section="listExamSection"
+                  :list-exam-document="getListExamDocument"
+                  :author-infomation="userInformation"
+                />
               </b-tab>
-              <b-tab title="Danh sách câu hỏi">
+              <b-tab title="danh sách câu hỏi">
                 <div class="tab-content-container">
                   <b-card
                     header="Danh sách câu hỏi"
@@ -481,8 +485,8 @@
 import {
   defineComponent,
   useContext,
-  // reactive,
-  // toRefs,
+  reactive,
+  toRefs,
   useRoute,
   computed,
   useAsync,
@@ -502,6 +506,7 @@ import Heading from '@/components/Quiz/Heading.vue'
 // eslint-disable-next-line import/no-unresolved
 import ExamApi from '@/api/examApi'
 import QuizApi from '@/api/quizApi'
+import ApiHome from '@/api/apiHome'
 
 export default defineComponent({
   components: {
@@ -513,35 +518,15 @@ export default defineComponent({
   layout: 'default',
   auth: false,
   setup() {
-    const { app, $loader, $logger } = useContext()
+    const { $loader, $logger } = useContext()
 
     const store = useStore()
     const route = useRoute()
     const idSlug = computed(() => route.value.params.id)
     const arr = idSlug.value.split('-')
     const id = arr[arr.length - 1]
-
-    useAsync(async () => {
-      $loader()
-      try {
-        const { data: examData } = await ExamApi.getExamConfig(id)
-        store.dispatch('exams/setExam', examData.object)
-        // console.log('d', data)
-      } catch (err) {
-        app.$handleError(err, () => {
-          $logger.info(err)
-        })
-      }
-      $loader().close()
-    })
-
-    // return {
-    //   ...toRefs(data),
-    // }
-  },
-  data() {
-    return {
-      idExam: this.$route.params.id || null,
+    const data = reactive({
+      idExam: idSlug || null,
       selectedBookmark: [],
       userInformation: {
         fullName: '',
@@ -557,39 +542,50 @@ export default defineComponent({
         checkboxQuestionTypeAnother: false,
       },
       dataExam: {
-        id: 1,
-        name: '400 câu trắc nghiệm Mạo từ trong tiếng Anh có đáp án cực hay',
-        description:
-          'English speaking course. 77 Hours of English language speaking, English listening practice. 1000 English language words',
-        thumbnail: '/images/exam-1.jpg',
-        category: 'Thi tốt nghiệp THPT',
-        time: '45',
-        examCount: '100',
-        questionCount: '90',
-        teacherId: 1,
-        teacherAvatar: '/images/teacher.png',
-        teacherName: 'Cô giáo Minh Thu',
-        rating: '4.5',
-        ratingCount: 20,
-        level: 1,
-        tags: [
-          {
-            id: 1,
-            name: 'Vật lý 12',
-          },
-          {
-            id: 2,
-            name: 'Luyện thi đại học',
-          },
-          {
-            id: 3,
-            name: 'Vật lý nâng cao',
-          },
-        ],
+        exam: {},
+        tagItems: [],
+        categoryTree: [],
       },
       configQuizData: null,
+      listExamSection: [],
+      getListExamDocument: [],
+    })
+    useAsync(async () => {
+      $loader()
+      try {
+        const [
+          { data: getExamDetail },
+          { data: getAuthorOfExam },
+          { data: getListExamSection },
+          { data: getListExamDocument },
+          { data: examData },
+        ] = await Promise.all([
+          ApiHome.getExamDetail(data.idExam),
+          ApiHome.getAuthorOfExam(data.idExam),
+          ApiHome.getListExamSection(data.idExam),
+          ApiHome.getListExamDocument(data.idExam),
+          ExamApi.getExamConfig(id),
+        ])
+        store.dispatch('exams/setExam', examData.object)
+        data.dataExam = getExamDetail.object
+        data.userInformation = getAuthorOfExam.object
+        data.listExamSection = getListExamSection.object.items
+        data.getListExamDocument = getListExamDocument.object.items
+        $logger.info('getExamDetail', data.dataExam)
+      } catch (err) {
+        // app.$handleError(err, () => {
+        //
+        // })
+        $logger.info(err)
+      }
+      $loader().close()
+    })
+
+    return {
+      ...toRefs(data),
     }
   },
+
   computed: {
     ...mapGetters({
       getQuestion: 'questions/getQuestion',

@@ -1,8 +1,8 @@
 <template>
   <div class="tab-content-container">
-    <Thematic></Thematic>
-    <Reference></Reference>
-    <Author></Author>
+    <Thematic :list-exam-section="listExamSection"></Thematic>
+    <Reference :list-exam-document="listExamDocument"></Reference>
+    <Author :author-infomation="authorInfomation"></Author>
     <Reviews></Reviews>
   </div>
 </template>
@@ -21,6 +21,20 @@ export default defineComponent({
     Reference,
     Author,
     Reviews,
+  },
+  props: {
+    listExamSection: {
+      type: Array,
+      default: () => [],
+    },
+    listExamDocument: {
+      type: Array,
+      default: () => [],
+    },
+    authorInfomation: {
+      type: Object,
+      default: () => {},
+    },
   },
   setup() {},
 })

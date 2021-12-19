@@ -59,4 +59,12 @@ export default {
     }
     return global.$http.get(url)
   },
+  getExamDetail: (id) =>
+    global.$http.get(`api/v1/Exam/get-exam-details-home/${id}`),
+  getAuthorOfExam: (id) =>
+    global.$http.get(`api/v1/Exam/get-information-author-of-exam/${id}`),
+  getListExamSection: (id) =>
+    global.$http.get(`api/v1/Exam/get-question-exam-detail-home/${id}`),
+  getListExamDocument: (id) =>
+    global.$http.get(`api/v1/Exam/get-document-exam-home/${id}?orderBy=1`),
 }
