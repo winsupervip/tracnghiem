@@ -177,7 +177,7 @@
       "draft": "Chỉ có bạn mới có thể xem đề thi này.",
       "slug": "Đường dẫn",
       "tagHelper": "Nhập tối thiểu 1 thẻ, tối đa 5 thẻ",
-      "tagHolder": "Nhập ít nhất 2 ký tự"
+      "tagHolder": "Mỗi thẻ cần ít nhất 2 ký tự"
     },
     "edit": "Cập nhật",
     "questions": {
@@ -246,7 +246,14 @@
     "00011110": "Token đã tồn tại",
     "00011111": "Mật khẩu mới phải khác mật khẩu hiện tại",
     "00100010": "Vui lòng đính kèm ít nhất 1 tệp tin minh chứng trước khi gửi duyệt",
-    "405": "HTTP 405 - Method Not Allowed"
+    "405": "HTTP 405 - Method Not Allowed",
+    "01011010": "Sai thông tin người dùng",
+    "01011011": "Dữ liệu bị trùng",
+    "01011100": "Mã xác nhận robot không hợp lệ",
+    "01011101": "Không tìm thấy bài thi",
+    "01011110": "Hết giờ làm bài",
+    "01011111": "Câu hỏi không tồn tại",
+    "01100000": "Bài thi đã kết thúc"
   },
   "admin": {
     "dashboard":"Trang tổng quan",

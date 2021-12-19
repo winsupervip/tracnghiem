@@ -9,4 +9,11 @@ export default {
     global.$http.get('/api/v1/Catalog/item-order-type-in-exam'),
   getHistoryExamStatus: () =>
     global.$http.get('/api/v1/Catalog/get-history-exam-status'),
+  getAvatarImages: () => global.$http.get('/api/v1/Catalog/get-avatar-images'),
+  getCategoriesByParent: (parentId, recursive) =>
+    global.$http.get(
+      `/api/v1/Catalog/get-categories?parent=${
+        parentId ?? 0
+      }&recursive=${recursive}`
+    ),
 }

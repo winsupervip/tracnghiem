@@ -191,10 +191,18 @@ export default {
     '@nuxtjs/auth-next',
     'bootstrap-vue/nuxt',
     '@nuxtjs/toast',
+    '@nuxtjs/recaptcha'
   ],
   // https://github.com/nuxt-community/google-gtag-module
   'google-gtag': {
     id: 'G-4RQGST5TRG',
+  },
+  recaptcha: {
+    hideBadge: false, // Hide badge element (v3 & v2 via size=invisible)
+    language: 'vi',   // Recaptcha language (v2)
+    siteKey: process.env.RECAPTCHA_SITE_KEY,    // Site key for requests
+    version: 2,     // Version
+    size: 'normal'        // Size: 'compact', 'normal', 'invisible' (v2)
   },
 
   // bootstrap-vue

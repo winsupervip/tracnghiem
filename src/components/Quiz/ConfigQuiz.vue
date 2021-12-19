@@ -74,26 +74,6 @@
       </div>
       <hr class="line-divide" />
       <div class="filter-group">
-        <strong>Cài đặt số lần thi</strong>
-        <b-collapse v-model="showFilterGroup2" class="filter-group-body">
-          <b-form-group>
-            <div class="d-flex justify-content-between" style="font-size: 14px">
-              <label>Cho phép thi tối đa</label>
-              <div class="group-input-xs">
-                <input
-                  v-model.number="maximumTest"
-                  class="form-control"
-                  type="text"
-                  :disabled="!allowChangeSettings"
-                />
-                <strong>lần</strong>
-              </div>
-            </div>
-          </b-form-group>
-        </b-collapse>
-      </div>
-      <hr class="line-divide" />
-      <div class="filter-group">
         <strong
           :class="
             showFilterGroup2
@@ -172,7 +152,7 @@
             :disabled="!configQuizData.allowChangeSettings"
           >
             <div class="d-flex justify-content-between">
-              <span>Xem kết quả trong khi trả lời câu hỏi</span>
+              <span>Xem kết quả sau khi trả lời câu hỏi</span>
             </div>
           </b-form-checkbox>
           <b-form-checkbox
@@ -180,7 +160,7 @@
             :disabled="!configQuizData.allowChangeSettings"
           >
             <div class="d-flex justify-content-between">
-              <span>Xem kết quả sau khi trả lời câu hỏi</span>
+              <span>Xem kết quả sau khi làm bài</span>
             </div>
           </b-form-checkbox>
         </b-collapse>
