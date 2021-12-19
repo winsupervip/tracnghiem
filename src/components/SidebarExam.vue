@@ -167,6 +167,7 @@
                 ref="slider"
                 v-model="valueNumberQuestion"
                 v-bind="optionsNumberQuestion"
+                @drag-end="changeOptionSeach"
               />
             </div>
           </b-collapse>
