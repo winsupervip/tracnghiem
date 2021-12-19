@@ -193,9 +193,12 @@
                 >
                   <div class="list-question-menu">
                     <template v-for="(item, index) in itemQuestions">
-                      <b-btn :key="index" :class="getColorOfQuestion(item)">{{
-                        item.sortOrder
-                      }}</b-btn>
+                      <b-btn
+                        :key="index"
+                        :class="getColorOfQuestion(item)"
+                        @click="getQuestionById(item.id)"
+                        >{{ item.sortOrder }}</b-btn
+                      >
                     </template>
                   </div>
                 </b-collapse>
@@ -371,7 +374,7 @@ export default defineComponent({
         data.analysisQuiz = analysisResult.object.items
         data.summaryQuiz = summaryResult.object
         data.settings = quizSettingRes.object
-        $logger.info(data.settings)
+        // $logger.info(data.settings)
         // $logger.info(data.analysisQuiz)
         // $logger.info(data.summaryQuiz)
         const firstQuestion = data.itemQuestions[0]
