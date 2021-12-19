@@ -20,4 +20,13 @@ export default {
   submitQuiz(quizId) {
     return global.$http.post(`/api/v1/Quiz/submit-quiz?quizId=${quizId}`)
   },
+  flagQuestion(id) {
+    return global.$http.put(`/api/v1/Quiz/flag-quiz-question`, {
+      questionId: id,
+    })
+  },
+  showRightAnswer(questionId) {
+    const url = `/api/v1/Quiz/question/${questionId}/right-answer`
+    return global.$http.get(url)
+  },
 }

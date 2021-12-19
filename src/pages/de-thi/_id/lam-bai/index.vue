@@ -190,7 +190,7 @@
                       <b-btn
                         :key="`question${item.id}`"
                         v-model="indexQuestionChoose"
-                        :class="item.status !== 0 ? 'answered' : ''"
+                        :class="getColorOfQuestion(item)"
                         @click="chooseQuestion(item.id, index)"
                         >{{ index + 1 }}</b-btn
                       >
@@ -221,10 +221,9 @@
                   <div class="font-bold">Câu {{ indexQuestionChoose }}</div>
                   <b-form-checkbox
                     id="checkbox-bookmark"
-                    v-model="bookmarkQuestion"
+                    v-model="questionItem.flag"
                     name="checkbox-bookmark"
-                    :value="true"
-                    :unchecked-value="false"
+                    @change="setFlag()"
                   >
                     Đánh dấu
                   </b-form-checkbox>
@@ -240,6 +239,7 @@
                 <b-btn
                   v-if="examSettings.showRightAnswerAfterSubmit"
                   variant="outline"
+                  @click="getRightAnswer(questionItem.id)"
                 >
                   Xem đáp án
                 </b-btn>
@@ -278,6 +278,7 @@ import {
   reactive,
   toRefs,
   useRoute,
+  useRouter,
   computed,
   useAsync,
 } from '@nuxtjs/composition-api'
@@ -294,6 +295,7 @@ export default defineComponent({
     const { $handleError, $loader, $logger } = useContext()
 
     const route = useRoute()
+    const router = useRouter()
     const quizId = computed(() => route.value.query.quizId)
     console.log('quizId', quizId.value)
 
@@ -379,6 +381,12 @@ export default defineComponent({
         data.timer = null
       }
     }
+    const SubmitExam = async () => {
+      await QuizApi.submitQuiz(data.quizId)
+      router.push({
+        path: `/de-thi/${data.idExam}/ket-qua?quizId=${data.quizId}`,
+      })
+    }
     const createClock = (time) => {
       clearClock()
       const countDownDate = new Date().getTime() + Number(time * 1000)
@@ -413,10 +421,8 @@ export default defineComponent({
         // If the count down is over, write some text
         if (distance < 0) {
           clearClock()
-          // vm.disabled = true
           data.timeRemaining = 'HẾT GIỜ'
-          // tính theo cả bài
-          // vm.endExam();
+          SubmitExam()
         }
       }, 1000)
     }
@@ -436,6 +442,7 @@ export default defineComponent({
           const { data: questionItem } = await QuizApi.getQuestionById(
             data.itemQuestions[0].id
           )
+          data.itemQuestions[0].status = 1
           data.questionItem = questionItem.object
           data.userAnswer.questionId = data.questionItem.id
         }
@@ -451,6 +458,7 @@ export default defineComponent({
     return {
       ...toRefs(data),
       clearClock,
+      SubmitExam,
     }
   },
   created() {},
@@ -474,18 +482,21 @@ export default defineComponent({
       this.indexQuestionChoose = index + 1
       const { data: questionItem } = await QuizApi.getQuestionById(id)
       this.questionItem = questionItem.object
-    },
-    async SubmitExam() {
-      await QuizApi.submitQuiz(this.quizId)
-      this.$router.push({
-        path: `/de-thi/${this.idExam}/ket-qua?quizId=${this.quizId}`,
-      })
+      // update status question
+      if (this.questionItem.status === 0) {
+        this.itemQuestions[index].status = 1
+      }
     },
     async submitQuestion(questionId) {
       if (this.userAnswer.userChoices.length > 0) {
         this.userAnswer.questionId = questionId
         try {
           await QuizApi.submitQuestion(this.userAnswer)
+          // update status question
+          const question = this.itemQuestions.filter((x) => x.id === questionId)
+          if (question) {
+            question[0].status = 2
+          }
         } catch (err) {
           this.$handleError(err, () => {
             console.log(err)
@@ -512,6 +523,42 @@ export default defineComponent({
         currentIndex = total - 1
       }
       this.chooseQuestion(this.itemQuestions[currentIndex].id, currentIndex)
+    },
+    async setFlag() {
+      const currentIndex = this.indexQuestionChoose - 1
+      const questionId = this.itemQuestions[currentIndex].id
+      try {
+        await QuizApi.flagQuestion(questionId)
+        this.itemQuestions[currentIndex].flag =
+          !this.itemQuestions[currentIndex].flag
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
+    },
+    getColorOfQuestion(questionItem) {
+      if (questionItem.flag) {
+        return 'tick'
+      }
+      if (questionItem.status === 2) {
+        return 'answered'
+      }
+      if (questionItem.status === 0) {
+        return ''
+      }
+      return 'not-answered'
+    },
+    async getRightAnswer(questionId) {
+      try {
+        const { data } = await QuizApi.showRightAnswer(questionId)
+        console.log(data)
+        this.questionItem = data.object
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
     },
   },
 })
