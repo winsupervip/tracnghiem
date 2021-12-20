@@ -8,8 +8,9 @@
     <section class="exam-main-container">
       <b-container>
         <b-row>
-          <b-col md="12" lg="8" class="exam-main-content">
-            <b-tabs class="common-tabs">
+          <b-col md="12" lg="8" class="exam-main-content"
+            >{{ tabIndex }}
+            <b-tabs v-model="tabIndex" class="common-tabs">
               <b-tab title="Thông tin đề thi" active>
                 <TabInfoQuiz
                   :list-exam-section="listExamSection"
@@ -25,312 +26,6 @@
                     class="mb-3"
                   >
                     <div class="list-question mb-4">
-                      <div class="question-item">
-                        <div
-                          class="question-title d-flex justify-content-between"
-                        >
-                          <div class="question-name font-bold">Câu hỏi 1</div>
-                          <div class="question-category text-gray">
-                            <i class="icon-tag" />
-                            <span class="font-sm">Reading, Cơ bản</span>
-                          </div>
-                        </div>
-                        <div class="question-content text-smd">
-                          Which of the following lists all and only the
-                          appropriate descriptions about a 32-bit CPU and a
-                          64-bit CPU? I When a 32-bit CPU and a 64-bit CPU are
-                          compared, a 64-bit CPU has a larger theoretical
-                          maximum memory space.. II There is no 32-bit OS that
-                          runs on a PC with a 64-bit CPU. III In terms of the
-                          read and write speed of a USB memory, the speed of a
-                          PC with a 64-bit CPU is twice as fast as that of a PC
-                          with a 32-bit CPU.
-                        </div>
-                        <div class="question-item-answer">
-                          <div class="answer-head">
-                            <span class="font-sm text-gray">câu trả lời</span>
-                          </div>
-                          <div class="list-answer">
-                            <ul class="list-unstyled p-0">
-                              <li>
-                                <b>A.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>B.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>C.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>D.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="question-item">
-                        <div
-                          class="question-title d-flex justify-content-between"
-                        >
-                          <div class="question-name font-bold">Câu hỏi 1</div>
-                          <div class="question-category text-gray">
-                            <i class="icon-tag" />
-                            <span class="font-sm">Reading, Cơ bản</span>
-                          </div>
-                        </div>
-                        <div class="question-content text-smd">
-                          Which of the following lists all and only the
-                          appropriate descriptions about a 32-bit CPU and a
-                          64-bit CPU? I When a 32-bit CPU and a 64-bit CPU are
-                          compared, a 64-bit CPU has a larger theoretical
-                          maximum memory space.. II There is no 32-bit OS that
-                          runs on a PC with a 64-bit CPU. III In terms of the
-                          read and write speed of a USB memory, the speed of a
-                          PC with a 64-bit CPU is twice as fast as that of a PC
-                          with a 32-bit CPU.
-                        </div>
-                        <div class="question-item-answer">
-                          <div class="answer-head">
-                            <span class="font-sm text-gray">câu trả lời</span>
-                          </div>
-                          <div class="list-answer">
-                            <ul class="list-unstyled p-0">
-                              <li>
-                                <b>A.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>B.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>C.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>D.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="question-item">
-                        <div
-                          class="question-title d-flex justify-content-between"
-                        >
-                          <div class="question-name font-bold">Câu hỏi 1</div>
-                          <div class="question-category text-gray">
-                            <i class="icon-tag" />
-                            <span class="font-sm">Reading, Cơ bản</span>
-                          </div>
-                        </div>
-                        <div class="question-content text-smd">
-                          Which of the following lists all and only the
-                          appropriate descriptions about a 32-bit CPU and a
-                          64-bit CPU? I When a 32-bit CPU and a 64-bit CPU are
-                          compared, a 64-bit CPU has a larger theoretical
-                          maximum memory space.. II There is no 32-bit OS that
-                          runs on a PC with a 64-bit CPU. III In terms of the
-                          read and write speed of a USB memory, the speed of a
-                          PC with a 64-bit CPU is twice as fast as that of a PC
-                          with a 32-bit CPU.
-                        </div>
-                        <div class="question-item-answer">
-                          <div class="answer-head">
-                            <span class="font-sm text-gray">câu trả lời</span>
-                          </div>
-                          <div class="list-answer">
-                            <ul class="list-unstyled p-0">
-                              <li>
-                                <b>A.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>B.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>C.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>D.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="question-item">
-                        <div
-                          class="question-title d-flex justify-content-between"
-                        >
-                          <div class="question-name font-bold">Câu hỏi 1</div>
-                          <div class="question-category text-gray">
-                            <i class="icon-tag" />
-                            <span class="font-sm">Reading, Cơ bản</span>
-                          </div>
-                        </div>
-                        <div class="question-content text-smd">
-                          Which of the following lists all and only the
-                          appropriate descriptions about a 32-bit CPU and a
-                          64-bit CPU? I When a 32-bit CPU and a 64-bit CPU are
-                          compared, a 64-bit CPU has a larger theoretical
-                          maximum memory space.. II There is no 32-bit OS that
-                          runs on a PC with a 64-bit CPU. III In terms of the
-                          read and write speed of a USB memory, the speed of a
-                          PC with a 64-bit CPU is twice as fast as that of a PC
-                          with a 32-bit CPU.
-                        </div>
-                        <div class="question-item-answer">
-                          <div class="answer-head">
-                            <span class="font-sm text-gray">câu trả lời</span>
-                          </div>
-                          <div class="list-answer">
-                            <ul class="list-unstyled p-0">
-                              <li>
-                                <b>A.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>B.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>C.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>D.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="question-item">
-                        <div
-                          class="question-title d-flex justify-content-between"
-                        >
-                          <div class="question-name font-bold">Câu hỏi 1</div>
-                          <div class="question-category text-gray">
-                            <i class="icon-tag" />
-                            <span class="font-sm">Reading, Cơ bản</span>
-                          </div>
-                        </div>
-                        <div class="question-content text-smd">
-                          Which of the following lists all and only the
-                          appropriate descriptions about a 32-bit CPU and a
-                          64-bit CPU? I When a 32-bit CPU and a 64-bit CPU are
-                          compared, a 64-bit CPU has a larger theoretical
-                          maximum memory space.. II There is no 32-bit OS that
-                          runs on a PC with a 64-bit CPU. III In terms of the
-                          read and write speed of a USB memory, the speed of a
-                          PC with a 64-bit CPU is twice as fast as that of a PC
-                          with a 32-bit CPU.
-                        </div>
-                        <div class="question-item-answer">
-                          <div class="answer-head">
-                            <span class="font-sm text-gray">câu trả lời</span>
-                          </div>
-                          <div class="list-answer">
-                            <ul class="list-unstyled p-0">
-                              <li>
-                                <b>A.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>B.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>C.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>D.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="question-item">
-                        <div
-                          class="question-title d-flex justify-content-between"
-                        >
-                          <div class="question-name font-bold">Câu hỏi 1</div>
-                          <div class="question-category text-gray">
-                            <i class="icon-tag" />
-                            <span class="font-sm">Reading, Cơ bản</span>
-                          </div>
-                        </div>
-                        <div class="question-content text-smd">
-                          Which of the following lists all and only the
-                          appropriate descriptions about a 32-bit CPU and a
-                          64-bit CPU? I When a 32-bit CPU and a 64-bit CPU are
-                          compared, a 64-bit CPU has a larger theoretical
-                          maximum memory space.. II There is no 32-bit OS that
-                          runs on a PC with a 64-bit CPU. III In terms of the
-                          read and write speed of a USB memory, the speed of a
-                          PC with a 64-bit CPU is twice as fast as that of a PC
-                          with a 32-bit CPU.
-                        </div>
-                        <div class="question-item-answer">
-                          <div class="answer-head">
-                            <span class="font-sm text-gray">câu trả lời</span>
-                          </div>
-                          <div class="list-answer">
-                            <ul class="list-unstyled p-0">
-                              <li>
-                                <b>A.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>B.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>C.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>D.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
                       <div class="question-item">
                         <div
                           class="question-title d-flex justify-content-between"
@@ -549,6 +244,8 @@ export default defineComponent({
       configQuizData: null,
       listExamSection: [],
       getListExamDocument: [],
+      listQuestionExam: [],
+      tabIndex: 0,
     })
     useAsync(async () => {
       $loader()
@@ -571,7 +268,6 @@ export default defineComponent({
         data.userInformation = getAuthorOfExam.object
         data.listExamSection = getListExamSection.object.items
         data.getListExamDocument = getListExamDocument.object.items
-        $logger.info('getExamDetail', data.dataExam)
       } catch (err) {
         // app.$handleError(err, () => {
         //
@@ -597,6 +293,11 @@ export default defineComponent({
       this.configQuizData = this.examSettings
       console.log('configQuizData', this.configQuizData)
     },
+    tabIndex() {
+      if (this.tabIndex === 1 && this.listQuestionExam.length === 0) {
+        this.fetchQuestionsOfExam()
+      }
+    },
   },
   created() {
     if (this.$auth.loggedIn) {
@@ -605,6 +306,18 @@ export default defineComponent({
     }
   },
   methods: {
+    async fetchQuestionsOfExam() {
+      try {
+        const { data: result } = await ApiHome.getQuestionExamDetailHome(
+          this.idExam
+        )
+        this.listQuestionExam = result.object.item
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
+    },
     hide() {
       this.$bvModal.hide('modal-start-exam')
     },
