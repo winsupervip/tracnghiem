@@ -37,6 +37,7 @@ import QuestionFillBlankList from './QuestionFillBlankList.vue'
 import QuestionShortAnswerList from './QuestionShortAnswerList.vue'
 import QuestionClusterList from './QuestionClusterList.vue'
 import QuestionSortAnswerList from './QuestionSortAnswerList.vue'
+import '../../assets/scss/single-question.scss'
 export default defineComponent({
   name: 'SingleListPage',
   components: {
