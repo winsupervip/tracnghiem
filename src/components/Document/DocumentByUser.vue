@@ -63,11 +63,12 @@
     </b-form>
 
     <hr />
-    <div v-if="documentByUser.total === 0">
-      <EmptyData />
-    </div>
-    <div v-else>
-      <b-table striped hover :items="documentByUser" :fields="fields">
+
+    <div>
+      <div v-if="total === 0">
+        <EmptyData />
+      </div>
+      <b-table v-else striped hover :items="documentByUser" :fields="fields">
         <template #cell(actions)="data">
           <b-dropdown class="m-md-2" no-caret size="sm">
             <template #button-content>
@@ -100,6 +101,7 @@
         :get-document-by-user="getDocumentByUser"
       />
       <b-pagination
+        v-if="total > 0"
         v-model="urlQuery.page"
         class="pagination"
         :total-rows="total"

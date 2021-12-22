@@ -13,8 +13,10 @@ export default {
     return result
   },
 
-  getQuestionDocument: (hashId) =>
-    global.$http.get(`/api/Document/get-question-documents/${hashId}`),
+  getQuestionDocument: (hashId, typeId) =>
+    global.$http.get(
+      `/api/Document/get-question-documents/${hashId}?typeId=${typeId}`
+    ),
   addQuestionDocument: (data) =>
     global.$http.post('/api/Document/add-question-document', data),
   deleteQuestionDocument: (hashId) =>

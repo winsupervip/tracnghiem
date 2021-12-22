@@ -12,7 +12,7 @@
             class="mb-3"
           >
             <treeselect
-              v-model="document.documentTypeId"
+              v-model="documentTypeId"
               :options="documentType"
               size="xl"
               :load-options="loadOptions"
@@ -30,7 +30,7 @@
             class="mb-3"
           >
             <b-form-input
-              v-model="document.documentName"
+              v-model="documentName"
               type="text"
               :state="errors[0] ? false : valid ? true : null"
             ></b-form-input>
@@ -46,7 +46,7 @@
             :label="$t('content') + ' (*)'"
           >
             <TinyEditor
-              v-model="document.documentContent"
+              v-model="documentContent"
               :state="errors[0] ? false : valid ? true : null"
             ></TinyEditor>
             <b-form-invalid-feedback id="inputLiveFeedback">
@@ -61,7 +61,7 @@
             :label="$t('link') + ' (*)'"
           >
             <b-form-input
-              v-model="document.documentContent"
+              v-model="documentContent"
               trim
               type="text"
               :placeholder="$t('search')"
@@ -81,7 +81,7 @@
           >
             <b-form-textarea
               id="note"
-              v-model="document.documentContent"
+              v-model="documentContent"
               :state="errors[0] ? false : valid ? true : null"
             ></b-form-textarea>
             <b-form-invalid-feedback id="inputLiveFeedback">
@@ -131,6 +131,9 @@ export default defineComponent({
     const data = reactive({
       documentType: [],
       document: {},
+      documentTypeId: null,
+      documentName: '',
+      documentContent: '',
     })
     const { fetch } = useFetch(async () => {
       $loader()
@@ -144,7 +147,9 @@ export default defineComponent({
   },
   watch: {
     updateQuestionDocument(val) {
-      this.document = val
+      this.documentTypeId = val.documentTypeId
+      this.documentName = val.documentName
+      this.documentContent = val.documentContent
     },
   },
   methods: {
@@ -154,10 +159,10 @@ export default defineComponent({
     async updateDocument() {
       const documentUpdateValue = {
         document: {
-          hashId: this.document.hashIdDocument,
-          documentName: this.document.documentName,
-          documentContent: this.document.documentContent,
-          documentTypeId: this.document.documentTypeId,
+          hashId: this.updateQuestionDocument.hashIdDocument,
+          documentName: this.documentName,
+          documentContent: this.documentContent,
+          documentTypeId: this.documentTypeId,
         },
       }
       try {

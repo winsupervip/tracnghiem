@@ -89,17 +89,15 @@
               />
             </b-form-group>
             <div class="d-flex justify-content-end">
-              <div class="w-50 d-flex justify-content-end">
-                <b-button variant="outline-primary" @click="handleSearch">
-                  <b-icon-filter></b-icon-filter> {{ $t('apply') }}
-                </b-button>
-                <b-button
-                  variant="primary"
-                  @click="$bvModal.show('bv-modal-add-question')"
-                >
-                  <b-icon-plus></b-icon-plus> {{ $t('add') }}
-                </b-button>
-              </div>
+              <b-button variant="outline-primary" @click="handleSearch">
+                <b-icon-filter></b-icon-filter> {{ $t('apply') }}
+              </b-button>
+              <b-button
+                variant="primary"
+                @click="$bvModal.show('bv-modal-add-question')"
+              >
+                <b-icon-plus></b-icon-plus> {{ $t('add') }}
+              </b-button>
             </div>
           </b-form-row>
         </b-form>
