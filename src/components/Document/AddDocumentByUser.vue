@@ -183,7 +183,7 @@ export default defineComponent({
       try {
         const { data } = await DocumentApi.addDocument(documentValue)
         this.getDocumentByUser()
-
+        this.$bvModal.hide(`bv-modal-add-user-references`)
         this.resetDocumentValue()
         this.$handleError(data)
       } catch (err) {

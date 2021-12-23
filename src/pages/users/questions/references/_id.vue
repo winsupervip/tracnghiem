@@ -15,9 +15,16 @@
 
     <div class="filter-bar">
       <b-card class="mt-3">
-        <b-table striped hover :items="questionDocument" :fields="fields">
+        <div v-if="questionDocument.length === 0"><EmptyData /></div>
+        <b-table
+          v-else
+          striped
+          hover
+          :items="questionDocument"
+          :fields="fields"
+        >
           <template #cell(actions)="data">
-            <b-dropdown class="m-md-2" no-caret size="sm">
+            <b-dropdown class="m-md-2" no-caret size="sm" variant="primary">
               <template #button-content>
                 <b-icon-three-dots></b-icon-three-dots>
               </template>
@@ -25,7 +32,7 @@
                 v-b-modal.modal-edit
                 @click="updateDocument(data.item)"
                 ><b-icon-file-text></b-icon-file-text>
-                Chỉnh sửa
+                {{ $t('editDocument') }}
               </b-dropdown-item>
               <b-dropdown-item @click="deleteQuestionDocument(data.item.hashId)"
                 ><b-icon-trash></b-icon-trash>
@@ -97,7 +104,10 @@ export default defineComponent({
     })
 
     const getQuestionDocument = async () => {
-      const { data: result2 } = await DocumentApi.getQuestionDocument(hashId)
+      const { data: result2 } = await DocumentApi.getQuestionDocument(
+        hashId,
+        typeQuestion
+      )
       data.questionDocument = result2?.object
       console.log(
         '🚀 ~ file: _id.vue ~ line 408 ~ getQuestionDocument ~ data.questionDocument',
@@ -108,7 +118,6 @@ export default defineComponent({
     const { fetch } = useFetch(async () => {
       $loader()
 
-      const { data: result2 } = await DocumentApi.getQuestionDocument(hashId)
       if (typeQuestion === 0) {
         const { data: result4 } = await QuestionApi.getUserQuestionDetails(
           hashId
@@ -137,8 +146,6 @@ export default defineComponent({
           active: true,
         },
       ]
-
-      data.questionDocument = result2?.object
 
       $loader().close()
     })
