@@ -35,7 +35,13 @@
           />
         </b-form-group>
         <div
-          class="col-12 col-md-3 mb-3 d-flex justify-content-around align-items-end"
+          class="
+            col-12 col-md-3
+            mb-3
+            d-flex
+            justify-content-around
+            align-items-end
+          "
         >
           <b-button variant="outline-primary" @click="getDocumentByUser">
             <b-icon-filter></b-icon-filter> {{ $t('apply') }}
@@ -70,7 +76,7 @@
       </div>
       <b-table v-else striped hover :items="documentByUser" :fields="fields">
         <template #cell(actions)="data">
-          <b-dropdown class="m-md-2" no-caret size="sm">
+          <b-dropdown class="dropdown-action m-auto" no-caret size="sm">
             <template #button-content>
               <b-icon-three-dots></b-icon-three-dots>
             </template>

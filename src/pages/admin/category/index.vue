@@ -12,11 +12,7 @@
                 class="form-control"
                 :placeholder="$t('admin.category.search')"
               />
-              <button
-                class="btn btn-outline-secondary"
-                type="button"
-                @click="search()"
-              >
+              <button class="btn btn-primary" type="button" @click="search()">
                 <b-icon-search></b-icon-search>
               </button>
             </div>
@@ -42,7 +38,7 @@
       <div v-else>
         <b-table striped hover :items="items" :fields="fields">
           <template #cell(actions)="data">
-            <b-dropdown class="m-md-2" no-caret size="sm">
+            <b-dropdown class="dropdown-action m-auto" no-caret size="sm">
               <template #button-content>
                 <b-icon-three-dots-vertical></b-icon-three-dots-vertical>
               </template>
@@ -88,7 +84,13 @@
             @input="handleInput"
           />
           <footer class="modal-footer">
-            <button type="button" class="btn btn-secondary">Hủy Bỏ</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              @click="hideModal('modal-add')"
+            >
+              Hủy Bỏ
+            </button>
             <button type="submit" class="btn btn-primary">Lưu</button>
           </footer>
         </b-form>
@@ -112,7 +114,13 @@
             @input="handleInput"
           />
           <footer class="modal-footer">
-            <button type="button" class="btn btn-secondary">Hủy Bỏ</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              @click="hideModal('modal-edit')"
+            >
+              Hủy Bỏ
+            </button>
             <button type="submit" class="btn btn-primary">Lưu</button>
           </footer>
         </b-form>

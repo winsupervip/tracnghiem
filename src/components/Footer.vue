@@ -19,7 +19,7 @@
                     </li>
                     <li>
                       <a :href="socialList.twitter" target="_blank">
-                        <i class="icon-twitter"></i>
+                        <b-icon icon="twitter" />
                       </a>
                     </li>
                     <li>
