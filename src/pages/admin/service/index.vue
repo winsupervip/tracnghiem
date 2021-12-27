@@ -1,11 +1,17 @@
 <template>
   <div>
     <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
-    <b-card class="mb-3">
+    <b-card class="mb-3" sub-title="Tìm kiếm gói dịch vụ">
       <b-form>
         <b-form-row class="row">
           <b-form-group
-            class="col-12 col-md-3 mb-3 position-relative overflow-hidden"
+            label="Tìm kiếm tên gói"
+            class="
+              col-12 col-md-6 col-lg-4 col-xl-3
+              mb-3
+              position-relative
+              overflow-hidden
+            "
           >
             <b-form-input
               id="keyword"
@@ -21,19 +27,31 @@
             ></b-icon-search>
           </b-form-group>
           <b-form-group
-            class="col-12 col-md-3 mb-3 position-relative overflow-hidden"
+            label="Từ ngày"
+            class="
+              col-12 col-md-6 col-lg-4 col-xl-3
+              mb-3
+              position-relative
+              overflow-hidden
+            "
           >
             <b-form-input
               id="keyword"
               v-model="urlQuery.fromDate"
               trim
               type="date"
-              placeholder="Ngày tạo từ"
+              placeholder="Từ ngày"
             >
             </b-form-input>
           </b-form-group>
           <b-form-group
-            class="col-12 col-md-3 mb-3 position-relative overflow-hidden"
+            label="Ngày tạo đến"
+            class="
+              col-12 col-md-6 col-lg-4 col-xl-3
+              mb-3
+              position-relative
+              overflow-hidden
+            "
           >
             <b-form-input
               id="keyword"
@@ -44,7 +62,10 @@
             >
             </b-form-input>
           </b-form-group>
-          <b-form-group class="col-12 col-md-3 mb-3">
+          <b-form-group
+            label="Trạng thái"
+            class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3"
+          >
             <treeselect
               id="status"
               v-model="urlQuery.isActive"
@@ -54,7 +75,10 @@
               placeholder="Trạng thái"
             />
           </b-form-group>
-          <b-form-group class="col-12 col-md-3 mb-3">
+          <b-form-group
+            label="Sắp xếp"
+            class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3"
+          >
             <treeselect
               id="sort"
               v-model="urlQuery.sort"
@@ -64,36 +88,26 @@
               placeholder="Sắp xếp"
             />
           </b-form-group>
-          <div
-            class="
-              col-12 col-md-3
-              mb-3
-              d-flex
-              justify-content-around
-              align-items-end
-            "
-          >
-            <b-button variant="outline-primary btn-sm" @click="search()">
+          <div class="d-flex justify-content-end form-search-action col-12">
+            <b-button variant="outline-primary" @click="search()">
               <b-icon-filter></b-icon-filter>
               Áp dụng
             </b-button>
-            <b-button
-              variant="outline-primary btn-sm"
-              @click="showModal('modal-add')"
+            <b-button variant="primary" @click="showModal('modal-add')"
               >Thêm gói</b-button
             >
           </div>
         </b-form-row>
       </b-form>
     </b-card>
-    <b-card>
+    <b-card sub-title="Danh sách gói dịch vụ">
       <div v-if="total === 0">
         <EmptyData />
       </div>
       <div v-else>
         <b-table striped hover :items="listServices" :fields="fields">
           <template #cell(actions)="data">
-            <b-dropdown class="m-md-2" no-caret size="sm">
+            <b-dropdown class="dropdown-action m-auto" no-caret size="sm">
               <template #button-content>
                 <b-icon-three-dots></b-icon-three-dots>
               </template>
@@ -275,7 +289,13 @@
             </b-form-group>
           </ValidationProvider>
           <footer class="modal-footer">
-            <button type="button" class="btn btn-secondary">Hủy Bỏ</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              @click="hideModal('modal-add')"
+            >
+              Hủy Bỏ
+            </button>
             <button type="submit" class="btn btn-primary">Lưu</button>
           </footer>
         </b-form>
@@ -418,7 +438,13 @@
             </b-form-group>
           </ValidationProvider>
           <footer class="modal-footer">
-            <button type="button" class="btn btn-secondary">Hủy Bỏ</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              @click="hideModal('modal-edit')"
+            >
+              Hủy Bỏ
+            </button>
             <button type="submit" class="btn btn-primary">Lưu</button>
           </footer>
         </b-form>
@@ -696,10 +722,3 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="scss" scoped>
-.btn-search {
-  top: 0;
-  right: 10%;
-  height: 100%;
-}
-</style>

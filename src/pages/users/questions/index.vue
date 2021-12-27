@@ -23,7 +23,7 @@
             <b-form-group
               :label="$t('exam.questions.categories')"
               label-for="categories"
-              class="col-12 col-md-3 mb-3"
+              class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3"
             >
               <treeselect
                 id="categories"
@@ -37,7 +37,7 @@
             <b-form-group
               :label="$t('exam.questions.paymentTypes')"
               label-for="paymentTypes"
-              class="col-12 col-md-3 mb-3"
+              class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3"
             >
               <treeselect
                 id="paymentTypes"
@@ -52,7 +52,7 @@
             <b-form-group
               :label="$t('exam.status')"
               label-for="status"
-              class="col-12 col-md-3 mb-3"
+              class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3"
             >
               <treeselect
                 id="status"
@@ -65,7 +65,7 @@
             <b-form-group
               :label="$t('exam.levels')"
               label-for="levels"
-              class="col-12 col-md-3 mb-3"
+              class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3"
             >
               <treeselect
                 id="levels"
@@ -78,7 +78,7 @@
             <b-form-group
               :label="$t('exam.sortby')"
               label-for="sortby"
-              class="col-12 col-md-3 mb-3"
+              class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3"
             >
               <treeselect
                 id="sortby"
@@ -88,7 +88,7 @@
                 :placeholder="$t('sort')"
               />
             </b-form-group>
-            <div class="d-flex justify-content-end">
+            <div class="form-search-action col-12">
               <b-button variant="outline-primary" @click="handleSearch">
                 <b-icon-filter></b-icon-filter> {{ $t('apply') }}
               </b-button>

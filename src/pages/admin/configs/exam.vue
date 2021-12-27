@@ -12,11 +12,7 @@
                 class="form-control"
                 :placeholder="$t('admin.category.search')"
               />
-              <button
-                class="btn btn-outline-secondary"
-                type="button"
-                @click="search()"
-              >
+              <button class="btn btn-primary" type="button" @click="search()">
                 <b-icon-search></b-icon-search>
               </button>
             </div>
@@ -24,11 +20,7 @@
           <div
             class="col-12 col-md-6 d-flex justify-content-end align-self-end"
           >
-            <button
-              type="button"
-              class="btn btn-primary"
-              @click="showModal('modal-add')"
-            >
+            <button type="button" class="btn btn-primary">
               <b-icon-plus></b-icon-plus> {{ $t('admin.category.add') }}
             </button>
           </div>

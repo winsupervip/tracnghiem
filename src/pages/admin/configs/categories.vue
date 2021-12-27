@@ -12,11 +12,7 @@
                 class="form-control"
                 :placeholder="$t('admin.category.search')"
               />
-              <button
-                class="btn btn-outline-secondary"
-                type="button"
-                @click="search()"
-              >
+              <button class="btn btn-primary" type="button" @click="search()">
                 <b-icon-search></b-icon-search>
               </button>
             </div>
@@ -70,11 +66,11 @@
     </b-card>
     <b-modal
       id="modal-add"
-      size="xl"
+      size="md"
       hide-footer
       :title="$t('admin.category.add')"
     >
-      <CategoryHomeForm @submit="onSubmit" />
+      <CategoryHomeForm @submit="onSubmit" @cancel="hideModal" />
     </b-modal>
   </div>
 </template>
@@ -181,6 +177,9 @@ export default defineComponent({
   methods: {
     showModal(id) {
       this.$bvModal.show(id)
+    },
+    hideModal() {
+      this.$bvModal.hide('modal-add')
     },
     onSubmit() {
       this.$bvModal.hide('modal-add')

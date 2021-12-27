@@ -92,7 +92,7 @@
       <div v-else>
         <b-table striped hover :items="listActived" :fields="fields">
           <template #cell(actions)="data">
-            <b-dropdown class="m-md-2" no-caret size="sm">
+            <b-dropdown class="dropdown-action m-auto" no-caret size="sm">
               <template #button-content>
                 <b-icon-three-dots></b-icon-three-dots>
               </template>

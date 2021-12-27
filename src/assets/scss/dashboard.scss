@@ -9,6 +9,98 @@ body.dashboard {
   .w-80 {
     // width: 80px;
   }
+  .form-control {
+    min-height: 40px;
+    padding: 6px 15px;
+    box-shadow: none;
+    &:focus {
+      box-shadow: none;
+    }
+  }
+  .vue-treeselect__control {
+    height: 40px;
+    padding-left: 8px;
+    padding-right: 8px;
+    .vue-treeselect__placeholder,
+    .vue-treeselect__single-value {
+      line-height: 38px;
+    }
+  }
+
+  .table {
+    font-size: 0.875rem;
+    > thead {
+      border-bottom: 2px solid #dddddd;
+    }
+    tr {
+      vertical-align: middle;
+      td,
+      th {
+        &:first-child {
+          padding-left: 0.75rem;
+        }
+      }
+    }
+    .dropdown-menu {
+      font-size: 14px;
+      box-shadow: 0 0 8px rgb(0 0 0 / 20%);
+      border: none;
+    }
+    .dropdown-action {
+      width: 100%;
+      text-align: center;
+      .dropdown-toggle {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        border-radius: 50%;
+        color: #ffffff;
+        max-width: 40px;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  .modal-footer {
+    justify-content: center;
+    margin-top: 1rem;
+    .btn {
+      min-width: 110px;
+    }
+  }
+
+  .btn {
+    border-width: 1px;
+    height: 40px;
+  }
+
+  .breadcrumb {
+    .breadcrumb-item {
+      &.active {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .form-search-action {
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    .btn {
+      margin-left: 1rem;
+    }
+  }
+
+  .card {
+    .card-body {
+      .card-subtitle {
+        font-weight: bold;
+        color: #222222 !important;
+        margin-bottom: 1rem !important;
+      }
+    }
+  }
 }
 
 .pagination-center {
@@ -137,6 +229,7 @@ body.dashboard {
         }
 
         .p-navItem--dropdown {
+          margin: 4px 0;
           &__inner {
             display: inline-flex;
 
@@ -145,6 +238,14 @@ body.dashboard {
               height: 40px;
               padding: 8px 0;
               text-align: center;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              .img-circle {
+                height: 40px;
+                width: 40px;
+                object-fit: cover;
+              }
 
               a {
                 display: inline-flex;
