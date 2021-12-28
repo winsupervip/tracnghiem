@@ -5,7 +5,13 @@
       <b-form>
         <b-form-row class="row">
           <b-form-group
-            class="col-12 col-md-3 mb-3 position-relative overflow-hidden"
+            class="
+              col-12 col-md-6 col-lg-4
+              cpl-xl-3
+              mb-3
+              position-relative
+              overflow-hidden
+            "
           >
             <b-form-input
               id="keyword"
@@ -21,7 +27,13 @@
             ></b-icon-search>
           </b-form-group>
           <b-form-group
-            class="col-12 col-md-3 mb-3 position-relative overflow-hidden"
+            class="
+              col-12 col-md-6 col-lg-4
+              cpl-xl-3
+              mb-3
+              position-relative
+              overflow-hidden
+            "
           >
             <b-form-input
               id="keyword"
@@ -33,7 +45,13 @@
             </b-form-input>
           </b-form-group>
           <b-form-group
-            class="col-12 col-md-3 mb-3 position-relative overflow-hidden"
+            class="
+              col-12 col-md-6 col-lg-4
+              cpl-xl-3
+              mb-3
+              position-relative
+              overflow-hidden
+            "
           >
             <b-form-input
               id="keyword"
@@ -45,7 +63,7 @@
             </b-form-input>
           </b-form-group>
 
-          <b-form-group class="col-12 col-md-3 mb-3">
+          <b-form-group class="col-12 col-md-6 col-lg-4 cpl-xl-3 mb-3">
             <treeselect
               id="status"
               v-model="urlQuery.status"
@@ -55,7 +73,7 @@
               placeholder="Trạng thái"
             />
           </b-form-group>
-          <b-form-group class="col-12 col-md-3 mb-3">
+          <b-form-group class="col-12 col-md-6 col-lg-4 cpl-xl-3 mb-3">
             <treeselect
               id="sort"
               v-model="urlQuery.sort"
@@ -65,23 +83,12 @@
               placeholder="Sắp xếp"
             />
           </b-form-group>
-          <div
-            class="
-              col-12 col-md-3
-              mb-3
-              d-flex
-              justify-content-around
-              align-items-end
-            "
-          >
-            <b-button variant="outline-primary btn-sm" @click="search()">
+          <div class="form-search-action col-12">
+            <b-button variant="outline-primary" @click="search()">
+              <span class="me-2"><b-icon-filter></b-icon-filter></span>
               Áp dụng
             </b-button>
-            <b-button
-              v-b-modal.modal-edit
-              variant="outline-primary btn-sm"
-              @click="onEdit()"
-            >
+            <b-button v-b-modal.modal-edit variant="primary" @click="onEdit()">
               Thêm tài khoản</b-button
             >
           </div>
@@ -163,7 +170,13 @@
             </b-form-group>
           </ValidationProvider>
           <footer class="modal-footer">
-            <button type="button" class="btn btn-secondary">Hủy Bỏ</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              @click="hideModal('modal-edit')"
+            >
+              Hủy Bỏ
+            </button>
             <button type="submit" class="btn btn-primary">Lưu</button>
           </footer>
         </b-form>

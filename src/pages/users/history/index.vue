@@ -30,8 +30,6 @@
               :placeholder="$t('exam.categories')"
             />
           </b-form-group>
-        </b-form-row>
-        <b-form-row class="row">
           <b-form-group
             :label="$t('exam.status')"
             label-for="status"
