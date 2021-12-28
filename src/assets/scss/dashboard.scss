@@ -92,10 +92,19 @@ body.dashboard {
   .form-search-action {
     margin-bottom: 0.5rem;
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    flex-wrap: wrap;
     .btn {
       margin-left: 1rem;
+      margin-top: 0.5rem;
+      min-width: 120px;
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+    @media screen and (max-width: $sp) {
+      justify-content: center !important;
     }
   }
 
