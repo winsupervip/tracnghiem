@@ -11,8 +11,12 @@
         <p>Số lượng đề thi: {{ listDetail.limitExam }}</p>
         <hr />
         <div>
-          <b-button variant="primary">Yêu cầu gia hạn gói</b-button>
-          <b-button variant="warning">Tạm dừng kích hoạt user</b-button>
+          <b-button variant="primary" class="my-1"
+            >Yêu cầu gia hạn gói</b-button
+          >
+          <b-button variant="warning" class="my-1"
+            >Tạm dừng kích hoạt user</b-button
+          >
         </div>
       </b-card>
 
@@ -34,14 +38,14 @@
         <hr />
         <div class="mt-auto">
           <nuxt-link
-            class="btn btn-info"
+            class="btn btn-info my-1"
             :to="{
               path: `/agency/service/${agencyHashId}`,
             }"
           >
             Danh sách mã kích hoạt
           </nuxt-link>
-          <b-button v-b-modal.modal-edit variant="primary"
+          <b-button v-b-modal.modal-edit variant="primary" class="my-1"
             >Thêm mã kích hoạt</b-button
           >
         </div>
