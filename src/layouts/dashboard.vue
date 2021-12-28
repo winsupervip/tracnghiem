@@ -69,30 +69,21 @@
                     </div>
                     <div class="p-navItem--dropdown__inner__menu help">
                       <div class="p-navItem--dropdown__inner__menu__child">
-                        <div class="item item__heading">Help</div>
+                        <div class="item item__heading">Hướng dẫn</div>
                         <nuxt-link class="item item__link" to="">
-                          Nguyen Phuoc Tien
+                          Hướng dẫn tạo đề thi
                         </nuxt-link>
                         <nuxt-link class="item item__link" to="">
-                          Documentation
-                        </nuxt-link>
-                        <nuxt-link class="item item__link" to="">
-                          Learn Git
+                          Hướng dẫn tạo câu hỏi
                         </nuxt-link>
                       </div>
                       <div class="p-navItem--dropdown__inner__menu__child">
-                        <div class="item item__heading">Settings</div>
+                        <div class="item item__heading">Chính sách</div>
                         <nuxt-link class="item item__link" to="">
-                          Personal settings
+                          Chính sách bảo mật
                         </nuxt-link>
                         <nuxt-link class="item item__link" to="">
-                          Labs
-                        </nuxt-link>
-                      </div>
-                      <div class="p-navItem--dropdown__inner__menu__child">
-                        <div class="item item__heading">NGUYEN PHUOC TIEN</div>
-                        <nuxt-link class="item item__link" to="">
-                          Privacy policy
+                          Điều khoản sử dụng
                         </nuxt-link>
                       </div>
                     </div>
@@ -111,7 +102,9 @@
                       data-bottom="10"
                     >
                       <div class="p-navItem--dropdown__inner__menu__child">
-                        <div class="item item__heading">Recent workspaces</div>
+                        <div class="item item__heading">
+                          Thông tin tài khoản
+                        </div>
                         <nuxt-link
                           class="item item__link"
                           to="/users/personal/personal"
@@ -122,32 +115,36 @@
                               : firstName + ' ' + lastName
                           }}
                         </nuxt-link>
-                        <nuxt-link class="item item__link" to="">
+                        <!-- <nuxt-link class="item item__link" to="">
                           All workspaces
-                        </nuxt-link>
+                        </nuxt-link> -->
                       </div>
-                      <div class="p-navItem--dropdown__inner__menu__child">
-                        <div class="item item__heading">Settings</div>
-                        <!-- <nuxt-link
+                      <!-- <div class="p-navItem--dropdown__inner__menu__child">
+                        <div class="item item__heading">Settings</div> -->
+                      <!-- <nuxt-link
                           to="/users/personal/personal"
                           class="item item__link"
                         >
                           Personal settings
                         </nuxt-link> -->
-                        <nuxt-link class="item item__link" to="">
+                      <!-- <nuxt-link class="item item__link" to="">
                           Labs
                         </nuxt-link>
-                      </div>
+                      </div> -->
                       <div class="p-navItem--dropdown__inner__menu__child">
-                        <div class="item item__heading">
+                        <!-- <div class="item item__heading">
                           {{
                             displayName
                               ? displayName
                               : firstName + ' ' + lastName
                           }}
-                        </div>
-                        <nuxt-link class="item item__link" to="">
-                          Logout
+                        </div> -->
+                        <nuxt-link
+                          class="item item__link"
+                          to=""
+                          @click.native="logout()"
+                        >
+                          Đăng xuất
                         </nuxt-link>
                       </div>
                     </div>
@@ -525,6 +522,9 @@ export default defineComponent({
     },
     getNavClass(currentRoute) {
       return this.$route.name.includes(currentRoute) ? 'active' : ''
+    },
+    logout() {
+      this.$auth.logout()
     },
   },
 })

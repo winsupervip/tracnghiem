@@ -4,7 +4,7 @@
     <b-card>
       <b-form>
         <b-form-row class="row">
-          <b-form-group label-for="keyword" class="col-12 col-md-6">
+          <b-form-group label-for="keyword" class="col-12 col-md-6 my-1">
             <div class="input-group">
               <input
                 v-model="urlQuery.keyword"
@@ -18,7 +18,13 @@
             </div>
           </b-form-group>
           <div
-            class="col-12 col-md-6 d-flex justify-content-end align-self-end"
+            class="
+              col-12 col-md-6
+              d-flex
+              justify-content-end
+              align-self-end
+              my-1
+            "
           >
             <button type="button" class="btn btn-primary">
               <b-icon-plus></b-icon-plus> {{ $t('admin.category.add') }}
@@ -32,7 +38,8 @@
         <EmptyData />
       </div>
       <div v-else>
-        <b-table striped hover :items="items" :fields="fields"> </b-table>
+        <b-table responsive striped hover :items="items" :fields="fields">
+        </b-table>
         <div class="mt-2">
           <b-pagination
             v-if="total > urlQuery.pageSize"

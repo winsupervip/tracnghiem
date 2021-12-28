@@ -4,7 +4,7 @@
     <b-card>
       <b-form>
         <b-form-row class="row">
-          <b-form-group label-for="keyword" class="col-12 col-md-6">
+          <b-form-group label-for="keyword" class="col-12 col-md-6 my-1">
             <div class="input-group">
               <input
                 v-model="urlQuery.keyword"
@@ -18,7 +18,13 @@
             </div>
           </b-form-group>
           <div
-            class="col-12 col-md-6 d-flex justify-content-end align-self-end"
+            class="
+              col-12 col-md-6
+              d-flex
+              justify-content-end
+              align-self-end
+              my-1
+            "
           >
             <button
               type="button"
@@ -36,7 +42,7 @@
         <EmptyData />
       </div>
       <div v-else>
-        <b-table striped hover :items="items" :fields="fields">
+        <b-table responsive striped hover :items="items" :fields="fields">
           <template #cell(actions)="data">
             <b-dropdown class="dropdown-action m-auto" no-caret size="sm">
               <template #button-content>
@@ -184,6 +190,7 @@ export default defineComponent({
         {
           key: 'actions',
           label: 'Chức năng',
+          class: 'col-action',
         },
       ],
       doShow: false,

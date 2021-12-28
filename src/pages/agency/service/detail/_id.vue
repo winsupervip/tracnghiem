@@ -9,8 +9,11 @@
         <p>Số ngày sử dụng: {{ listDetail.exp }}</p>
         <p>Số lượng câu hỏi: {{ listDetail.limitQuestion }}</p>
         <p>Số lượng đề thi: {{ listDetail.limitExam }}</p>
-        <b-button variant="outline-primary">Yêu cầu gia hạn gói</b-button>
-        <b-button variant="outline-primary">Tạm dừng kích hoạt user</b-button>
+        <hr />
+        <div>
+          <b-button variant="primary">Yêu cầu gia hạn gói</b-button>
+          <b-button variant="warning">Tạm dừng kích hoạt user</b-button>
+        </div>
       </b-card>
 
       <b-card sub-title="Thông tin mã kích hoạt" class="ms-2">
@@ -28,20 +31,20 @@
           -
           {{ listDetail.lastUserActive.activeDate | formatDurationDay }} -->
         </p>
-        <footer>
-          <b-button variant="outline-primary">
-            <nuxt-link
-              :to="{
-                path: `/agency/service/${agencyHashId}`,
-              }"
-            >
-              Danh sách mã kích hoạt
-            </nuxt-link>
-          </b-button>
-          <b-button v-b-modal.modal-edit variant="outline-primary"
+        <hr />
+        <div class="mt-auto">
+          <nuxt-link
+            class="btn btn-info"
+            :to="{
+              path: `/agency/service/${agencyHashId}`,
+            }"
+          >
+            Danh sách mã kích hoạt
+          </nuxt-link>
+          <b-button v-b-modal.modal-edit variant="primary"
             >Thêm mã kích hoạt</b-button
           >
-        </footer>
+        </div>
       </b-card>
     </b-card-group>
     <b-modal

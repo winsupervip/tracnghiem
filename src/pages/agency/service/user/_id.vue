@@ -174,7 +174,13 @@
         <EmptyData />
       </div>
       <div v-else>
-        <b-table striped hover :items="listAccounts" :fields="fields">
+        <b-table
+          responsive
+          striped
+          hover
+          :items="listAccounts"
+          :fields="fields"
+        >
           <template #cell(actions)="data">
             <b-dropdown class="dropdown-action m-auto" no-caret size="sm">
               <template #button-content>

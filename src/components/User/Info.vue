@@ -123,7 +123,7 @@
         />
 
         <button class="btn btn-primary" @click="handleCopy">
-          <b-icon icon="file-code" aria-hidden="true"></b-icon>
+          <b-icon icon="files" aria-hidden="true"></b-icon>
         </button>
       </div>
       <div class="w-100 btn btn-outline-primary" @click="logout()">

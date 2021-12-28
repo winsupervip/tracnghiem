@@ -87,15 +87,12 @@
         <div class="wrapper d-flex justify-content-between">
           <b-button
             v-b-modal.modal-prevent-closing
-            class="btn btn-sm btn-outline-primary btn_transparent"
+            variant="info"
+            class="btn btn-sm"
             ><b-icon icon="link45deg" aria-hidden="true" class="icon"></b-icon
             >Link ảnh</b-button
           >
-          <button
-            class="btn btn-sm btn-outline-primary"
-            type="button"
-            @click="reup()"
-          >
+          <button class="btn btn-sm btn-danger" type="button" @click="reup()">
             <b-icon icon="trash" aria-hidden="true" class="icon"></b-icon>
           </button>
           <b-modal id="modal-prevent-closing" ref="modal" title="Link ảnh">
