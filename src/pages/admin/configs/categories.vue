@@ -4,7 +4,7 @@
     <b-card>
       <b-form>
         <b-form-row class="row">
-          <b-form-group label-for="keyword" class="col-12 col-md-6">
+          <b-form-group label-for="keyword" class="col-12 col-md-6 my-1">
             <div class="input-group">
               <input
                 v-model="urlQuery.keyword"
@@ -18,7 +18,13 @@
             </div>
           </b-form-group>
           <div
-            class="col-12 col-md-6 d-flex justify-content-end align-self-end"
+            class="
+              col-12 col-md-6
+              d-flex
+              justify-content-end
+              align-self-end
+              my-1
+            "
           >
             <button
               type="button"
@@ -27,12 +33,8 @@
             >
               <b-icon-plus></b-icon-plus> {{ $t('admin.category.add') }}
             </button>
-            <button
-              type="button"
-              class="btn btn-outline-secondary"
-              @click="clearAll"
-            >
-              <b-icon-trash></b-icon-trash>
+            <button type="button" class="btn btn-danger" @click="clearAll">
+              <span class="me-2"><b-icon-trash></b-icon-trash></span>
               {{ $t('admin.configs.category.clear') }}
             </button>
           </div>
@@ -44,10 +46,10 @@
         <EmptyData />
       </div>
       <div v-else>
-        <b-table striped hover :items="items" :fields="fields">
+        <b-table responsive striped hover :items="items" :fields="fields">
           <template #cell(actions)="data">
-            <b-button @click="deleteCategory(data.item.id)">
-              <b-icon-trash></b-icon-trash>
+            <b-button variant="danger" @click="deleteCategory(data.item.id)">
+              <span class="me-2"><b-icon-trash></b-icon-trash></span>
               {{ $t('admin.category.delete') }}
             </b-button>
           </template>
@@ -142,6 +144,7 @@ export default defineComponent({
         {
           key: 'actions',
           label: 'Chức năng',
+          class: 'col-action',
         },
       ],
       dataForm: {},

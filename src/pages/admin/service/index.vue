@@ -105,7 +105,13 @@
         <EmptyData />
       </div>
       <div v-else>
-        <b-table striped hover :items="listServices" :fields="fields">
+        <b-table
+          responsive
+          striped
+          hover
+          :items="listServices"
+          :fields="fields"
+        >
           <template #cell(actions)="data">
             <b-dropdown class="dropdown-action m-auto" no-caret size="sm">
               <template #button-content>
@@ -527,6 +533,7 @@ export default defineComponent({
         {
           key: 'actions',
           label: 'Chức năng',
+          class: 'col-action',
         },
       ],
       listActive: [

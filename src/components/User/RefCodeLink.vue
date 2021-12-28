@@ -13,12 +13,8 @@
           :value="`https://tracnghiem.vn/affiliate?ref=${refCode}`"
           readonly
         />
-        <button class="btn btn-outline-primary">
-          <b-icon
-            icon="file-code"
-            aria-hidden="true"
-            @click="handleCopy"
-          ></b-icon>
+        <button class="btn btn-primary">
+          <b-icon icon="files" aria-hidden="true" @click="handleCopy"></b-icon>
         </button>
       </div>
     </b-card>

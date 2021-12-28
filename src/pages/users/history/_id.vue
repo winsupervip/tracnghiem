@@ -6,7 +6,7 @@
         <EmptyData />
       </div>
       <div v-else>
-        <b-table striped hover :items="items" :fields="fields">
+        <b-table responsive striped hover :items="items" :fields="fields">
           <template #cell(id)="data">
             {{ data.index + 1 }}
           </template>

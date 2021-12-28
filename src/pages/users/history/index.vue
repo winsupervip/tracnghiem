@@ -7,7 +7,7 @@
           <b-form-group
             :label="$t('keyword')"
             label-for="keyword"
-            class="col-12 col-md-6 mb-3"
+            class="col-12 col-md-6 col-lg-4 cpl-xl-3 mb-3"
           >
             <b-form-input
               id="keyword"
@@ -19,7 +19,7 @@
           <b-form-group
             :label="$t('exam.categories')"
             label-for="categories"
-            class="col-12 col-md-3 mb-3"
+            class="col-12 col-md-6 col-lg-4 cpl-xl-3 mb-3"
           >
             <treeselect
               id="categories"
@@ -35,7 +35,7 @@
           <b-form-group
             :label="$t('exam.status')"
             label-for="status"
-            class="col-12 col-md-3 mb-3"
+            class="col-12 col-md-6 col-lg-4 cpl-xl-3 mb-3"
           >
             <treeselect
               id="status"
@@ -49,7 +49,7 @@
           <b-form-group
             :label="$t('exam.sortby')"
             label-for="sortby"
-            class="col-12 col-md-3 mb-3"
+            class="col-12 col-md-6 col-lg-4 cpl-xl-3 mb-3"
           >
             <treeselect
               id="sortby"
@@ -60,15 +60,7 @@
               :placeholder="$t('exam.sortby')"
             />
           </b-form-group>
-          <div
-            class="
-              col-12 col-md-3
-              mb-3
-              d-flex
-              justify-content-around
-              align-items-end
-            "
-          >
+          <div class="form-search-action col-12">
             <b-button variant="outline-primary" @click="fetch()">
               <b-icon-filter></b-icon-filter> {{ $t('exam.filter') }}
             </b-button>
