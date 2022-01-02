@@ -33,13 +33,13 @@
                 :options="optionsExam"
               ></b-select>
             </div> -->
-            <div class="input-select">
-              <!-- <b-select
+            <!-- <div class="input-select"> -->
+            <!-- <b-select
                 v-model="dataSearch.category"
                 class="form-control"
                 :options="optionsCategory"
               ></b-select> -->
-              <b-form-select v-model="selected" class="form-control">
+            <!-- <b-form-select v-model="selected" class="form-control">
                 <b-form-select-option :value="''"
                   >Danh Mục</b-form-select-option
                 >
@@ -49,8 +49,8 @@
                   :value="category.id"
                   >{{ category.label }}</b-form-select-option
                 >
-              </b-form-select>
-            </div>
+              </b-form-select> -->
+            <!-- </div> -->
             <div class="search-button">
               <b-btn type="submit" variant="primary" :disabled="isLoading">
                 <span v-if="isLoading" class="d-flex align-items-center">

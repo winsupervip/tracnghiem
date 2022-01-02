@@ -4,10 +4,14 @@
       <div class="question-name font-bold">
         Câu hỏi {{ question.sortOrder }}
       </div>
+      <div class="question-category text-gray">
+        <i class="icon-tag" />
+        <span class="font-sm">{{ question.seoTitle }}</span>
+      </div>
     </div>
     <div
       class="question-content text-smd"
-      v-html="question.item.questionContent"
+      v-html="question.questionContent"
     ></div>
     <div class="question-item-answer">
       <div class="answer-head">

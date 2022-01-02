@@ -79,7 +79,13 @@
         <EmptyData />
       </div>
       <div v-else>
-        <b-table striped hover :items="listServices" :fields="fields">
+        <b-table
+          responsive
+          striped
+          hover
+          :items="listServices"
+          :fields="fields"
+        >
           <template #cell(index)="data">
             {{ data.index + 1 + (urlQuery.page - 1) * 10 }}
           </template>

@@ -1,13 +1,6 @@
 <template>
   <div>
     <div v-for="(q, index) in question.item.questions" :key="index">
-      <div class="question-title d-flex justify-content-between">
-        <div class="question-name font-bold">Câu hỏi {{ q.sortOrder }}</div>
-        <div class="question-category text-gray">
-          <i class="icon-tag" />
-          <span class="font-sm">{{ title }}</span>
-        </div>
-      </div>
       <!-- <component :is="dynamicComponent(q)" ref="questionInExam" :question="q" /> -->
       <Item :question="q" />
     </div>
@@ -32,7 +25,7 @@ export default defineComponent({
       if (this.question?.item?.section?.title) {
         return this.question?.item?.section?.title
       } else {
-        return 'Fails'
+        return ''
       }
     },
   },

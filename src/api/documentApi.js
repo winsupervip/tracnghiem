@@ -13,10 +13,18 @@ export default {
     return result
   },
 
-  getQuestionDocument: (hashId) =>
-    global.$http.get(`/api/Document/get-question-documents/${hashId}`),
+  getQuestionDocument: (hashId, typeId) =>
+    global.$http.get(
+      `/api/Document/get-question-documents/${hashId}?typeId=${typeId}`
+    ),
   addQuestionDocument: (data) =>
     global.$http.post('/api/Document/add-question-document', data),
-  deleteQuestionDocument: (data) =>
-    global.$http.delete('/api/Document/delete-question-document', data),
+  deleteQuestionDocument: (hashId) =>
+    global.$http.delete(
+      `/api/Document/delete-question-document?hashId=${hashId}`
+    ),
+  updateDocument: (data) =>
+    global.$http.post('/api/Document/update-document', data),
+  deleteDocument: (hashId) =>
+    global.$http.delete(`/api/Document/delete-document/${hashId}`),
 }

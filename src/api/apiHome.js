@@ -67,8 +67,8 @@ export default {
     global.$http.get(`api/v1/Exam/get-question-exam-detail-home/${id}`),
   getListExamDocument: (id) =>
     global.$http.get(`api/v1/Exam/get-document-exam-home/${id}?orderBy=1`),
-  getQuestionExamDetailHome: (id) =>
+  getQuestionExamDetailHome: (data) =>
     global.$http.get(
-      `api/v1/Exam/get-question-exam-detail-home/${id}?PageSize=50`
+      `api/v1/Exam/get-question-exam-detail-home/${data.id}?Page=${data.page}&PageSize=${data.pageSize}`
     ),
 }

@@ -31,10 +31,18 @@
                         :question="question"
                       />
                     </div>
-                    <div class="text-center mb-3">
-                      <b-btn variant="primary"> Xem thêm </b-btn>
+                    <b-pagination
+                      v-if="isLogin"
+                      v-model="currentPage"
+                      total-rows="50"
+                      align="right"
+                    />
+
+                    <div v-else class="text-center mb-3">
+                      <b-btn variant="primary" @click="seeMore">
+                        Xem thêm
+                      </b-btn>
                     </div>
-                    <b-pagination total-rows="50" align="right" />
                   </b-card>
                 </div>
               </b-tab>
@@ -62,6 +70,13 @@
         </b-row>
       </b-container>
     </section>
+    <div>
+      <b-modal id="see-more" title="Thông báo" ok-only>
+        <p class="d-flex justify-content-center">
+          Bạn cần đăng nhập để xem nhiều hơn
+        </p>
+      </b-modal>
+    </div>
     <b-modal
       id="modal-start-exam"
       class="modal-common"
@@ -204,6 +219,8 @@ export default defineComponent({
         questionId: null,
         userChoices: [],
       },
+      currentPage: 1,
+      pageSize: 10,
     })
     useAsync(async () => {
       $loader()
@@ -244,9 +261,13 @@ export default defineComponent({
     ...mapGetters({
       getQuestion: 'questions/getQuestion',
       examSettings: 'exams/getExamSettings',
+      isLogin: 'user/isLogin',
     }),
   },
   watch: {
+    currentPage() {
+      this.fetchQuestionsOfExam()
+    },
     examSettings() {
       this.configQuizData = this.examSettings
       console.log('configQuizData', this.configQuizData)
@@ -266,15 +287,24 @@ export default defineComponent({
   methods: {
     async fetchQuestionsOfExam() {
       try {
-        const { data: result } = await ApiHome.getQuestionExamDetailHome(
-          this.idExam
-        )
+        const { data: result } = await ApiHome.getQuestionExamDetailHome({
+          id: this.idExam,
+          pageSize: this.pageSize,
+          page: this.currentPage,
+        })
         this.listQuestionExam = result.object
         console.log(this.listQuestionExam, 'ta den day')
       } catch (err) {
         this.$handleError(err, () => {
           console.log(err)
         })
+      }
+    },
+    seeMore() {
+      if (this.isLogin) {
+        //
+      } else {
+        this.$bvModal.show('see-more')
       }
     },
     hide() {

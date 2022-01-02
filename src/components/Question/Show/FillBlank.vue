@@ -1,8 +1,17 @@
 <template>
   <div class="questionItem">
+    <div class="question-title d-flex justify-content-between">
+      <div class="question-name font-bold">
+        Câu hỏi {{ question.sortOrder }}
+      </div>
+      <div class="question-category text-gray">
+        <i class="icon-tag" />
+        <span class="font-sm">{{ question.seoTitle }}</span>
+      </div>
+    </div>
     <div
       class="questionItem__content text-smd"
-      v-html="question.item.questionContent"
+      v-html="question.questionContent"
     ></div>
     <div class="questionItem__answer">
       <div class="answer-head">
@@ -52,13 +61,13 @@ export default defineComponent({
   },
   computed: {
     listAnswer() {
-      return this.question.item.answers
+      return this.question.answers
     },
     listTextChoose() {
       const arr = [{ value: null, text: 'Choose' }]
 
       // eslint-disable-next-line array-callback-return
-      this.question.item.answers.map((x, i) => {
+      this.question.answers.map((x, i) => {
         if (x.sortOrder > 0) {
           arr.push({
             value: x.sortOrder + '',

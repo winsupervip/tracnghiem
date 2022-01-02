@@ -1,7 +1,6 @@
 <template>
   <div>
-    <component :is="dynamicComponent" :question="question.item" />
-    <!-- {{ question }} -->
+    <component :is="dynamicComponent" :question="question" />
   </div>
 </template>
 
@@ -14,7 +13,6 @@ import Paring from './Paring.vue'
 import FillBlank from './FillBlank.vue'
 import ShortAnswer from './ShortAnswer.vue'
 import Sort from './Sort.vue'
-import SectionView from './SectionView.vue'
 import GroupView from './GroupView.vue'
 export default defineComponent({
   name: 'Item',
@@ -27,7 +25,6 @@ export default defineComponent({
     ShortAnswer,
     Sort,
     GroupView,
-    SectionView,
   },
   props: {
     question: {
@@ -47,20 +44,21 @@ export default defineComponent({
         6: ShortAnswer,
         7: Sort,
         8: GroupView,
-        9: SectionView,
       }
-      if (this.question.itemType === 'question') {
+      if (
+        this.question?.itemType === 'question' ||
+        this.question.questionTypeId
+      ) {
         console.log('vo day')
-        return listQuestionTypes[this.question.item.questionTypeId]
-      } else if (this.question.itemType === 'section') {
-        return listQuestionTypes[9]
+        return listQuestionTypes[this.question?.questionTypeId]
       } else {
+        console.log('group')
         return listQuestionTypes[8]
       }
     },
   },
   created() {
-    console.log(this.question)
+    console.log('item view', this.question)
   },
 })
 </script>

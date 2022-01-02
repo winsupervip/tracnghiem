@@ -6,27 +6,28 @@
   align-items: center;
   overflow: hidden;
   background-color: $white;
-  @media screen and (max-width: $sm){
+  @media screen and (max-width: $sm) {
     padding: 50px 0;
     min-height: 420px;
   }
-  @media screen and (max-width: $xs){
+  @media screen and (max-width: $xs) {
     min-height: 350px;
   }
   .container {
     position: relative;
     .search-box {
       width: 100%;
-      max-width: 800px;
+      // max-width: 800px;
+      max-width: fit-content;
       position: relative;
       z-index: 2;
       .search-box-text {
         max-width: 550px;
         margin-bottom: 2rem;
-        @media screen and (max-width: $sm){
+        @media screen and (max-width: $sm) {
           width: 70%;
         }
-        @media screen and (max-width: $xs){
+        @media screen and (max-width: $xs) {
           width: 90%;
         }
       }
@@ -37,11 +38,11 @@
         color: $blueDark;
         line-height: 1.5;
         text-shadow: 2px 2px 1px #ffffff;
-        @media screen and (max-width: $sm){
+        @media screen and (max-width: $sm) {
           font-size: 1.75rem;
           text-shadow: 1px 1px 0 #ffffff;
         }
-        @media screen and (max-width: $xs){
+        @media screen and (max-width: $xs) {
           font-size: 1.25rem;
         }
       }
@@ -50,7 +51,7 @@
         color: $blueDark;
         line-height: 1.8;
         text-shadow: 1px 0 1px #ffffff;
-        @media screen and (max-width: $sm){
+        @media screen and (max-width: $sm) {
           font-size: 0.875rem;
         }
       }
@@ -58,10 +59,10 @@
         padding: 1.5rem;
         background-color: #f3f3fa;
         border-radius: 0.25rem;
-        @media screen and (max-width: $sm){
+        @media screen and (max-width: $sm) {
           padding: 1rem;
         }
-        @media screen and (max-width: $xs){
+        @media screen and (max-width: $xs) {
           padding: 0;
           background-color: transparent;
           border-radius: 0;
@@ -70,7 +71,8 @@
           display: flex;
           align-items: center;
           .input-keyword {
-            width: 210px;
+            // width: 210px;
+            width: 100%;
             margin-right: 1rem;
             position: relative;
             .form-control {
@@ -90,7 +92,7 @@
                 border-radius: 4px 0 0 4px;
                 background-color: transparent;
                 height: 50px;
-                color: #B0BAD5;
+                color: #b0bad5;
                 padding: 0.375rem 0 0.375rem 0.75rem;
                 border: none;
                 i {
@@ -134,7 +136,7 @@
               }
             }
           }
-          @media screen and (max-width: $sm){
+          @media screen and (max-width: $sm) {
             flex-wrap: wrap;
             justify-content: space-between;
             .input-keyword {
@@ -167,7 +169,6 @@
             }
           }
         }
-
       }
     }
     .search-img-right {
@@ -178,7 +179,7 @@
       top: 45%;
       transform: translateY(-50%);
       text-align: right;
-      @media screen and (max-width: $sm){
+      @media screen and (max-width: $sm) {
         width: 40%;
         top: 0;
         transform: none;

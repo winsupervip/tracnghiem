@@ -21,8 +21,10 @@
       </div>
       <div class="list-group-item">
         <p>{{ statusMessage }}</p>
-        <b-button variant="outline-primary" type="submit">
-          <b-icon-file-earmark-check></b-icon-file-earmark-check>
+        <b-button variant="primary" type="submit">
+          <span class="me-2">
+            <b-icon-file-earmark-check></b-icon-file-earmark-check>
+          </span>
           {{ $t('exam.form.submitDraft') }}
         </b-button>
       </div>
@@ -36,10 +38,10 @@
         <b-form-invalid-feedback :state="valid">
           {{ errors ? errors[0] : '' }}
         </b-form-invalid-feedback>
-        <div class="list-group-item disabled border-bottom-0">
+        <div class="list-group-item disabled">
           <h3>{{ $t('exam.form.categoryTitle') }} (*):</h3>
         </div>
-        <div class="list-group-item border-0 p-0 m-0">
+        <div class="list-group-item">
           <treeselect
             id="categories"
             v-model="categoryId"

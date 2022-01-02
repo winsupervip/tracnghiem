@@ -1,6 +1,6 @@
 <template>
   <div>
-    <component :is="dynamicComponent" :question="question" />
+    <component :is="dynamicComponent" :question="compareValue" />
   </div>
 </template>
 
@@ -57,6 +57,12 @@ export default defineComponent({
         console.log('c')
         return listQuestionTypes[8]
       }
+    },
+    compareValue() {
+      if (this.question.itemType === 'question') {
+        return this.question.item
+      }
+      return this.question
     },
   },
 })
