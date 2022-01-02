@@ -8,8 +8,7 @@
     <section class="exam-main-container">
       <b-container>
         <b-row>
-          <b-col md="12" lg="8" class="exam-main-content"
-            >{{ tabIndex }}
+          <b-col md="12" lg="8" class="exam-main-content">
             <b-tabs v-model="tabIndex" class="common-tabs">
               <b-tab title="Thông tin đề thi" active>
                 <TabInfoQuiz
@@ -26,57 +25,11 @@
                     class="mb-3"
                   >
                     <div class="list-question mb-4">
-                      <div class="question-item">
-                        <div
-                          class="question-title d-flex justify-content-between"
-                        >
-                          <div class="question-name font-bold">Câu hỏi 1</div>
-                          <div class="question-category text-gray">
-                            <i class="icon-tag" />
-                            <span class="font-sm">Reading, Cơ bản</span>
-                          </div>
-                        </div>
-                        <div class="question-content text-smd">
-                          Which of the following lists all and only the
-                          appropriate descriptions about a 32-bit CPU and a
-                          64-bit CPU? I When a 32-bit CPU and a 64-bit CPU are
-                          compared, a 64-bit CPU has a larger theoretical
-                          maximum memory space.. II There is no 32-bit OS that
-                          runs on a PC with a 64-bit CPU. III In terms of the
-                          read and write speed of a USB memory, the speed of a
-                          PC with a 64-bit CPU is twice as fast as that of a PC
-                          with a 32-bit CPU.
-                        </div>
-                        <div class="question-item-answer">
-                          <div class="answer-head">
-                            <span class="font-sm text-gray">câu trả lời</span>
-                          </div>
-                          <div class="list-answer">
-                            <ul class="list-unstyled p-0">
-                              <li>
-                                <b>A.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>B.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>C.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>D.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
+                      <ShowQuestionExamDetail
+                        v-for="(question, index) in listQuestionExam"
+                        :key="index"
+                        :question="question"
+                      />
                     </div>
                     <div class="text-center mb-3">
                       <b-btn variant="primary"> Xem thêm </b-btn>
@@ -176,7 +129,6 @@
 </template>
 
 <script>
-// import { defineComponent } from '@nuxtjs/composition-api'
 import {
   defineComponent,
   useContext,
@@ -190,6 +142,7 @@ import {
 // eslint-disable-next-line no-unused-vars
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
+import ShowQuestionExamDetail from '@/components/Question/Show/QuestionExamDetail.vue'
 // eslint-disable-next-line import/no-unresolved
 import ConfigQuiz from '@/components/Quiz/ConfigQuiz.vue'
 // eslint-disable-next-line import/no-unresolved
@@ -209,6 +162,7 @@ export default defineComponent({
     Ranks,
     TabInfoQuiz,
     Heading,
+    ShowQuestionExamDetail,
   },
   layout: 'default',
   auth: false,
@@ -246,6 +200,10 @@ export default defineComponent({
       getListExamDocument: [],
       listQuestionExam: [],
       tabIndex: 0,
+      userAnswer: {
+        questionId: null,
+        userChoices: [],
+      },
     })
     useAsync(async () => {
       $loader()
@@ -311,7 +269,8 @@ export default defineComponent({
         const { data: result } = await ApiHome.getQuestionExamDetailHome(
           this.idExam
         )
-        this.listQuestionExam = result.object.item
+        this.listQuestionExam = result.object
+        console.log(this.listQuestionExam, 'ta den day')
       } catch (err) {
         this.$handleError(err, () => {
           console.log(err)

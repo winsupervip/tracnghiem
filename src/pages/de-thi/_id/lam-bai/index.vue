@@ -190,7 +190,7 @@
                       <b-btn
                         :key="`question${item.id}`"
                         v-model="indexQuestionChoose"
-                        :class="item.status !== 0 ? 'answered' : ''"
+                        :class="getColorOfQuestion(item)"
                         @click="chooseQuestion(item.id, index)"
                         >{{ index + 1 }}</b-btn
                       >
@@ -221,10 +221,9 @@
                   <div class="font-bold">Câu {{ indexQuestionChoose }}</div>
                   <b-form-checkbox
                     id="checkbox-bookmark"
-                    v-model="bookmarkQuestion"
+                    v-model="questionItem.flag"
                     name="checkbox-bookmark"
-                    :value="true"
-                    :unchecked-value="false"
+                    @change="setFlag()"
                   >
                     Đánh dấu
                   </b-form-checkbox>
@@ -237,20 +236,48 @@
                 />
               </div>
               <template #footer>
-                <b-btn
-                  v-if="examSettings.showRightAnswerAfterSubmit"
-                  variant="outline"
+                <b-overlay
+                  :show="busy"
+                  rounded
+                  opacity="0.6"
+                  spinner-small
+                  spinner-variant="primary"
+                  class="d-inline-block"
                 >
-                  Xem đáp án
-                </b-btn>
-                <b-btn variant="outline" @click="prevQuestion()">
-                  <i class="icon-arrow-left me-2"></i>
-                  Câu trước
-                </b-btn>
-                <b-btn variant="primary" @click="nextQuestion()">
-                  Câu sau
-                  <i class="icon-arrow-right ms-2"></i>
-                </b-btn>
+                  <b-btn
+                    v-if="examSettings.showRightAnswerAfterSubmit"
+                    variant="outline"
+                    @click="getRightAnswer(questionItem.id)"
+                  >
+                    Xem đáp án
+                  </b-btn>
+                </b-overlay>
+                <b-overlay
+                  :show="busy"
+                  rounded
+                  opacity="0.6"
+                  spinner-small
+                  spinner-variant="primary"
+                  class="d-inline-block"
+                >
+                  <b-btn variant="outline" @click="prevQuestion()">
+                    <i class="icon-arrow-left me-2"></i>
+                    Câu trước
+                  </b-btn>
+                </b-overlay>
+                <b-overlay
+                  :show="busy"
+                  rounded
+                  opacity="0.6"
+                  spinner-small
+                  spinner-variant="primary"
+                  class="d-inline-block"
+                >
+                  <b-btn variant="primary" @click="nextQuestion()">
+                    Câu sau
+                    <i class="icon-arrow-right ms-2"></i>
+                  </b-btn>
+                </b-overlay>
               </template>
             </b-card>
           </b-col>
@@ -265,8 +292,25 @@
       </div>
       <div class="modal-footer-common d-flex justify-content-center">
         <b-btn variant="outline" class="me-3" @click="hide()">Quay lại</b-btn>
-        <b-btn variant="primary" @click="SubmitExam()">Nộp bài</b-btn>
+        <b-overlay
+          :show="busy"
+          rounded
+          opacity="0.6"
+          spinner-small
+          spinner-variant="primary"
+          class="d-inline-block"
+        >
+          <b-btn variant="primary" @click="SubmitExam()">Nộp bài</b-btn>
+        </b-overlay>
       </div>
+    </b-modal>
+    <b-modal id="modal-show-answer" class="modal-common" hide-footer size="lg">
+      <ResultQuestion
+        v-if="questionRightAns"
+        :question="questionRightAns"
+        :settings="examSettings"
+        :hide-button="true"
+      />
     </b-modal>
   </div>
 </template>
@@ -278,15 +322,18 @@ import {
   reactive,
   toRefs,
   useRoute,
+  useRouter,
   computed,
   useAsync,
 } from '@nuxtjs/composition-api'
 // import ExamApi from '@/api/examApi'
 import QuizApi from '@/api/quizApi'
 import ViewQuestion from '@/components/Question/Display/ViewQuestion.vue'
+import ResultQuestion from '@/components/Quiz/Result/ResultQuestion.vue'
 export default defineComponent({
   components: {
     ViewQuestion,
+    ResultQuestion,
   },
   layout: 'default',
   auth: false,
@@ -294,6 +341,7 @@ export default defineComponent({
     const { $handleError, $loader, $logger } = useContext()
 
     const route = useRoute()
+    const router = useRouter()
     const quizId = computed(() => route.value.query.quizId)
     console.log('quizId', quizId.value)
 
@@ -368,6 +416,8 @@ export default defineComponent({
       examSettings: {},
       timeRemaining: '00:00:00',
       timer: null,
+      questionRightAns: null,
+      busy: false,
     })
     const idExam = computed(() => route.value.params.id)
     data.idExam = idExam.value
@@ -378,6 +428,14 @@ export default defineComponent({
         clearInterval(data.timer)
         data.timer = null
       }
+    }
+    const SubmitExam = async () => {
+      data.busy = true
+      await QuizApi.submitQuiz(data.quizId)
+      router.push({
+        path: `/de-thi/${data.idExam}/ket-qua?quizId=${data.quizId}`,
+      })
+      data.busy = false
     }
     const createClock = (time) => {
       clearClock()
@@ -413,10 +471,8 @@ export default defineComponent({
         // If the count down is over, write some text
         if (distance < 0) {
           clearClock()
-          // vm.disabled = true
           data.timeRemaining = 'HẾT GIỜ'
-          // tính theo cả bài
-          // vm.endExam();
+          SubmitExam()
         }
       }, 1000)
     }
@@ -436,6 +492,7 @@ export default defineComponent({
           const { data: questionItem } = await QuizApi.getQuestionById(
             data.itemQuestions[0].id
           )
+          data.itemQuestions[0].status = 1
           data.questionItem = questionItem.object
           data.userAnswer.questionId = data.questionItem.id
         }
@@ -451,6 +508,7 @@ export default defineComponent({
     return {
       ...toRefs(data),
       clearClock,
+      SubmitExam,
     }
   },
   created() {},
@@ -462,30 +520,35 @@ export default defineComponent({
     hide() {
       this.$bvModal.hide('modal-submit-exam')
     },
-    chooseQuestion(id, index) {
-      this.submitQuestion(this.questionItem.id)
+    async chooseQuestion(id, index) {
+      this.busy = true
+      await this.submitQuestion(this.questionItem.id)
       this.userAnswer = {
         questionId: null,
         userChoices: [],
       }
-      this.getQuestionById(id, index)
+      await this.getQuestionById(id, index)
+      this.busy = false
     },
     async getQuestionById(id, index) {
       this.indexQuestionChoose = index + 1
       const { data: questionItem } = await QuizApi.getQuestionById(id)
       this.questionItem = questionItem.object
-    },
-    async SubmitExam() {
-      await QuizApi.submitQuiz(this.quizId)
-      this.$router.push({
-        path: `/de-thi/${this.idExam}/ket-qua?quizId=${this.quizId}`,
-      })
+      // update status question
+      if (this.questionItem.status === 0) {
+        this.itemQuestions[index].status = 1
+      }
     },
     async submitQuestion(questionId) {
       if (this.userAnswer.userChoices.length > 0) {
         this.userAnswer.questionId = questionId
         try {
           await QuizApi.submitQuestion(this.userAnswer)
+          // update status question
+          const question = this.itemQuestions.filter((x) => x.id === questionId)
+          if (question) {
+            question[0].status = 2
+          }
         } catch (err) {
           this.$handleError(err, () => {
             console.log(err)
@@ -512,6 +575,44 @@ export default defineComponent({
         currentIndex = total - 1
       }
       this.chooseQuestion(this.itemQuestions[currentIndex].id, currentIndex)
+    },
+    async setFlag() {
+      const currentIndex = this.indexQuestionChoose - 1
+      const questionId = this.itemQuestions[currentIndex].id
+      try {
+        await QuizApi.flagQuestion(questionId)
+        this.itemQuestions[currentIndex].flag =
+          !this.itemQuestions[currentIndex].flag
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
+    },
+    getColorOfQuestion(questionItem) {
+      if (questionItem.flag) {
+        return 'tick'
+      }
+      if (questionItem.status === 2) {
+        return 'answered'
+      }
+      if (questionItem.status === 0) {
+        return ''
+      }
+      return 'not-answered'
+    },
+    async getRightAnswer(questionId) {
+      this.busy = true
+      try {
+        const { data } = await QuizApi.showRightAnswer(questionId)
+        this.questionRightAns = data.object
+        await this.$bvModal.show('modal-show-answer')
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
+      this.busy = false
     },
   },
 })

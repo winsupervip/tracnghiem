@@ -1,6 +1,5 @@
 <template>
   <div class="question-item">
-    <h3>Multiple choice</h3>
     <div
       class="question-content text-smd"
       v-html="question.questionContent"
