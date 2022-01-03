@@ -10,7 +10,7 @@
         <a href="#" target="_blank" class="btn btn-sm btn-outline-primary">
           Xem trên web
         </a>
-        <b-dropdown class="m-md-2" no-caret size="sm">
+        <b-dropdown class="dropdown-action m-auto" no-caret size="sm">
           <template #button-content>
             <b-icon-three-dots-vertical></b-icon-three-dots-vertical>
           </template>

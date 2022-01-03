@@ -69,30 +69,21 @@
                     </div>
                     <div class="p-navItem--dropdown__inner__menu help">
                       <div class="p-navItem--dropdown__inner__menu__child">
-                        <div class="item item__heading">Help</div>
+                        <div class="item item__heading">Hướng dẫn</div>
                         <nuxt-link class="item item__link" to="">
-                          Nguyen Phuoc Tien
+                          Hướng dẫn tạo đề thi
                         </nuxt-link>
                         <nuxt-link class="item item__link" to="">
-                          Documentation
-                        </nuxt-link>
-                        <nuxt-link class="item item__link" to="">
-                          Learn Git
+                          Hướng dẫn tạo câu hỏi
                         </nuxt-link>
                       </div>
                       <div class="p-navItem--dropdown__inner__menu__child">
-                        <div class="item item__heading">Settings</div>
+                        <div class="item item__heading">Chính sách</div>
                         <nuxt-link class="item item__link" to="">
-                          Personal settings
+                          Chính sách bảo mật
                         </nuxt-link>
                         <nuxt-link class="item item__link" to="">
-                          Labs
-                        </nuxt-link>
-                      </div>
-                      <div class="p-navItem--dropdown__inner__menu__child">
-                        <div class="item item__heading">NGUYEN PHUOC TIEN</div>
-                        <nuxt-link class="item item__link" to="">
-                          Privacy policy
+                          Điều khoản sử dụng
                         </nuxt-link>
                       </div>
                     </div>
@@ -111,7 +102,9 @@
                       data-bottom="10"
                     >
                       <div class="p-navItem--dropdown__inner__menu__child">
-                        <div class="item item__heading">Recent workspaces</div>
+                        <div class="item item__heading">
+                          Thông tin tài khoản
+                        </div>
                         <nuxt-link
                           class="item item__link"
                           to="/users/personal/personal"
@@ -122,32 +115,36 @@
                               : firstName + ' ' + lastName
                           }}
                         </nuxt-link>
-                        <nuxt-link class="item item__link" to="">
+                        <!-- <nuxt-link class="item item__link" to="">
                           All workspaces
-                        </nuxt-link>
+                        </nuxt-link> -->
                       </div>
-                      <div class="p-navItem--dropdown__inner__menu__child">
-                        <div class="item item__heading">Settings</div>
-                        <!-- <nuxt-link
+                      <!-- <div class="p-navItem--dropdown__inner__menu__child">
+                        <div class="item item__heading">Settings</div> -->
+                      <!-- <nuxt-link
                           to="/users/personal/personal"
                           class="item item__link"
                         >
                           Personal settings
                         </nuxt-link> -->
-                        <nuxt-link class="item item__link" to="">
+                      <!-- <nuxt-link class="item item__link" to="">
                           Labs
                         </nuxt-link>
-                      </div>
+                      </div> -->
                       <div class="p-navItem--dropdown__inner__menu__child">
-                        <div class="item item__heading">
+                        <!-- <div class="item item__heading">
                           {{
                             displayName
                               ? displayName
                               : firstName + ' ' + lastName
                           }}
-                        </div>
-                        <nuxt-link class="item item__link" to="">
-                          Logout
+                        </div> -->
+                        <nuxt-link
+                          class="item item__link"
+                          to=""
+                          @click.native="logout()"
+                        >
+                          Đăng xuất
                         </nuxt-link>
                       </div>
                     </div>
@@ -173,7 +170,10 @@
               >
                 <ul v-if="isAdmin">
                   <li>
-                    <nuxt-link to="/admin/service">
+                    <nuxt-link
+                      :class="getNavClass('admin-service')"
+                      to="/admin/service"
+                    >
                       <div>
                         <b-icon-card-checklist></b-icon-card-checklist>
                       </div>
@@ -181,7 +181,10 @@
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="/admin/category">
+                    <nuxt-link
+                      :class="getNavClass('admin-category')"
+                      to="/admin/category"
+                    >
                       <div>
                         <b-icon-card-checklist></b-icon-card-checklist>
                       </div>
@@ -189,7 +192,10 @@
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="/admin/configs/exam">
+                    <nuxt-link
+                      :class="getNavClass('admin-configs-exam')"
+                      to="/admin/configs/exam"
+                    >
                       <div>
                         <b-icon-card-checklist></b-icon-card-checklist>
                       </div>
@@ -197,7 +203,10 @@
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="/admin/configs/categories">
+                    <nuxt-link
+                      :class="getNavClass('admin-configs-categories')"
+                      to="/admin/configs/categories"
+                    >
                       <div>
                         <b-icon-card-checklist></b-icon-card-checklist>
                       </div>
@@ -207,7 +216,10 @@
                 </ul>
                 <ul v-if="isAgency">
                   <li>
-                    <nuxt-link to="/agency/service">
+                    <nuxt-link
+                      :class="getNavClass('agency-service')"
+                      to="/agency/service"
+                    >
                       <div>
                         <img
                           src="~/assets/img/dashboard/icon_lslambai.svg"
@@ -218,7 +230,10 @@
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="/admin/configs/exam">
+                    <nuxt-link
+                      :class="getNavClass('admin-configs-exam')"
+                      to="/admin/configs/exam"
+                    >
                       <div>
                         <img
                           src="~/assets/img/dashboard/icon_dethi.svg"
@@ -229,7 +244,10 @@
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="/admin/configs/categories">
+                    <nuxt-link
+                      :class="getNavClass('admin-configs-categories')"
+                      to="/admin/configs/categories"
+                    >
                       <div>
                         <img
                           src="~/assets/img/dashboard/icon_nhch.svg"
@@ -242,7 +260,10 @@
                 </ul>
                 <ul>
                   <li v-if="!isAgency && !isAdmin">
-                    <nuxt-link to="/users/service">
+                    <nuxt-link
+                      :class="getNavClass('users-service')"
+                      to="/users/service"
+                    >
                       <div>
                         <img
                           src="~/assets/img/dashboard/icon_lslambai.svg"
@@ -253,7 +274,10 @@
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="/users/history">
+                    <nuxt-link
+                      :class="getNavClass('users-history')"
+                      to="/users/history"
+                    >
                       <div>
                         <img
                           src="~/assets/img/dashboard/icon_lslambai.svg"
@@ -264,7 +288,10 @@
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="/users/exams/">
+                    <nuxt-link
+                      :class="getNavClass('users-exams')"
+                      to="/users/exams/"
+                    >
                       <div>
                         <img
                           src="~/assets/img/dashboard/icon_dethi.svg"
@@ -275,7 +302,10 @@
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="/users/questions/">
+                    <nuxt-link
+                      :class="getNavClass('users-questions')"
+                      to="/users/questions/"
+                    >
                       <div>
                         <img
                           src="~/assets/img/dashboard/icon_nhch.svg"
@@ -294,7 +324,10 @@
                 <h2 class="one-line">Công cụ chung</h2>
                 <ul>
                   <li>
-                    <nuxt-link to="/users/personal/affiliate">
+                    <nuxt-link
+                      :class="getNavClass('users-personal-affiliate')"
+                      to="/users/personal/affiliate"
+                    >
                       <div>
                         <img
                           src="~/assets/img/dashboard/bx_bx-network-chart.svg"
@@ -305,7 +338,10 @@
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="/users/questions/">
+                    <nuxt-link
+                      :class="getNavClass('users-notification')"
+                      to="/users/notification/"
+                    >
                       <div>
                         <img
                           src="~/assets/img/dashboard/carbon_notification.svg"
@@ -316,7 +352,10 @@
                     </nuxt-link>
                   </li>
                   <li>
-                    <nuxt-link to="">
+                    <nuxt-link
+                      :class="getNavClass('users-history-payment')"
+                      to="/users/history/payment"
+                    >
                       <div>
                         <img
                           src="~/assets/img/dashboard/icon_dollar.svg"
@@ -480,6 +519,12 @@ export default defineComponent({
           $('.p-navItem--dropdown__inner__menu.block').removeClass('block')
         }
       })
+    },
+    getNavClass(currentRoute) {
+      return this.$route.name.includes(currentRoute) ? 'active' : ''
+    },
+    logout() {
+      this.$auth.logout()
     },
   },
 })

@@ -58,7 +58,7 @@
             <b-form-input
               id="examTime"
               v-model="examTime"
-              :style="nonExamTime ? ' background: gray;' : ''"
+              :style="nonExamTime ? ' background: #e9ecef;' : ''"
               :disabled="nonExamTime"
               trim
               :state="errors[0] ? false : valid ? true : null"
@@ -241,6 +241,6 @@ export default defineComponent({
 </script>
 <style>
 .disiableExamTime {
-  background: gray;
+  background: rgb(233, 236, 239);
 }
 </style>

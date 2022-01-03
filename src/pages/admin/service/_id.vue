@@ -5,6 +5,7 @@
       <b-form>
         <b-form-row class="row">
           <b-form-group
+            label="Tìm kiếm tên gói"
             class="col-12 col-md-3 mb-3 position-relative overflow-hidden"
           >
             <b-form-input
@@ -21,6 +22,7 @@
             ></b-icon-search>
           </b-form-group>
           <b-form-group
+            label="Ngày cấp từ"
             class="col-12 col-md-3 mb-3 position-relative overflow-hidden"
           >
             <b-form-input
@@ -33,6 +35,7 @@
             </b-form-input>
           </b-form-group>
           <b-form-group
+            label="Ngày cấp đến"
             class="col-12 col-md-3 mb-3 position-relative overflow-hidden"
           >
             <b-form-input
@@ -45,7 +48,7 @@
             </b-form-input>
           </b-form-group>
 
-          <b-form-group class="col-12 col-md-3 mb-3">
+          <b-form-group label="Trạng thái" class="col-12 col-md-3 mb-3">
             <treeselect
               id="status"
               v-model="urlQuery.isActive"
@@ -55,7 +58,7 @@
               placeholder="Trạng thái"
             />
           </b-form-group>
-          <b-form-group class="col-12 col-md-3 mb-3">
+          <b-form-group label="Sắp xếp" class="col-12 col-md-3 mb-3">
             <treeselect
               id="sort"
               v-model="urlQuery.sort"
@@ -65,16 +68,8 @@
               placeholder="Sắp xếp"
             />
           </b-form-group>
-          <div
-            class="
-              col-12 col-md-3
-              mb-3
-              d-flex
-              justify-content-around
-              align-items-end
-            "
-          >
-            <b-button variant="outline-primary btn-sm" @click="search()">
+          <div class="form-search-action col-12">
+            <b-button variant="primary btn-sm" @click="search()">
               <b-icon-filter></b-icon-filter>
               Áp dụng
             </b-button>
@@ -182,7 +177,13 @@
             </b-form-group>
           </ValidationProvider>
           <footer class="modal-footer">
-            <button type="button" class="btn btn-secondary">Hủy Bỏ</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              @click="hideModal('modal-edit')"
+            >
+              Hủy Bỏ
+            </button>
             <button type="submit" class="btn btn-primary">Lưu</button>
           </footer>
         </b-form>
@@ -193,9 +194,9 @@
         <EmptyData />
       </div>
       <div v-else>
-        <b-table striped hover :items="listAccount" :fields="fields">
+        <b-table responsive striped hover :items="listAccount" :fields="fields">
           <template #cell(actions)="data">
-            <b-dropdown class="m-md-2" no-caret size="sm">
+            <b-dropdown class="dropdown-action m-auto" no-caret size="sm">
               <template #button-content>
                 <b-icon-three-dots></b-icon-three-dots>
               </template>
@@ -323,6 +324,7 @@ export default defineComponent({
         {
           key: 'actions',
           label: 'Chức năng',
+          class: 'col-action',
         },
       ],
       currentPage: queryPage,
@@ -437,9 +439,9 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
-.btn-search {
-  top: 0;
-  right: 10%;
-  height: 100%;
-}
+// .btn-search {
+//   top: 0;
+//   right: 10%;
+//   height: 100%;
+// }
 </style>

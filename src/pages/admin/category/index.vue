@@ -4,7 +4,7 @@
     <b-card>
       <b-form>
         <b-form-row class="row">
-          <b-form-group label-for="keyword" class="col-12 col-md-6">
+          <b-form-group label-for="keyword" class="col-12 col-md-6 my-1">
             <div class="input-group">
               <input
                 v-model="urlQuery.keyword"
@@ -12,17 +12,19 @@
                 class="form-control"
                 :placeholder="$t('admin.category.search')"
               />
-              <button
-                class="btn btn-outline-secondary"
-                type="button"
-                @click="search()"
-              >
+              <button class="btn btn-primary" type="button" @click="search()">
                 <b-icon-search></b-icon-search>
               </button>
             </div>
           </b-form-group>
           <div
-            class="col-12 col-md-6 d-flex justify-content-end align-self-end"
+            class="
+              col-12 col-md-6
+              d-flex
+              justify-content-end
+              align-self-end
+              my-1
+            "
           >
             <button
               type="button"
@@ -40,9 +42,9 @@
         <EmptyData />
       </div>
       <div v-else>
-        <b-table striped hover :items="items" :fields="fields">
+        <b-table responsive striped hover :items="items" :fields="fields">
           <template #cell(actions)="data">
-            <b-dropdown class="m-md-2" no-caret size="sm">
+            <b-dropdown class="dropdown-action m-auto" no-caret size="sm">
               <template #button-content>
                 <b-icon-three-dots-vertical></b-icon-three-dots-vertical>
               </template>
@@ -88,7 +90,13 @@
             @input="handleInput"
           />
           <footer class="modal-footer">
-            <button type="button" class="btn btn-secondary">Hủy Bỏ</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              @click="hideModal('modal-add')"
+            >
+              Hủy Bỏ
+            </button>
             <button type="submit" class="btn btn-primary">Lưu</button>
           </footer>
         </b-form>
@@ -112,7 +120,13 @@
             @input="handleInput"
           />
           <footer class="modal-footer">
-            <button type="button" class="btn btn-secondary">Hủy Bỏ</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              @click="hideModal('modal-edit')"
+            >
+              Hủy Bỏ
+            </button>
             <button type="submit" class="btn btn-primary">Lưu</button>
           </footer>
         </b-form>
@@ -176,6 +190,7 @@ export default defineComponent({
         {
           key: 'actions',
           label: 'Chức năng',
+          class: 'col-action',
         },
       ],
       doShow: false,

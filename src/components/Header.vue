@@ -72,7 +72,7 @@
                   <span>{{ userInfo.email }}</span>
                 </div>
               </div>
-              <b-dropdown-item href="#">
+              <b-dropdown-item href="/users/history">
                 <i class="icon-clock text-primary" />
                 Lịch sử làm bài
               </b-dropdown-item>
