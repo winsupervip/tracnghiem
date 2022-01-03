@@ -134,6 +134,10 @@ export default defineComponent({
       type: Function,
       required: true,
     },
+    getExamDocument: {
+      type: Function,
+      required: true,
+    },
   },
 
   setup() {

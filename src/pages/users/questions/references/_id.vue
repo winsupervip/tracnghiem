@@ -76,6 +76,7 @@ export default defineComponent({
     const { app, $logger, $loader } = useContext()
     const route = useRoute()
     const typeQuestion = route?.value?.query?.type === 'question' ? 0 : 1
+    console.log('🚀 ~ file: _id.vue ~ line 79 ~ setup ~ route', route)
     const hashId = route?.value?.params?.id
     $logger.info('🚀 ~ file: _id.vue ~ line 309 ~ setup ~ hashId', hashId)
 
@@ -109,10 +110,6 @@ export default defineComponent({
         typeQuestion
       )
       data.questionDocument = result2?.object
-      console.log(
-        '🚀 ~ file: _id.vue ~ line 408 ~ getQuestionDocument ~ data.questionDocument',
-        data.questionDocument
-      )
     }
 
     const { fetch } = useFetch(async () => {
