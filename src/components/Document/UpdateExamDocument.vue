@@ -104,7 +104,7 @@
           <b-button
             variant="outline-primary btn-md "
             block
-            @click="$bvModal.hide('modal-edit')"
+            @click="$bvModal.hide('modal-edit-exam-document')"
             >{{ $t('close') }}</b-button
           >
         </div>
