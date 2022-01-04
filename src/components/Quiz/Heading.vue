@@ -5,19 +5,19 @@
         <b-breadcrumb :items="breadcrumbs" class="mb-2"></b-breadcrumb>
         <div class="page-heading-title mb-2">
           <h1 class="page-title">
-            {{ dataExam.name }}
+            {{ dataExam.exam ? dataExam.exam.title : 'tracnghiem.vn' }}
           </h1>
           <span
             :class="
-              dataExam.level === 1
+              dataExam.exam.levelId === 1
                 ? 'badge rounded-full bg-green exam-level'
                 : 'badge rounded-full bg-primary exam-level'
             "
-            >{{ dataExam.level === 1 ? 'Cơ bản' : 'Nâng cao' }}
+            >{{ dataExam.exam.levelId | formatLevel }}
           </span>
         </div>
         <div class="page-heading-description mb-3">
-          {{ dataExam.description }}
+          <p v-html="dataExam.exam.description"></p>
         </div>
         <div class="exam-teacher-row row align-items-center mb-3">
           <b-col cols="12" sm="12" md="4">
@@ -32,29 +32,37 @@
                     border-2 border-white border-solid
                     me-2
                   "
-                  :src="dataExam.teacherAvatar"
-                  :alt="dataExam.teacherName"
+                  :src="dataExam.exam.image"
+                  :alt="
+                    dataExam.exam.authorName
+                      ? dataExam.exam.authorName
+                      : 'Trắc Nghiệm.vn'
+                  "
                 />
-                <span>{{ dataExam.teacherName }}</span>
+                <span>{{
+                  dataExam.exam.authorName
+                    ? dataExam.exam.authorName
+                    : 'tracnghiem.vn'
+                }}</span>
               </nuxt-link>
             </div>
           </b-col>
           <b-col cols="12" sm="12" md="4">
             <div class="d-flex">
               <b-form-rating
-                v-model="dataExam.rating"
+                :value="dataExam.exam.rating"
                 class="custom-rating"
                 readonly
               />
               <div class="mx-2">
-                <strong>{{ dataExam.rating }}</strong>
-                <span>({{ dataExam.ratingCount }})</span>
+                <strong>{{ dataExam.exam.rating }}</strong>
+                <span>({{ dataExam.exam.totalRating }})</span>
               </div>
             </div>
           </b-col>
           <b-col cols="12" sm="12" md="4">
             <div class="exam-category">
-              {{ dataExam.category }}
+              {{ showCategory }}
             </div>
           </b-col>
         </div>
@@ -74,7 +82,7 @@
               </template>
               <b-dropdown-form class="">
                 <b-form-checkbox-group
-                  v-model="selectedBookmark"
+                  :value="selectedBookmark"
                   :options="optionsBookmark"
                   value-field="value"
                   text-field="text"
@@ -107,7 +115,7 @@
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'Heading',
@@ -122,8 +130,8 @@ export default defineComponent({
       default: [],
     },
   },
-  data() {
-    return {
+  setup(props) {
+    const data = reactive({
       optionsBookmark: [
         { text: 'Yêu thích', value: 1 },
         { text: 'Đề vật lý', value: 2 },
@@ -146,8 +154,23 @@ export default defineComponent({
           active: true,
         },
       ],
+      optionSave: props.dataExam,
+    })
+    return {
+      ...toRefs(data),
     }
   },
-  computed: {},
+  computed: {
+    showCategory() {
+      if (this.dataExam.categoryTree && this.dataExam.categoryTree.length > 0) {
+        const value = this.dataExam.categoryTree[0]
+        if (value.label) {
+          return value.label
+        }
+        return 'tracnghiem.vn'
+      }
+      return 'tracnghiem.vn'
+    },
+  },
 })
 </script>

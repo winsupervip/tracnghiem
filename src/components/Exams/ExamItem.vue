@@ -49,7 +49,9 @@
       </ul>
       <h3>
         <b-icon-journal-bookmark></b-icon-journal-bookmark>
-        {{ exam.categoryItem.categoryName }}
+        {{
+          exam.categoryItem ? exam.categoryItem.categoryName : 'tracnghiem.vn'
+        }}
       </h3>
       <b-badge pill class="rounded-pill bg-success">{{
         exam.levelName

@@ -315,7 +315,7 @@ export default defineComponent({
             id: this.childQuestionId,
             answer: data.answer,
           })
-          this.$toast.success('Cập nhập câu trả lời thành công').goAway(1000)
+          this.$toast.success('Cập nhập câu trả lời thành công')
           this.resetData()
         } else {
           await this.addAnswerInChildQuestion({
