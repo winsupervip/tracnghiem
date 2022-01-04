@@ -10,7 +10,10 @@
       >
         {{ $t('add') }}
       </b-button>
-      <DocumentByUser :get-question-document="getQuestionDocument" />
+      <DocumentByUser
+        is-checked="question"
+        :get-document="getQuestionDocument"
+      />
     </div>
 
     <div class="filter-bar">
@@ -83,7 +86,7 @@ export default defineComponent({
     const data = reactive({
       breadcrumbs: [],
       titleQuestion: '',
-
+      typeId: typeQuestion,
       hashIdQuestion: hashId,
 
       selected: '2',
@@ -110,6 +113,10 @@ export default defineComponent({
         typeQuestion
       )
       data.questionDocument = result2?.object
+      console.log(
+        '🚀 ~ file: _id.vue ~ line 116 ~ getQuestionDocument ~ data.questionDocument',
+        data.questionDocument
+      )
     }
 
     const { fetch } = useFetch(async () => {
@@ -172,7 +179,10 @@ export default defineComponent({
     },
     async deleteQuestionDocument(documentId) {
       try {
-        const { data } = await DocumentApi.deleteQuestionDocument(documentId)
+        const { data } = await DocumentApi.deleteQuestionDocument(
+          documentId,
+          this.typeId
+        )
         this.getQuestionDocument()
 
         this.$handleError(data)

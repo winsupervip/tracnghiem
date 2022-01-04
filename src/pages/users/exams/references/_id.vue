@@ -10,7 +10,7 @@
       >
         {{ $t('add') }}
       </b-button>
-      <DocumentByUser :get-exam-document="getExamDocument" />
+      <DocumentByUser is-checked="exam" :get-document="getExamDocument" />
     </div>
     <div class="filter-bar">
       <b-card class="mt-3">
@@ -22,12 +22,12 @@
                 <b-icon-three-dots></b-icon-three-dots>
               </template>
               <b-dropdown-item
-                v-b-modal.modal-edit
+                v-b-modal.modal-edit-exam-document
                 @click="updateDocument(data.item)"
                 ><b-icon-file-text></b-icon-file-text>
                 {{ $t('editDocument') }}
               </b-dropdown-item>
-              <b-dropdown-item
+              <b-dropdown-item @click="deleteExamDocument(data.item.hashId)"
                 ><b-icon-trash></b-icon-trash>
                 {{ $t('delete') }}
               </b-dropdown-item>
@@ -37,10 +37,10 @@
             {{ data.index + 1 }}
           </template>
         </b-table>
-        <!-- <UpdateQuestionDocument
-          :update-question-document="updateQuestionDocument"
-          :get-question-document="getQuestionDocument"
-        /> -->
+        <UpdateExamDocument
+          :update-exam-document="updateExamDocument"
+          :get-exam-document="getExamDocument"
+        />
       </b-card>
     </div>
   </div>
@@ -55,14 +55,14 @@ import {
   useFetch,
   useContext,
 } from '@nuxtjs/composition-api'
-// import DocumentApi from '../../../../api/documentApi'
+import DocumentApi from '../../../../api/documentApi'
 
 import ExamApi from '@/api/examApi'
-// import UpdateQuestionDocument from '@/components/Document/UpdateQuestionDocument.vue'
+import UpdateExamDocument from '@/components/Document/UpdateExamDocument.vue'
 import DocumentByUser from '@/components/Document/DocumentByUser.vue'
-import EventBus from '@/plugins/eventBus'
+
 export default defineComponent({
-  components: { DocumentByUser },
+  components: { DocumentByUser, UpdateExamDocument },
   layout: 'dashboard',
   auth: true,
   setup() {
@@ -81,11 +81,21 @@ export default defineComponent({
         { key: 'documentTypeName', label: 'Loại tài liệu' },
         { key: 'actions', label: 'Chức năng' },
       ],
+      updateExamDocument: {
+        hashId: '',
+        documentName: '',
+        documentContent: '',
+        documentTypeId: 2,
+      },
     })
 
     const getExamDocument = async () => {
-      const { data: result } = await ExamApi.getExamDocument(hashId)
-      data.examDocument = result?.object
+      const { data: result } = await DocumentApi.getExamDocument(hashId)
+      data.examDocument = result?.object?.items
+      console.log(
+        '🚀 ~ file: _id.vue ~ line 89 ~ getExamDocument ~ data.examDocument',
+        data.examDocument
+      )
     }
     const { fetch } = useFetch(async () => {
       const { data: result } = await ExamApi.getUserExamById(hashId)
@@ -111,8 +121,20 @@ export default defineComponent({
     return { ...toRefs(data), getExamDocument }
   },
   methods: {
-    created() {
-      EventBus.$on('update-page-exam-document', this.getExamDocument)
+    updateDocument(val) {
+      this.updateExamDocument = val
+    },
+    async deleteExamDocument(documentId) {
+      try {
+        const { data } = await DocumentApi.deleteExamDocument(documentId)
+        this.getExamDocument()
+
+        this.$handleError(data)
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
     },
   },
 })

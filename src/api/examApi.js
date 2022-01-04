@@ -147,6 +147,4 @@ export default {
     global.$http.delete(
       `/api/v1/Exam/${data.examHashId}/${data.questionHashId}`
     ),
-  getExamDocument: (hashId) =>
-    global.$http.get(`/api/Document/get-exam-documents/${hashId}`),
 }

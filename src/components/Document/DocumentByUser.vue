@@ -35,13 +35,7 @@
           />
         </b-form-group>
         <div
-          class="
-            col-12 col-md-3
-            mb-3
-            d-flex
-            justify-content-around
-            align-items-end
-          "
+          class="col-12 col-md-3 mb-3 d-flex justify-content-around align-items-end"
         >
           <b-button variant="outline-primary" @click="getDocumentByUser">
             <b-icon-filter></b-icon-filter> {{ $t('apply') }}
@@ -136,17 +130,18 @@ export default defineComponent({
   auth: true,
   components: { AddDocumentByUser, UpdateDocumentByUser },
   props: {
-    getQuestionDocument: {
+    getDocument: {
       type: Function,
       required: true,
     },
-    getExamDocument: {
-      type: Function,
+
+    isChecked: {
+      type: String,
       required: true,
     },
   },
 
-  setup() {
+  setup(props) {
     const route = useRoute()
     const hashId = route?.value?.params?.id
     const typeQuestion = route?.value?.query?.type === 'question' ? 0 : 1
@@ -184,6 +179,7 @@ export default defineComponent({
       data.total = result.object?.total
 
       data.documentByUser = result?.object?.items
+      console.log('this.isChecked=', props.isChecked)
     }
     const { fetch } = useFetch(async () => {
       $loader()
@@ -233,22 +229,43 @@ export default defineComponent({
       }
     },
     async addToQuestionDocument(documentId) {
-      const questionDocument = {
-        questionDocument: {
-          hashIdQuestion: this.hashIdQuestion,
-          hashIdDocument: documentId,
-          typeId: this.typeId,
-        },
-      }
-      try {
-        const { data } = await DocumentApi.addQuestionDocument(questionDocument)
-        this.getQuestionDocument()
+      if (this.isChecked === 'question') {
+        const questionDocument = {
+          questionDocument: {
+            hashIdQuestion: this.hashIdQuestion,
+            hashIdDocument: documentId,
+            typeId: this.typeId,
+          },
+        }
+        try {
+          const { data } = await DocumentApi.addQuestionDocument(
+            questionDocument
+          )
+          this.getDocument()
 
-        this.$handleError(data)
-      } catch (err) {
-        this.$handleError(err, () => {
-          console.log(err)
-        })
+          this.$handleError(data)
+        } catch (err) {
+          this.$handleError(err, () => {
+            console.log(err)
+          })
+        }
+      } else if (this.isChecked === 'exam') {
+        const examDocument = {
+          examDocument: {
+            hashIdExam: this.hashIdQuestion,
+            hashIdDocuments: documentId,
+          },
+        }
+        try {
+          const { data } = await DocumentApi.addExamDocument(examDocument)
+          this.getDocument()
+
+          this.$handleError(data)
+        } catch (err) {
+          this.$handleError(err, () => {
+            console.log(err)
+          })
+        }
       }
     },
   },
