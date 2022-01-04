@@ -16,6 +16,7 @@
       Tài liệu ôn thi Tiếng Anh:
       <a href="https://www.google.com.vn/">https://www.google.com.vn/</a>
     </p>
+    <p v-if="listExamDocument.length == 0">Chưa có tài liệu tham khảo</p>
   </b-card>
 </template>
 
@@ -24,6 +25,12 @@ import { defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'Reference',
+  props: {
+    listExamDocument: {
+      type: Array,
+      default: () => [],
+    },
+  },
   setup() {},
 })
 </script>

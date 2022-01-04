@@ -177,7 +177,12 @@ export default {
 
   watch: {
     image() {
-      this.$emit('input', this.image)
+      if (this.image && this.image.startsWith('http')) {
+        this.$emit('input', this.image)
+      } else {
+        this.image = ''
+        this.$toast.show('Link ảnh phải bắt đầu bằng http').goAway(1000)
+      }
     },
   },
   async created() {

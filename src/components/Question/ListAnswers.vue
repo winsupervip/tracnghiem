@@ -268,6 +268,7 @@ export default defineComponent({
     // eslint-disable-next-line vue/require-default-prop
     listChildAnswer: {
       type: Array,
+      default: () => [],
       // eslint-disable-next-line vue/require-valid-default-prop
     },
     errors: {

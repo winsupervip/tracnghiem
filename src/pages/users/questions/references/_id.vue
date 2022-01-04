@@ -1,7 +1,12 @@
 <template>
   <div class="page-container">
     <div
-      class="d-flex align-items-center justify-content-between references-header"
+      class="
+        d-flex
+        align-items-center
+        justify-content-between
+        references-header
+      "
     >
       <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
       <b-button
