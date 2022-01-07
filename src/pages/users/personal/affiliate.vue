@@ -6,7 +6,7 @@
       <div class="row">
         <div class="col-12 col-md-4 mb-3">
           <b-card class="mb-3">
-            <Info :type="false" :bio="user" />
+            <Information :type="false" :bio="user" />
           </b-card>
           <b-card v-if="user.refCode" :sub-title="$t('affiliate.info')">
             <CountShare :total-share="sharingNumber" />
@@ -45,13 +45,13 @@ import {
   useRoute,
 } from '@nuxtjs/composition-api'
 import userAPI from '@/api/user'
-import Info from '@/components/User/Info.vue'
+import Information from '@/components/User/Information.vue'
 import CountShare from '@/components/User/CountShare.vue'
 import RefCodeLink from '@/components/User/RefCodeLink.vue'
 import FormAffiliate from '@/components/User/FormAffiliate.vue'
 export default defineComponent({
   auth: true,
-  components: { Info, FormAffiliate, RefCodeLink, CountShare },
+  components: { Information, FormAffiliate, RefCodeLink, CountShare },
   layout: 'dashboard',
   setup() {
     const { $loader } = useContext()

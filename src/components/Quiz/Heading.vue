@@ -27,11 +27,7 @@
                 class="text-white"
               >
                 <img
-                  class="
-                    avatar avatar-md
-                    border-2 border-white border-solid
-                    me-2
-                  "
+                  class="avatar avatar-md border-2 border-white border-solid me-2"
                   :src="dataExam.teacherAvatar"
                   :alt="dataExam.teacherName"
                 />

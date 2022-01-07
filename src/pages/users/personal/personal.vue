@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col-12 col-md-4">
           <b-card :sub-title="$t('personal.userInfo')">
-            <Info
+            <Information
               :type="true"
               :bio="user"
               :check-ref-by="user.refCode"
@@ -15,7 +15,7 @@
         </div>
         <div class="col-12 col-md-8">
           <b-card :sub-title="$t('personal.updateInfo')">
-            <FormInfo :info="user" />
+            <FormInformation :info="user" />
           </b-card>
         </div>
       </div>
@@ -32,12 +32,12 @@ import {
 } from '@nuxtjs/composition-api'
 import EventBus from '@/plugins/eventBus'
 import userAPI from '@/api/user'
-import Info from '@/components/User/Info.vue'
-import FormInfo from '@/components/User/FormInfo.vue'
+import Information from '@/components/User/Information.vue'
+import FormInformation from '@/components/User/FormInformation.vue'
 
 export default defineComponent({
   auth: true,
-  components: { Info, FormInfo },
+  components: { Information, FormInformation },
   layout: 'dashboard',
   setup() {
     const { $loader } = useContext()

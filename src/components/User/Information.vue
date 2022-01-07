@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UserlInfo :show="type" :user="bio" />
+    <UserInformation :show="type" :user="bio" />
     <div v-if="type">
       <ul>
         <li>
@@ -122,7 +122,11 @@
           readonly
         />
 
-        <button class="btn btn-primary" @click="handleCopy">
+        <button
+          class="btn btn-primary"
+          :disabled="!bio.refCode"
+          @click="handleCopy"
+        >
           <b-icon icon="files" aria-hidden="true"></b-icon>
         </button>
       </div>
@@ -152,29 +156,27 @@
         v-model="inputCode"
         type="text"
         class="form-control text-input"
-        :disabled="isDisabled"
         :placeholder="$t('info.referralCode')"
       />
       <button
-        v-if="!bio.refBy && !checkRefBy"
+        v-if="!bio.refBy"
         class="btn btn-outline-primary d-block m-auto mt-2 mb-4"
-        :disabled="isDisabled"
         @click="handleUpdate"
       >
         {{ $t('info.btnUpdate') }}
       </button>
-      <p v-if="!bio.refBy && !checkRefBy">{{ $t('info.note') }}</p>
+      <p v-if="!bio.refBy">{{ $t('info.note') }}</p>
     </div>
   </div>
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
-import UserlInfo from './UserInfo.vue'
+import UserInformation from './UserInformation.vue'
 import userAPI from '@/api/user'
 export default defineComponent({
   name: 'Info',
   auth: true,
-  components: { UserlInfo },
+  components: { UserInformation },
   props: {
     checkRefBy: {
       type: String,
@@ -192,7 +194,6 @@ export default defineComponent({
   setup() {
     const data = reactive({
       inputCode: '',
-      isDisabled: false,
       oldPassword: '',
       newPassword: '',
       confirmPassword: '',
@@ -201,6 +202,15 @@ export default defineComponent({
     return {
       ...toRefs(data),
     }
+  },
+  watch: {
+    bio: {
+      handler(val) {
+        this.inputCode = val.refBy
+        alert(this.inputCode)
+      },
+      deep: true,
+    },
   },
   methods: {
     loadOptions({ action, searchQuery, callback }) {},
@@ -241,7 +251,6 @@ export default defineComponent({
         const { data } = await userAPI.postCode({ refCode: this.inputCode })
         this.$emit('isCreateRefBy', this.inputCode)
         console.log(this.inputCode)
-        this.isDisabled = true
         this.$handleError(data)
       } catch (err) {
         this.$handleError(err, () => {
