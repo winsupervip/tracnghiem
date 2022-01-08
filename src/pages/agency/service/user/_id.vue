@@ -5,13 +5,7 @@
       <b-form>
         <b-form-row class="row">
           <b-form-group
-            class="
-              col-12 col-md-6 col-lg-4
-              cpl-xl-3
-              mb-3
-              position-relative
-              overflow-hidden
-            "
+            class="col-12 col-md-6 col-lg-4 cpl-xl-3 mb-3 position-relative overflow-hidden"
           >
             <b-form-input
               id="keyword"
@@ -27,13 +21,7 @@
             ></b-icon-search>
           </b-form-group>
           <b-form-group
-            class="
-              col-12 col-md-6 col-lg-4
-              cpl-xl-3
-              mb-3
-              position-relative
-              overflow-hidden
-            "
+            class="col-12 col-md-6 col-lg-4 cpl-xl-3 mb-3 position-relative overflow-hidden"
           >
             <b-form-input
               id="keyword"
@@ -45,13 +33,7 @@
             </b-form-input>
           </b-form-group>
           <b-form-group
-            class="
-              col-12 col-md-6 col-lg-4
-              cpl-xl-3
-              mb-3
-              position-relative
-              overflow-hidden
-            "
+            class="col-12 col-md-6 col-lg-4 cpl-xl-3 mb-3 position-relative overflow-hidden"
           >
             <b-form-input
               id="keyword"

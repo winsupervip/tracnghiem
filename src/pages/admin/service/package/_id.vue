@@ -6,12 +6,7 @@
         <b-form-row class="row">
           <b-form-group
             label="Tìm kiếm tên gói"
-            class="
-              col-12 col-md-6 col-lg-4 col-xl-3
-              mb-3
-              position-relative
-              overflow-hidden
-            "
+            class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3 position-relative overflow-hidden"
           >
             <b-form-input
               id="keyword"
@@ -28,12 +23,7 @@
           </b-form-group>
           <b-form-group
             label="Ngày cấp từ"
-            class="
-              col-12 col-md-6 col-lg-4 col-xl-3
-              mb-3
-              position-relative
-              overflow-hidden
-            "
+            class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3 position-relative overflow-hidden"
           >
             <b-form-input
               id="keyword"
@@ -46,12 +36,7 @@
           </b-form-group>
           <b-form-group
             label="Ngày cấp đến"
-            class="
-              col-12 col-md-6 col-lg-4 col-xl-3
-              mb-3
-              position-relative
-              overflow-hidden
-            "
+            class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3 position-relative overflow-hidden"
           >
             <b-form-input
               id="keyword"
@@ -91,12 +76,7 @@
           </b-form-group>
           <b-form-group
             label="Ngày hết hạn từ"
-            class="
-              col-12 col-md-6 col-lg-4 col-xl-3
-              mb-3
-              position-relative
-              overflow-hidden
-            "
+            class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3 position-relative overflow-hidden"
           >
             <b-form-input
               id="keyword"
@@ -109,12 +89,7 @@
           </b-form-group>
           <b-form-group
             label="Ngày hết hạn đến"
-            class="
-              col-12 col-md-6 col-lg-4 col-xl-3
-              mb-3
-              position-relative
-              overflow-hidden
-            "
+            class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3 position-relative overflow-hidden"
           >
             <b-form-input
               id="keyword"
@@ -140,7 +115,7 @@
 
     <b-card sub-title="Danh sách đại lý">
       <div v-if="total === 0">
-        <EmptyData />
+        <NoData description="Nhấn vào nút thêm bên góc phải để thêm mới" />
       </div>
       <div v-else>
         <b-table responsive striped hover :items="listPackage" :fields="fields">
@@ -533,7 +508,7 @@ export default defineComponent({
         hashId: id,
         pageSize: 10,
         sort: 1,
-        status: '',
+        status: null,
         keyword: '',
         createDateFrom: '',
         createDateTo: '',

@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
-    <b-card :sub-title="$t('history.title')" class="mt-3">
+    <b-card :sub-title="quizTitle" class="mt-3">
       <div v-if="total === 0">
         <EmptyData />
       </div>
@@ -12,6 +12,12 @@
           </template>
           <template #cell(actions)="data">
             <a :href="'/de-thi/' + data.item.id + '/ket-qua'"></a>
+          </template>
+          <template #cell(quizCreateDate)="data">
+            {{ data.item.quizCreateDate | formatDurationDay }}
+          </template>
+          <template #cell(percentage)="data">
+            {{ data.item.percentage + '%' }}
           </template>
         </b-table>
         <div class="mt-2">
@@ -84,22 +90,27 @@ export default defineComponent({
         },
         {
           key: 'quizCreateDate',
-          label: 'Ngày bắt đầu',
+          label: 'Ngày thi',
+          sortable: true,
+        },
+        {
+          key: 'numOfCorrect',
+          label: 'Số câu đúng',
+          sortable: true,
+        },
+        {
+          key: 'numOfIncorrect',
+          label: 'Số câu sai',
+          sortable: true,
+        },
+        {
+          key: 'percentage',
+          label: 'Tỉ lệ đúng',
           sortable: true,
         },
         {
           key: 'time',
-          label: 'Thời gian làm bài',
-          sortable: true,
-        },
-        {
-          key: 'quizSubmitDate',
-          label: 'Thời gian kết thúc',
-          sortable: true,
-        },
-        {
-          key: 'score',
-          label: 'Điểm',
+          label: 'Thời gian thực hiện (phút)',
           sortable: true,
         },
         {
