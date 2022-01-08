@@ -25,6 +25,22 @@
     <div class="exam-body">
       <div class="row">
         <div class="col-12 col-md-7">
+          <div class="card-exam-teacher d-flex align-items-center">
+            <a href="/giao-vien/undefined" class="text-white"
+              ><img
+                alt="Trắc Nghiệm.vn"
+                class="avatar avatar-md border-2 border-white border-solid me-2"
+                :src="user.avatar"
+            /></a>
+            <p class="mb-0">
+              {{
+                user.displayName === null
+                  ? user.firstName + ' ' + user.lastName
+                  : user.displayName
+              }}
+            </p>
+          </div>
+
           <ul class="list-inline exam-tags d-flex gap-4">
             <li class="list-inline-item">
               <div class="exam-rating">
@@ -38,7 +54,7 @@
               </div>
             </li>
             <li class="d-flex">
-              <p class="font-sm">Thi tốt nghiệp THPT</p>
+              <p class="font-sm">{{ exam.categoryItem.categoryName }}</p>
             </li>
             <li>
               <p class="font-sm">
@@ -72,7 +88,7 @@
                 class="list-inline-item"
               >
                 <nuxt-link to="#">
-                  {{ '#' + tag }}
+                  {{ '#' + tag.tagName }}
                 </nuxt-link>
               </li>
             </div>
@@ -88,24 +104,19 @@
             <tr>
               <td class="fw-bold">Số lượt thi:</td>
               <td>
-                {{ exam.examHistory === null ? 0 : exam.examHistory.numQuiz }}
+                {{ exam.examHistory.numQuiz }}
               </td>
             </tr>
             <tr>
               <td class="fw-bold">Kết quả sau cùng:</td>
               <td>
-                {{
-                  exam.examHistory === null
-                    ? '9 điểm'
-                    : exam.examHistory.lastScore + ' điểm'
-                }}
+                {{ exam.examHistory.lastScore + ' điểm' }}
               </td>
             </tr>
             <tr>
               <td class="fw-bold">Ngày cập nhật:</td>
               <td>
-                {{ exam.examHistory === null ? '20/11/2022' : '20/11/2022' }}
-                <!-- exam.examHistory.lastQuizTime | formatDurationDay -->
+                {{ exam.examHistory.lastQuizTime | formatDurationDay }}
               </td>
             </tr>
           </table>
@@ -119,6 +130,11 @@ import { defineComponent } from '@nuxtjs/composition-api'
 export default defineComponent({
   name: 'ExamItem',
   props: {
+    user: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
     exam: {
       type: Object,
       required: true,
