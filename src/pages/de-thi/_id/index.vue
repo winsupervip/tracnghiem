@@ -9,11 +9,15 @@
       <b-container>
         <b-row>
           <b-col md="12" lg="8" class="exam-main-content">
-            <b-tabs class="common-tabs">
+            <b-tabs v-model="tabIndex" class="common-tabs">
               <b-tab title="Thông tin đề thi" active>
-                <TabInfoQuiz />
+                <TabInfoQuiz
+                  :list-exam-section="listExamSection"
+                  :list-exam-document="getListExamDocument"
+                  :author-infomation="userInformation"
+                />
               </b-tab>
-              <b-tab title="Danh sách câu hỏi">
+              <b-tab title="danh sách câu hỏi">
                 <div class="tab-content-container">
                   <b-card
                     header="Danh sách câu hỏi"
@@ -21,368 +25,24 @@
                     class="mb-3"
                   >
                     <div class="list-question mb-4">
-                      <div class="question-item">
-                        <div
-                          class="question-title d-flex justify-content-between"
-                        >
-                          <div class="question-name font-bold">Câu hỏi 1</div>
-                          <div class="question-category text-gray">
-                            <i class="icon-tag" />
-                            <span class="font-sm">Reading, Cơ bản</span>
-                          </div>
-                        </div>
-                        <div class="question-content text-smd">
-                          Which of the following lists all and only the
-                          appropriate descriptions about a 32-bit CPU and a
-                          64-bit CPU? I When a 32-bit CPU and a 64-bit CPU are
-                          compared, a 64-bit CPU has a larger theoretical
-                          maximum memory space.. II There is no 32-bit OS that
-                          runs on a PC with a 64-bit CPU. III In terms of the
-                          read and write speed of a USB memory, the speed of a
-                          PC with a 64-bit CPU is twice as fast as that of a PC
-                          with a 32-bit CPU.
-                        </div>
-                        <div class="question-item-answer">
-                          <div class="answer-head">
-                            <span class="font-sm text-gray">câu trả lời</span>
-                          </div>
-                          <div class="list-answer">
-                            <ul class="list-unstyled p-0">
-                              <li>
-                                <b>A.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>B.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>C.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>D.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="question-item">
-                        <div
-                          class="question-title d-flex justify-content-between"
-                        >
-                          <div class="question-name font-bold">Câu hỏi 1</div>
-                          <div class="question-category text-gray">
-                            <i class="icon-tag" />
-                            <span class="font-sm">Reading, Cơ bản</span>
-                          </div>
-                        </div>
-                        <div class="question-content text-smd">
-                          Which of the following lists all and only the
-                          appropriate descriptions about a 32-bit CPU and a
-                          64-bit CPU? I When a 32-bit CPU and a 64-bit CPU are
-                          compared, a 64-bit CPU has a larger theoretical
-                          maximum memory space.. II There is no 32-bit OS that
-                          runs on a PC with a 64-bit CPU. III In terms of the
-                          read and write speed of a USB memory, the speed of a
-                          PC with a 64-bit CPU is twice as fast as that of a PC
-                          with a 32-bit CPU.
-                        </div>
-                        <div class="question-item-answer">
-                          <div class="answer-head">
-                            <span class="font-sm text-gray">câu trả lời</span>
-                          </div>
-                          <div class="list-answer">
-                            <ul class="list-unstyled p-0">
-                              <li>
-                                <b>A.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>B.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>C.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>D.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="question-item">
-                        <div
-                          class="question-title d-flex justify-content-between"
-                        >
-                          <div class="question-name font-bold">Câu hỏi 1</div>
-                          <div class="question-category text-gray">
-                            <i class="icon-tag" />
-                            <span class="font-sm">Reading, Cơ bản</span>
-                          </div>
-                        </div>
-                        <div class="question-content text-smd">
-                          Which of the following lists all and only the
-                          appropriate descriptions about a 32-bit CPU and a
-                          64-bit CPU? I When a 32-bit CPU and a 64-bit CPU are
-                          compared, a 64-bit CPU has a larger theoretical
-                          maximum memory space.. II There is no 32-bit OS that
-                          runs on a PC with a 64-bit CPU. III In terms of the
-                          read and write speed of a USB memory, the speed of a
-                          PC with a 64-bit CPU is twice as fast as that of a PC
-                          with a 32-bit CPU.
-                        </div>
-                        <div class="question-item-answer">
-                          <div class="answer-head">
-                            <span class="font-sm text-gray">câu trả lời</span>
-                          </div>
-                          <div class="list-answer">
-                            <ul class="list-unstyled p-0">
-                              <li>
-                                <b>A.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>B.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>C.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>D.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="question-item">
-                        <div
-                          class="question-title d-flex justify-content-between"
-                        >
-                          <div class="question-name font-bold">Câu hỏi 1</div>
-                          <div class="question-category text-gray">
-                            <i class="icon-tag" />
-                            <span class="font-sm">Reading, Cơ bản</span>
-                          </div>
-                        </div>
-                        <div class="question-content text-smd">
-                          Which of the following lists all and only the
-                          appropriate descriptions about a 32-bit CPU and a
-                          64-bit CPU? I When a 32-bit CPU and a 64-bit CPU are
-                          compared, a 64-bit CPU has a larger theoretical
-                          maximum memory space.. II There is no 32-bit OS that
-                          runs on a PC with a 64-bit CPU. III In terms of the
-                          read and write speed of a USB memory, the speed of a
-                          PC with a 64-bit CPU is twice as fast as that of a PC
-                          with a 32-bit CPU.
-                        </div>
-                        <div class="question-item-answer">
-                          <div class="answer-head">
-                            <span class="font-sm text-gray">câu trả lời</span>
-                          </div>
-                          <div class="list-answer">
-                            <ul class="list-unstyled p-0">
-                              <li>
-                                <b>A.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>B.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>C.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>D.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="question-item">
-                        <div
-                          class="question-title d-flex justify-content-between"
-                        >
-                          <div class="question-name font-bold">Câu hỏi 1</div>
-                          <div class="question-category text-gray">
-                            <i class="icon-tag" />
-                            <span class="font-sm">Reading, Cơ bản</span>
-                          </div>
-                        </div>
-                        <div class="question-content text-smd">
-                          Which of the following lists all and only the
-                          appropriate descriptions about a 32-bit CPU and a
-                          64-bit CPU? I When a 32-bit CPU and a 64-bit CPU are
-                          compared, a 64-bit CPU has a larger theoretical
-                          maximum memory space.. II There is no 32-bit OS that
-                          runs on a PC with a 64-bit CPU. III In terms of the
-                          read and write speed of a USB memory, the speed of a
-                          PC with a 64-bit CPU is twice as fast as that of a PC
-                          with a 32-bit CPU.
-                        </div>
-                        <div class="question-item-answer">
-                          <div class="answer-head">
-                            <span class="font-sm text-gray">câu trả lời</span>
-                          </div>
-                          <div class="list-answer">
-                            <ul class="list-unstyled p-0">
-                              <li>
-                                <b>A.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>B.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>C.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>D.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="question-item">
-                        <div
-                          class="question-title d-flex justify-content-between"
-                        >
-                          <div class="question-name font-bold">Câu hỏi 1</div>
-                          <div class="question-category text-gray">
-                            <i class="icon-tag" />
-                            <span class="font-sm">Reading, Cơ bản</span>
-                          </div>
-                        </div>
-                        <div class="question-content text-smd">
-                          Which of the following lists all and only the
-                          appropriate descriptions about a 32-bit CPU and a
-                          64-bit CPU? I When a 32-bit CPU and a 64-bit CPU are
-                          compared, a 64-bit CPU has a larger theoretical
-                          maximum memory space.. II There is no 32-bit OS that
-                          runs on a PC with a 64-bit CPU. III In terms of the
-                          read and write speed of a USB memory, the speed of a
-                          PC with a 64-bit CPU is twice as fast as that of a PC
-                          with a 32-bit CPU.
-                        </div>
-                        <div class="question-item-answer">
-                          <div class="answer-head">
-                            <span class="font-sm text-gray">câu trả lời</span>
-                          </div>
-                          <div class="list-answer">
-                            <ul class="list-unstyled p-0">
-                              <li>
-                                <b>A.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>B.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>C.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>D.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="question-item">
-                        <div
-                          class="question-title d-flex justify-content-between"
-                        >
-                          <div class="question-name font-bold">Câu hỏi 1</div>
-                          <div class="question-category text-gray">
-                            <i class="icon-tag" />
-                            <span class="font-sm">Reading, Cơ bản</span>
-                          </div>
-                        </div>
-                        <div class="question-content text-smd">
-                          Which of the following lists all and only the
-                          appropriate descriptions about a 32-bit CPU and a
-                          64-bit CPU? I When a 32-bit CPU and a 64-bit CPU are
-                          compared, a 64-bit CPU has a larger theoretical
-                          maximum memory space.. II There is no 32-bit OS that
-                          runs on a PC with a 64-bit CPU. III In terms of the
-                          read and write speed of a USB memory, the speed of a
-                          PC with a 64-bit CPU is twice as fast as that of a PC
-                          with a 32-bit CPU.
-                        </div>
-                        <div class="question-item-answer">
-                          <div class="answer-head">
-                            <span class="font-sm text-gray">câu trả lời</span>
-                          </div>
-                          <div class="list-answer">
-                            <ul class="list-unstyled p-0">
-                              <li>
-                                <b>A.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>B.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>C.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                              <li>
-                                <b>D.</b>
-                                Deciding one’s own strategy in a game according
-                                to the strategy of the opponent
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
+                      <ShowQuestionExamDetail
+                        v-for="(question, index) in listQuestionExam"
+                        :key="index"
+                        :question="question"
+                      />
                     </div>
-                    <div class="text-center mb-3">
-                      <b-btn variant="primary"> Xem thêm </b-btn>
+                    <b-pagination
+                      v-if="isLogin"
+                      v-model="currentPage"
+                      total-rows="50"
+                      align="right"
+                    />
+
+                    <div v-else class="text-center mb-3">
+                      <b-btn variant="primary" @click="seeMore">
+                        Xem thêm
+                      </b-btn>
                     </div>
-                    <b-pagination total-rows="50" align="right" />
                   </b-card>
                 </div>
               </b-tab>
@@ -390,20 +50,7 @@
           </b-col>
           <b-col md="12" lg="4" class="do-exam-sidebar-wrapper">
             <div class="do-exam-sidebar text-black">
-              <div v-if="quizState.state">
-                <div class="card-do-exam card-filter mb-3">
-                  <b-btn
-                    variant="success"
-                    block
-                    class="font-lmd w-100"
-                    @click="continueQuiz"
-                  >
-                    TIẾP TỤC LÀM BÀI
-                  </b-btn>
-                </div>
-              </div>
               <ConfigQuiz
-                v-else
                 :config-quiz="configQuiz"
                 :config-quiz-data="examSettings"
                 @showModalStartExam="$bvModal.show('modal-start-exam')"
@@ -423,6 +70,13 @@
         </b-row>
       </b-container>
     </section>
+    <div>
+      <b-modal id="see-more" title="Thông báo" ok-only>
+        <p class="d-flex justify-content-center">
+          Bạn cần đăng nhập để xem nhiều hơn
+        </p>
+      </b-modal>
+    </div>
     <b-modal
       id="modal-start-exam"
       class="modal-common"
@@ -434,7 +88,7 @@
           <div class="mb-4">
             <ValidationProvider
               name="Họ và tên"
-              rules="required|fullName|max:30"
+              rules="required|fullName|max:255"
             >
               <b-form-group slot-scope="{ valid, errors }" class="mb-2">
                 <b-form-input
@@ -481,16 +135,7 @@
             <b-btn variant="outline" class="me-3" type="button" @click="hide()">
               Hủy bỏ
             </b-btn>
-            <b-overlay
-              :show="busy"
-              rounded
-              opacity="0.6"
-              spinner-small
-              spinner-variant="primary"
-              class="d-inline-block"
-            >
-              <b-btn variant="primary" type="submit">Bắt đầu</b-btn>
-            </b-overlay>
+            <b-btn variant="primary" type="submit">Bắt đầu</b-btn>
           </div>
         </b-form>
       </ValidationObserver>
@@ -499,7 +144,6 @@
 </template>
 
 <script>
-// import { defineComponent } from '@nuxtjs/composition-api'
 import {
   defineComponent,
   useContext,
@@ -513,6 +157,7 @@ import {
 // eslint-disable-next-line no-unused-vars
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
+import ShowQuestionExamDetail from '@/components/Question/Show/QuestionExamDetail.vue'
 // eslint-disable-next-line import/no-unresolved
 import ConfigQuiz from '@/components/Quiz/ConfigQuiz.vue'
 // eslint-disable-next-line import/no-unresolved
@@ -524,6 +169,7 @@ import Heading from '@/components/Quiz/Heading.vue'
 // eslint-disable-next-line import/no-unresolved
 import ExamApi from '@/api/examApi'
 import QuizApi from '@/api/quizApi'
+import ApiHome from '@/api/apiHome'
 
 export default defineComponent({
   components: {
@@ -531,11 +177,12 @@ export default defineComponent({
     Ranks,
     TabInfoQuiz,
     Heading,
+    ShowQuestionExamDetail,
   },
   layout: 'default',
   auth: false,
   setup() {
-    const { app, $loader, $logger } = useContext()
+    const { $loader, $logger } = useContext()
 
     const store = useStore()
     const route = useRoute()
@@ -543,36 +190,7 @@ export default defineComponent({
     const arr = idSlug.value.split('-')
     const id = arr[arr.length - 1]
     const data = reactive({
-      quizState: {
-        state: false,
-        quizId: '',
-      },
-      busy: false,
-    })
-    useAsync(async () => {
-      $loader()
-      try {
-        const [{ data: examData }, { data: examUserState }] = await Promise.all(
-          [ExamApi.getExamConfig(id), QuizApi.checkQuizProcess(id)]
-        )
-        await store.dispatch('exams/setExam', examData.object)
-        data.quizState.state = examUserState.state
-        data.quizState.quizId = examUserState.object?.id
-      } catch (err) {
-        app.$handleError(err, () => {
-          $logger.info(err)
-        })
-      }
-      $loader().close()
-    })
-
-    return {
-      ...toRefs(data),
-    }
-  },
-  data() {
-    return {
-      idExam: this.$route.params.id || null,
+      idExam: idSlug || null,
       selectedBookmark: [],
       userInformation: {
         fullName: '',
@@ -585,52 +203,79 @@ export default defineComponent({
         showFilterGroup2: true,
         showFilterGroup3: true,
         selectedOptions3: [],
-        checkboxQuestionTypeAnother: true,
+        checkboxQuestionTypeAnother: false,
       },
       dataExam: {
-        id: 1,
-        name: '400 câu trắc nghiệm Mạo từ trong tiếng Anh có đáp án cực hay',
-        description:
-          'English speaking course. 77 Hours of English language speaking, English listening practice. 1000 English language words',
-        thumbnail: '/images/exam-1.jpg',
-        category: 'Thi tốt nghiệp THPT',
-        time: '45',
-        examCount: '100',
-        questionCount: '90',
-        teacherId: 1,
-        teacherAvatar: '/images/teacher.png',
-        teacherName: 'Cô giáo Minh Thu',
-        rating: '4.5',
-        ratingCount: 20,
-        level: 1,
-        tags: [
-          {
-            id: 1,
-            name: 'Vật lý 12',
-          },
-          {
-            id: 2,
-            name: 'Luyện thi đại học',
-          },
-          {
-            id: 3,
-            name: 'Vật lý nâng cao',
-          },
-        ],
+        exam: {},
+        tagItems: [],
+        categoryTree: [],
       },
       configQuizData: null,
+      listExamSection: [],
+      getListExamDocument: [],
+      listQuestionExam: [],
+      tabIndex: 0,
+      userAnswer: {
+        questionId: null,
+        userChoices: [],
+      },
+      currentPage: 1,
+      pageSize: 10,
+    })
+    useAsync(async () => {
+      $loader()
+      try {
+        const [
+          { data: getExamDetail },
+          { data: getAuthorOfExam },
+          { data: getListExamSection },
+          { data: getListExamDocument },
+          { data: examData },
+        ] = await Promise.all([
+          ApiHome.getExamDetail(data.idExam),
+          ApiHome.getAuthorOfExam(data.idExam),
+          ApiHome.getListExamSection(data.idExam),
+          ApiHome.getListExamDocument(data.idExam),
+          ExamApi.getExamConfig(id),
+        ])
+        store.dispatch('exams/setExam', examData.object)
+        data.dataExam = getExamDetail.object
+        data.userInformation = getAuthorOfExam.object
+        data.listExamSection = getListExamSection.object.items
+        data.getListExamDocument = getListExamDocument.object.items
+      } catch (err) {
+        // app.$handleError(err, () => {
+        //
+        // })
+        $logger.info(err)
+      }
+      $loader().close()
+    })
+
+    return {
+      ...toRefs(data),
     }
   },
+
   computed: {
     ...mapGetters({
       getQuestion: 'questions/getQuestion',
       examSettings: 'exams/getExamSettings',
+      isLogin: 'user/isLogin',
     }),
   },
   watch: {
+    currentPage() {
+      this.fetchQuestionsOfExam()
+    },
     examSettings() {
       this.configQuizData = this.examSettings
       console.log('configQuizData', this.configQuizData)
+    },
+    tabIndex() {
+      if (this.tabIndex === 1 && this.listQuestionExam.length === 0) {
+        this.fetchQuestionsOfExam()
+      }
     },
   },
   created() {
@@ -640,11 +285,37 @@ export default defineComponent({
     }
   },
   methods: {
+    async fetchQuestionsOfExam() {
+      try {
+        const { data: result } = await ApiHome.getQuestionExamDetailHome({
+          id: this.idExam,
+          pageSize: this.pageSize,
+          page: this.currentPage,
+        })
+        this.listQuestionExam = result.object
+        console.log(this.listQuestionExam, 'ta den day')
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
+    },
+    seeMore() {
+      if (this.isLogin) {
+        //
+      } else {
+        this.$bvModal.show('see-more')
+      }
+    },
     hide() {
       this.$bvModal.hide('modal-start-exam')
     },
     async StartExam() {
-      this.busy = true
+      const token = await this.$recaptcha.getResponse()
+      this.$logger.info('ReCaptcha token:', token)
+
+      // send token to server alongside your form data
+
       const idSlug = this.idExam
       const arr = idSlug.split('-')
       const examHashId = arr[arr.length - 1]
@@ -654,57 +325,41 @@ export default defineComponent({
           (item) => item.sectionHashId === x
         )
       })
-      const settingsData = settings.map(function (x) {
+
+      // eslint-disable-next-line array-callback-return
+      // eslint-disable-next-line prefer-const
+      let settingsData = settings.map(function (x) {
         return {
           sectionHashId: x.sectionHashId,
           numQuestions: x.numberQuestionsTest,
-          totalQuestion: x.totalQuestion,
         }
       })
 
       if (this.configQuiz.checkboxQuestionTypeAnother) {
-        if (this.configQuizData.questionOutsideSection > 0) {
-          settingsData.push({
-            sectionHashId: '',
-            numQuestions: this.examSettings.numberQuestionsTest,
-            totalQuestion: this.configQuizData.questionOutsideSection,
-          })
-        }
+        settingsData.push({
+          sectionHashId: '',
+          numQuestions: this.examSettings.numberQuestionsTest,
+        })
       }
 
-      if (settingsData.length === 0) {
-        this.$toast.error('Vui lòng chọn số lượng câu hỏi').goAway(1500)
-        this.busy = false
-        return
-      }
-
-      // valid
-      const isValidSettingSection = settingsData.filter(
-        (x) => x.numQuestions > x.totalQuestion
-      )
-      if (isValidSettingSection && isValidSettingSection.length > 0) {
-        this.$toast.error('Vui lòng chọn số lượng câu hỏi phù hợp').goAway(1500)
-        this.busy = false
-        return
+      const dataInitExam = {
+        quiz: {
+          examHashId,
+          timeInSeconds: this.examSettings.examTimeSecond,
+          shuffleQuestion: this.examSettings.suffleQuestions,
+          shuffleAnswer: this.examSettings.suffleAnswers,
+          showRightAnswer: this.examSettings.checkAnswersWhileTest,
+          showRightAnswerAfterSubmit: this.examSettings.checkAnswersAfterTest,
+        },
+        settings: settingsData,
+        userInformation: this.userInformation,
+        googleToken: token,
       }
 
       try {
-        // send token to server alongside your form data
-        const token = await this.$recaptcha.getResponse()
-        const dataInitExam = {
-          quiz: {
-            examHashId,
-            timeInSeconds: this.examSettings.examTimeSecond,
-            shuffleQuestion: this.examSettings.suffleQuestions,
-            shuffleAnswer: this.examSettings.suffleAnswers,
-            showRightAnswer: this.examSettings.checkAnswersWhileTest,
-            showRightAnswerAfterSubmit: this.examSettings.checkAnswersAfterTest,
-          },
-          settings: settingsData,
-          userInformation: this.userInformation,
-          googleToken: token,
-        }
         const { data } = await QuizApi.addQuiz(dataInitExam)
+        this.$handleError(data)
+        console.log('data addquiz', data)
         this.$router.push({
           path: `/de-thi/${this.idExam}/lam-bai?quizId=${data.object.data}`,
         })
@@ -713,18 +368,8 @@ export default defineComponent({
           console.log(err)
         })
       }
-      try {
-        // at the end you need to reset recaptcha
-        await this.$recaptcha.reset()
-      } catch {
-        console.log('could not reset google captcha')
-      }
-      this.busy = false
-    },
-    continueQuiz() {
-      this.$router.push({
-        path: `/de-thi/${this.idExam}/lam-bai?quizId=${this.quizState.quizId}`,
-      })
+      // at the end you need to reset recaptcha
+      await this.$recaptcha.reset()
     },
   },
 })

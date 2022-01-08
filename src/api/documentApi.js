@@ -19,12 +19,18 @@ export default {
     ),
   addQuestionDocument: (data) =>
     global.$http.post('/api/Document/add-question-document', data),
-  deleteQuestionDocument: (hashId) =>
+  deleteQuestionDocument: (hashId, typeId) =>
     global.$http.delete(
-      `/api/Document/delete-question-document?hashId=${hashId}`
+      `/api/Document/delete-question-document?hashId=${hashId}&typeId=${typeId}`
     ),
+  deleteExamDocument: (hashId, typeId) =>
+    global.$http.delete(`/api/Document/delete-exam-document?hashId=${hashId}`),
   updateDocument: (data) =>
     global.$http.post('/api/Document/update-document', data),
   deleteDocument: (hashId) =>
     global.$http.delete(`/api/Document/delete-document/${hashId}`),
+  getExamDocument: (hashId) =>
+    global.$http.get(`/api/Document/get-exam-documents/${hashId}`),
+  addExamDocument: (data) =>
+    global.$http.post('/api/Document/add-exam-document', data),
 }

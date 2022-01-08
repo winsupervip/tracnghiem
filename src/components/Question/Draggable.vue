@@ -80,7 +80,6 @@ export default {
   },
   watch: {
     listAnswer() {
-      console.log(this.listAnswer)
       if (
         this.listAnswer.length > this.list.length ||
         this.listAnswer.length < this.list.length
@@ -117,7 +116,6 @@ export default {
     onEndMove({ newDraggableIndex, oldDraggableIndex }) {
       if (newDraggableIndex !== oldDraggableIndex) {
         if (this.groupQuestion) {
-          console.log('aa343434')
           this.handleUpdateDraggableAnswerForGroupQuestion({
             questionId: this.childQuestionId,
             answers: this.list,
@@ -152,6 +150,8 @@ export default {
 .list-group-item {
   cursor: move;
   margin-top: 1rem;
+
+  border: 1px solid;
 }
 
 .list-group-item i {
