@@ -11,7 +11,19 @@
             {{ data.index + 1 }}
           </template>
           <template #cell(actions)="data">
-            <a :href="'/de-thi/' + data.item.id + '/ket-qua'"></a>
+            <b-dropdown class="dropdown-action m-auto" no-caret size="sm">
+              <template #button-content>
+                <b-icon-three-dots></b-icon-three-dots>
+              </template>
+              <b-dropdown-item
+                :to="{
+                  path: `/de-thi/${data.item.id}/ket-qua`,
+                }"
+              >
+                <b-icon-file-text></b-icon-file-text>
+                kết quả
+              </b-dropdown-item>
+            </b-dropdown>
           </template>
           <template #cell(quizCreateDate)="data">
             {{ data.item.quizCreateDate | formatDurationDay }}
