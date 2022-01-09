@@ -1,5 +1,12 @@
 <template>
-  <b-modal id="modal-edit" :title="$t('editDocument')" hide-footer size="lg">
+  <b-modal
+    id="modal-edit"
+    :title="$t('editDocument')"
+    hide-footer
+    size="lg"
+    @shown="shown"
+    @hide="hide"
+  >
     <ValidationObserver ref="form">
       <b-form>
         <ValidationProvider
@@ -46,6 +53,7 @@
             :label="$t('content') + ' (*)'"
           >
             <TinyEditor
+              v-if="doShow"
               v-model="documentContent"
               :state="errors[0] ? false : valid ? true : null"
             ></TinyEditor>
@@ -129,6 +137,7 @@ export default defineComponent({
   setup() {
     const { $loader } = useContext()
     const data = reactive({
+      doShow: false,
       documentType: [],
       document: {},
       documentTypeId: null,
@@ -153,6 +162,12 @@ export default defineComponent({
     },
   },
   methods: {
+    shown() {
+      this.doShow = true
+    },
+    hide() {
+      this.doShow = false
+    },
     loadOptions({ callback }) {
       callback()
     },
