@@ -18,13 +18,7 @@
             </div>
           </b-form-group>
           <div
-            class="
-              col-12 col-md-6
-              d-flex
-              justify-content-end
-              align-self-end
-              my-1
-            "
+            class="col-12 col-md-6 d-flex justify-content-end align-self-end my-1"
           >
             <button
               type="button"

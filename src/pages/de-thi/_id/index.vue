@@ -34,7 +34,8 @@
                     <b-pagination
                       v-if="isLogin"
                       v-model="currentPage"
-                      total-rows="50"
+                      :total-rows="totalQuestion"
+                      per-page="10"
                       align="right"
                     />
 
@@ -221,6 +222,7 @@ export default defineComponent({
       },
       currentPage: 1,
       pageSize: 10,
+      totalQuestion: 0,
     })
     useAsync(async () => {
       $loader()
@@ -242,6 +244,7 @@ export default defineComponent({
         data.dataExam = getExamDetail.object
         data.userInformation = getAuthorOfExam.object
         data.listExamSection = getListExamSection.object.items
+        console.log('section', data.listExamSection)
         data.getListExamDocument = getListExamDocument.object.items
       } catch (err) {
         // app.$handleError(err, () => {
@@ -292,7 +295,8 @@ export default defineComponent({
           pageSize: this.pageSize,
           page: this.currentPage,
         })
-        this.listQuestionExam = result.object
+        this.listQuestionExam = result.object.items
+        this.totalQuestion = result.object.total
         console.log(this.listQuestionExam, 'ta den day')
       } catch (err) {
         this.$handleError(err, () => {

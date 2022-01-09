@@ -64,7 +64,7 @@ export default {
   getAuthorOfExam: (id) =>
     global.$http.get(`api/v1/Exam/get-information-author-of-exam/${id}`),
   getListExamSection: (id) =>
-    global.$http.get(`api/v1/Exam/get-question-exam-detail-home/${id}`),
+    global.$http.get(`/api/v1/Exam/get-list-exam-section-home/${id}`),
   getListExamDocument: (id) =>
     global.$http.get(`api/v1/Exam/get-document-exam-home/${id}?orderBy=1`),
   getQuestionExamDetailHome: (data) =>

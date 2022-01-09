@@ -10,7 +10,7 @@
       <tbody>
         <tr v-for="item in listExamSection" :key="item.id">
           <td>{{ item.title }}</td>
-          <td>{{ item.numberQuestionsTest }}</td>
+          <td>{{ item.totalQuestion }}</td>
         </tr>
       </tbody>
     </table>

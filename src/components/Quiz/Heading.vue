@@ -27,11 +27,7 @@
                 class="text-white"
               >
                 <img
-                  class="
-                    avatar avatar-md
-                    border-2 border-white border-solid
-                    me-2
-                  "
+                  class="avatar avatar-md border-2 border-white border-solid me-2"
                   :src="dataExam.exam.image"
                   :alt="
                     dataExam.exam.authorName
@@ -160,16 +156,28 @@ export default defineComponent({
       ...toRefs(data),
     }
   },
+
   computed: {
     showCategory() {
       if (this.dataExam.categoryTree && this.dataExam.categoryTree.length > 0) {
         const value = this.dataExam.categoryTree[0]
         if (value.label) {
+          this.updateBreadcrumbs(value.label)
           return value.label
         }
+        this.updateBreadcrumbs('tracnghiem.vn')
         return 'tracnghiem.vn'
       }
+      this.updateBreadcrumbs('tracnghiem.vn')
       return 'tracnghiem.vn'
+    },
+  },
+  methods: {
+    updateBreadcrumbs(value) {
+      this.breadcrumbs[2].text = value
+      this.breadcrumbs[3].text = this.dataExam.exam
+        ? this.dataExam.exam.title
+        : 'tracnghiem.vn'
     },
   },
 })

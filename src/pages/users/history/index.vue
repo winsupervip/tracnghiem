@@ -78,6 +78,7 @@
           v-for="(item, index) in items"
           :key="index"
           :exam="item"
+          :user="profile"
         />
         <div class="mt-2">
           <b-pagination
@@ -107,6 +108,7 @@ import {
 import QuestionApi from '@/api/question-list-page'
 import catalogApi from '@/api/catalogApi'
 import examApi from '@/api/examApi'
+import userApi from '@/api/user'
 import EmptyData from '@/components/EmptyData.vue'
 import ExamHistoryItem from '@/components/History/ExamHistoryItem.vue'
 export default defineComponent({
@@ -126,6 +128,7 @@ export default defineComponent({
           active: true,
         },
       ],
+      profile: {},
       categories: [],
       sortBy: [],
       status: [],
@@ -166,9 +169,13 @@ export default defineComponent({
     const { fetch } = useFetch(async () => {
       $loader()
       const { data: exams } = await examApi.getUserHistoryExams(data.urlQuery)
+      const { data: profile } = await userApi.getAccount(
+        exams.object.items.createBy
+      )
       data.items = exams.object.items
+      data.profile = profile?.object
       data.total = exams.object.total
-      $logger.info(data.items)
+      $logger.info(data.items, data.profile)
       $loader().close()
     })
 

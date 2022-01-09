@@ -41,7 +41,7 @@ import EventBus from '@/plugins/eventBus'
 
 import Uploader from '@/components/Uploader.vue'
 export default defineComponent({
-  name: 'UserlInfo',
+  name: 'UserInformation',
   auth: true,
   components: { Uploader },
   props: {

@@ -6,12 +6,7 @@
         <b-form-row class="row">
           <b-form-group
             label="Tìm kiếm tên gói"
-            class="
-              col-12 col-md-6 col-lg-4 col-xl-3
-              mb-3
-              position-relative
-              overflow-hidden
-            "
+            class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3 position-relative overflow-hidden"
           >
             <b-form-input
               id="keyword"
@@ -28,12 +23,7 @@
           </b-form-group>
           <b-form-group
             label="Từ ngày"
-            class="
-              col-12 col-md-6 col-lg-4 col-xl-3
-              mb-3
-              position-relative
-              overflow-hidden
-            "
+            class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3 position-relative overflow-hidden"
           >
             <b-form-input
               id="keyword"
@@ -46,12 +36,7 @@
           </b-form-group>
           <b-form-group
             label="Ngày tạo đến"
-            class="
-              col-12 col-md-6 col-lg-4 col-xl-3
-              mb-3
-              position-relative
-              overflow-hidden
-            "
+            class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3 position-relative overflow-hidden"
           >
             <b-form-input
               id="keyword"
@@ -562,7 +547,7 @@ export default defineComponent({
         page: 1,
         pageSize: 10,
         sort: 1,
-        isActive: '',
+        isActive: null,
         keyword: '',
         fromDate: '',
         toDate: '',
@@ -601,7 +586,7 @@ export default defineComponent({
   methods: {
     loadOptions({ action, searchQuery, callback }) {},
     async handleDelete(hashId) {
-      if (!window.confirm('Chắc chưa ba ?')) {
+      if (!window.confirm('Bạn có muốn xóa không !')) {
         return
       }
       try {
