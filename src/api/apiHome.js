@@ -71,4 +71,6 @@ export default {
     global.$http.get(
       `api/v1/Exam/get-question-exam-detail-home/${data.id}?Page=${data.page}&PageSize=${data.pageSize}`
     ),
+  getReviews: (data) =>
+    global.$http.get(`/api/v1/Review/${data.typeId}/${data.hashId}`),
 }

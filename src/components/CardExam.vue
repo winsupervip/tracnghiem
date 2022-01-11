@@ -52,7 +52,10 @@
       </nuxt-link>
     </div>
     <div class="card-body">
-      <nuxt-link :to="`/de-thi/${data.hashId}`" class="exam-title">
+      <nuxt-link
+        :to="`/de-thi/${data.slug + '-' + data.hashId}`"
+        class="exam-title"
+      >
         <h4 class="font-md font-bold">
           {{ data.title }}
         </h4>

@@ -62,3 +62,7 @@ Vue.filter('date', function (value) {
   const inputTime = moment(value).locale('vi')
   return inputTime.format('DD/MM/YYYY')
 })
+
+Vue.filter('convertDate', function (value) {})
+
+})

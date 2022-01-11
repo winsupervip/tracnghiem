@@ -234,17 +234,16 @@ export default defineComponent({
           { data: getListExamDocument },
           { data: examData },
         ] = await Promise.all([
-          ApiHome.getExamDetail(data.idExam),
-          ApiHome.getAuthorOfExam(data.idExam),
-          ApiHome.getListExamSection(data.idExam),
-          ApiHome.getListExamDocument(data.idExam),
+          ApiHome.getExamDetail(id),
+          ApiHome.getAuthorOfExam(id),
+          ApiHome.getListExamSection(id),
+          ApiHome.getListExamDocument(id),
           ExamApi.getExamConfig(id),
         ])
         store.dispatch('exams/setExam', examData.object)
         data.dataExam = getExamDetail.object
         data.userInformation = getAuthorOfExam.object
         data.listExamSection = getListExamSection.object.items
-        console.log('section', data.listExamSection)
         data.getListExamDocument = getListExamDocument.object.items
       } catch (err) {
         // app.$handleError(err, () => {
@@ -290,8 +289,11 @@ export default defineComponent({
   methods: {
     async fetchQuestionsOfExam() {
       try {
+        const idSlug = this.idExam
+        const arr = idSlug.split('-')
+        const examHashId = arr[arr.length - 1]
         const { data: result } = await ApiHome.getQuestionExamDetailHome({
-          id: this.idExam,
+          id: examHashId,
           pageSize: this.pageSize,
           page: this.currentPage,
         })
