@@ -2,11 +2,17 @@
   <div class="page-container position-relative">
     <section class="page-heading exam-page-heading bg-gradient-blue">
       <div class="page-heading-inner">
-        <Heading
-          :data-exam="dataExam"
-          :selected-bookmark="selectedBookmark"
-          :breadcrumbs="breadcrumds"
-        />
+        <b-container class="position-relative">
+          <b-row>
+            <b-col md="12" lg="8">
+              <Heading
+                :data-exam="dataExam"
+                :selected-bookmark="selectedBookmark"
+                :breadcrumbs="breadcrumbs"
+              />
+            </b-col>
+          </b-row>
+        </b-container>
       </div>
     </section>
     <section class="exam-main-container">
@@ -236,7 +242,7 @@ export default defineComponent({
       currentPage: 1,
       pageSize: 10,
       totalQuestion: 0,
-      breadcrumds: [],
+      breadcrumbs: [],
       urlQuery: {
         page: 1,
         pageSize: 10,
@@ -289,19 +295,19 @@ export default defineComponent({
         data.userInformation = getAuthorOfExam.object
         data.listExamSection = getListExamSection.object.items
         data.getListExamDocument = getListExamDocument.object.items
-        // breadcrumds
-        data.breadcrumds = []
-        data.breadcrumds.push({
+        // breadcrumbs
+        data.breadcrumbs = []
+        data.breadcrumbs.push({
           text: 'Trang chủ',
           href: '/',
         })
         breadcrumdItems.object.items.forEach((element) => {
-          data.breadcrumds.push({
+          data.breadcrumbs.push({
             text: element.categoryName,
             href: element.slug,
           })
         })
-        data.breadcrumds.push({
+        data.breadcrumbs.push({
           text: data.dataExam.exam.title,
           href: '/' + data.dataExam.exam.slug + '-' + data.dataExam.exam.hashId,
           active: true,

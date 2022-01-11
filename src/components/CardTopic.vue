@@ -13,7 +13,7 @@
       </nuxt-link>
     </div>
     <div class="card-body">
-      <nuxt-link :to="`topic/${data.id}`" class="card-title">
+      <nuxt-link :to="data.slug" class="card-title">
         <h4 class="font-md font-bold">{{ data.name }}</h4>
       </nuxt-link>
       <div class="d-flex justify-content-between">

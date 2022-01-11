@@ -290,6 +290,11 @@ export default {
         path: '/:slug-:id',
         component: resolve(__dirname, 'pages/chi-tiet-de-thi/index.vue'),
       })
+      routes.push({
+        name: 'ket-qua-id-slug',
+        path: '/ket-qua/:slug-:id',
+        component: resolve(__dirname, 'pages/ket-qua/index.vue'),
+      })
     },
     middleware: ['auth'],
   },

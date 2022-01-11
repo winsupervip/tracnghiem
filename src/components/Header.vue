@@ -27,18 +27,9 @@
             </ul>
           </div>
           <div v-if="!isLogin" class="menu-action">
-            <b-button
-              variant="outline-primary"
-              size="lg"
-              @click="collapseMenuMb"
-            >
-              Đăng ký
-            </b-button>
-            <!-- <b-button variant="primary" size="lg" @click="collapseMenuMb">
-              Đăng nhập
-            </b-button> -->
             <b-button variant="primary" @click="$auth.loginWith('keycloak')">
-              Đăng Nhập
+              <b-icon-person-circle></b-icon-person-circle>
+              <span class="ms-1">Tài khoản</span>
             </b-button>
           </div>
           <div v-else class="menu-logined">
