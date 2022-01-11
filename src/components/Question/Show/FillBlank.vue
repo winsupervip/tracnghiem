@@ -1,24 +1,15 @@
 <template>
   <div class="questionItem">
-    <div class="question-title d-flex justify-content-between">
-      <div class="question-name font-bold">
-        Câu hỏi {{ question.sortOrder }}
-      </div>
-      <div class="question-category text-gray">
-        <i class="icon-tag" />
-        <span class="font-sm">{{ question.seoTitle }}</span>
-      </div>
-    </div>
     <div
-      class="questionItem__content text-smd"
-      v-html="question.questionContent"
+      class="questionItem__content question-content text-smd"
+      v-html="questionlist.questionContent"
     ></div>
-    <div class="questionItem__answer">
+    <div class="questionItem__answer question-item-answer">
       <div class="answer-head">
         <span class="font-sm text-gray">câu trả lời</span>
       </div>
-      <div class="questionItem__listAnswer row">
-        <div class="answerItem__left col-md-6 col-xs-6 col-sm-6">
+      <div class="questionItem__listAnswer list-answered row">
+        <div class="answerItem__left col-12">
           <p class="text-center">Cột A</p>
           <div
             v-for="(item, index) in listAnswer"
@@ -35,6 +26,7 @@
               <b-form-select
                 :options="listTextChoose"
                 :value="item.sortOrder"
+                :disabled="true"
               ></b-form-select>
             </div>
           </div>
@@ -46,11 +38,12 @@
 
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
-
+import mathType from '@/extensions/mathType'
 export default defineComponent({
   name: 'FillBlank',
+  mixins: [mathType],
   props: {
-    question: {
+    questionlist: {
       type: Object,
       required: true,
     },
@@ -61,20 +54,10 @@ export default defineComponent({
   },
   computed: {
     listAnswer() {
-      return this.question.answers
+      return this.questionlist.answers
     },
     listTextChoose() {
       const arr = [{ value: null, text: 'Choose' }]
-
-      // eslint-disable-next-line array-callback-return
-      this.question.answers.map((x, i) => {
-        if (x.sortOrder > 0) {
-          arr.push({
-            value: x.sortOrder + '',
-            text: x.sortOrder,
-          })
-        }
-      })
       return arr
     },
   },

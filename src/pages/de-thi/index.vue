@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <HeadingPage title="Danh sách đề thi" :breadcrumbs="breadcrumbs" />
+    <HeadingPage :title="category.categoryName" :breadcrumbs="breadcrumbs" />
     <div class="exam-page-container">
       <b-container>
         <b-row>
@@ -160,6 +160,7 @@ export default defineComponent({
         orderBy: false,
       },
       mess: '',
+      category: {},
     })
 
     const paramsUrl = computed(() => route.value.path)
@@ -196,6 +197,7 @@ export default defineComponent({
           name: 'description',
           content: category.object.seoDescription,
         })
+        data.category = category.object
         // get breadcrumbs
         const { data: breadcrumdRes } = await apiHome.getCategoryBreadcrumd(
           slug

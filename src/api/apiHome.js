@@ -89,4 +89,8 @@ export default {
     }
     return global.$http.get(url)
   },
+  getQuestionsOfExam(hashId, urlQuery) {
+    const url = `api/Home/get-question-of-exam/${hashId}?page=${urlQuery.page}&pageSize=${urlQuery.pageSize}&keyword=${urlQuery.Keyword}`
+    return global.$http.get(url)
+  },
 }
