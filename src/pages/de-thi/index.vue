@@ -49,7 +49,7 @@
                 </div>
                 <div class="pagination-center">
                   <b-pagination
-                    v-if="rows > 0"
+                    v-if="rows > queryUrl.pageSize"
                     v-model="queryUrl.page"
                     :total-rows="rows"
                     per-page="10"
