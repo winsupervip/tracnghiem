@@ -19,45 +19,44 @@ export default {
   searchExam: (urlQuery) => {
     let url = '/api/v1/Exam/get-user-exam-list-public?'
     if (urlQuery.page) {
-      url += `Page=${urlQuery.page}&`
+      url += `page=${urlQuery.page}`
     }
     if (urlQuery.pageSize) {
-      url += `PageSize=${urlQuery.pageSize}&`
+      url += `&pageSize=${urlQuery.pageSize}`
     }
-    if (urlQuery.Keyword) {
-      url += `Keyword=${urlQuery.Keyword}&`
+    if (urlQuery.keyword) {
+      url += `&keyword=${encodeURIComponent(urlQuery.keyword)}`
     }
     if (urlQuery.categories && urlQuery.categories.length > 0) {
       urlQuery.categories.forEach((item) => {
-        url += `categories=${item}&`
+        url += `&categories=${item}`
       })
     }
     if (urlQuery.levels && urlQuery.levels.length > 0) {
       urlQuery.levels.forEach((item) => {
-        url += `levels=${item}&`
+        url += `&levels=${item}`
       })
     }
     if (urlQuery.ratings && urlQuery.ratings.length > 0) {
       urlQuery.ratings.forEach((item) => {
-        url += `ratings=${item}&`
+        url += `&ratings=${item}`
       })
     }
     if (urlQuery.amountQuestionLeft) {
-      url += `amountquestionleft=${urlQuery.amountQuestionLeft}&`
+      url += `&amountquestionleft=${urlQuery.amountQuestionLeft}`
     }
     if (urlQuery.amountQuestionRight) {
-      url += `amountquestionright=${urlQuery.amountQuestionRight}&`
+      url += `&amountquestionright=${urlQuery.amountQuestionRight}`
     }
     if (urlQuery.amountExamTimeLeft) {
-      url += `amountexamtimeleft=${urlQuery.amountExamTimeLeft}&`
+      url += `&amountexamtimeleft=${urlQuery.amountExamTimeLeft}`
     }
     if (urlQuery.amountExamTimeRight) {
-      url += `amountexamtimeright=${urlQuery.amountExamTimeRight}&`
+      url += `&amountexamtimeright=${urlQuery.amountExamTimeRight}`
     }
     if (urlQuery.orderBy) {
-      url += `orderBy=${urlQuery.orderBy}`
+      url += `&orderBy=${urlQuery.orderBy}`
     }
-    console.log(url)
     return global.$http.get(url)
   },
   getExamDetail: (id) =>

@@ -16,7 +16,7 @@
           <b-input
             v-model="inputKeyword"
             placeholder="Nhập từ khóa cần tìm"
-            @focus="visibleSuggestions = true"
+            @focus="visibleSuggestions = false"
             @blur="visibleSuggestions = false"
           ></b-input>
           <div :class="visibleSuggestions ? 'suggestions open' : 'suggestions'">
@@ -52,13 +52,6 @@
               v-model="selectCategories"
               @change="changeOptionSeach"
             >
-              <p v-if="currentCategoryLabel !== ''">
-                <b-icon
-                  icon="chevron-left"
-                  @click="backToOldCategories()"
-                ></b-icon>
-                <strong>{{ currentCategoryLabel }}</strong>
-              </p>
               <div
                 v-for="category in categories"
                 :key="category.id"
@@ -145,7 +138,12 @@
           <b-collapse v-model="showFilterGroup4" class="filter-group-body">
             <div class="custom-ranger px-1 my-3">
               <div
-                class="ranger-selected-value d-flex justify-content-center font-smd"
+                class="
+                  ranger-selected-value
+                  d-flex
+                  justify-content-center
+                  font-smd
+                "
               >
                 <span>{{ valueNumberQuestion[0] }} câu</span>
                 <span class="mx-2">~</span>
@@ -182,7 +180,12 @@
             ></b-form-checkbox-group> -->
             <div class="custom-ranger px-1 my-3">
               <div
-                class="ranger-selected-value d-flex justify-content-center font-smd"
+                class="
+                  ranger-selected-value
+                  d-flex
+                  justify-content-center
+                  font-smd
+                "
               >
                 <span>{{ valueTimeExam[0] }} phút</span>
                 <span class="mx-2">~</span>
@@ -207,7 +210,7 @@
 
 <script>
 import 'vue-slider-component/theme/antd.css'
-
+import _ from 'lodash'
 export default {
   name: 'SidebarExam',
   props: {
@@ -242,16 +245,7 @@ export default {
       inputKeyword: '',
       visibleSuggestions: false,
       currentHistoryIndex: 0,
-      categoriesHistory: [
-        {
-          id: 0,
-          label: '',
-        },
-        {
-          id: 0,
-          label: '',
-        },
-      ],
+      categoriesHistory: [],
       listSuggestions: [
         {
           text: 'Tiếng Anh',
@@ -273,14 +267,6 @@ export default {
       visibleFilter: false,
       showFilterGroup1: true,
       selectCategories: [],
-      options1: [
-        { text: 'Thi tốt nghiệp THPT', value: 1 },
-        { text: 'Trắc nghiệm giáo dục K12', value: 2 },
-        { text: 'Trắc nghiệm đại học', value: 3 },
-        { text: 'Trắc nghiệm ngoại ngữ', value: 4 },
-        { text: 'Trắc nghiệm nghề nghiệp', value: 5 },
-        { text: 'Trắc nghiệm tính cách', value: 6 },
-      ],
       showFilterGroup2: true,
       selectLevels: [],
       options2: [
@@ -342,6 +328,11 @@ export default {
       return value.label
     },
   },
+  watch: {
+    inputKeyword() {
+      this.enterKeyword()
+    },
+  },
   mounted() {},
   methods: {
     clearFilter() {
@@ -363,6 +354,7 @@ export default {
     },
     changeOptionSeach() {
       const data = {
+        keyword: this.inputKeyword,
         categories: this.selectCategories,
         levels: this.selectCategories,
         ratings: this.selecTratings,
@@ -373,6 +365,9 @@ export default {
       }
       this.$emit('seachOption', data)
     },
+    enterKeyword: _.debounce(function () {
+      this.changeOptionSeach()
+    }, 500),
   },
 }
 </script>
