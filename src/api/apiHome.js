@@ -57,6 +57,7 @@ export default {
     if (urlQuery.orderBy) {
       url += `orderBy=${urlQuery.orderBy}`
     }
+    console.log(url)
     return global.$http.get(url)
   },
   getExamDetail: (id) =>
@@ -73,4 +74,27 @@ export default {
     ),
   getReviews: (data) =>
     global.$http.get(`/api/v1/Review/${data.typeId}/${data.hashId}`),
+  getTotalRate: (data) =>
+    global.$http.get(`/api/v1/Review/count-rate/${data.typeId}/${data.hashId}`),
+  getCategoryBreadcrumd(slug) {
+    return global.$http.get(
+      `api/Home/category-breadcrumb?slug=${encodeURIComponent(slug)}`
+    )
+  },
+  getChildCategoryBySlug(slug) {
+    return global.$http.get(
+      `api/Home/children-categories-by-slug?slug=${encodeURIComponent(slug)}`
+    )
+  },
+  getCategoryBySlug(slug) {
+    let url = `api/Home/category-by-slug`
+    if (slug) {
+      url += `?slug=${encodeURIComponent(slug)}`
+    }
+    return global.$http.get(url)
+  },
+  getQuestionsOfExam(hashId, urlQuery) {
+    const url = `api/Home/get-question-of-exam/${hashId}?page=${urlQuery.page}&pageSize=${urlQuery.pageSize}&keyword=${urlQuery.Keyword}`
+    return global.$http.get(url)
+  },
 }

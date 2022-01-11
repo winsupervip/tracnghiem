@@ -2,77 +2,31 @@
   <b-row class="card-review">
     <b-col sm="12" md="3">
       <div class="card-review-left">
-        <span class="number">5</span>
+        <span class="number">{{ rates.avgRate }}</span>
         <b-form-rating value="5" class="custom-rating mb-1" readonly />
-        <span>26 đánh giá</span>
+        <span>{{ rates.total }} đánh giá</span>
       </div>
     </b-col>
     <b-col sm="12" md="9">
       <div class="card-review-right">
-        <div class="rate-row">
+        <div v-for="(rate, index) in rates.items" :key="index" class="rate-row">
           <div class="rate-progress">
-            <b-progress variant="success" value="75" max="100" />
+            <b-progress
+              variant="success"
+              :value="(rate.count * 100) / rates.total"
+              max="100"
+            />
           </div>
           <div class="rate-star text-yellow">
-            <i class="icon-star-fill" />
-            <i class="icon-star-fill" />
-            <i class="icon-star-fill" />
-            <i class="icon-star-fill" />
-            <i class="icon-star-fill" />
+            <i :class="index >= 0 ? 'icon-star-fill' : 'icon-star'" />
+            <i :class="index >= 1 ? 'icon-star-fill' : 'icon-star'" />
+            <i :class="index >= 2 ? 'icon-star-fill' : 'icon-star'" />
+            <i :class="index >= 3 ? 'icon-star-fill' : 'icon-star'" />
+            <i :class="index >= 4 ? 'icon-star-fill' : 'icon-star'" />
           </div>
-          <div class="rate-num">75%</div>
-        </div>
-        <div class="rate-row">
-          <div class="rate-progress">
-            <b-progress variant="success" value="10" max="100" />
+          <div class="rate-num">
+            {{ (rate.count / rates.total).toFixed(2) * 100 }}%
           </div>
-          <div class="rate-star text-yellow">
-            <i class="icon-star-fill" />
-            <i class="icon-star-fill" />
-            <i class="icon-star-fill" />
-            <i class="icon-star-fill" />
-            <i class="icon-star" />
-          </div>
-          <div class="rate-num">10%</div>
-        </div>
-        <div class="rate-row">
-          <div class="rate-progress">
-            <b-progress variant="success" value="5" max="100" />
-          </div>
-          <div class="rate-star text-yellow">
-            <i class="icon-star-fill" />
-            <i class="icon-star-fill" />
-            <i class="icon-star-fill" />
-            <i class="icon-star" />
-            <i class="icon-star" />
-          </div>
-          <div class="rate-num">5%</div>
-        </div>
-        <div class="rate-row">
-          <div class="rate-progress">
-            <b-progress variant="success" value="5" max="100" />
-          </div>
-          <div class="rate-star text-yellow">
-            <i class="icon-star-fill" />
-            <i class="icon-star-fill" />
-            <i class="icon-star" />
-            <i class="icon-star" />
-            <i class="icon-star" />
-          </div>
-          <div class="rate-num">5%</div>
-        </div>
-        <div class="rate-row">
-          <div class="rate-progress">
-            <b-progress variant="success" value="5" max="100" />
-          </div>
-          <div class="rate-star text-yellow">
-            <i class="icon-star" />
-            <i class="icon-star" />
-            <i class="icon-star" />
-            <i class="icon-star" />
-            <i class="icon-star" />
-          </div>
-          <div class="rate-num">5%</div>
         </div>
       </div>
     </b-col>
@@ -84,6 +38,11 @@ import { defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'Overview',
-  setup() {},
+  props: {
+    rates: {
+      type: [Object],
+      default: () => {},
+    },
+  },
 })
 </script>

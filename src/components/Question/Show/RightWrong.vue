@@ -1,17 +1,8 @@
 <template>
-  <div class="question-item">
-    <div class="question-title d-flex justify-content-between">
-      <div class="question-name font-bold">
-        Câu hỏi {{ question.sortOrder }}
-      </div>
-      <div class="question-category text-gray">
-        <i class="icon-tag" />
-        <span class="font-sm">{{ question.seoTitle }}</span>
-      </div>
-    </div>
+  <div class="">
     <div
       class="question-content text-smd"
-      v-html="question.questionContent"
+      v-html="questionlist.questionContent"
     ></div>
     <div class="question-item-answer">
       <div class="answer-head">
@@ -19,7 +10,7 @@
       </div>
       <div class="list-answer">
         <ul class="list-unstyled p-0">
-          <li v-for="(item, index) in question.answers" :key="index">
+          <li v-for="(item, index) in questionlist.answers" :key="index">
             <b-form-radio name="anwser-radios" :value="item.hashId">
               <b>{{ String.fromCharCode(65 + index) + '. ' }}</b>
               <div class="ms-1" v-html="item.answerContent"></div>
@@ -33,11 +24,12 @@
 
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
-
+import mathType from '@/extensions/mathType'
 export default defineComponent({
   name: 'RightWrong',
+  mixins: [mathType],
   props: {
-    question: {
+    questionlist: {
       type: Object,
       required: true,
     },

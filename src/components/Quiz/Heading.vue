@@ -7,12 +7,7 @@
           <h1 class="page-title">
             {{ dataExam.exam ? dataExam.exam.title : 'tracnghiem.vn' }}
           </h1>
-          <span
-            :class="
-              dataExam.exam.levelId === 1
-                ? 'badge rounded-full bg-green exam-level'
-                : 'badge rounded-full bg-primary exam-level'
-            "
+          <span class="badge rounded-full bg-green exam-level"
             >{{ dataExam.exam.levelId | formatLevel }}
           </span>
         </div>
@@ -27,11 +22,7 @@
                 class="text-white"
               >
                 <img
-                  class="
-                    avatar avatar-md
-                    border-2 border-white border-solid
-                    me-2
-                  "
+                  class="avatar avatar-md border-2 border-white border-solid"
                   :src="dataExam.exam.image"
                   :alt="
                     dataExam.exam.authorName
@@ -39,7 +30,7 @@
                       : 'Trắc Nghiệm.vn'
                   "
                 />
-                <span>{{
+                <span class="ms-2">{{
                   dataExam.exam.authorName
                     ? dataExam.exam.authorName
                     : 'tracnghiem.vn'
@@ -62,7 +53,11 @@
           </b-col>
           <b-col cols="12" sm="12" md="4">
             <div class="exam-category">
-              {{ showCategory }}
+              {{
+                dataExam.exam.category
+                  ? dataExam.exam.category.categoryName
+                  : ''
+              }}
             </div>
           </b-col>
         </div>
@@ -129,6 +124,10 @@ export default defineComponent({
       // eslint-disable-next-line vue/require-valid-default-prop
       default: [],
     },
+    breadcrumbs: {
+      type: Array,
+      required: true,
+    },
   },
   setup(props) {
     const data = reactive({
@@ -136,53 +135,12 @@ export default defineComponent({
         { text: 'Yêu thích', value: 1 },
         { text: 'Đề vật lý', value: 2 },
       ],
-      breadcrumbs: [
-        {
-          text: 'Trang chủ',
-          href: '/',
-        },
-        {
-          text: 'Đề thi',
-          href: '/de-thi',
-        },
-        {
-          text: 'Thi Tốt nghiệp THPT',
-          href: '/de-thi/tot-nghiep-thpt',
-        },
-        {
-          text: '400 câu trắc nghiệm Mạo từ trong tiếng Anh có đáp án cực hay',
-          active: true,
-        },
-      ],
       optionSave: props.dataExam,
     })
     return {
       ...toRefs(data),
     }
   },
-
-  computed: {
-    showCategory() {
-      if (this.dataExam.categoryTree && this.dataExam.categoryTree.length > 0) {
-        const value = this.dataExam.categoryTree[0]
-        if (value.label) {
-          this.updateBreadcrumbs(value.label)
-          return value.label
-        }
-        this.updateBreadcrumbs('tracnghiem.vn')
-        return 'tracnghiem.vn'
-      }
-      this.updateBreadcrumbs('tracnghiem.vn')
-      return 'tracnghiem.vn'
-    },
-  },
-  methods: {
-    updateBreadcrumbs(value) {
-      this.breadcrumbs[2].text = value
-      this.breadcrumbs[3].text = this.dataExam.exam
-        ? this.dataExam.exam.title
-        : 'tracnghiem.vn'
-    },
-  },
+  methods: {},
 })
 </script>

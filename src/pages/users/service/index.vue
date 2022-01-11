@@ -76,7 +76,7 @@
     </b-modal>
     <b-card>
       <div v-if="total === 0">
-        <EmptyData />
+        <NoData description="Nhấn vào góc bên phải để thêm mới" />
       </div>
       <div v-else>
         <b-table

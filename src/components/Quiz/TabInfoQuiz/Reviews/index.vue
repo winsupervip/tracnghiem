@@ -1,6 +1,6 @@
 <template>
   <b-card header="Đánh giá" header-tag="header" class="mb-3">
-    <Overview></Overview>
+    <Overview :rates="rates"></Overview>
     <hr />
     <ListReviews :reviews="reviews"></ListReviews>
     <div class="text-center mb-3">
@@ -23,6 +23,7 @@ export default defineComponent({
   data() {
     return {
       reviews: [],
+      rates: {},
     }
   },
   mounted() {
@@ -37,7 +38,12 @@ export default defineComponent({
         typeId: 3,
         hashId: examHashId,
       })
+      const { data: resultRate } = await ApiHome.getTotalRate({
+        typeId: 3,
+        hashId: examHashId,
+      })
       this.reviews = result?.object?.items
+      this.rates = resultRate?.object
       console.log('review', this.reviews)
     },
   },

@@ -1,5 +1,11 @@
 <template>
-  <b-modal id="bv-modal-add-user-references" hide-footer size="lg">
+  <b-modal
+    id="bv-modal-add-user-references"
+    hide-footer
+    size="lg"
+    @shown="shown"
+    @hide="hide"
+  >
     <ValidationObserver>
       <b-form>
         <ValidationProvider rules="required" :name="$t('typeOfDocument')">
@@ -48,6 +54,7 @@
               :label="$t('content') + ' (*)'"
             >
               <TinyEditor
+                v-if="doShow"
                 v-model="documentValue.document.documentContent"
                 :state="errors[0] ? false : valid ? true : null"
               ></TinyEditor>
@@ -140,6 +147,7 @@ export default defineComponent({
   setup(props) {
     const { $loader } = useContext()
     const data = reactive({
+      doShow: false,
       documentValue: {
         document: {
           hashId: '',
@@ -166,6 +174,12 @@ export default defineComponent({
     }
   },
   methods: {
+    shown() {
+      this.doShow = true
+    },
+    hide() {
+      this.doShow = false
+    },
     loadOptions({ callback }) {
       callback()
     },

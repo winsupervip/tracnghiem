@@ -191,7 +191,7 @@
     </b-modal>
     <b-card>
       <div v-if="total === 0">
-        <EmptyData />
+        <NoData description="Nhấn vào nút thêm bên góc phải để thêm mới" />
       </div>
       <div v-else>
         <b-table responsive striped hover :items="listAccount" :fields="fields">
@@ -334,11 +334,10 @@ export default defineComponent({
         hashId: id,
         pageSize: 10,
         sort: 1,
-        status: '',
         keyword: '',
         activeDateFrom: '',
         activeDateTo: '',
-        isActive: '',
+        isActive: null,
       },
       serviceHashId: '',
       user: {

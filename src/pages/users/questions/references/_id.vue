@@ -1,12 +1,7 @@
 <template>
   <div class="page-container">
     <div
-      class="
-        d-flex
-        align-items-center
-        justify-content-between
-        references-header
-      "
+      class="d-flex align-items-center justify-content-between references-header"
     >
       <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
       <b-button
@@ -15,7 +10,10 @@
       >
         {{ $t('add') }}
       </b-button>
-      <DocumentByUser :get-question-document="getQuestionDocument" />
+      <DocumentByUser
+        is-checked="question"
+        :get-document="getQuestionDocument"
+      />
     </div>
 
     <div class="filter-bar">
@@ -81,13 +79,14 @@ export default defineComponent({
     const { app, $logger, $loader } = useContext()
     const route = useRoute()
     const typeQuestion = route?.value?.query?.type === 'question' ? 0 : 1
+    console.log('🚀 ~ file: _id.vue ~ line 79 ~ setup ~ route', route)
     const hashId = route?.value?.params?.id
     $logger.info('🚀 ~ file: _id.vue ~ line 309 ~ setup ~ hashId', hashId)
 
     const data = reactive({
       breadcrumbs: [],
       titleQuestion: '',
-
+      typeId: typeQuestion,
       hashIdQuestion: hashId,
 
       selected: '2',
@@ -115,7 +114,7 @@ export default defineComponent({
       )
       data.questionDocument = result2?.object
       console.log(
-        '🚀 ~ file: _id.vue ~ line 408 ~ getQuestionDocument ~ data.questionDocument',
+        '🚀 ~ file: _id.vue ~ line 116 ~ getQuestionDocument ~ data.questionDocument',
         data.questionDocument
       )
     }
@@ -180,7 +179,10 @@ export default defineComponent({
     },
     async deleteQuestionDocument(documentId) {
       try {
-        const { data } = await DocumentApi.deleteQuestionDocument(documentId)
+        const { data } = await DocumentApi.deleteQuestionDocument(
+          documentId,
+          this.typeId
+        )
         this.getQuestionDocument()
 
         this.$handleError(data)

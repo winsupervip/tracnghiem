@@ -1,6 +1,6 @@
 <template>
   <b-modal
-    id="modal-edit"
+    id="modal-edit-exam-document"
     :title="$t('editDocument')"
     hide-footer
     size="lg"
@@ -48,7 +48,7 @@
         </ValidationProvider>
         <ValidationProvider rules="required|max:1000" name="Nội dung">
           <b-form-group
-            v-if="updateQuestionDocument.documentTypeId === 1"
+            v-if="updateExamDocument.documentTypeId === 1"
             slot-scope="{ valid, errors }"
             :label="$t('content') + ' (*)'"
           >
@@ -64,7 +64,7 @@
         </ValidationProvider>
         <ValidationProvider rules="required|max:1000" name="Nội dung">
           <b-form-group
-            v-if="updateQuestionDocument.documentTypeId === 2"
+            v-if="updateExamDocument.documentTypeId === 2"
             slot-scope="{ valid, errors }"
             :label="$t('link') + ' (*)'"
           >
@@ -83,7 +83,7 @@
         </ValidationProvider>
         <ValidationProvider rules="required|max:1000" :name="$t('content')">
           <b-form-group
-            v-if="updateQuestionDocument.documentTypeId === 3"
+            v-if="updateExamDocument.documentTypeId === 3"
             slot-scope="{ valid, errors }"
             :label="$t('iframeCode') + ' (*)'"
           >
@@ -107,7 +107,7 @@
           <b-button
             variant="outline-primary btn-md "
             block
-            @click="$bvModal.hide('modal-edit')"
+            @click="$bvModal.hide('modal-edit-exam-document')"
             >{{ $t('close') }}</b-button
           >
         </div>
@@ -128,11 +128,11 @@ import DocumentApi from '../../api/documentApi'
 
 export default defineComponent({
   props: {
-    getQuestionDocument: {
+    getExamDocument: {
       type: Function,
       required: true,
     },
-    updateQuestionDocument: { type: Object, required: true },
+    updateExamDocument: { type: Object, required: true },
   },
   setup() {
     const { $loader } = useContext()
@@ -155,7 +155,7 @@ export default defineComponent({
     }
   },
   watch: {
-    updateQuestionDocument(val) {
+    updateExamDocument(val) {
       this.documentTypeId = val.documentTypeId
       this.documentName = val.documentName
       this.documentContent = val.documentContent
@@ -174,7 +174,7 @@ export default defineComponent({
     async updateDocument() {
       const documentUpdateValue = {
         document: {
-          hashId: this.updateQuestionDocument.hashIdDocument,
+          hashId: this.updateExamDocument.hashIdDocument,
           documentName: this.documentName,
           documentContent: this.documentContent,
           documentTypeId: this.documentTypeId,
@@ -182,7 +182,7 @@ export default defineComponent({
       }
       try {
         const { data } = await DocumentApi.updateDocument(documentUpdateValue)
-        this.getQuestionDocument()
+        this.getExamDocument()
 
         this.$handleError(data)
       } catch (err) {
