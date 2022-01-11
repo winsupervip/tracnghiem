@@ -57,6 +57,7 @@ export default {
     if (urlQuery.orderBy) {
       url += `orderBy=${urlQuery.orderBy}`
     }
+    console.log(url)
     return global.$http.get(url)
   },
   getExamDetail: (id) =>
@@ -71,4 +72,21 @@ export default {
     global.$http.get(
       `api/v1/Exam/get-question-exam-detail-home/${data.id}?Page=${data.page}&PageSize=${data.pageSize}`
     ),
+  getCategoryBreadcrumd(slug) {
+    return global.$http.get(
+      `api/Home/category-breadcrumb?slug=${encodeURIComponent(slug)}`
+    )
+  },
+  getChildCategoryBySlug(slug) {
+    return global.$http.get(
+      `api/Home/children-categories-by-slug?slug=${encodeURIComponent(slug)}`
+    )
+  },
+  getCategoryBySlug(slug) {
+    let url = `api/Home/category-by-slug`
+    if (slug) {
+      url += `?slug=${encodeURIComponent(slug)}`
+    }
+    return global.$http.get(url)
+  },
 }

@@ -5,7 +5,10 @@
       <b-container>
         <b-row>
           <b-col cols="12" sm="12" md="4" lg="3" class="filter-sidebar">
-            <SidebarExam @seachOption="seachOption" />
+            <SidebarExam
+              :categories="categoryItems"
+              @seachOption="seachOption"
+            />
           </b-col>
           <b-col
             cols="12"
@@ -104,6 +107,9 @@ import {
   useContext,
   useRouter,
   watch,
+  computed,
+  useAsync,
+  useMeta,
 } from '@nuxtjs/composition-api'
 // eslint-disable-next-line import/no-unresolved
 import HeadingPage from '@/components/HeadingPage'
@@ -121,23 +127,16 @@ export default defineComponent({
   layout: 'default',
   auth: false,
   setup() {
-    const { $loader } = useContext()
+    const { $loader, error } = useContext()
+    const { title, meta } = useMeta()
     const route = useRoute()
     const router = useRouter()
     const category = route?.value?.query.category || false
     const keyword = route?.value?.query.keyword || false
 
     const data = reactive({
-      breadcrumbs: [
-        {
-          text: 'Trang chủ',
-          href: '/',
-        },
-        {
-          text: 'Danh sách đề thi',
-          active: true,
-        },
-      ],
+      breadcrumbs: [],
+      categoryItems: [],
       selectedSort: 'latest',
       optionsSort: [
         { value: 'latest', text: 'Mới nhất' },
@@ -162,11 +161,17 @@ export default defineComponent({
       },
       mess: '',
     })
+
+    const paramsUrl = computed(() => route.value.path)
+    let slug = paramsUrl.value
+    if (slug === '/de-thi') {
+      slug = ''
+    }
     const { fetch } = useFetch(async () => {
       try {
         $loader()
         const { data: result } = await apiHome.searchExam(data.queryUrl)
-        console.log(result)
+        // console.log(result)
         data.dataExam = result.object.items
         data.rows = result.object.total
         if (data.rows < 0) {
@@ -177,11 +182,46 @@ export default defineComponent({
       } catch (err) {
         $loader().close()
         // this.$handleError(err, () => {
-        //   console.log(err)
+        //   // console.log(err)
         // })
       }
     })
-    fetch()
+    useAsync(async () => {
+      try {
+        const { data: category } = await apiHome.getCategoryBySlug(slug)
+        // set seo title, description
+        title.value = category.object.seoTitle
+        meta.value.push({
+          hid: 'description',
+          name: 'description',
+          content: category.object.seoDescription,
+        })
+        // get breadcrumbs
+        const { data: breadcrumdRes } = await apiHome.getCategoryBreadcrumd(
+          slug
+        )
+        data.breadcrumbs = [
+          {
+            text: 'Trang chủ',
+            href: '/',
+          },
+        ]
+        const breadcrumdItems = breadcrumdRes.object.items
+        breadcrumdItems.forEach((element) => {
+          data.breadcrumbs.push({
+            text: element.categoryName,
+            href: element.slug,
+          })
+        })
+        // get child category
+        const { data: categories } = await apiHome.getChildCategoryBySlug(slug)
+        data.categoryItems = categories.object
+        data.queryUrl.categories = [category.object.id]
+        fetch()
+      } catch {
+        error({ statusCode: 404, message: 'Post not found' })
+      }
+    })
     const seachOption = (value) => {
       data.queryUrl.categories = value.categories
       data.queryUrl.levels = value.levels
@@ -209,5 +249,6 @@ export default defineComponent({
       seachOption,
     }
   },
+  head: {},
 })
 </script>

@@ -31,7 +31,6 @@ export default defineComponent({
   data() {
     return {
       title: document.SEO.title,
-      description: document.SEO.description,
     }
   },
   head() {
@@ -41,9 +40,6 @@ export default defineComponent({
       },
       link: [{ rel: 'canonical', href: '' }],
       title: this.title,
-      meta: [
-        { hid: 'description', name: 'description', content: this.description },
-      ],
     }
   },
 })

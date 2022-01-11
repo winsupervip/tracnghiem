@@ -27,7 +27,7 @@
                 class="text-white"
               >
                 <img
-                  class="avatar avatar-md border-2 border-white border-solid me-2"
+                  class="avatar avatar-md border-2 border-white border-solid"
                   :src="dataExam.exam.image"
                   :alt="
                     dataExam.exam.authorName
@@ -35,7 +35,7 @@
                       : 'Trắc Nghiệm.vn'
                   "
                 />
-                <span>{{
+                <span class="ms-2">{{
                   dataExam.exam.authorName
                     ? dataExam.exam.authorName
                     : 'tracnghiem.vn'

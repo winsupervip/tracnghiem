@@ -14,16 +14,6 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
-        name: 'keywords',
-        content:
-          'Trắc nghiệm, Online, trac nghiem online, ngan hang de thi, ngan hang cau hoi, thi truc tuyen',
-      },
-      {
-        name: 'description',
-        content:
-          'Thi trắc nghiệm online với hàng ngàn đề thi, ngân hàng câu hỏi phong phú đa dạng trên nhiều lĩnh vực',
-      },
-      {
         property: 'og:image',
         content: 'https://tracnghiem.vn/images/logo-shared.png',
       },
@@ -191,7 +181,7 @@ export default {
     '@nuxtjs/auth-next',
     'bootstrap-vue/nuxt',
     '@nuxtjs/toast',
-    '@nuxtjs/recaptcha'
+    '@nuxtjs/recaptcha',
   ],
   // https://github.com/nuxt-community/google-gtag-module
   'google-gtag': {
@@ -199,10 +189,10 @@ export default {
   },
   recaptcha: {
     hideBadge: false, // Hide badge element (v3 & v2 via size=invisible)
-    language: 'vi',   // Recaptcha language (v2)
-    siteKey: process.env.RECAPTCHA_SITE_KEY,    // Site key for requests
-    version: 2,     // Version
-    size: 'normal'        // Size: 'compact', 'normal', 'invisible' (v2)
+    language: 'vi', // Recaptcha language (v2)
+    siteKey: process.env.RECAPTCHA_SITE_KEY, // Site key for requests
+    version: 2, // Version
+    size: 'normal', // Size: 'compact', 'normal', 'invisible' (v2)
   },
 
   // bootstrap-vue
@@ -291,9 +281,14 @@ export default {
         component: resolve(__dirname, 'pages/home'),
       })
       routes.push({
+        name: 'de-thi-categories',
+        path: '/de-thi/*',
+        component: resolve(__dirname, 'pages/de-thi/index.vue'),
+      })
+      routes.push({
         name: 'de-thi-id-slug',
         path: '/:slug-:id',
-        component: resolve(__dirname, 'pages/de-thi/_id/index.vue'),
+        component: resolve(__dirname, 'pages/chi-tiet-de-thi/index.vue'),
       })
     },
     middleware: ['auth'],
@@ -304,7 +299,7 @@ export default {
       options: {
         path: '/',
         maxAge: 3600,
-      }
+      },
     },
     plugins: [{ src: '@/plugins/http.js', ssr: true }],
     strategies: {

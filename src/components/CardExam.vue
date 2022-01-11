@@ -52,7 +52,7 @@
       </nuxt-link>
     </div>
     <div class="card-body">
-      <nuxt-link :to="`/de-thi/${data.hashId}`" class="exam-title">
+      <nuxt-link :to="`/${data.slug}-${data.hashId}`" class="exam-title">
         <h4 class="font-md font-bold">
           {{ data.title }}
         </h4>
@@ -67,9 +67,7 @@
         </nuxt-link>
       </div>
       <div class="d-flex justify-content-between">
-        <span class="exam-category text-gray font-sm">
-          {{ data.categories.categoryName }}
-        </span>
+        <span class="exam-category text-gray font-sm"> </span>
         <div class="exam-rating">
           <i class="icon-star-fill text-yellow mr-1"></i>
           <strong class="font-sm mr-1">{{ data.rating }}</strong>

@@ -66,12 +66,11 @@
                 :value="category.id"
               >
                 <b-form-checkbox :value="category.id">{{
-                  category.label
+                  category.categoryName
                 }}</b-form-checkbox>
-                <b-icon
-                  icon="chevron-right"
-                  @click="nextToOtherCategory(category)"
-                ></b-icon>
+                <nuxt-link v-if="category.slug" :to="category.slug">
+                  <b-icon icon="chevron-right"></b-icon>
+                </nuxt-link>
               </div>
             </b-form-checkbox-group>
             <b-alert v-if="categories.length === 0" show variant="warning"
@@ -144,20 +143,9 @@
             <i class="icon-caret-down"></i>
           </strong>
           <b-collapse v-model="showFilterGroup4" class="filter-group-body">
-            <!-- <b-form-checkbox-group
-              v-model="selectedOptions4"
-              :options="options4"
-              value-field="value"
-              text-field="text"
-            ></b-form-checkbox-group> -->
             <div class="custom-ranger px-1 my-3">
               <div
-                class="
-                  ranger-selected-value
-                  d-flex
-                  justify-content-center
-                  font-smd
-                "
+                class="ranger-selected-value d-flex justify-content-center font-smd"
               >
                 <span>{{ valueNumberQuestion[0] }} câu</span>
                 <span class="mx-2">~</span>
@@ -194,12 +182,7 @@
             ></b-form-checkbox-group> -->
             <div class="custom-ranger px-1 my-3">
               <div
-                class="
-                  ranger-selected-value
-                  d-flex
-                  justify-content-center
-                  font-smd
-                "
+                class="ranger-selected-value d-flex justify-content-center font-smd"
               >
                 <span>{{ valueTimeExam[0] }} phút</span>
                 <span class="mx-2">~</span>
@@ -223,11 +206,17 @@
 </template>
 
 <script>
-import apiHome from '@/api/apiHome'
 import 'vue-slider-component/theme/antd.css'
 
 export default {
   name: 'SidebarExam',
+  props: {
+    categories: {
+      type: Array,
+      required: true,
+      default: () => [],
+    },
+  },
   data() {
     return {
       valueTimeExam: [0, 120],
@@ -253,7 +242,6 @@ export default {
       inputKeyword: '',
       visibleSuggestions: false,
       currentHistoryIndex: 0,
-      categories: [],
       categoriesHistory: [
         {
           id: 0,
@@ -354,9 +342,7 @@ export default {
       return value.label
     },
   },
-  mounted() {
-    this.fetchCategories(0)
-  },
+  mounted() {},
   methods: {
     clearFilter() {
       this.selectCategories = []
@@ -374,25 +360,6 @@ export default {
     selectSuggestion(value) {
       this.inputKeyword = value
       this.$logger.debug(value)
-    },
-    async fetchCategories(id) {
-      const { data: result } = await apiHome.getCategoriesExamPage({
-        parent: id,
-      })
-      this.categories = result?.object?.items
-    },
-    nextToOtherCategory(value) {
-      this.categoriesHistory.push(value)
-      this.selectCategories = []
-      this.fetchCategories(value.id)
-    },
-    backToOldCategories() {
-      this.selectCategories = []
-      const removeHistory = this.categoriesHistory.length - 1
-      this.categoriesHistory.splice(removeHistory, 1)
-      console.log('back', this.categoriesHistory)
-      const id = this.categoriesHistory[removeHistory - 2].id
-      this.fetchCategories(id)
     },
     changeOptionSeach() {
       const data = {
