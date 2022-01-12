@@ -1,46 +1,31 @@
 <template>
   <div class="list-review">
     <div v-for="(review, index) in reviews" :key="index" class="review-item">
-      <div class="review-item-avatar">
-        <img class="avatar avatar-md" :src="review.user.avatar" alt="" />
+      <ReviewsItem :review="review" />
+    </div>
+    <div class="form-review-exam">
+      <div class="form-group mb-4">
+        <label for="rating-input" class="font-bold mb-2">Nhận xét</label>
+        <b-form-textarea
+          id="rating-input"
+          v-model="comment"
+          placeholder="Nhận xét về đề thi này"
+          rows="5"
+          max-rows="10"
+        ></b-form-textarea>
       </div>
-      <div class="review-item-content">
-        <div class="font-bold mb-1">
-          {{
-            review.user.dislayName
-              ? review.user.dislayName
-              : review.user.firstName + review.user.lastName
-          }}
+      <div class="d-flex flex-wrap align-items-center justify-content-between">
+        <div class="d-flex mb-3">
+          <strong class="me-3">Đánh giá:</strong>
+          <b-form-rating v-model="ratingExam" class="custom-rating" />
         </div>
-        <div class="d-flex align-items-center mb-3">
-          <b-form-rating
-            :value="review.rate"
-            class="custom-rating me-2"
-            readonly
-          />
-          <span class="font-sm text-gray">{{
-            review.createDate | convertDate
-          }}</span>
-        </div>
-        <div class="font-smd mb-4">
-          {{ review.comment }}
-        </div>
-        <div class="review-item-action">
-          <b-btn variant="link" class="btn-link">
-            <i :class="review.like ? 'icon-like-fill' : 'icon-like'"></i>
-            Thích
-          </b-btn>
-          <b-btn variant="link" class="btn-link">
-            <i
-              :class="review.dislike ? 'icon-dislike-fill' : 'icon-dislike'"
-            ></i>
-            Không thích
-          </b-btn>
-          <b-btn variant="link" class="btn-link">
-            <i class="icon-flag"></i>
-            Báo cáo sai phạm
-          </b-btn>
-        </div>
+        <b-btn
+          variant="primary"
+          class="button-submit-rating mb-3"
+          :disabled="allowComment"
+          @click="sendComment"
+          >Gửi</b-btn
+        >
       </div>
     </div>
   </div>
@@ -48,13 +33,41 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
-
+import ReviewsItem from './ReviewsItem.vue'
 export default defineComponent({
   name: 'ListReviews',
+  components: {
+    ReviewsItem,
+  },
   props: {
     reviews: {
       type: [Array],
       default: () => [],
+    },
+  },
+  data() {
+    return {
+      ratingExam: 0,
+      comment: '',
+    }
+  },
+  computed: {
+    allowComment() {
+      if (this.ratingExam !== 0 && this.comment !== '') {
+        return false
+      }
+      return true
+    },
+  },
+  methods: {
+    sendComment() {
+      const data = {
+        typeId: 3,
+        comment: this.comment,
+        rateId: this.ratingExam,
+        itemId: 'string',
+      }
+      this.$emit('sendComment', data)
     },
   },
 })
