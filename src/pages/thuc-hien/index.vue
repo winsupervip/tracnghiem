@@ -354,6 +354,22 @@ export default defineComponent({
           name: 'description',
           content: 'Đang thực hiện ' + data.dataExam.exam.seoDescription,
         })
+        // facebook
+        meta.value.push({
+          hid: 'og:title',
+          name: 'og:title',
+          content: data.dataExam.exam.seoTitle,
+        })
+        meta.value.push({
+          hid: 'og:description',
+          name: 'og:description',
+          content: data.dataExam.exam.seoDescription,
+        })
+        meta.value.push({
+          hid: 'og:image',
+          name: 'og:image',
+          content: data.dataExam.exam.image,
+        })
         // get slug
         const slugCate = data.dataExam.exam.category.slug
         // breadcrumbs

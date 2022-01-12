@@ -202,13 +202,17 @@ export default defineComponent({
   layout: 'default',
   auth: false,
   setup() {
-    const { $loader, $logger, error } = useContext()
+    const { $loader, $logger, error, redirect } = useContext()
     const { title, meta } = useMeta()
     const store = useStore()
     const route = useRoute()
     const idSlug = computed(() => route.value.params.id)
     const arr = idSlug.value.split('-')
     const id = arr[arr.length - 1]
+
+    const paramsUrl = computed(() => route.value.path)
+    const slug = paramsUrl.value
+
     const data = reactive({
       idExam: id || null,
       selectedBookmark: [],
@@ -266,6 +270,11 @@ export default defineComponent({
         // get exam
         const { data: getExamDetail } = await ApiHome.getExamDetail(data.idExam)
         data.dataExam = getExamDetail.object
+        const examSlug = '/' + data.dataExam.exam.slug + '-' + data.idExam
+        console.log(slug, examSlug)
+        if (slug !== examSlug) {
+          redirect(examSlug)
+        }
         // seo
         title.value = data.dataExam.exam.seoTitle
         meta.value.push({
@@ -273,7 +282,22 @@ export default defineComponent({
           name: 'description',
           content: data.dataExam.exam.seoDescription,
         })
-
+        // facebook
+        meta.value.push({
+          hid: 'og:title',
+          name: 'og:title',
+          content: data.dataExam.exam.seoTitle,
+        })
+        meta.value.push({
+          hid: 'og:description',
+          name: 'og:description',
+          content: data.dataExam.exam.seoDescription,
+        })
+        meta.value.push({
+          hid: 'og:image',
+          name: 'og:image',
+          content: data.dataExam.exam.image,
+        })
         // console.log(data.dataExam)
         const slugCate = data.dataExam.exam.category.slug
         //

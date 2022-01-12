@@ -227,6 +227,24 @@ export default defineComponent({
           content:
             'Thi trắc nghiệm online với hàng ngàn đề thi, ngân hàng câu hỏi phong phú đa dạng trên nhiều lĩnh vực',
         },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content:
+            'https://storage.tracnghiem.vn/public/trang-chu-tracnghiem-online.jpg',
+        },
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content:
+            'Trắc nghiệm Online, Ngân hàng câu hỏi, đề thi mới nhất cập nhật 24h/7',
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content:
+            'Thi trắc nghiệm online với hàng ngàn đề thi, ngân hàng câu hỏi phong phú đa dạng trên nhiều lĩnh vực',
+        },
       ],
     }
   },

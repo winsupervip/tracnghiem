@@ -15,10 +15,7 @@
     <div class="exam-teacher-row row align-items-center mb-3">
       <b-col cols="12" sm="12" md="4">
         <div class="card-exam-teacher">
-          <nuxt-link
-            :to="`/giao-vien/${dataExam.teacherId}`"
-            class="text-white"
-          >
+          <nuxt-link to="#" class="text-white">
             <img
               class="avatar avatar-md border-2 border-white border-solid"
               :src="dataExam.exam.image"
@@ -50,10 +47,10 @@
         </div>
       </b-col>
       <b-col cols="12" sm="12" md="4">
-        <div class="exam-category">
-          {{
-            dataExam.exam.category ? dataExam.exam.category.categoryName : ''
-          }}
+        <div v-if="dataExam.exam.category" class="exam-category">
+          <nuxt-link :to="dataExam.exam.category.slug" class="text-white">
+            {{ dataExam.exam.category.categoryName }}
+          </nuxt-link>
         </div>
       </b-col>
     </div>

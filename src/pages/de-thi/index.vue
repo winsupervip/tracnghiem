@@ -177,6 +177,22 @@ export default defineComponent({
           name: 'description',
           content: category.object.seoDescription,
         })
+        // facebook
+        meta.value.push({
+          hid: 'og:title',
+          name: 'og:title',
+          content: category.object.seoTitle,
+        })
+        meta.value.push({
+          hid: 'og:description',
+          name: 'og:description',
+          content: category.object.seoDescription,
+        })
+        meta.value.push({
+          hid: 'og:image',
+          name: 'og:image',
+          content: category.object.seoAvatar,
+        })
         data.category = category.object
         // get breadcrumbs
         const { data: breadcrumdRes } = await apiHome.getCategoryBreadcrumd(

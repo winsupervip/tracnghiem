@@ -182,12 +182,7 @@
                       ></b-form-textarea>
                     </div>
                     <div
-                      class="
-                        d-flex
-                        flex-wrap
-                        align-items-center
-                        justify-content-between
-                      "
+                      class="d-flex flex-wrap align-items-center justify-content-between"
                     >
                       <div class="d-flex mb-3">
                         <strong class="me-3">Đánh giá:</strong>
@@ -284,6 +279,22 @@ export default defineComponent({
           hid: 'description',
           name: 'description',
           content: data.dataExam.exam.seoDescription,
+        })
+        // facebook
+        meta.value.push({
+          hid: 'og:title',
+          name: 'og:title',
+          content: data.dataExam.exam.seoTitle,
+        })
+        meta.value.push({
+          hid: 'og:description',
+          name: 'og:description',
+          content: data.dataExam.exam.seoDescription,
+        })
+        meta.value.push({
+          hid: 'og:image',
+          name: 'og:image',
+          content: data.dataExam.exam.image,
         })
         // console.log(data.dataExam)
         const slugCate = data.dataExam.exam.category.slug
