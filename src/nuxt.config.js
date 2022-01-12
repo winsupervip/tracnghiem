@@ -13,12 +13,14 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      {
-        property: 'og:image',
-        content: 'https://tracnghiem.vn/images/logo-shared.png',
-      },
-      { property: 'og:image:width', content: '400' },
-      { property: 'og:image:height', content: '400' },
+      { property: 'robots', content: 'index, follow' },
+      { property: 'robots', content: 'max-image-preview:large' },
+      { property: 'fb:pages', content: '104897438554626' },
+      { property: 'fb:app_id', content: '411104806997379' },
+      { property: 'og:image:width', content: '940' },
+      { property: 'og:image:height', content: '788' },
+      { property: 'twitter:card', content: 'summary_large_image' },
+      { property: 'twitter:creator', content: '@vanvuongnv' },
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'msapplication-TileColor', content: '#ffffff' },
       {
@@ -289,6 +291,11 @@ export default {
         name: 'de-thi-id-slug',
         path: '/:slug-:id',
         component: resolve(__dirname, 'pages/chi-tiet-de-thi/index.vue'),
+      })
+      routes.push({
+        name: 'ket-qua-id-slug',
+        path: '/ket-qua/:slug-:id',
+        component: resolve(__dirname, 'pages/ket-qua/index.vue'),
       })
     },
     middleware: ['auth'],

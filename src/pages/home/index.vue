@@ -14,7 +14,7 @@
         <div class="feature-topic">
           <div class="view-more">
             <div class="divider"><span></span></div>
-            <nuxt-link to="/topic" class="view-all">
+            <nuxt-link to="/de-thi" class="view-all">
               <b-btn size="lg" variant="outline-primary">Xem tất cả</b-btn>
             </nuxt-link>
           </div>
@@ -67,18 +67,12 @@
               lg="3"
             >
               <div class="category-item">
-                <nuxt-link
-                  :to="category.slug ? category.slug : '#'"
-                  class="category-title"
-                >
+                <nuxt-link :to="category.slug" class="category-title">
                   <h3 class="font-lg font-bold">{{ category.categoryName }}</h3>
                 </nuxt-link>
                 <ul class="list-unstyled category-item-list">
                   <li v-for="child in category.children" :key="child.id">
-                    <nuxt-link
-                      :to="child.slug ? category.slug : '#'"
-                      class="text-black"
-                    >
+                    <nuxt-link :to="child.slug" class="text-black">
                       <h4 class="font-lmd font-bold">
                         {{ child.categoryName }}
                       </h4>
@@ -95,7 +89,7 @@
             </b-col>
           </b-row>
           <div class="text-center my-3">
-            <nuxt-link to="/chuyen-muc" class="btn btn-outline-primary">
+            <nuxt-link to="/de-thi" class="btn btn-outline-primary">
               Xem tất cả
             </nuxt-link>
           </div>
@@ -138,7 +132,7 @@ export default defineComponent({
   layout: 'default',
   auth: false,
   setup() {
-    const { $logger, $loader } = useContext()
+    const { $loader } = useContext()
     const data = reactive({
       dataFeatureTopic: [],
       dataFeatureExam: [],
@@ -194,19 +188,17 @@ export default defineComponent({
         })
         data.dataFeatureExam = exam.object?.items
         data.dataFeatureTopic = result.object?.items
+        console.log(data.dataFeatureTopic)
         data.dataConfigCategories = configCategories.object.items
         data.dataCategories = resultCategories.object.items
-        $logger.info('trung log nek hehe 1', data.dataConfigCategories)
         $loader().close()
       } catch (err) {
-        console.log(err)
         $loader().close()
         // this.$handleError(err, () => {
         //   console.log(err)
         // })
       }
     })
-    $logger.info('trung log nek hehe 1')
     fetch()
     return {
       ...toRefs(data),
@@ -224,9 +216,40 @@ export default defineComponent({
       },
     }
   },
+  head() {
+    return {
+      title:
+        'Trắc nghiệm Online, Ngân hàng câu hỏi, đề thi mới nhất cập nhật 24h/7',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content:
+            'Thi trắc nghiệm online với hàng ngàn đề thi, ngân hàng câu hỏi phong phú đa dạng trên nhiều lĩnh vực',
+        },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content:
+            'https://storage.tracnghiem.vn/public/trang-chu-tracnghiem-online.jpg',
+        },
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content:
+            'Trắc nghiệm Online, Ngân hàng câu hỏi, đề thi mới nhất cập nhật 24h/7',
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content:
+            'Thi trắc nghiệm online với hàng ngàn đề thi, ngân hàng câu hỏi phong phú đa dạng trên nhiều lĩnh vực',
+        },
+      ],
+    }
+  },
   methods: {
     onSubmitSearch(value) {
-      console.log(value)
       let url = 'de-thi?'
       if (value.keyword !== '') {
         url += `keyword=${value.keyword}&`

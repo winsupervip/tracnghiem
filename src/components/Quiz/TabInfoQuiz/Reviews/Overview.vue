@@ -2,9 +2,9 @@
   <b-row class="card-review">
     <b-col sm="12" md="3">
       <div class="card-review-left">
-        <span class="number">{{ rates.avgRate }}</span>
+        <span class="number">{{ rates.avgRate ? rates.avgRate : 0 }}</span>
         <b-form-rating value="5" class="custom-rating mb-1" readonly />
-        <span>{{ rates.total }} đánh giá</span>
+        <span> {{ rates.total ? rates.total : 0 }} đánh giá</span>
       </div>
     </b-col>
     <b-col sm="12" md="9">
@@ -13,7 +13,7 @@
           <div class="rate-progress">
             <b-progress
               variant="success"
-              :value="(rate.count * 100) / rates.total"
+              :value="rate.count !== 0 ? (rate.count * 100) / rates.total : 0"
               max="100"
             />
           </div>
@@ -25,7 +25,11 @@
             <i :class="index >= 4 ? 'icon-star-fill' : 'icon-star'" />
           </div>
           <div class="rate-num">
-            {{ (rate.count / rates.total).toFixed(2) * 100 }}%
+            {{
+              rate.count !== 0
+                ? (rate.count / rates.total).toFixed(2) * 100
+                : 0
+            }}%
           </div>
         </div>
       </div>
@@ -42,6 +46,11 @@ export default defineComponent({
     rates: {
       type: [Object],
       default: () => {},
+    },
+  },
+  watch: {
+    rates() {
+      console.log(this.rates)
     },
   },
 })

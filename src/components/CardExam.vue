@@ -26,7 +26,7 @@
       ></b-icon>
     </b-btn>
     <div class="card-exam-teacher">
-      <nuxt-link :to="`/giao-vien/${data.teacher ? data.teacher.userId : ''}`">
+      <nuxt-link to="#">
         <img
           class="avatar avatar-lg"
           :src="
@@ -61,9 +61,17 @@
         <nuxt-link
           v-for="tag in data.tags"
           :key="tag.id"
-          :to="`tag/${tag.tagId}`"
+          :title="tag.tagName"
+          :to="`#${encodeURI(tag.tagName)}`"
         >
           #{{ tag.tagName }}
+        </nuxt-link>
+        <nuxt-link
+          v-if="data.categories"
+          :title="data.categories.categoryName"
+          :to="data.categories.slug"
+        >
+          #{{ data.categories.categoryName }}
         </nuxt-link>
       </div>
       <div class="d-flex justify-content-between">

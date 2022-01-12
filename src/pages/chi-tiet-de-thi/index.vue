@@ -2,11 +2,17 @@
   <div class="page-container position-relative">
     <section class="page-heading exam-page-heading bg-gradient-blue">
       <div class="page-heading-inner">
-        <Heading
-          :data-exam="dataExam"
-          :selected-bookmark="selectedBookmark"
-          :breadcrumbs="breadcrumds"
-        />
+        <b-container class="position-relative">
+          <b-row>
+            <b-col md="12" lg="8">
+              <Heading
+                :data-exam="dataExam"
+                :selected-bookmark="selectedBookmark"
+                :breadcrumbs="breadcrumbs"
+              />
+            </b-col>
+          </b-row>
+        </b-container>
       </div>
     </section>
     <section class="exam-main-container">
@@ -196,13 +202,17 @@ export default defineComponent({
   layout: 'default',
   auth: false,
   setup() {
-    const { $loader, $logger, error } = useContext()
+    const { $loader, $logger, error, redirect } = useContext()
     const { title, meta } = useMeta()
     const store = useStore()
     const route = useRoute()
     const idSlug = computed(() => route.value.params.id)
     const arr = idSlug.value.split('-')
     const id = arr[arr.length - 1]
+
+    const paramsUrl = computed(() => route.value.path)
+    const slug = paramsUrl.value
+
     const data = reactive({
       idExam: id || null,
       selectedBookmark: [],
@@ -236,7 +246,7 @@ export default defineComponent({
       currentPage: 1,
       pageSize: 10,
       totalQuestion: 0,
-      breadcrumds: [],
+      breadcrumbs: [],
       urlQuery: {
         page: 1,
         pageSize: 10,
@@ -260,6 +270,11 @@ export default defineComponent({
         // get exam
         const { data: getExamDetail } = await ApiHome.getExamDetail(data.idExam)
         data.dataExam = getExamDetail.object
+        const examSlug = '/' + data.dataExam.exam.slug + '-' + data.idExam
+        console.log(slug, examSlug)
+        if (slug !== examSlug) {
+          redirect(examSlug)
+        }
         // seo
         title.value = data.dataExam.exam.seoTitle
         meta.value.push({
@@ -267,7 +282,22 @@ export default defineComponent({
           name: 'description',
           content: data.dataExam.exam.seoDescription,
         })
-
+        // facebook
+        meta.value.push({
+          hid: 'og:title',
+          name: 'og:title',
+          content: data.dataExam.exam.seoTitle,
+        })
+        meta.value.push({
+          hid: 'og:description',
+          name: 'og:description',
+          content: data.dataExam.exam.seoDescription,
+        })
+        meta.value.push({
+          hid: 'og:image',
+          name: 'og:image',
+          content: data.dataExam.exam.image,
+        })
         // console.log(data.dataExam)
         const slugCate = data.dataExam.exam.category.slug
         //
@@ -289,19 +319,19 @@ export default defineComponent({
         data.userInformation = getAuthorOfExam.object
         data.listExamSection = getListExamSection.object.items
         data.getListExamDocument = getListExamDocument.object.items
-        // breadcrumds
-        data.breadcrumds = []
-        data.breadcrumds.push({
+        // breadcrumbs
+        data.breadcrumbs = []
+        data.breadcrumbs.push({
           text: 'Trang chủ',
           href: '/',
         })
         breadcrumdItems.object.items.forEach((element) => {
-          data.breadcrumds.push({
+          data.breadcrumbs.push({
             text: element.categoryName,
             href: element.slug,
           })
         })
-        data.breadcrumds.push({
+        data.breadcrumbs.push({
           text: data.dataExam.exam.title,
           href: '/' + data.dataExam.exam.slug + '-' + data.dataExam.exam.hashId,
           active: true,

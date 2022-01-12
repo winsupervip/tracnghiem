@@ -52,6 +52,7 @@ export default defineComponent({
   },
   mounted() {
     this.fetchReviews()
+    this.fetchRate()
   },
   methods: {
     async fetchReviews() {
@@ -65,18 +66,23 @@ export default defineComponent({
         Page: this.page,
         PageSize: 10,
       })
+      if (result.object.items.length === 0) {
+        this.isDisabled = true
+        return
+      }
+      this.reviews = [...this.reviews, ...result?.object?.items]
+    },
+    async fetchRate() {
+      const idSlug = this.$route.params.id
+      const arr = idSlug.split('-')
+      const examHashId = arr[arr.length - 1]
       const { data: resultRate } = await ApiHome.getTotalRate({
         typeId: 3,
         hashId: examHashId,
       })
-      if (result.object.items.length === 0) {
-        this.isDisabled = true
-        this.mess = 'Tất cả các bình luận đả được hiển thị'
-        this.$bvModal.show('sendComment')
-        return
-      }
-      this.reviews = [...this.reviews, ...result?.object?.items]
+
       this.rates = resultRate?.object
+      console.log(this.rates)
     },
     beforeSendComment(data) {
       if (this.isLogin) {

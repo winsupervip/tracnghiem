@@ -26,12 +26,12 @@
       </div>
       <div class="review-item-action">
         <b-btn variant="link" class="btn-link" @click="sendLike(1)">
-          <i :class="like === 1 ? 'icon-like-fill' : 'icon-like'"></i>
-          Thích
+          <i :class="react === 1 ? 'icon-like-fill' : 'icon-like'"></i>
+          ({{ like }}) Thích
         </b-btn>
         <b-btn variant="link" class="btn-link" @click="sendLike(-1)">
-          <i :class="disLike === 1 ? 'icon-dislike-fill' : 'icon-dislike'"></i>
-          Không thích
+          <i :class="react === -1 ? 'icon-dislike-fill' : 'icon-dislike'"></i>
+          ({{ disLike }}) Không thích
         </b-btn>
         <b-btn variant="link" class="btn-link">
           <i class="icon-flag"></i>
@@ -55,15 +55,15 @@ export default defineComponent({
   },
   data() {
     return {
+      react: 0,
       like: 0,
       disLike: 0,
     }
   },
-  watch: {
-    review() {
-      this.like = this.review.like
-      this.disLike = this.review.disLike
-    },
+  mounted() {
+    this.react = this.review.react
+    this.like = this.review.like
+    this.disLike = this.review.disLike
   },
   methods: {
     async sendLike(id) {
@@ -73,11 +73,17 @@ export default defineComponent({
           react: id,
         })
         if (id === 1) {
-          this.like = 1
-          this.disLike = 0
+          if (this.react === -1) {
+            this.disLike -= 1
+          }
+          this.like += 1
+          this.react = 1
         } else {
-          this.like = 0
-          this.disLike = 1
+          if (this.react === 1) {
+            this.like -= 1
+          }
+          this.disLike += 1
+          this.react = -1
         }
       } catch (error) {
         //

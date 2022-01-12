@@ -19,24 +19,28 @@ export default {
   },
   MENU: [
     {
-      name: 'Trang chủ',
-      target: '/',
+      name: 'Tốt nghiệp THPT',
+      target: '/de-thi/tot-nghiep-thpt',
     },
     {
-      name: 'Đề thi',
-      target: '/de-thi',
+      name: 'Giáo dục K12',
+      target: '/de-thi/giao-duc-k12',
     },
     {
-      name: 'Câu hỏi',
-      target: '/cau-hoi',
+      name: 'Đại học',
+      target: '/de-thi/dai-hoc',
     },
     {
-      name: 'Trường học',
-      target: '/truong-hoc',
+      name: 'Ngoại ngữ',
+      target: '/de-thi/ngoai-ngu',
     },
     {
-      name: 'Thẻ',
-      target: '/the',
+      name: 'Nghề nghiệp',
+      target: '/de-thi/nghe-nghiep',
+    },
+    {
+      name: 'Tính cách - MBTI',
+      target: '/de-thi/tinh-cach-mbti',
     },
   ],
   MENU_LINK: [
