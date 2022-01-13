@@ -95,14 +95,14 @@
                         <CardExam :data="item"></CardExam>
                       </b-col>
 
-                      <div class="pagination-center">
-                        <b-pagination
-                          v-model="examPublic.Page"
-                          :total-rows="totalExamPublic"
-                          :per-page="examPublic.PageSize"
-                          aria-controls="my-table"
-                        ></b-pagination>
-                      </div>
+                      <b-pagination
+                        v-model="examPublic.Page"
+                        :total-rows="totalExamPublic"
+                        class="pagination bg-transparent"
+                        align="center"
+                        :per-page="examPublic.PageSize"
+                        aria-controls="my-table"
+                      ></b-pagination>
                     </b-row>
                     <NoData v-else title="Chưa có đề thi" />
                   </div>
@@ -122,14 +122,15 @@
                       >
                         <CardExam :data="item"></CardExam>
                       </b-col>
-                      <div class="pagination-center">
-                        <b-pagination
-                          v-model="userListExam.Page"
-                          :total-rows="totalUserListExam"
-                          :per-page="userListExam.PageSize"
-                          aria-controls="my-table"
-                        ></b-pagination>
-                      </div>
+
+                      <b-pagination
+                        v-model="userListExam.Page"
+                        align="center"
+                        class="pagination bg-transparent"
+                        :total-rows="totalUserListExam"
+                        :per-page="userListExam.PageSize"
+                        aria-controls="my-table"
+                      ></b-pagination>
                     </b-row>
                     <NoData
                       v-else
@@ -176,8 +177,8 @@ export default defineComponent({
         { text: 'Đề vật lý', value: 2 },
       ],
       dataUser: {},
-      totalExamPublic: 1,
-      totalUserListExam: 1,
+      totalExamPublic: 0,
+      totalUserListExam: 0,
       examPublic: { Page: 1, PageSize: 6, Keyword: '', userId },
       userListExam: { Page: 1, PageSize: 6, Keyword: '', userId },
       dataExamDone: {},
@@ -186,12 +187,13 @@ export default defineComponent({
     const { fetch } = useFetch(async () => {
       $loader()
 
-      const [{ data: result }, { data: result2 }, { data: result3 }] =
-        await Promise.all([
-          ProfileApi.getAccountInfo(userId),
-          ProfileApi.getExamPublicProfileOfUser(data.examPublic), // đề thi đã thực hiện
-          ProfileApi.getListExamCreateByUser(data.userListExam), // đề thi đã tạo
-        ])
+      const { data: result } = await ProfileApi.getAccountInfo(userId)
+      const { data: result2 } = await ProfileApi.getExamPublicProfileOfUser(
+        data.examPublic
+      ) // đề thi đã thực hiện
+      const { data: result3 } = await ProfileApi.getListExamCreateByUser(
+        data.userListExam
+      ) // đề thi đã tạo
       data.dataUser = result?.object
 
       data.dataExamDone = result2?.object?.items
@@ -232,16 +234,14 @@ export default defineComponent({
     })
     fetch()
     watch(
-      () => data.examPublic.Page,
-      console.log(
-        '🚀 ~ file: _id.vue ~ line 232 ~ setup ~ data.examPublic.Page',
-        data.examPublic.Page
-      ),
       () => data.userListExam.Page,
-      console.log(
-        '🚀 ~ file: _id.vue ~ line 233 ~ setup ~ data.userListExam.Page',
-        data.userListExam.Page
-      ),
+
+      () => {
+        fetch()
+      }
+    )
+    watch(
+      () => data.examPublic.Page,
 
       () => {
         fetch()
