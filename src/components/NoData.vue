@@ -14,7 +14,7 @@ export default {
     img: {
       type: String,
       required: false,
-      default: '../images/empty.svg',
+      default: 'https://storage.tracnghiem.vn/public/images/empty.svg',
     },
     title: {
       type: String,

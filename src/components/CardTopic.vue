@@ -6,7 +6,7 @@
           :src="
             data.image && data.image.startsWith('http')
               ? data.image
-              : '/images/topic-2.jpg'
+              : 'https://storage.tracnghiem.vn/public/images/topic-2.jpg'
           "
           :alt="data.name"
         />

@@ -10,7 +10,7 @@
                 :src="
                   authorInfomation.avatar
                     ? authorInfomation.avatar
-                    : 'https://dev.tracnghiem.vn/images/logo.svg'
+                    : 'https://storage.tracnghiem.vn/public/images/logo.svg'
                 "
                 alt="tracnghiem.vn"
               />

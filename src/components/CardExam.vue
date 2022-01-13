@@ -3,9 +3,9 @@
     <div class="card-exam-thumb">
       <img
         :src="
-          data.image && data.image.startsWith('http')
+          data.image
             ? data.image
-            : '/images/exam-1.jpg'
+            : 'https://storage.tracnghiem.vn/public/images/exam-1.jpg'
         "
         :alt="data.title"
       />
@@ -32,7 +32,7 @@
           :src="
             data.teacher && data.teacher.avatar
               ? data.teacher.avatar
-              : '/images/teacher.png'
+              : 'https://storage.tracnghiem.vn/public/images/teacher.png'
           "
           :alt="
             data.teacher
