@@ -315,5 +315,10 @@
   "history":{
     "title":"Lịch sử làm bài",
     "detail":"Chi tiết đề thi"
+  },
+  "profile":{
+    "homepage":"Trang chủ",
+    "test":"Đề thi"
   }
+
 }
