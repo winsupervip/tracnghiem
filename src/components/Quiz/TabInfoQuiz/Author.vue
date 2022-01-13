@@ -10,7 +10,7 @@
                 :src="
                   authorInfomation.avatar
                     ? authorInfomation.avatar
-                    : 'https://dev.tracnghiem.vn/images/logo.svg'
+                    : 'https://storage.tracnghiem.vn/public/images/logo.svg'
                 "
                 alt="tracnghiem.vn"
               />
@@ -91,9 +91,11 @@ export default defineComponent({
         this.authorInfomation.firstName &&
         this.authorInfomation.lastName
       ) {
-        return this.authorInfomation.firstName + this.authorInfomation.lastName
+        return (
+          this.authorInfomation.firstName + ' ' + this.authorInfomation.lastName
+        )
       } else {
-        return 'Trắc Nghiêm .VN'
+        return 'Trắc Nghiệm .VN'
       }
     },
   },

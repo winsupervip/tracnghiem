@@ -326,7 +326,7 @@ export default defineComponent({
     // },
     sectionConfig: {
       get() {
-        console.log('this.configQuizData: ', this.configQuizData)
+        // console.log('this.configQuizData: ', this.configQuizData)
         return (
           // eslint-disable-next-line no-unneeded-ternary
           get(this.configQuizData, 'sectionConfig', null)
@@ -336,7 +336,7 @@ export default defineComponent({
         // eslint-disable-next-line vue/no-mutating-props
         // this.sectionConfigData = val
         // eslint-disable-next-line vue/no-mutating-props
-        console.log('set .sectionConfig: ', val)
+        // console.log('set .sectionConfig: ', val)
 
         // eslint-disable-next-line vue/no-mutating-props
         this.$emit('update:data', (this.configQuizData.sectionConfig = val))
@@ -360,7 +360,7 @@ export default defineComponent({
     },
     allowChangeSettings: {
       get() {
-        console.log('allowChangeSettings configQuizData: ', this.configQuizData)
+        // console.log('allowChangeSettings configQuizData: ', this.configQuizData)
         return (
           // eslint-disable-next-line no-unneeded-ternary
           get(this.configQuizData, 'allowChangeSettings', null)

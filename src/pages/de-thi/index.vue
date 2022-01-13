@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <HeadingPage title="Danh sách đề thi" :breadcrumbs="breadcrumbs" />
+    <HeadingPage :title="category.categoryName" :breadcrumbs="breadcrumbs" />
     <div class="exam-page-container">
       <b-container>
         <b-row>
@@ -47,48 +47,28 @@
                     </b-col>
                   </b-row>
                 </div>
+                <div class="pagination-center">
+                  <b-pagination
+                    v-if="rows > queryUrl.pageSize"
+                    v-model="queryUrl.page"
+                    :total-rows="rows"
+                    per-page="10"
+                    aria-controls="my-table"
+                  ></b-pagination>
+                  <h4 v-else>{{ mess }}</h4>
+                </div>
               </b-tab>
-              <b-tab title="Gợi ý cho bạn">
+              <b-tab title="Tạo đề nhanh">
                 <div class="count-result mb-4">
                   <div class="count-result-left">
-                    <strong>19</strong>
-                    <span>kết quả</span>
+                    <span>Thiết lập</span>
+                    <strong>ma trận đề</strong>
                   </div>
-                  <div class="count-result-right">
-                    <span>Sắp xếp:</span>
-                    <b-form-select
-                      v-model="selectedSort"
-                      :options="optionsSort"
-                      class="form-control"
-                    ></b-form-select>
-                  </div>
+                  <div class="count-result-right"></div>
                 </div>
-                <div class="list-exam">
-                  <b-row>
-                    <b-col
-                      v-for="item in dataExam"
-                      :key="item.id"
-                      cols="12"
-                      sm="6"
-                      md="12"
-                      lg="6"
-                    >
-                      <CardExam :data="item"></CardExam>
-                    </b-col>
-                  </b-row>
-                </div>
+                <div class="list-exam"></div>
               </b-tab>
             </b-tabs>
-            <div class="pagination-center">
-              <b-pagination
-                v-if="rows > 0"
-                v-model="queryUrl.page"
-                :total-rows="rows"
-                per-page="10"
-                aria-controls="my-table"
-              ></b-pagination>
-              <h4 v-else>{{ mess }}</h4>
-            </div>
           </b-col>
         </b-row>
       </b-container>
@@ -132,7 +112,7 @@ export default defineComponent({
     const route = useRoute()
     const router = useRouter()
     const category = route?.value?.query.category || false
-    const keyword = route?.value?.query.keyword || false
+    const searchKeyword = route?.value?.query.keyword || false
 
     const data = reactive({
       breadcrumbs: [],
@@ -148,7 +128,7 @@ export default defineComponent({
       queryUrl: {
         page: 1,
         pageSize: 10,
-        Keyword: keyword,
+        keyword: searchKeyword,
         categories: category,
         tags: false,
         levels: false,
@@ -160,6 +140,7 @@ export default defineComponent({
         orderBy: false,
       },
       mess: '',
+      category: {},
     })
 
     const paramsUrl = computed(() => route.value.path)
@@ -196,6 +177,23 @@ export default defineComponent({
           name: 'description',
           content: category.object.seoDescription,
         })
+        // facebook
+        meta.value.push({
+          hid: 'og:title',
+          name: 'og:title',
+          content: category.object.seoTitle,
+        })
+        meta.value.push({
+          hid: 'og:description',
+          name: 'og:description',
+          content: category.object.seoDescription,
+        })
+        meta.value.push({
+          hid: 'og:image',
+          name: 'og:image',
+          content: category.object.seoAvatar,
+        })
+        data.category = category.object
         // get breadcrumbs
         const { data: breadcrumdRes } = await apiHome.getCategoryBreadcrumd(
           slug
@@ -223,6 +221,8 @@ export default defineComponent({
       }
     })
     const seachOption = (value) => {
+      data.queryUrl.page = 1
+      data.queryUrl.keyword = value.keyword
       data.queryUrl.categories = value.categories
       data.queryUrl.levels = value.levels
       data.queryUrl.ratings = value.ratings

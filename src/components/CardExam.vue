@@ -3,9 +3,9 @@
     <div class="card-exam-thumb">
       <img
         :src="
-          data.image && data.image.startsWith('http')
+          data.image
             ? data.image
-            : '/images/exam-1.jpg'
+            : 'https://storage.tracnghiem.vn/public/images/exam-1.jpg'
         "
         :alt="data.title"
       />
@@ -26,13 +26,13 @@
       ></b-icon>
     </b-btn>
     <div class="card-exam-teacher">
-      <nuxt-link :to="`/profile/${data.teacher ? data.teacher.userId : ''}`">
+      <nuxt-link to="#">
         <img
           class="avatar avatar-lg"
           :src="
             data.teacher && data.teacher.avatar
               ? data.teacher.avatar
-              : '/images/teacher.png'
+              : 'https://storage.tracnghiem.vn/public/images/teacher.png'
           "
           :alt="
             data.teacher
@@ -60,10 +60,18 @@
       <div class="exam-tag">
         <nuxt-link
           v-for="tag in data.tags"
-          :key="tag.tagId"
-          :to="`tag/${tag.tagId}`"
+          :key="tag.id"
+          :title="tag.tagName"
+          :to="`#${encodeURI(tag.tagName)}`"
         >
           #{{ tag.tagName }}
+        </nuxt-link>
+        <nuxt-link
+          v-if="data.categories"
+          :title="data.categories.categoryName"
+          :to="data.categories.slug"
+        >
+          #{{ data.categories.categoryName }}
         </nuxt-link>
       </div>
       <div class="d-flex justify-content-between">

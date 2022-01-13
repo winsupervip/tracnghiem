@@ -1,17 +1,8 @@
 <template>
-  <div class="question-item">
-    <div class="question-title d-flex justify-content-between">
-      <div class="question-name font-bold">
-        Câu hỏi {{ question.sortOrder }}
-      </div>
-      <div class="question-category text-gray">
-        <i class="icon-tag" />
-        <span class="font-sm">{{ question.seoTitle }}</span>
-      </div>
-    </div>
+  <div class="">
     <div
       class="question-content text-smd"
-      v-html="question.questionContent"
+      v-html="questionlist.questionContent"
     ></div>
     <div class="question-item-answer">
       <div class="answer-head">
@@ -26,11 +17,12 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
-
+import mathType from '@/extensions/mathType'
 export default defineComponent({
   name: 'ShortAnswer',
+  mixins: [mathType],
   props: {
-    question: {
+    questionlist: {
       type: Object,
       required: true,
     },

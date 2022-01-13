@@ -2,7 +2,17 @@
   <div class="page-container position-relative">
     <section class="page-heading exam-page-heading bg-gradient-blue">
       <div class="page-heading-inner">
-        <Heading :data-exam="dataExam" :selected-bookmark="selectedBookmark" />
+        <b-container class="position-relative">
+          <b-row>
+            <b-col md="12" lg="8">
+              <Heading
+                :data-exam="dataExam"
+                :selected-bookmark="selectedBookmark"
+                :breadcrumbs="breadcrumbs"
+              />
+            </b-col>
+          </b-row>
+        </b-container>
       </div>
     </section>
     <section class="exam-main-container">
@@ -25,11 +35,18 @@
                     class="mb-3"
                   >
                     <div class="list-question mb-4">
-                      <ShowQuestionExamDetail
-                        v-for="(question, index) in listQuestionExam"
-                        :key="index"
-                        :question="question"
-                      />
+                      <div v-if="totalQuestion === 0">
+                        <EmptyData />
+                      </div>
+                      <div v-else>
+                        <div
+                          v-for="(item, index) in listQuestionExam"
+                          :key="index"
+                          class="question-item"
+                        >
+                          <ShowQuestionExamDetail :item-data="item" />
+                        </div>
+                      </div>
                     </div>
                     <b-pagination
                       v-if="isLogin"
@@ -154,6 +171,7 @@ import {
   computed,
   useAsync,
   useStore,
+  useMeta,
 } from '@nuxtjs/composition-api'
 // eslint-disable-next-line no-unused-vars
 import _ from 'lodash'
@@ -171,7 +189,7 @@ import Heading from '@/components/Quiz/Heading.vue'
 import ExamApi from '@/api/examApi'
 import QuizApi from '@/api/quizApi'
 import ApiHome from '@/api/apiHome'
-
+import EmptyData from '@/components/EmptyData.vue'
 export default defineComponent({
   components: {
     ConfigQuiz,
@@ -179,17 +197,22 @@ export default defineComponent({
     TabInfoQuiz,
     Heading,
     ShowQuestionExamDetail,
+    EmptyData,
   },
   layout: 'default',
   auth: false,
   setup() {
-    const { $loader, $logger, error } = useContext()
-
+    const { $loader, $logger, error, redirect } = useContext()
+    const { title, meta } = useMeta()
     const store = useStore()
     const route = useRoute()
     const idSlug = computed(() => route.value.params.id)
     const arr = idSlug.value.split('-')
     const id = arr[arr.length - 1]
+
+    const paramsUrl = computed(() => route.value.path)
+    const slug = paramsUrl.value
+
     const data = reactive({
       idExam: id || null,
       selectedBookmark: [],
@@ -223,30 +246,98 @@ export default defineComponent({
       currentPage: 1,
       pageSize: 10,
       totalQuestion: 0,
+      breadcrumbs: [],
+      urlQuery: {
+        page: 1,
+        pageSize: 10,
+        keyword: '',
+      },
     })
+    const fetchQuestionsOfExam = async () => {
+      try {
+        const { data: result } = await ApiHome.getQuestionsOfExam(
+          data.idExam,
+          data.urlQuery
+        )
+        data.listQuestionExam = result.object.items
+        data.totalQuestion = result.object.total
+        console.log(data.listQuestionExam, 'data.listQuestionExam')
+      } catch {}
+    }
     useAsync(async () => {
       $loader()
       try {
         // get exam
         const { data: getExamDetail } = await ApiHome.getExamDetail(data.idExam)
+        data.dataExam = getExamDetail.object
+        const examSlug = '/' + data.dataExam.exam.slug + '-' + data.idExam
+        console.log(slug, examSlug)
+        if (slug !== examSlug) {
+          redirect(examSlug)
+        }
+        // seo
+        title.value = data.dataExam.exam.seoTitle
+        meta.value.push({
+          hid: 'description',
+          name: 'description',
+          content: data.dataExam.exam.seoDescription,
+        })
+        // facebook
+        meta.value.push({
+          hid: 'og:title',
+          name: 'og:title',
+          content: data.dataExam.exam.seoTitle,
+        })
+        meta.value.push({
+          hid: 'og:description',
+          name: 'og:description',
+          content: data.dataExam.exam.seoDescription,
+        })
+        meta.value.push({
+          hid: 'og:image',
+          name: 'og:image',
+          content: data.dataExam.exam.image,
+        })
+        // console.log(data.dataExam)
+        const slugCate = data.dataExam.exam.category.slug
         //
         const [
           { data: getAuthorOfExam },
           { data: getListExamSection },
           { data: getListExamDocument },
           { data: examData },
+          { data: breadcrumdItems },
         ] = await Promise.all([
           ApiHome.getAuthorOfExam(data.idExam),
           ApiHome.getListExamSection(data.idExam),
           ApiHome.getListExamDocument(data.idExam),
           ExamApi.getExamConfig(id),
+          ApiHome.getCategoryBreadcrumd(slugCate),
         ])
         store.dispatch('exams/setExam', examData.object)
-        data.dataExam = getExamDetail.object
+
         data.userInformation = getAuthorOfExam.object
         data.listExamSection = getListExamSection.object.items
         data.getListExamDocument = getListExamDocument.object.items
-        // console.log(data.dataExam)
+        // breadcrumbs
+        data.breadcrumbs = []
+        data.breadcrumbs.push({
+          text: 'Trang chủ',
+          href: '/',
+        })
+        breadcrumdItems.object.items.forEach((element) => {
+          data.breadcrumbs.push({
+            text: element.categoryName,
+            href: element.slug,
+          })
+        })
+        data.breadcrumbs.push({
+          text: data.dataExam.exam.title,
+          href: '/' + data.dataExam.exam.slug + '-' + data.dataExam.exam.hashId,
+          active: true,
+        })
+        // load question
+        await fetchQuestionsOfExam()
       } catch (err) {
         // exam không tồn tại
         error({ statusCode: 404, message: 'Post not found' })
@@ -260,9 +351,10 @@ export default defineComponent({
 
     return {
       ...toRefs(data),
+      fetchQuestionsOfExam,
     }
   },
-
+  head: {},
   computed: {
     ...mapGetters({
       getQuestion: 'questions/getQuestion',
@@ -278,11 +370,6 @@ export default defineComponent({
       this.configQuizData = this.examSettings
       // console.log('configQuizData', this.configQuizData)
     },
-    tabIndex() {
-      if (this.tabIndex === 1 && this.listQuestionExam.length === 0) {
-        this.fetchQuestionsOfExam()
-      }
-    },
   },
   created() {
     if (this.$auth.loggedIn) {
@@ -291,21 +378,6 @@ export default defineComponent({
     }
   },
   methods: {
-    async fetchQuestionsOfExam() {
-      try {
-        const { data: result } = await ApiHome.getQuestionExamDetailHome({
-          id: this.idExam,
-          pageSize: this.pageSize,
-          page: this.currentPage,
-        })
-        this.listQuestionExam = result.object.items
-        this.totalQuestion = result.object.total
-      } catch (err) {
-        this.$handleError(err, () => {
-          // console.log(err)
-        })
-      }
-    },
     seeMore() {
       if (this.isLogin) {
         //
@@ -367,7 +439,7 @@ export default defineComponent({
         this.$handleError(data)
         // console.log('data addquiz', data)
         this.$router.push({
-          path: `/de-thi/${this.idExam}/lam-bai?quizId=${data.object.data}`,
+          path: `/thuc-hien/?id=${this.idExam}&quizId=${data.object.data}`,
         })
       } catch (err) {
         this.$handleError(err, () => {

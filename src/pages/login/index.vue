@@ -2,7 +2,10 @@
   <div class="loading-login">
     <!-- <button @click="$auth.loginWith('keycloak')">login</button> -->
     <div class="loading-img">
-      <img src="/images/login-loading.png" alt="Vui lòng đợi trong giây lát" />
+      <img
+        src="https://storage.tracnghiem.vn/public/images/login-loading.png"
+        alt="Vui lòng đợi trong giây lát"
+      />
     </div>
   </div>
 </template>

@@ -38,7 +38,9 @@ export default defineComponent({
       htmlAttrs: {
         lang: 'vi',
       },
-      link: [{ rel: 'canonical', href: '' }],
+      link: [
+        { rel: 'canonical', href: 'https://tracnghiem.vn' + this.$route.path },
+      ],
       title: this.title,
     }
   },

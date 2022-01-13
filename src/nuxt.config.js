@@ -13,17 +13,20 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      {
-        property: 'og:image',
-        content: 'https://tracnghiem.vn/images/logo-shared.png',
-      },
-      { property: 'og:image:width', content: '400' },
-      { property: 'og:image:height', content: '400' },
+      { property: 'robots', content: 'index, follow' },
+      { property: 'robots', content: 'max-image-preview:large' },
+      { property: 'fb:pages', content: '104897438554626' },
+      { property: 'fb:app_id', content: '411104806997379' },
+      { property: 'og:image:width', content: '940' },
+      { property: 'og:image:height', content: '788' },
+      { property: 'twitter:card', content: 'summary_large_image' },
+      { property: 'twitter:creator', content: '@vanvuongnv' },
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'msapplication-TileColor', content: '#ffffff' },
       {
         name: 'msapplication-TileImage',
-        content: '/favicon/ms-icon-144x144.png',
+        content:
+          'https://storage.tracnghiem.vn/public/favicon/ms-icon-144x144.png',
       },
       { name: 'theme-color', content: '#ffffff' },
     ],
@@ -31,73 +34,76 @@ export default {
       {
         rel: 'apple-touch-icon',
         sizes: '57x57',
-        href: '/favicon/apple-icon-57x57.png',
+        href: 'https://storage.tracnghiem.vn/public/favicon/apple-icon-57x57.png',
       },
       {
         rel: 'apple-touch-icon',
         sizes: '60x60',
-        href: '/favicon/apple-icon-60x60.png',
+        href: 'https://storage.tracnghiem.vn/public/favicon/apple-icon-60x60.png',
       },
       {
         rel: 'apple-touch-icon',
         sizes: '72x72',
-        href: '/favicon/apple-icon-72x72.png',
+        href: 'https://storage.tracnghiem.vn/public/favicon/apple-icon-72x72.png',
       },
       {
         rel: 'apple-touch-icon',
         sizes: '76x76',
-        href: '/favicon/apple-icon-76x76.png',
+        href: 'https://storage.tracnghiem.vn/public/favicon/apple-icon-76x76.png',
       },
       {
         rel: 'apple-touch-icon',
         sizes: '114x114',
-        href: '/favicon/apple-icon-114x114.png',
+        href: 'https://storage.tracnghiem.vn/public/favicon/apple-icon-114x114.png',
       },
       {
         rel: 'apple-touch-icon',
         sizes: '120x120',
-        href: '/favicon/apple-icon-120x120.png',
+        href: 'https://storage.tracnghiem.vn/public/favicon/apple-icon-120x120.png',
       },
       {
         rel: 'apple-touch-icon',
         sizes: '144x144',
-        href: '/favicon/apple-icon-144x144.png',
+        href: 'https://storage.tracnghiem.vn/public/favicon/apple-icon-144x144.png',
       },
       {
         rel: 'apple-touch-icon',
         sizes: '152x152',
-        href: '/favicon/apple-icon-152x152.png',
+        href: 'https://storage.tracnghiem.vn/public/favicon/apple-icon-152x152.png',
       },
       {
         rel: 'apple-touch-icon',
         sizes: '180x180',
-        href: '/favicon/apple-icon-180x180.png',
+        href: 'https://storage.tracnghiem.vn/public/favicon/apple-icon-180x180.png',
       },
       {
         rel: 'icon',
         type: 'image/png',
         sizes: '192x192',
-        href: '/favicon/android-icon-192x192.png',
+        href: 'https://storage.tracnghiem.vn/public/favicon/android-icon-192x192.png',
       },
       {
         rel: 'icon',
         type: 'image/png',
         sizes: '32x32',
-        href: '/favicon/favicon-32x32.png',
+        href: 'https://storage.tracnghiem.vn/public/favicon/favicon-32x32.png',
       },
       {
         rel: 'icon',
         type: 'image/png',
         sizes: '96x96',
-        href: '/favicon/favicon-96x96.png',
+        href: 'https://storage.tracnghiem.vn/public/favicon/favicon-96x96.png',
       },
       {
         rel: 'icon',
         type: 'image/png',
         sizes: '16x16',
-        href: '/favicon/favicon-16x16.png',
+        href: 'https://storage.tracnghiem.vn/public/favicon/favicon-16x16.png',
       },
-      { rel: 'manifest', href: '/favicon/manifest.json' },
+      {
+        rel: 'manifest',
+        href: 'https://storage.tracnghiem.vn/public/favicon/manifest.json',
+      },
     ],
     script: [
       {
@@ -185,7 +191,7 @@ export default {
   ],
   // https://github.com/nuxt-community/google-gtag-module
   'google-gtag': {
-    id: 'G-4RQGST5TRG',
+    id: 'G-LBTEV4HYKN',
   },
   recaptcha: {
     hideBadge: false, // Hide badge element (v3 & v2 via size=invisible)
@@ -289,6 +295,11 @@ export default {
         name: 'de-thi-id-slug',
         path: '/:slug-:id',
         component: resolve(__dirname, 'pages/chi-tiet-de-thi/index.vue'),
+      })
+      routes.push({
+        name: 'ket-qua-id-slug',
+        path: '/ket-qua/:slug-:id',
+        component: resolve(__dirname, 'pages/ket-qua/index.vue'),
       })
     },
     middleware: ['auth'],

@@ -4,35 +4,55 @@
     <div class="list-ranking-user">
       <div class="ranking-item text-smd">
         <div class="d-flex align-items-center">
-          <img class="avatar avatar-md" src="/images/teacher.png" alt="" />
+          <img
+            class="avatar avatar-md"
+            src="https://storage.tracnghiem.vn/public/images/teacher.png"
+            alt=""
+          />
           <span class="ms-2">Phùng Việt</span>
         </div>
         <span class="text-gray">98 điểm</span>
       </div>
       <div class="ranking-item text-smd">
         <div class="d-flex align-items-center">
-          <img class="avatar avatar-md" src="/images/teacher.png" alt="" />
+          <img
+            class="avatar avatar-md"
+            src="https://storage.tracnghiem.vn/public/images/teacher.png"
+            alt=""
+          />
           <span class="ms-2">Phùng Việt</span>
         </div>
         <span class="text-gray">98 điểm</span>
       </div>
       <div class="ranking-item text-smd">
         <div class="d-flex align-items-center">
-          <img class="avatar avatar-md" src="/images/teacher.png" alt="" />
+          <img
+            class="avatar avatar-md"
+            src="https://storage.tracnghiem.vn/public/images/teacher.png"
+            alt=""
+          />
           <span class="ms-2">Phùng Việt</span>
         </div>
         <span class="text-gray">98 điểm</span>
       </div>
       <div class="ranking-item text-smd">
         <div class="d-flex align-items-center">
-          <img class="avatar avatar-md" src="/images/teacher.png" alt="" />
+          <img
+            class="avatar avatar-md"
+            src="https://storage.tracnghiem.vn/public/images/teacher.png"
+            alt=""
+          />
           <span class="ms-2">Phùng Việt</span>
         </div>
         <span class="text-gray">98 điểm</span>
       </div>
       <div class="ranking-item text-smd">
         <div class="d-flex align-items-center">
-          <img class="avatar avatar-md" src="/images/teacher.png" alt="" />
+          <img
+            class="avatar avatar-md"
+            src="https://storage.tracnghiem.vn/public/images/teacher.png"
+            alt=""
+          />
           <span class="ms-2">Phùng Việt</span>
         </div>
         <span class="text-gray">98 điểm</span>

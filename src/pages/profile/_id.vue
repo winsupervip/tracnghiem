@@ -131,7 +131,11 @@
                         ></b-pagination>
                       </div>
                     </b-row>
-                    <NoData v-else title="Người dùng chưa tạo đề thi nào." />
+                    <NoData
+                      v-else
+                      img="https://storage.tracnghiem.vn/public/images/empty.svg"
+                      title="Người dùng chưa tạo đề thi nào."
+                    />
                   </div>
                 </div>
               </b-tab>

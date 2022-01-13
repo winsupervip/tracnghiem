@@ -1,11 +1,17 @@
 <template>
   <div class="content-error">
     <div v-if="error.statusCode === 404">
-      <img src="/images/404.jpg" alt="Trang không tồn tại" />
+      <img
+        src="https://storage.tracnghiem.vn/public/images/404.jpg"
+        alt="Trang không tồn tại"
+      />
       <h1 class="error-title">Trang không tồn tại</h1>
     </div>
     <div v-else>
-      <img src="/images/error.jpg" alt="Đã có lỗi xảy ra" />
+      <img
+        src="https://storage.tracnghiem.vn/public/images/error.jpg"
+        alt="Đã có lỗi xảy ra"
+      />
       <h1 class="error-title">Đã có lỗi xảy ra</h1>
     </div>
     <nuxt-link to="/" class="btn btn-lg btn-primary">

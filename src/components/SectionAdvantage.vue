@@ -14,7 +14,10 @@
         </b-col>
         <b-col cols="12" sm="12" md="12" lg="4" class="advantage-center">
           <div class="px-4">
-            <img src="/images/co-gai.png" alt="co-gai" />
+            <img
+              src="https://storage.tracnghiem.vn/public/images/co-gai.png"
+              alt="co-gai"
+            />
           </div>
         </b-col>
         <b-col cols="12" sm="12" md="6" lg="4" class="advantage-right">
