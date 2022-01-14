@@ -26,7 +26,7 @@
       ></b-icon>
     </b-btn>
     <div class="card-exam-teacher">
-      <nuxt-link to="#">
+      <nuxt-link :to="`/profile/${data.teacher ? data.teacher.userId : ''}`">
         <img
           class="avatar avatar-lg"
           :src="

@@ -10,21 +10,18 @@
                 <div class="user-heading">
                   <img
                     class="avatar border-2 border-white border-solid"
-                    :src="dataUser.userAvatar"
+                    :src="dataUser.avatar"
                     :alt="dataUser.name"
                   />
                   <div class="user-heading-name">
                     <h1 class="page-title">
                       {{ dataUser.name }}
                     </h1>
-                    <div class="user-heading-username">
-                      @{{ dataUser.username }}
-                    </div>
                   </div>
                 </div>
               </div>
               <div class="page-heading-description mb-5">
-                {{ dataUser.description }}
+                {{ dataUser.bio }}
               </div>
               <div class="toolbar-action-exam">
                 <div class="action-exam">
@@ -97,6 +94,15 @@
                       >
                         <CardExam :data="item"></CardExam>
                       </b-col>
+
+                      <b-pagination
+                        v-model="examPublic.Page"
+                        :total-rows="totalExamPublic"
+                        class="pagination bg-transparent"
+                        align="center"
+                        :per-page="examPublic.PageSize"
+                        aria-controls="my-table"
+                      ></b-pagination>
                     </b-row>
                     <NoData v-else title="Chưa có đề thi" />
                   </div>
@@ -116,6 +122,15 @@
                       >
                         <CardExam :data="item"></CardExam>
                       </b-col>
+
+                      <b-pagination
+                        v-model="userListExam.Page"
+                        align="center"
+                        class="pagination bg-transparent"
+                        :total-rows="totalUserListExam"
+                        :per-page="userListExam.PageSize"
+                        aria-controls="my-table"
+                      ></b-pagination>
                     </b-row>
                     <NoData
                       v-else
@@ -134,272 +149,107 @@
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api'
+import {
+  defineComponent,
+  toRefs,
+  reactive,
+  useFetch,
+  useContext,
+  useRoute,
+  watch,
+} from '@nuxtjs/composition-api'
 
+import ProfileApi from '@/api/profile'
 export default defineComponent({
   components: {},
   layout: 'default',
   auth: false,
-  setup() {},
-  data() {
-    return {
-      idUser: this.$route.params.id || null,
-      breadcrumbs: [
-        {
-          text: 'Trang chủ',
-          href: '/',
-        },
-        {
-          text: 'Người dùng',
-          href: '/nguoi-dung',
-        },
-        {
-          text: 'Vương David',
-          active: true,
-        },
-      ],
+  setup() {
+    const { app, $loader } = useContext()
+    const route = useRoute()
+    const userId = route?.value.params?.id
+
+    const data = reactive({
       selectedBookmark: [],
+      breadcrumbs: [],
       optionsBookmark: [
         { text: 'Yêu thích', value: 1 },
         { text: 'Đề vật lý', value: 2 },
       ],
-      dataUser: {
-        id: 1,
-        name: 'Vương David',
-        username: 'vuongdavid',
-        description:
-          ' I’m selfish, impatient and a little insecure. I make mistakes, I am out of control and at times hard to handle. But if you can’t handle me at my worst, then you sure as hell don’t deserve me at my best',
-        userAvatar: 'https://storage.tracnghiem.vn/public/images/teacher.png',
-      },
-      dataExamCreated: [],
-      dataExamDone: [
+      dataUser: {},
+      totalExamPublic: 0,
+      totalUserListExam: 0,
+      examPublic: { Page: 1, PageSize: 6, Keyword: '', userId },
+      userListExam: { Page: 1, PageSize: 6, Keyword: '', userId },
+      dataExamDone: {},
+      dataExamCreated: {},
+    })
+    const { fetch } = useFetch(async () => {
+      $loader()
+
+      const { data: result } = await ProfileApi.getAccountInfo(userId)
+      const { data: result2 } = await ProfileApi.getExamPublicProfileOfUser(
+        data.examPublic
+      ) // đề thi đã thực hiện
+      const { data: result3 } = await ProfileApi.getListExamCreateByUser(
+        data.userListExam
+      ) // đề thi đã tạo
+      data.dataUser = result?.object
+
+      data.dataExamDone = result2?.object?.items
+      data.totalExamPublic = result2?.object?.total
+      console.log(
+        '🚀 ~ file: _id.vue ~ line 193 ~ const{fetch}=useFetch ~ data.totalExamPublic',
+        data.totalExamPublic
+      )
+      console.log(
+        '🚀 ~ file: _id.vue ~ line 178 ~ const{fetch}=useFetch ~ data.dataExamDone',
+        data.dataExamDone
+      )
+
+      data.dataExamCreated = result3?.object?.items
+      data.totalUserListExam = result3?.object?.total
+      console.log(
+        '🚀 ~ file: _id.vue ~ line 181 ~ const{fetch}=useFetch ~ data.dataExamCreated',
+        data.dataExamCreated
+      )
+
+      data.breadcrumbs = [
         {
-          hashId: 'klcrudrx',
-          teacher: {
-            userId: '83119c5d-bbfc-4412-94ca-9779069e785c',
-            firstName: 'Ngoc Khue',
-            lastName: 'Dao',
-            displayName: null,
-            avatar: 'https://storage.tracnghiem.vn/tracnghiem-dev/avatar.jpg',
-            email: 'ngockhuentca2k@gmail.com',
-          },
-          title: 'string',
-          image: 'string',
-          nonExamTime: true,
-          examTime: 0,
-          numberQuestionsTest: 10,
-          numberQuiz: 0,
-          rating: 0,
-          totalRating: 0,
-          level: {
-            name: 'Cơ bản',
-            id: 1,
-            domainEvents: null,
-          },
-          isLiked: false,
-          slug: null,
-          tags: [
-            {
-              tagId: 22,
-              tagName: 'ban',
-            },
-          ],
-          categories: {
-            categoryId: 1,
-            categoryName: 'Tốt nghiệp thpt',
-          },
+          text: app.i18n.t(`profile.homepage`),
+          href: '/',
+        },
+
+        {
+          text: app.i18n.t(`profile.test`),
+          href: '/de-thi',
         },
         {
-          hashId: 'omukujrx',
-          teacher: {
-            userId: '83119c5d-bbfc-4412-94ca-9779069e785c',
-            firstName: 'Ngoc Khue',
-            lastName: 'Dao',
-            displayName: null,
-            avatar: 'https://storage.tracnghiem.vn/tracnghiem-dev/avatar.jpg',
-            email: 'ngockhuentca2k@gmail.com',
-          },
-          title: 'string',
-          image: 'string',
-          nonExamTime: true,
-          examTime: 0,
-          numberQuestionsTest: 10,
-          numberQuiz: 0,
-          rating: 0,
-          totalRating: 0,
-          level: {
-            name: 'Cơ bản',
-            id: 1,
-            domainEvents: null,
-          },
-          isLiked: false,
-          slug: null,
-          tags: [
-            {
-              tagId: 21,
-              tagName: 'bannhatb',
-            },
-          ],
-          categories: {
-            categoryId: 2,
-            categoryName: 'Giáo dục K12',
-          },
+          text: app.i18n.t(`${data.dataUser.name}`),
+          active: true,
         },
-        {
-          hashId: 'qaswujxb',
-          teacher: {
-            userId: '83119c5d-bbfc-4412-94ca-9779069e785c',
-            firstName: 'Ngoc Khue',
-            lastName: 'Dao',
-            displayName: null,
-            avatar: 'https://storage.tracnghiem.vn/tracnghiem-dev/avatar.jpg',
-            email: 'ngockhuentca2k@gmail.com',
-          },
-          title: 'Cách làm người tử tế 1',
-          image: 'Không có ảnh',
-          nonExamTime: true,
-          examTime: 0,
-          numberQuestionsTest: 100,
-          numberQuiz: 6,
-          rating: 0,
-          totalRating: 0,
-          level: {
-            name: 'Trung bình',
-            id: 2,
-            domainEvents: null,
-          },
-          isLiked: false,
-          slug: null,
-          tags: [
-            {
-              tagId: 18,
-              tagName: 'đạo đức 12',
-            },
-            {
-              tagId: 19,
-              tagName: 'Cách làm ng',
-            },
-            {
-              tagId: 20,
-              tagName: 'ALO',
-            },
-          ],
-          categories: {
-            categoryId: 7,
-            categoryName: 'Tốt nghiệp Môn Toán',
-          },
-        },
-        {
-          hashId: 'eeiauxop',
-          teacher: {
-            userId: '83119c5d-bbfc-4412-94ca-9779069e785c',
-            firstName: 'Ngoc Khue',
-            lastName: 'Dao',
-            displayName: null,
-            avatar: 'https://storage.tracnghiem.vn/tracnghiem-dev/avatar.jpg',
-            email: 'ngockhuentca2k@gmail.com',
-          },
-          title: 'test_update_state',
-          image: 'image_2',
-          nonExamTime: true,
-          examTime: 0,
-          numberQuestionsTest: 5,
-          numberQuiz: 0,
-          rating: 0,
-          totalRating: 0,
-          level: {
-            name: 'Trung bình',
-            id: 2,
-            domainEvents: null,
-          },
-          isLiked: false,
-          slug: null,
-          tags: [
-            {
-              tagId: 12,
-              tagName: 'string',
-            },
-          ],
-          categories: {
-            categoryId: 2,
-            categoryName: 'Giáo dục K12',
-          },
-        },
-        {
-          hashId: 'mjhjuaxd',
-          teacher: {
-            userId: '83119c5d-bbfc-4412-94ca-9779069e785c',
-            firstName: 'Ngoc Khue',
-            lastName: 'Dao',
-            displayName: null,
-            avatar: 'https://storage.tracnghiem.vn/tracnghiem-dev/avatar.jpg',
-            email: 'ngockhuentca2k@gmail.com',
-          },
-          title: 'Test',
-          image: 'image-1',
-          nonExamTime: true,
-          examTime: 0,
-          numberQuestionsTest: 20,
-          numberQuiz: 0,
-          rating: 0,
-          totalRating: 0,
-          level: {
-            name: 'Cơ bản',
-            id: 1,
-            domainEvents: null,
-          },
-          isLiked: false,
-          slug: null,
-          tags: [
-            {
-              tagId: 12,
-              tagName: 'string',
-            },
-          ],
-          categories: {
-            categoryId: 2,
-            categoryName: 'Giáo dục K12',
-          },
-        },
-        {
-          hashId: 'dmtmukxn',
-          teacher: {
-            userId: '83119c5d-bbfc-4412-94ca-9779069e785c',
-            firstName: 'Ngoc Khue',
-            lastName: 'Dao',
-            displayName: null,
-            avatar: 'https://storage.tracnghiem.vn/tracnghiem-dev/avatar.jpg',
-            email: 'ngockhuentca2k@gmail.com',
-          },
-          title: 'test_update',
-          image: 'string',
-          nonExamTime: true,
-          examTime: 3,
-          numberQuestionsTest: 10,
-          numberQuiz: 0,
-          rating: 0,
-          totalRating: 0,
-          level: {
-            name: 'Cơ bản',
-            id: 1,
-            domainEvents: null,
-          },
-          isLiked: false,
-          slug: 'a',
-          tags: [
-            {
-              tagId: 12,
-              tagName: 'string',
-            },
-          ],
-          categories: {
-            categoryId: 2,
-            categoryName: 'Giáo dục K12',
-          },
-        },
-      ],
+      ]
+
+      $loader().close()
+    })
+    fetch()
+    watch(
+      () => data.userListExam.Page,
+
+      () => {
+        fetch()
+      }
+    )
+    watch(
+      () => data.examPublic.Page,
+
+      () => {
+        fetch()
+      }
+    )
+    return {
+      ...toRefs(data),
     }
   },
-  methods: {},
 })
 </script>
