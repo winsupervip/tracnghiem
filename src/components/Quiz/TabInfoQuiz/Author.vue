@@ -5,10 +5,18 @@
         <b-col sm="12" md="3">
           <div class="mx-auto teacher-info text-center">
             <div class="teacher-info-avatar">
-              <img class="avatar" src="/images/teacher.png" alt="" />
+              <img
+                class="avatar"
+                :src="
+                  authorInfomation.avatar
+                    ? authorInfomation.avatar
+                    : 'https://storage.tracnghiem.vn/public/images/logo.svg'
+                "
+                alt="tracnghiem.vn"
+              />
             </div>
-            <p class="font-bold mb-1">Mrs Thu Thảo</p>
-            <p>Trung tâm Anh ngữ</p>
+            <p class="font-bold mb-1">{{ showName }}</p>
+            <p>{{ authorInfomation.tenTruong }}</p>
           </div>
         </b-col>
         <b-col sm="12" md="9">
@@ -28,11 +36,11 @@
               </li>
               <li>
                 <i class="icon-exam text-primary me-2"></i>
-                10+ Đề thi
+                {{ authorInfomation.totalExam }}+ Đề thi
               </li>
             </ul>
-            <div>
-              <p><strong>Thành tích</strong></p>
+            <div v-html="authorInfomation.bio">
+              <!-- <p><strong>Thành tích</strong></p>
               <p>
                 - Là hế hệ đầu tiên lớp cử nhân tài năng khoa Tiếng Anh ĐH Hà
                 Nội. <br />
@@ -54,7 +62,7 @@
                 sinh giỏi trở thành giỏi hơn thì không khó, truyền cảm hứng cho
                 học sinh kém và yêu thích Tiếng Anh mới thực sự là một thử
                 thách.
-              </p>
+              </p> -->
             </div>
           </div>
         </b-col>
@@ -68,6 +76,28 @@ import { defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'Author',
+  props: {
+    authorInfomation: {
+      type: Object,
+      default: () => {},
+    },
+  },
   setup() {},
+  computed: {
+    showName() {
+      if (this.authorInfomation.displayName) {
+        return this.authorInfomation.displayName
+      } else if (
+        this.authorInfomation.firstName &&
+        this.authorInfomation.lastName
+      ) {
+        return (
+          this.authorInfomation.firstName + ' ' + this.authorInfomation.lastName
+        )
+      } else {
+        return 'Trắc Nghiệm .VN'
+      }
+    },
+  },
 })
 </script>

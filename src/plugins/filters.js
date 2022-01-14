@@ -41,6 +41,23 @@ Vue.filter('displayName', function (value, separator = '-') {
   //
 })
 
+// trả về level
+Vue.filter('formatLevel', function (value) {
+  if (value === 1 || value === '1') {
+    return 'Cơ Bản'
+  }
+  if (value === 2 || value === '2') {
+    return 'Trung Bình'
+  }
+  if (value === 3 || value === '3') {
+    return 'Nâng Cao'
+  }
+  if (value === 4 || value === '4') {
+    return 'Khó'
+  }
+  return 'Cơ Bản'
+})
+
 Vue.filter('date', function (value) {
   const inputTime = moment(value).locale('vi')
   return inputTime.format('DD/MM/YYYY')

@@ -259,7 +259,7 @@
                   </li>
                 </ul>
                 <ul>
-                  <li v-if="!isAgency && !isAdmin">
+                  <li>
                     <nuxt-link
                       :class="getNavClass('users-service')"
                       to="/users/service"

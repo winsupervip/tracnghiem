@@ -35,49 +35,24 @@
       </p>
     </div>
     <div v-if="checkRefCode">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">{{ $t('formAffiliate.ordinalNumber') }}</th>
-            <th scope="col">{{ $t('formAffiliate.name') }}</th>
-            <th scope="col">{{ $t('formAffiliate.accountCode') }}</th>
-            <th scope="col">{{ $t('formAffiliate.registrationDate') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr v-for="(item, index) in refList" :key="index">
-            <th scope="row">
-              {{ index + 1 + (urlQuery.page - 1) * 10 }}
-            </th>
-            <td>{{ item.username }}</td>
-            <td>
-              {{
-                item.displayName
-                  ? item.displayName
-                  : item.firstName
-                  ? item.firstName + ' ' + item.lastName
-                  : ''
-              }}
-            </td>
-            <td>
-              {{ formatDate(item.createDate) }}
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
       <EmptyData v-if="!refList.length" />
+      <div v-else>
+        <b-table responsive striped hover :items="refList" :fields="fields">
+          <template #cell(index)="data">
+            {{ data.index + 1 + (urlQuery.page - 1) * 10 }}
+          </template>
+          <template #cell(createDate)="data">
+            {{ data.item.createDate | formatDurationDay }}
+          </template>
+          <template #cell(displayName)="data">
+            {{
+              data.item.displayName !== null
+                ? data.item.displayName
+                : data.item.firstName + ' ' + data.item.lastName
+            }}
+          </template>
+        </b-table>
+      </div>
     </div>
   </div>
 </template>
@@ -105,15 +80,31 @@ export default defineComponent({
     },
   },
   data() {
+    console.log('list : ', this.refList)
     return {
       code: '',
+      fields: [
+        {
+          key: 'index',
+          label: this.$i18n.t('formAffiliate.ordinalNumber'),
+        },
+        {
+          key: 'username',
+          label: this.$i18n.t('formAffiliate.accountCode'),
+        },
+        {
+          key: 'displayName',
+          label: this.$i18n.t('formAffiliate.name'),
+        },
+        {
+          key: 'createDate',
+          label: this.$i18n.t('formAffiliate.registrationDate'),
+        },
+      ],
     }
   },
   computed: {},
   methods: {
-    formatDate(value) {
-      return value.slice(0, 10).split('-').reverse().join('/')
-    },
     async onSubmit() {
       try {
         const { data } = await userAPI.createCode({ refCode: this.code })

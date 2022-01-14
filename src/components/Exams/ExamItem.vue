@@ -23,7 +23,9 @@
             <b-icon-journal-text></b-icon-journal-text>
             {{ $t('exam.questions.title') }}
           </b-dropdown-item>
-          <b-dropdown-item>Third Action</b-dropdown-item>
+          <b-dropdown-item :to="`/users/exams/references/${exam.hashId}`">{{
+            $t('documentation')
+          }}</b-dropdown-item>
           <b-dropdown-divider></b-dropdown-divider>
           <b-dropdown-item active>Active action</b-dropdown-item>
           <b-dropdown-item disabled>Disabled action</b-dropdown-item>
@@ -47,7 +49,9 @@
       </ul>
       <h3>
         <b-icon-journal-bookmark></b-icon-journal-bookmark>
-        {{ exam.categoryItem.categoryName }}
+        {{
+          exam.categoryItem ? exam.categoryItem.categoryName : 'tracnghiem.vn'
+        }}
       </h3>
       <b-badge pill class="rounded-pill bg-success">{{
         exam.levelName

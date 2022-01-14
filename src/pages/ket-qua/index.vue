@@ -27,109 +27,11 @@
         <b-container class="position-relative">
           <b-row>
             <b-col md="12" lg="12">
-              <b-breadcrumb :items="breadcrumbs" class="mb-2"></b-breadcrumb>
-              <div class="page-heading-title mb-2">
-                <h1 class="page-title">
-                  {{ dataExam.name }}
-                </h1>
-                <span
-                  :class="
-                    dataExam.level === 1
-                      ? 'badge rounded-full bg-green exam-level'
-                      : 'badge rounded-full bg-primary exam-level'
-                  "
-                  >{{ dataExam.level === 1 ? 'Cơ bản' : 'Nâng cao' }}
-                </span>
-              </div>
-              <div class="page-heading-description mb-3">
-                {{ dataExam.description }}
-              </div>
-              <div class="exam-teacher-row row align-items-center mb-3">
-                <b-col cols="12" sm="12" md="4">
-                  <div class="card-exam-teacher">
-                    <nuxt-link
-                      :to="`/giao-vien/${dataExam.teacherId}`"
-                      class="text-white"
-                    >
-                      <img
-                        class="
-                          avatar avatar-md
-                          border-2 border-white border-solid
-                          me-2
-                        "
-                        :src="dataExam.teacherAvatar"
-                        :alt="dataExam.teacherName"
-                      />
-                      <span>{{ dataExam.teacherName }}</span>
-                    </nuxt-link>
-                  </div>
-                </b-col>
-                <b-col cols="12" sm="12" md="4">
-                  <div class="d-flex">
-                    <b-form-rating
-                      v-model="dataExam.rating"
-                      class="custom-rating"
-                      readonly
-                    />
-                    <div class="mx-2">
-                      <strong>{{ dataExam.rating }}</strong>
-                      <span>({{ dataExam.ratingCount }})</span>
-                    </div>
-                  </div>
-                </b-col>
-                <b-col cols="12" sm="12" md="4">
-                  <div class="exam-category">
-                    {{ dataExam.category }}
-                  </div>
-                </b-col>
-              </div>
-              <div class="toolbar-action-exam">
-                <div class="action-exam">
-                  <b-btn
-                    variant="outline-light"
-                    class="btn-outline-white font-smd btn-action"
-                  >
-                    <i class="icon-heart me-3"></i>
-                    Yêu thích
-                  </b-btn>
-                  <b-dropdown
-                    variant="outline-light"
-                    no-caret
-                    class="dropdown-save"
-                  >
-                    <template #button-content>
-                      <i class="icon-bookmark me-3"></i>
-                      Lưu
-                    </template>
-                    <b-dropdown-form class="">
-                      <b-form-checkbox-group
-                        v-model="selectedBookmark"
-                        :options="optionsBookmark"
-                        value-field="value"
-                        text-field="text"
-                      ></b-form-checkbox-group>
-                      <div class="add-bookmark-input">
-                        <b-input />
-                        <b-btn variant="primary" class="btn-circle">
-                          <b-icon icon="plus" class="text-white" />
-                        </b-btn>
-                      </div>
-                    </b-dropdown-form>
-                  </b-dropdown>
-                  <b-btn
-                    variant="outline-light"
-                    class="btn-outline-white font-smd btn-action"
-                  >
-                    <i class="icon-share me-3"></i>
-                    Chia sẻ
-                  </b-btn>
-                </div>
-                <div class="exam-report">
-                  <b-btn class="btn-transparent font-smd btn-text">
-                    <i class="icon-flag"></i> Báo cáo
-                  </b-btn>
-                </div>
-              </div>
+              <Heading
+                :data-exam="dataExam"
+                :selected-bookmark="selectedBookmark"
+                :breadcrumbs="breadcrumbs"
+              />
             </b-col>
           </b-row>
         </b-container>
@@ -280,12 +182,7 @@
                       ></b-form-textarea>
                     </div>
                     <div
-                      class="
-                        d-flex
-                        flex-wrap
-                        align-items-center
-                        justify-content-between
-                      "
+                      class="d-flex flex-wrap align-items-center justify-content-between"
                     >
                       <div class="d-flex mb-3">
                         <strong class="me-3">Đánh giá:</strong>
@@ -318,18 +215,26 @@ import {
   useAsync,
   reactive,
   toRefs,
+  useMeta,
 } from '@nuxtjs/composition-api'
 import QuizApi from '@/api/quizApi'
+import ApiHome from '@/api/apiHome'
+import Heading from '@/components/Quiz/Heading.vue'
 import ResultQuestion from '@/components/Quiz/Result/ResultQuestion.vue'
 export default defineComponent({
-  components: { ResultQuestion },
+  components: { ResultQuestion, Heading },
   layout: 'default',
   auth: false,
   setup() {
-    const { $handleError, $loader, $logger } = useContext()
+    const { $handleError, $loader, $logger, error } = useContext()
+    const { title, meta } = useMeta()
     const route = useRoute()
     const quizId = computed(() => route.value.query.quizId)
-    console.log('quizId', quizId.value)
+    const idSlug = computed(() => route.value.params.id)
+    const arr = idSlug.value.split('-')
+    const examId = arr[arr.length - 1]
+    console.log(examId)
+
     const data = reactive({
       itemQuestions: [],
       analysisQuiz: [],
@@ -340,13 +245,19 @@ export default defineComponent({
         userChoices: [],
       },
       settings: {},
+      dataExam: {
+        exam: {},
+        tagItems: [],
+        categoryTree: [],
+      },
+      selectedBookmark: [],
+      breadcrumbs: [],
     })
 
     const getQuestionById = async (qId) => {
       try {
         const { data: item } = await QuizApi.getQuestionById(qId)
         data.questionItem = item.object
-        console.log(data.questionItem)
       } catch (err) {
         $handleError(err, () => {
           console.log(err)
@@ -358,6 +269,61 @@ export default defineComponent({
       $loader()
       $logger.info('Get Quiz Result Data')
       try {
+        // get exam
+        const { data: getExamDetail } = await ApiHome.getExamDetail(examId)
+        data.dataExam = getExamDetail.object
+        console.log(data.dataExam)
+        // seo
+        title.value = data.dataExam.exam.seoTitle
+        meta.value.push({
+          hid: 'description',
+          name: 'description',
+          content: data.dataExam.exam.seoDescription,
+        })
+        // facebook
+        meta.value.push({
+          hid: 'og:title',
+          name: 'og:title',
+          content: data.dataExam.exam.seoTitle,
+        })
+        meta.value.push({
+          hid: 'og:description',
+          name: 'og:description',
+          content: data.dataExam.exam.seoDescription,
+        })
+        meta.value.push({
+          hid: 'og:image',
+          name: 'og:image',
+          content: data.dataExam.exam.image,
+        })
+        // console.log(data.dataExam)
+        const slugCate = data.dataExam.exam.category.slug
+        // breadcrumbs
+        const { data: breadcrumdItems } = await ApiHome.getCategoryBreadcrumd(
+          slugCate
+        )
+        data.breadcrumbs = []
+        data.breadcrumbs.push({
+          text: 'Trang chủ',
+          href: '/',
+        })
+        breadcrumdItems.object.items.forEach((element) => {
+          data.breadcrumbs.push({
+            text: element.categoryName,
+            href: element.slug,
+          })
+        })
+        data.breadcrumbs.push({
+          text: data.dataExam.exam.title,
+          href: '/' + data.dataExam.exam.slug + '-' + examId,
+          active: true,
+        })
+        data.breadcrumbs.push({
+          text: 'Kết quả',
+          href: `/ket-qua/${data.dataExam.exam.slug}-${examId}?quizId=${data.quizId}`,
+          active: true,
+        })
+        // quiz data
         const [
           { data: questions },
           { data: analysisResult },
@@ -380,9 +346,7 @@ export default defineComponent({
         const firstQuestion = data.itemQuestions[0]
         await getQuestionById(firstQuestion.id)
       } catch (err) {
-        $handleError(err, () => {
-          console.log(err)
-        })
+        error({ statusCode: 404, message: 'Post not found' })
       }
       $loader().close()
     })
@@ -394,85 +358,11 @@ export default defineComponent({
   },
   data() {
     return {
+      expandHeading: true,
       ratingExam: 5,
-      idExam: this.$route.params.id || null,
-      breadcrumbs: [
-        {
-          text: 'Trang chủ',
-          href: '/',
-        },
-        {
-          text: 'Đề thi',
-          href: '/de-thi',
-        },
-        {
-          text: 'Thi Tốt nghiệp THPT',
-          href: '/de-thi/tot-nghiep-thpt',
-        },
-        {
-          text: '400 câu trắc nghiệm Mạo từ trong tiếng Anh có đáp án cực hay',
-          active: true,
-        },
-      ],
-      showListQuestionMenu: true,
-      bookmarkQuestion: false,
-      listAnswer: [
-        {
-          text: 'A. Deciding one own strategy in a game according to the strategy of the opponent',
-          value: 'a',
-        },
-        {
-          text: 'B. Deciding one own strategy in a game according to the strategy of the opponent',
-          value: 'b',
-        },
-        {
-          text: 'B. Deciding one own strategy in a game according to the strategy of the opponent',
-          value: 'a',
-        },
-        {
-          text: 'A. Deciding one own strategy in a game according to the strategy of the opponent',
-          value: 'a',
-        },
-      ],
-      expandHeading: false,
-      selectedBookmark: [],
-      optionsBookmark: [
-        { text: 'Yêu thích', value: 1 },
-        { text: 'Đề vật lý', value: 2 },
-      ],
-      dataExam: {
-        id: 1,
-        name: '400 câu trắc nghiệm Mạo từ trong tiếng Anh có đáp án cực hay',
-        description:
-          'English speaking course. 77 Hours of English language speaking, English listening practice. 1000 English language words',
-        thumbnail: '/images/exam-1.jpg',
-        category: 'Thi tốt nghiệp THPT',
-        time: '45',
-        examCount: '100',
-        questionCount: '90',
-        teacherId: 1,
-        teacherAvatar: '/images/teacher.png',
-        teacherName: 'Cô giáo Minh Thu',
-        rating: '4.5',
-        ratingCount: 20,
-        level: 1,
-        tags: [
-          {
-            id: 1,
-            name: 'Vật lý 12',
-          },
-          {
-            id: 2,
-            name: 'Luyện thi đại học',
-          },
-          {
-            id: 3,
-            name: 'Vật lý nâng cao',
-          },
-        ],
-      },
     }
   },
+  head: {},
   methods: {
     getColorOfQuestion(question) {
       if (question.isCorrect) return 'true'

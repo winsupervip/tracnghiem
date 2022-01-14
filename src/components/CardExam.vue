@@ -3,9 +3,9 @@
     <div class="card-exam-thumb">
       <img
         :src="
-          data.image && data.image.startsWith('http')
+          data.image
             ? data.image
-            : '/images/exam-1.jpg'
+            : 'https://storage.tracnghiem.vn/public/images/exam-1.jpg'
         "
         :alt="data.title"
       />
@@ -26,13 +26,13 @@
       ></b-icon>
     </b-btn>
     <div class="card-exam-teacher">
-      <nuxt-link :to="`/giao-vien/${data.teacher ? data.teacher.userId : ''}`">
+      <nuxt-link to="#">
         <img
           class="avatar avatar-lg"
           :src="
             data.teacher && data.teacher.avatar
               ? data.teacher.avatar
-              : '/images/teacher.png'
+              : 'https://storage.tracnghiem.vn/public/images/teacher.png'
           "
           :alt="
             data.teacher
@@ -52,7 +52,7 @@
       </nuxt-link>
     </div>
     <div class="card-body">
-      <nuxt-link :to="`/de-thi/${data.hashId}`" class="exam-title">
+      <nuxt-link :to="`/${data.slug}-${data.hashId}`" class="exam-title">
         <h4 class="font-md font-bold">
           {{ data.title }}
         </h4>
@@ -61,15 +61,21 @@
         <nuxt-link
           v-for="tag in data.tags"
           :key="tag.id"
-          :to="`tag/${tag.tagId}`"
+          :title="tag.tagName"
+          :to="`#${encodeURI(tag.tagName)}`"
         >
           #{{ tag.tagName }}
         </nuxt-link>
+        <nuxt-link
+          v-if="data.categories"
+          :title="data.categories.categoryName"
+          :to="data.categories.slug"
+        >
+          #{{ data.categories.categoryName }}
+        </nuxt-link>
       </div>
       <div class="d-flex justify-content-between">
-        <span class="exam-category text-gray font-sm">
-          {{ data.categories.categoryName }}
-        </span>
+        <span class="exam-category text-gray font-sm"> </span>
         <div class="exam-rating">
           <i class="icon-star-fill text-yellow mr-1"></i>
           <strong class="font-sm mr-1">{{ data.rating }}</strong>

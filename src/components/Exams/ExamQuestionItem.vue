@@ -21,7 +21,6 @@
     <div v-if="itemData.group">
       <h3 class="question-number">{{ itemData.group.title }}</h3>
     </div>
-    {{ itemData.hashId }}
     <QuestionTags :questiontags="itemData" />
     <component
       :is="dynamicComponent"

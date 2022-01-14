@@ -2,7 +2,11 @@
   <div class="list-review">
     <div class="review-item">
       <div class="review-item-avatar">
-        <img class="avatar avatar-md" src="/images/teacher.png" alt="" />
+        <img
+          class="avatar avatar-md"
+          src="https://storage.tracnghiem.vn/public/images/teacher.png"
+          alt=""
+        />
       </div>
       <div class="review-item-content">
         <div class="font-bold mb-1">Nguyễn Văn Vương</div>
@@ -33,7 +37,11 @@
     </div>
     <div class="review-item">
       <div class="review-item-avatar">
-        <img class="avatar avatar-md" src="/images/teacher.png" alt="" />
+        <img
+          class="avatar avatar-md"
+          src="https://storage.tracnghiem.vn/public/images/teacher.png"
+          alt=""
+        />
       </div>
       <div class="review-item-content">
         <div class="font-bold mb-1">Nguyễn Văn Vương</div>
@@ -64,7 +72,11 @@
     </div>
     <div class="review-item">
       <div class="review-item-avatar">
-        <img class="avatar avatar-md" src="/images/teacher.png" alt="" />
+        <img
+          class="avatar avatar-md"
+          src="https://storage.tracnghiem.vn/public/images/teacher.png"
+          alt=""
+        />
       </div>
       <div class="review-item-content">
         <div class="font-bold mb-1">Nguyễn Văn Vương</div>
@@ -95,7 +107,11 @@
     </div>
     <div class="review-item">
       <div class="review-item-avatar">
-        <img class="avatar avatar-md" src="/images/teacher.png" alt="" />
+        <img
+          class="avatar avatar-md"
+          src="https://storage.tracnghiem.vn/public/images/teacher.png"
+          alt=""
+        />
       </div>
       <div class="review-item-content">
         <div class="font-bold mb-1">Nguyễn Văn Vương</div>
@@ -126,7 +142,11 @@
     </div>
     <div class="review-item">
       <div class="review-item-avatar">
-        <img class="avatar avatar-md" src="/images/teacher.png" alt="" />
+        <img
+          class="avatar avatar-md"
+          src="https://storage.tracnghiem.vn/public/images/teacher.png"
+          alt=""
+        />
       </div>
       <div class="review-item-content">
         <div class="font-bold mb-1">Nguyễn Văn Vương</div>

@@ -16,7 +16,7 @@
           <b-input
             v-model="inputKeyword"
             placeholder="Nhập từ khóa cần tìm"
-            @focus="visibleSuggestions = true"
+            @focus="visibleSuggestions = false"
             @blur="visibleSuggestions = false"
           ></b-input>
           <div :class="visibleSuggestions ? 'suggestions open' : 'suggestions'">
@@ -52,13 +52,6 @@
               v-model="selectCategories"
               @change="changeOptionSeach"
             >
-              <p v-if="currentCategoryLabel !== ''">
-                <b-icon
-                  icon="chevron-left"
-                  @click="backToOldCategories()"
-                ></b-icon>
-                <strong>{{ currentCategoryLabel }}</strong>
-              </p>
               <div
                 v-for="category in categories"
                 :key="category.id"
@@ -66,12 +59,11 @@
                 :value="category.id"
               >
                 <b-form-checkbox :value="category.id">{{
-                  category.label
+                  category.categoryName
                 }}</b-form-checkbox>
-                <b-icon
-                  icon="chevron-right"
-                  @click="nextToOtherCategory(category)"
-                ></b-icon>
+                <nuxt-link v-if="category.slug" :to="category.slug">
+                  <b-icon icon="chevron-right"></b-icon>
+                </nuxt-link>
               </div>
             </b-form-checkbox-group>
             <b-alert v-if="categories.length === 0" show variant="warning"
@@ -144,12 +136,6 @@
             <i class="icon-caret-down"></i>
           </strong>
           <b-collapse v-model="showFilterGroup4" class="filter-group-body">
-            <!-- <b-form-checkbox-group
-              v-model="selectedOptions4"
-              :options="options4"
-              value-field="value"
-              text-field="text"
-            ></b-form-checkbox-group> -->
             <div class="custom-ranger px-1 my-3">
               <div
                 class="
@@ -167,6 +153,7 @@
                 ref="slider"
                 v-model="valueNumberQuestion"
                 v-bind="optionsNumberQuestion"
+                @drag-end="changeOptionSeach"
               />
             </div>
           </b-collapse>
@@ -222,11 +209,17 @@
 </template>
 
 <script>
-import apiHome from '@/api/apiHome'
 import 'vue-slider-component/theme/antd.css'
-
+import _ from 'lodash'
 export default {
   name: 'SidebarExam',
+  props: {
+    categories: {
+      type: Array,
+      required: true,
+      default: () => [],
+    },
+  },
   data() {
     return {
       valueTimeExam: [0, 120],
@@ -252,17 +245,7 @@ export default {
       inputKeyword: '',
       visibleSuggestions: false,
       currentHistoryIndex: 0,
-      categories: [],
-      categoriesHistory: [
-        {
-          id: 0,
-          label: '',
-        },
-        {
-          id: 0,
-          label: '',
-        },
-      ],
+      categoriesHistory: [],
       listSuggestions: [
         {
           text: 'Tiếng Anh',
@@ -284,14 +267,6 @@ export default {
       visibleFilter: false,
       showFilterGroup1: true,
       selectCategories: [],
-      options1: [
-        { text: 'Thi tốt nghiệp THPT', value: 1 },
-        { text: 'Trắc nghiệm giáo dục K12', value: 2 },
-        { text: 'Trắc nghiệm đại học', value: 3 },
-        { text: 'Trắc nghiệm ngoại ngữ', value: 4 },
-        { text: 'Trắc nghiệm nghề nghiệp', value: 5 },
-        { text: 'Trắc nghiệm tính cách', value: 6 },
-      ],
       showFilterGroup2: true,
       selectLevels: [],
       options2: [
@@ -353,9 +328,12 @@ export default {
       return value.label
     },
   },
-  mounted() {
-    this.fetchCategories(0)
+  watch: {
+    inputKeyword() {
+      this.enterKeyword()
+    },
   },
+  mounted() {},
   methods: {
     clearFilter() {
       this.selectCategories = []
@@ -374,27 +352,9 @@ export default {
       this.inputKeyword = value
       this.$logger.debug(value)
     },
-    async fetchCategories(id) {
-      const { data: result } = await apiHome.getCategoriesExamPage({
-        parent: id,
-      })
-      this.categories = result?.object?.items
-    },
-    nextToOtherCategory(value) {
-      this.categoriesHistory.push(value)
-      this.selectCategories = []
-      this.fetchCategories(value.id)
-    },
-    backToOldCategories() {
-      this.selectCategories = []
-      const removeHistory = this.categoriesHistory.length - 1
-      this.categoriesHistory.splice(removeHistory, 1)
-      console.log('back', this.categoriesHistory)
-      const id = this.categoriesHistory[removeHistory - 2].id
-      this.fetchCategories(id)
-    },
     changeOptionSeach() {
       const data = {
+        keyword: this.inputKeyword,
         categories: this.selectCategories,
         levels: this.selectCategories,
         ratings: this.selecTratings,
@@ -405,6 +365,9 @@ export default {
       }
       this.$emit('seachOption', data)
     },
+    enterKeyword: _.debounce(function () {
+      this.changeOptionSeach()
+    }, 500),
   },
 }
 </script>

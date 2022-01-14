@@ -70,10 +70,14 @@
         </div>
       </div>
       <div class="search-img-right">
-        <img class="dots-bg" src="images/dots-bg.png" alt="dots image" />
+        <img
+          class="dots-bg"
+          src="https://storage.tracnghiem.vn/public/images/dots-bg.png"
+          alt="dots image"
+        />
         <img
           class="search-img"
-          src="images/search-img.png"
+          src="https://storage.tracnghiem.vn/public/images/search-img.png"
           alt="search image"
         />
       </div>

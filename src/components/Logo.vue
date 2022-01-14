@@ -2,7 +2,7 @@
   <nuxt-link class="logo-link" to="/" @click.native="closeMenu">
     <img
       class="logo-header"
-      src="/images/logo.svg"
+      src="https://storage.tracnghiem.vn/public/images/logo.svg"
       alt="Trắc nghiệm Online"
       @click="scrollToTop()"
     />

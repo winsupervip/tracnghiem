@@ -119,7 +119,7 @@
                     </b-row>
                     <NoData
                       v-else
-                      img="../images/empty.svg"
+                      img="https://storage.tracnghiem.vn/public/images/empty.svg"
                       title="Người dùng chưa tạo đề thi nào."
                     />
                   </div>
@@ -169,7 +169,7 @@ export default defineComponent({
         username: 'vuongdavid',
         description:
           ' I’m selfish, impatient and a little insecure. I make mistakes, I am out of control and at times hard to handle. But if you can’t handle me at my worst, then you sure as hell don’t deserve me at my best',
-        userAvatar: '/images/teacher.png',
+        userAvatar: 'https://storage.tracnghiem.vn/public/images/teacher.png',
       },
       dataExamCreated: [],
       dataExamDone: [

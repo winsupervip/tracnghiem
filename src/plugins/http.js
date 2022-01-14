@@ -46,7 +46,6 @@ export default function ({ $axios, $auth, $logger, redirect, store }, inject) {
         } else {
           $logger.error(err.message || `a fatal error as occurred`)
         }
-
         return Promise.reject(err)
       }
     }

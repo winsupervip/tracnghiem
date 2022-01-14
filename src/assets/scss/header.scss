@@ -1,4 +1,4 @@
-@import "variables";
+@import 'variables';
 .header {
   padding: 15px 0;
   background-color: #ffffff;
@@ -68,6 +68,8 @@
             color: $text;
             text-decoration: none;
             font-weight: 600;
+            font-size: 15px;
+            white-space: nowrap;
             &:hover {
               color: $primary;
             }
@@ -86,6 +88,7 @@
         }
         &:last-child {
           margin-left: 0.75rem;
+          white-space: nowrap;
         }
       }
     }
@@ -216,7 +219,6 @@
         box-shadow: -2px 0 6px rgba(#000000, 0.1);
         padding: 0;
         overflow: auto;
-        transition: all 0.2s;
         .menu-logined {
           display: none !important;
         }

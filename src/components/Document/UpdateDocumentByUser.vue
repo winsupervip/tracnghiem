@@ -5,6 +5,8 @@
     hide-footer
     size="lg"
     :ok-only="okOnly"
+    @shown="shown"
+    @hide="hide"
   >
     <ValidationObserver>
       <b-form>
@@ -57,6 +59,7 @@
               :label="$t('content') + ' (*)'"
             >
               <TinyEditor
+                v-if="doShow"
                 v-model="document.documentContent"
                 :options="optionsText"
                 :state="errors[0] ? false : valid ? true : null"
@@ -154,6 +157,7 @@ export default defineComponent({
   setup() {
     const { $loader } = useContext()
     const data = reactive({
+      doShow: false,
       documentType: [],
       document: {},
       optionsText: {
@@ -178,6 +182,12 @@ export default defineComponent({
     },
   },
   methods: {
+    shown() {
+      this.doShow = true
+    },
+    hide() {
+      this.doShow = false
+    },
     loadOptions({ callback }) {
       callback()
     },
