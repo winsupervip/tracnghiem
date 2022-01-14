@@ -188,7 +188,11 @@
     </section>
     <b-modal id="modal-submit-exam" class="modal-common" hide-footer centered>
       <div class="text-center mb-4">
-        <img class="mb-3" src="/images/document.svg" alt="bot" />
+        <img
+          class="mb-3"
+          src="https://storage.tracnghiem.vn/public/images/document.svg"
+          alt="bot"
+        />
         <div class="font-bold text-lmd mb-3">Xác nhận nộp bài</div>
         <p>Bạn đã hoàn thành hết bài thi và muốn nộp bài</p>
       </div>

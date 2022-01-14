@@ -188,7 +188,6 @@ export default defineComponent({
         })
         data.dataFeatureExam = exam.object?.items
         data.dataFeatureTopic = result.object?.items
-        console.log(data.dataFeatureTopic)
         data.dataConfigCategories = configCategories.object.items
         data.dataCategories = resultCategories.object.items
         $loader().close()

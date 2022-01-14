@@ -22,7 +22,7 @@
           <div class="contribute-right">
             <img
               class="animate__animated"
-              src="/images/contribute-girl.png"
+              src="https://storage.tracnghiem.vn/public/images/contribute-girl.png"
               alt="Đóng góp câu hỏi ngay"
             />
           </div>

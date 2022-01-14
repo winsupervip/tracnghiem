@@ -20,9 +20,9 @@
           <div class="main-menu">
             <ul>
               <li v-for="item in mainMenu" :key="item.name">
-                <nuxt-link :to="item.target" @click.native="collapseMenuMb">
+                <a :href="item.target" :title="item.name">
                   {{ item.name }}
-                </nuxt-link>
+                </a>
               </li>
             </ul>
           </div>
@@ -37,11 +37,11 @@
               <template #button-content>
                 <i class="fa fa-pencil text-primary" />
               </template>
-              <b-dropdown-item href="#">
+              <b-dropdown-item href="/users/exams/add">
                 <i class="icon-clock text-primary" />
                 Tạo đề thi
               </b-dropdown-item>
-              <b-dropdown-item href="#">
+              <b-dropdown-item href="/users/questions/">
                 <i class="icon-exam text-primary" />
                 Tạo câu hỏi
               </b-dropdown-item>
@@ -49,13 +49,16 @@
             <b-dropdown variant="primary" class="user-info-dropdown" no-caret>
               <template #button-content>
                 <div class="user-avatar">
-                  <img src="/images/default-avatar.jpg" :alt="userInfo.name" />
+                  <img
+                    src="https://storage.tracnghiem.vn/public/images/default-avatar.jpg"
+                    :alt="userInfo.name"
+                  />
                 </div>
               </template>
               <div class="user-info">
                 <img
                   class="avatar"
-                  src="/images/default-avatar.jpg"
+                  src="https://storage.tracnghiem.vn/public/images/default-avatar.jpg"
                   :alt="userInfo.name"
                 />
                 <div class="d-flex flex-column">
@@ -88,7 +91,7 @@
               <template #button-content>
                 <i class="fa fa-pencil text-primary" />
               </template>
-              <b-dropdown-item href="/users/exam">
+              <b-dropdown-item href="/users/exams/add">
                 <i class="icon-clock text-primary" />
                 Tạo đề thi
               </b-dropdown-item>
@@ -100,13 +103,16 @@
             <b-dropdown variant="primary" class="user-info-dropdown" no-caret>
               <template #button-content>
                 <div class="user-avatar">
-                  <img src="/images/default-avatar.jpg" :alt="userInfo.name" />
+                  <img
+                    src="https://storage.tracnghiem.vn/public/images/default-avatar.jpg"
+                    :alt="userInfo.name"
+                  />
                 </div>
               </template>
               <div class="user-info">
                 <img
                   class="avatar"
-                  src="/images/default-avatar.jpg"
+                  src="https://storage.tracnghiem.vn/public/images/default-avatar.jpg"
                   :alt="userInfo.name"
                 />
                 <div class="d-flex flex-column">
@@ -114,11 +120,11 @@
                   <span>{{ userInfo.email }}</span>
                 </div>
               </div>
-              <b-dropdown-item href="#">
+              <b-dropdown-item href="/users/history">
                 <i class="icon-clock text-primary" />
                 Lịch sử làm bài
               </b-dropdown-item>
-              <b-dropdown-item href="#">
+              <b-dropdown-item href="/users/exams">
                 <i class="icon-exam text-primary" />
                 Đề thi của bạn
               </b-dropdown-item>
