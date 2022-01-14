@@ -105,6 +105,9 @@
             </b-form-group>
           </ValidationProvider>
           <footer class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="hide()">
+              Đóng
+            </button>
             <button v-if="!isDisabled" type="submit" class="btn btn-primary">
               Lưu
             </button>
@@ -115,9 +118,6 @@
               @click="handleCopy"
             >
               Sao chép
-            </button>
-            <button type="button" class="btn btn-secondary" @click="hide()">
-              Đóng
             </button>
           </footer>
         </b-form>
