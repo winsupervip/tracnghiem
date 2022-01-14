@@ -71,6 +71,15 @@ export default {
     global.$http.get(
       `api/v1/Exam/get-question-exam-detail-home/${data.id}?Page=${data.page}&PageSize=${data.pageSize}`
     ),
+  getReviews: (data) =>
+    global.$http.get(
+      `/api/v1/Review/${data.typeId}/${data.hashId}?Page=${data.Page}&&PageSize=${data.PageSize}`
+    ),
+  getTotalRate: (data) =>
+    global.$http.get(`/api/v1/Review/count-rate/${data.typeId}/${data.hashId}`),
+  sendComment: (data) => global.$http.post('/api/v1/Review/', data),
+  sendReact: (data) => global.$http.post('/api/v1/Review/react', data),
+
   getCategoryBreadcrumd(slug) {
     return global.$http.get(
       `api/Home/category-breadcrumb?slug=${encodeURIComponent(slug)}`
@@ -89,7 +98,7 @@ export default {
     return global.$http.get(url)
   },
   getQuestionsOfExam(hashId, urlQuery) {
-    const url = `api/Home/get-question-of-exam/${hashId}?page=${urlQuery.page}&pageSize=${urlQuery.pageSize}&keyword=${urlQuery.Keyword}`
+    const url = `api/Home/get-question-of-exam/${hashId}?page=${urlQuery.page}&pageSize=${urlQuery.pageSize}&keyword=${urlQuery.keyword}`
     return global.$http.get(url)
   },
 }
