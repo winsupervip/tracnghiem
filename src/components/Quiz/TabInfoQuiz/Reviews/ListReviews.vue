@@ -1,7 +1,7 @@
 <template>
   <div class="list-review">
     <div v-for="(review, index) in reviews" :key="index" class="review-item">
-      <ReviewsItem :review="review" />
+      <ReviewsItem :review="review" @openReportModal="openReportModal" />
     </div>
     <div class="form-review-exam">
       <div class="form-group mb-4">
@@ -28,16 +28,25 @@
         >
       </div>
     </div>
+    <Report
+      :hash-id="hashId"
+      report-type-id="4"
+      :is-open="isOpen"
+      modal-id="reportReview"
+      @isClose="isClose"
+    />
   </div>
 </template>
 
 <script>
 import { defineComponent } from '@vue/composition-api'
 import ReviewsItem from './ReviewsItem.vue'
+import Report from '@/components/Report.vue'
 export default defineComponent({
   name: 'ListReviews',
   components: {
     ReviewsItem,
+    Report,
   },
   props: {
     reviews: {
@@ -49,6 +58,8 @@ export default defineComponent({
     return {
       ratingExam: 0,
       comment: '',
+      isOpen: false,
+      hashId: '',
     }
   },
   computed: {
@@ -68,6 +79,14 @@ export default defineComponent({
         itemId: 'string',
       }
       this.$emit('sendComment', data)
+    },
+    openReportModal(value) {
+      this.hashId = value
+      this.isOpen = true
+    },
+    isClose() {
+      console.log('close')
+      this.isOpen = false
     },
   },
 })

@@ -101,4 +101,6 @@ export default {
     const url = `api/Home/get-question-of-exam/${hashId}?page=${urlQuery.page}&pageSize=${urlQuery.pageSize}&keyword=${urlQuery.keyword}`
     return global.$http.get(url)
   },
+  // funtion send report for exam, question and comment
+  sendReport: (data) => global.$http.post('api/v1/Report/add-report', data),
 }

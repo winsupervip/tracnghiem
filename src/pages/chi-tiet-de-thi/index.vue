@@ -57,7 +57,7 @@
                     />
 
                     <div v-else class="text-center mb-3">
-                      <b-btn variant="primary" @click="seeMore">
+                      <b-btn variant="primary" @click="checkLogin">
                         Xem thêm
                       </b-btn>
                     </div>
@@ -89,10 +89,8 @@
       </b-container>
     </section>
     <div>
-      <b-modal id="see-more" title="Thông báo" ok-only>
-        <p class="d-flex justify-content-center">
-          Bạn cần đăng nhập để xem nhiều hơn
-        </p>
+      <b-modal id="checkLogin" title="Thông báo" ok-only>
+        <p class="d-flex justify-content-center">Bạn cần đăng nhập</p>
       </b-modal>
     </div>
     <b-modal
@@ -252,6 +250,8 @@ export default defineComponent({
         pageSize: 10,
         keyword: '',
       },
+      mess: '',
+      reportTypeId: 3,
     })
     const fetchQuestionsOfExam = async () => {
       try {
@@ -378,12 +378,12 @@ export default defineComponent({
     }
   },
   methods: {
-    seeMore() {
-      if (this.isLogin) {
-        //
-      } else {
-        this.$bvModal.show('see-more')
+    checkLogin() {
+      if (!this.isLogin) {
+        this.$bvModal.show('checkLogin')
+        return false
       }
+      return true
     },
     hide() {
       this.$bvModal.hide('modal-start-exam')

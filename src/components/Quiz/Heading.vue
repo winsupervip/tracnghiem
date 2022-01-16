@@ -92,19 +92,37 @@
         </b-btn>
       </div>
       <div class="exam-report">
-        <b-btn class="btn-transparent font-smd btn-text">
+        <b-btn
+          class="btn-transparent font-smd btn-text"
+          @click="openReportModal"
+        >
           <i class="icon-flag"></i> Báo cáo
         </b-btn>
       </div>
     </div>
+    <Report
+      :hash-id="hashId"
+      report-type-id="3"
+      :is-open="isOpen"
+      @isClose="isClose"
+    />
   </div>
 </template>
 
 <script>
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  computed,
+  useRoute,
+} from '@nuxtjs/composition-api'
+import Report from '@/components/Report.vue'
 export default defineComponent({
   name: 'Heading',
+  components: {
+    Report,
+  },
   props: {
     dataExam: {
       type: Object,
@@ -121,17 +139,31 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const route = useRoute()
+    const idSlug = computed(() => route.value.params.id)
+    const arr = idSlug.value.split('-')
+    const id = arr[arr.length - 1]
     const data = reactive({
+      hashId: id || null,
       optionsBookmark: [
         { text: 'Yêu thích', value: 1 },
         { text: 'Đề vật lý', value: 2 },
       ],
       optionSave: props.dataExam,
+      isOpen: false,
     })
     return {
       ...toRefs(data),
     }
   },
-  methods: {},
+  methods: {
+    openReportModal() {
+      this.isOpen = true
+    },
+    isClose() {
+      console.log('close')
+      this.isOpen = false
+    },
+  },
 })
 </script>

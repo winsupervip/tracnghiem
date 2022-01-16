@@ -33,7 +33,7 @@
           <i :class="react === -1 ? 'icon-dislike-fill' : 'icon-dislike'"></i>
           ({{ disLike }}) Không thích
         </b-btn>
-        <b-btn variant="link" class="btn-link">
+        <b-btn variant="link" class="btn-link" @click="openReportModal">
           <i class="icon-flag"></i>
           Báo cáo sai phạm
         </b-btn>
@@ -88,6 +88,9 @@ export default defineComponent({
       } catch (error) {
         //
       }
+    },
+    openReportModal() {
+      this.$emit('openReportModal', this.review.hashId)
     },
   },
 })
