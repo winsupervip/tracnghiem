@@ -682,9 +682,28 @@ img {
   &.exam-page-heading {
     .page-heading-inner {
       transition: all 0.2s;
-    }
-    .page-heading-inner {
       background-image: url('https://storage.tracnghiem.vn/public/images/header-exam-bg.png');
+    }
+    .page-heading-description {
+      max-height: 200px;
+      overflow: auto;
+      &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      &::-webkit-scrollbar-track {
+        background: $white;
+        transition: all 0.2s;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: $border;
+        border-radius: 6px;
+        transition: all 0.2s;
+      }
+      &::-webkit-scrollbar-thumb:hover {
+        background: $primary;
+        transition: all 0.2s;
+      }
     }
     .button-expand-heading {
       position: absolute;

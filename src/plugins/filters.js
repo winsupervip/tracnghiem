@@ -62,3 +62,38 @@ Vue.filter('date', function (value) {
   const inputTime = moment(value).locale('vi')
   return inputTime.format('DD/MM/YYYY')
 })
+
+Vue.filter('convertDate', function (value) {
+  const now = new Date()
+  const reviewTime = new Date(value)
+
+  const year = now.getFullYear()
+  const month = now.getMonth() + 1
+  const day = now.getDay()
+  const hours = now.getHours()
+  const minutes = now.getMinutes()
+
+  const yearReview = reviewTime.getFullYear()
+  const monthReview = reviewTime.getMonth() + 1
+  const dayReview = reviewTime.getDay()
+  const hourReview = reviewTime.getHours()
+  const minutesReview = reviewTime.getMinutes()
+
+  if (year - yearReview >= 1 || month - monthReview) {
+    return `${dayReview} tháng ${monthReview}, ${yearReview}`
+  }
+  if (day - dayReview > 1) {
+    return `${day - dayReview} ngày trước`
+  }
+  if (day - dayReview === 1) {
+    if (hours - hourReview < 0) {
+      return `${24 + hours - hourReview} giờ trước`
+    }
+    return `${hours - hourReview} giờ trước`
+  }
+  if (hours - hourReview >= 1) {
+    return `${hours - hourReview} giờ trước`
+  }
+
+  return `${minutes - minutesReview} phút trước`
+})
