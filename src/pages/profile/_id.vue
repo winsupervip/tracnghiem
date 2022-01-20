@@ -27,10 +27,21 @@
                 <div class="action-exam">
                   <b-btn
                     variant="outline-light"
-                    class="btn-outline-white font-smd btn-action"
+                    :class="
+                      dataUser.isLiked === false
+                        ? 'btn-outline-white font-smd btn-action'
+                        : 'btn-outline-white bg-white font-smd btn-action text-danger'
+                    "
+                    @click="saveWishList"
                   >
-                    <i class="icon-heart me-3"></i>
-                    Yêu thích
+                    <i
+                      :class="
+                        dataUser.isLiked === true
+                          ? 'icon-heart-fill text-danger me-3'
+                          : 'icon-heart me-3'
+                      "
+                    ></i>
+                    {{ $t('profile.like') }}
                   </b-btn>
                   <b-dropdown
                     variant="outline-light"
@@ -38,19 +49,37 @@
                     class="dropdown-save"
                   >
                     <template #button-content>
-                      <i class="icon-bookmark me-3"></i>
-                      Lưu
+                      <i
+                        :class="
+                          dataUser.isSaved === true
+                            ? 'icon-bookmark    text-danger me-3'
+                            : 'icon-bookmark me-3'
+                        "
+                      ></i>
+                      {{ $t('profile.save') }}
                     </template>
                     <b-dropdown-form class="">
                       <b-form-checkbox-group
                         v-model="selectedBookmark"
                         :options="optionsBookmark"
-                        value-field="value"
-                        text-field="text"
+                        value-field="hashId"
+                        text-field="name"
                       ></b-form-checkbox-group>
+
                       <div class="add-bookmark-input">
-                        <b-input />
-                        <b-btn variant="primary" class="btn-circle">
+                        <b-form-input
+                          v-model="valueAddBookmark"
+                          trim
+                          type="text"
+                          placeholder="Thêm"
+                        >
+                        </b-form-input>
+
+                        <b-btn
+                          variant="primary"
+                          class="btn-circle"
+                          @click="addBookmark"
+                        >
                           <b-icon icon="plus" class="text-white" />
                         </b-btn>
                       </div>
@@ -61,12 +90,15 @@
                     class="btn-outline-white font-smd btn-action"
                   >
                     <i class="icon-share me-3"></i>
-                    Chia sẻ
+                    {{ $t('profile.share') }}
                   </b-btn>
                 </div>
                 <div class="exam-report">
-                  <b-btn class="btn-transparent font-smd btn-text">
-                    <i class="icon-flag"></i> Báo cáo
+                  <b-btn
+                    class="btn-transparent font-smd btn-text"
+                    @click="report"
+                  >
+                    <i class="icon-flag"></i>{{ $t('profile.report') }}
                   </b-btn>
                 </div>
               </div>
@@ -160,22 +192,22 @@ import {
 } from '@nuxtjs/composition-api'
 
 import ProfileApi from '@/api/profile'
+import WishListApi from '@/api/wishList'
+import LabelApi from '@/api/label'
 export default defineComponent({
   components: {},
   layout: 'default',
-  auth: false,
+  auth: true,
   setup() {
     const { app, $loader } = useContext()
     const route = useRoute()
     const userId = route?.value.params?.id
 
     const data = reactive({
+      valueAddBookmark: null,
       selectedBookmark: [],
       breadcrumbs: [],
-      optionsBookmark: [
-        { text: 'Yêu thích', value: 1 },
-        { text: 'Đề vật lý', value: 2 },
-      ],
+      optionsBookmark: [],
       dataUser: {},
       totalExamPublic: 0,
       totalUserListExam: 0,
@@ -183,36 +215,31 @@ export default defineComponent({
       userListExam: { Page: 1, PageSize: 6, Keyword: '', userId },
       dataExamDone: {},
       dataExamCreated: {},
+      userId,
+      wishList: { hashIdItem: userId, status: false, wishListType: 0 },
+      type: 4,
     })
+    const getAccountInfo = async () => {
+      const { data: result } = await ProfileApi.getAccountInfo(userId)
+      data.dataUser = result?.object
+    }
+    const getLabelProfile = async () => {
+      const { data: result } = await LabelApi.getLabelProfile(data.type, userId)
+      data.optionsBookmark = result.object?.items
+    }
     const { fetch } = useFetch(async () => {
       $loader()
-
-      const { data: result } = await ProfileApi.getAccountInfo(userId)
-      const { data: result2 } = await ProfileApi.getExamPublicProfileOfUser(
-        data.examPublic
-      ) // đề thi đã thực hiện
-      const { data: result3 } = await ProfileApi.getListExamCreateByUser(
-        data.userListExam
-      ) // đề thi đã tạo
-      data.dataUser = result?.object
-
+      getAccountInfo()
+      getLabelProfile()
+      const [{ data: result2 }, { data: result3 }] = await Promise.all([
+        ProfileApi.getExamPublicProfileOfUser(data.examPublic), // đề thi đã thực hiện
+        ProfileApi.getListExamCreateByUser(data.userListExam), // đề thi đã tạo
+      ])
       data.dataExamDone = result2?.object?.items
       data.totalExamPublic = result2?.object?.total
-      console.log(
-        '🚀 ~ file: _id.vue ~ line 193 ~ const{fetch}=useFetch ~ data.totalExamPublic',
-        data.totalExamPublic
-      )
-      console.log(
-        '🚀 ~ file: _id.vue ~ line 178 ~ const{fetch}=useFetch ~ data.dataExamDone',
-        data.dataExamDone
-      )
 
       data.dataExamCreated = result3?.object?.items
       data.totalUserListExam = result3?.object?.total
-      console.log(
-        '🚀 ~ file: _id.vue ~ line 181 ~ const{fetch}=useFetch ~ data.dataExamCreated',
-        data.dataExamCreated
-      )
 
       data.breadcrumbs = [
         {
@@ -232,6 +259,7 @@ export default defineComponent({
 
       $loader().close()
     })
+
     fetch()
     watch(
       () => data.userListExam.Page,
@@ -247,9 +275,87 @@ export default defineComponent({
         fetch()
       }
     )
+    watch(
+      () => data.selectedBookmark,
+      async (newVal, oldVal) => {
+        if (newVal.length > oldVal.length) {
+          const addVal = {
+            hashIdItem: userId,
+            hashIdLabel: newVal[newVal.length - 1],
+            status: true,
+            itemType: 4,
+          }
+          console.log(addVal)
+          const { data: result } = await LabelApi.addDeleteItemLabel(addVal)
+          console.log(result)
+          getLabelProfile()
+        } else {
+          const deleteVal = {
+            hashIdItem: userId,
+            hashIdLabel: oldVal.find(
+              (x) => !newVal.find((newVal) => newVal === x)
+            ),
+            status: false,
+            itemType: 4,
+          }
+          const { data: result } = await LabelApi.addDeleteItemLabel(deleteVal)
+          console.log(result)
+          getLabelProfile()
+        }
+      }
+    )
     return {
       ...toRefs(data),
+      getAccountInfo,
+      getLabelProfile,
     }
+  },
+
+  methods: {
+    async saveWishList() {
+      if (this.dataUser?.isLiked === false) {
+        this.wishList = {
+          hashIdItem: this.userId,
+          status: false,
+          wishListType: 4,
+        }
+        const { data: result } = await WishListApi.saveWishList(this.wishList)
+        console.log(
+          '🚀 ~ file: _id.vue ~ line 210 ~ saveWishList ~ result',
+          result
+        )
+        this.getAccountInfo()
+      } else {
+        this.wishList = {
+          hashIdItem: this.userId,
+          status: true,
+          wishListType: 4,
+        }
+        const { data: result } = await WishListApi.saveWishList(this.wishList)
+        console.log(
+          '🚀 ~ file: _id.vue ~ line 210 ~ saveWishList ~ result',
+          result
+        )
+        this.getAccountInfo()
+      }
+    },
+    async addBookmark() {
+      const label = { name: this.valueAddBookmark, color: '#000' }
+
+      if (
+        !this.optionsBookmark.find((val) => val.text === this.valueAddBookmark)
+      ) {
+        const { data: result } = await LabelApi.addLabel(label)
+        console.log(
+          '🚀 ~ file: _id.vue ~ line 315 ~ addBookmark ~ result',
+          result
+        )
+        this.getLabelProfile()
+      } else {
+        alert('Đã có bookmark này')
+      }
+    },
+    report() {},
   },
 })
 </script>
