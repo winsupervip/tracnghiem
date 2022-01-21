@@ -318,7 +318,11 @@
   },
   "profile":{
     "homepage":"Trang chủ",
-    "test":"Đề thi"
+    "test":"Đề thi",
+    "report":"Báo cáo",
+    "share":"Chia sẻ",
+    "save":"Lưu",
+    "like":"Yêu thích"
   }
 
 }
