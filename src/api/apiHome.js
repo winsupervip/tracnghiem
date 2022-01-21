@@ -103,4 +103,6 @@ export default {
   },
   // funtion send report for exam, question and comment
   sendReport: (data) => global.$http.post('api/v1/Report/add-report', data),
+  sendWishlist: (data) =>
+    global.$http.post('api/v1/Wishlist/save-wishlist', data),
 }

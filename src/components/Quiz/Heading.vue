@@ -57,8 +57,12 @@
     <div class="toolbar-action-exam">
       <div class="action-exam">
         <b-btn
-          variant="outline-light"
-          class="btn-outline-white font-smd btn-action"
+          :variant="!isLike ? 'outline-light' : null"
+          :class="[
+            isLike ? 'btn-danger' : 'btn-outline-white',
+            'font-smd btn-action',
+          ]"
+          @click="sendWishList"
         >
           <i class="icon-heart me-3"></i>
           Yêu thích
@@ -100,6 +104,10 @@
         </b-btn>
       </div>
     </div>
+
+    <b-modal id="mustLogin" title="Thông báo" ok-only>
+      <p class="d-flex justify-content-center">Bạn cần đăng nhập</p>
+    </b-modal>
     <Report
       :hash-id="hashId"
       report-type-id="3"
@@ -117,7 +125,9 @@ import {
   computed,
   useRoute,
 } from '@nuxtjs/composition-api'
+import { mapGetters } from 'vuex'
 import Report from '@/components/Report.vue'
+import ApiHome from '@/api/apiHome.js'
 export default defineComponent({
   name: 'Heading',
   components: {
@@ -151,10 +161,31 @@ export default defineComponent({
       ],
       optionSave: props.dataExam,
       isOpen: false,
+      isLike: false,
     })
     return {
       ...toRefs(data),
     }
+  },
+  computed: {
+    ...mapGetters({
+      isLogin: 'user/isLogin',
+    }),
+    checkLogin() {
+      if (!this.isLogin) {
+        this.$bvModal.show('mustLogin')
+        return false
+      }
+      return true
+    },
+  },
+  watch: {
+    dataExam() {
+      this.isLike = this.dataExam.exam.wishlist
+    },
+  },
+  mounted() {
+    this.isLike = this.dataExam.exam.wishlist
   },
   methods: {
     openReportModal() {
@@ -163,6 +194,23 @@ export default defineComponent({
     isClose() {
       console.log('close')
       this.isOpen = false
+    },
+    async sendWishList() {
+      if (!this.checkLogin) return
+      const value = {
+        hashIdItem: this.hashId,
+        status: this.isLike,
+        wishListType: 3,
+      }
+      try {
+        const { data } = await ApiHome.sendWishlist(value)
+        this.$handleError(data)
+        this.isLike = !this.isLike
+      } catch (err) {
+        this.$handleError(err, () => {
+          console.log(err)
+        })
+      }
     },
   },
 })

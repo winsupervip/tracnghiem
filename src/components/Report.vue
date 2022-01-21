@@ -30,9 +30,6 @@
         </div>
       </div>
     </b-modal>
-    <b-modal id="mustLogin" title="Thông báo" ok-only>
-      <p class="d-flex justify-content-center">Bạn cần đăng nhập</p>
-    </b-modal>
   </div>
 </template>
 
