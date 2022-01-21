@@ -25,24 +25,11 @@
               </div>
               <div class="toolbar-action-exam">
                 <div class="action-exam">
-                  <b-btn
-                    variant="outline-light"
-                    :class="
-                      dataUser.isLiked === false
-                        ? 'btn-outline-white font-smd btn-action'
-                        : 'btn-outline-white bg-white font-smd btn-action text-danger'
-                    "
-                    @click="saveWishList"
-                  >
-                    <i
-                      :class="
-                        dataUser.isLiked === true
-                          ? 'icon-heart-fill text-danger me-3'
-                          : 'icon-heart me-3'
-                      "
-                    ></i>
-                    {{ $t('profile.like') }}
-                  </b-btn>
+                  <WishList
+                    :hash-id="userId"
+                    :is-like="dataUser.isLike"
+                    :type-wishlist="4"
+                  />
                   <b-dropdown
                     variant="outline-light"
                     no-caret
@@ -195,12 +182,14 @@ import {
   useRoute,
   watch,
 } from '@nuxtjs/composition-api'
-
+import WishList from '@/components/WishList.vue'
 import ProfileApi from '@/api/profile'
 import WishListApi from '@/api/wishList'
 import LabelApi from '@/api/label'
 export default defineComponent({
-  components: {},
+  components: {
+    WishList,
+  },
   layout: 'default',
   auth: true,
   setup() {

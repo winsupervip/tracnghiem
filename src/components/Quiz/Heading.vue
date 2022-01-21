@@ -1,5 +1,5 @@
 <template>
-  <div v-if="dataExam.exam">
+  <div>
     <b-breadcrumb :items="breadcrumbs" class="mb-2"></b-breadcrumb>
     <div class="page-heading-title mb-2">
       <h1 class="page-title">
@@ -56,17 +56,8 @@
     </div>
     <div class="toolbar-action-exam">
       <div class="action-exam">
-        <b-btn
-          :variant="!isLike ? 'outline-light' : null"
-          :class="[
-            isLike ? 'btn-danger' : 'btn-outline-white',
-            'font-smd btn-action',
-          ]"
-          @click="sendWishList"
-        >
-          <i class="icon-heart me-3"></i>
-          Yêu thích
-        </b-btn>
+        <WishList :hash-id="hashId" :is-like="isLike" :type-wishlist="3" />
+
         <b-dropdown variant="outline-light" no-caret class="dropdown-save">
           <template #button-content>
             <i class="icon-bookmark me-3"></i>
@@ -105,15 +96,14 @@
       </div>
     </div>
 
-    <b-modal id="mustLogin" title="Thông báo" ok-only>
-      <p class="d-flex justify-content-center">Bạn cần đăng nhập</p>
-    </b-modal>
     <Report
       :hash-id="hashId"
       report-type-id="3"
       :is-open="isOpen"
       @isClose="isClose"
-    />
+    /><b-modal id="mustLogin" title="Thông báo" ok-only>
+      <p class="d-flex justify-content-center">Bạn cần đăng nhập</p>
+    </b-modal>
   </div>
 </template>
 
@@ -125,13 +115,13 @@ import {
   computed,
   useRoute,
 } from '@nuxtjs/composition-api'
-import { mapGetters } from 'vuex'
 import Report from '@/components/Report.vue'
-import ApiHome from '@/api/apiHome.js'
+import WishList from '@/components/WishList.vue'
 export default defineComponent({
   name: 'Heading',
   components: {
     Report,
+    WishList,
   },
   props: {
     dataExam: {
@@ -161,56 +151,18 @@ export default defineComponent({
       ],
       optionSave: props.dataExam,
       isOpen: false,
-      isLike: false,
+      isLike: props.dataExam.exam.wishlist,
     })
     return {
       ...toRefs(data),
     }
-  },
-  computed: {
-    ...mapGetters({
-      isLogin: 'user/isLogin',
-    }),
-    checkLogin() {
-      if (!this.isLogin) {
-        this.$bvModal.show('mustLogin')
-        return false
-      }
-      return true
-    },
-  },
-  watch: {
-    dataExam() {
-      this.isLike = this.dataExam.exam.wishlist
-    },
-  },
-  mounted() {
-    this.isLike = this.dataExam.exam.wishlist
   },
   methods: {
     openReportModal() {
       this.isOpen = true
     },
     isClose() {
-      console.log('close')
       this.isOpen = false
-    },
-    async sendWishList() {
-      if (!this.checkLogin) return
-      const value = {
-        hashIdItem: this.hashId,
-        status: this.isLike,
-        wishListType: 3,
-      }
-      try {
-        const { data } = await ApiHome.sendWishlist(value)
-        this.$handleError(data)
-        this.isLike = !this.isLike
-      } catch (err) {
-        this.$handleError(err, () => {
-          console.log(err)
-        })
-      }
     },
   },
 })
