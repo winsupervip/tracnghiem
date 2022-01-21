@@ -59,12 +59,20 @@
                       {{ $t('profile.save') }}
                     </template>
                     <b-dropdown-form class="">
-                      <b-form-checkbox-group
+                      <!-- <b-form-checkbox-group
                         v-model="selectedBookmark"
                         :options="optionsBookmark"
                         value-field="hashId"
                         text-field="name"
-                      ></b-form-checkbox-group>
+                      ></b-form-checkbox-group> -->
+                      <b-form-checkbox
+                        v-for="bookmark in optionsBookmark"
+                        :key="bookmark.hashId"
+                        v-model="bookmark.saved"
+                        @change="(e) => changeCheckBox(e, bookmark.hashId)"
+                      >
+                        {{ bookmark.name }}
+                      </b-form-checkbox>
 
                       <div class="add-bookmark-input">
                         <b-form-input
@@ -94,10 +102,7 @@
                   </b-btn>
                 </div>
                 <div class="exam-report">
-                  <b-btn
-                    class="btn-transparent font-smd btn-text"
-                    @click="report"
-                  >
+                  <b-btn class="btn-transparent font-smd btn-text">
                     <i class="icon-flag"></i>{{ $t('profile.report') }}
                   </b-btn>
                 </div>
@@ -225,6 +230,7 @@ export default defineComponent({
     }
     const getLabelProfile = async () => {
       const { data: result } = await LabelApi.getLabelProfile(data.type, userId)
+      console.log('getLabelProfile', result)
       data.optionsBookmark = result.object?.items
     }
     const { fetch } = useFetch(async () => {
@@ -275,35 +281,7 @@ export default defineComponent({
         fetch()
       }
     )
-    watch(
-      () => data.selectedBookmark,
-      async (newVal, oldVal) => {
-        if (newVal.length > oldVal.length) {
-          const addVal = {
-            hashIdItem: userId,
-            hashIdLabel: newVal[newVal.length - 1],
-            status: true,
-            itemType: 4,
-          }
-          console.log(addVal)
-          const { data: result } = await LabelApi.addDeleteItemLabel(addVal)
-          console.log(result)
-          getLabelProfile()
-        } else {
-          const deleteVal = {
-            hashIdItem: userId,
-            hashIdLabel: oldVal.find(
-              (x) => !newVal.find((newVal) => newVal === x)
-            ),
-            status: false,
-            itemType: 4,
-          }
-          const { data: result } = await LabelApi.addDeleteItemLabel(deleteVal)
-          console.log(result)
-          getLabelProfile()
-        }
-      }
-    )
+
     return {
       ...toRefs(data),
       getAccountInfo,
@@ -355,7 +333,19 @@ export default defineComponent({
         alert('Đã có bookmark này')
       }
     },
-    report() {},
+
+    async changeCheckBox(status, hashId) {
+      const data = {
+        hashIdItem: this.userId,
+        hashIdLabel: hashId,
+        status: !status,
+        itemType: 4,
+      }
+      console.log(data)
+      const { data: result } = await LabelApi.addDeleteItemLabel(data)
+      console.log(result)
+      this.getLabelProfile()
+    },
   },
 })
 </script>
