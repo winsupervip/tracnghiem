@@ -59,12 +59,6 @@
                       {{ $t('profile.save') }}
                     </template>
                     <b-dropdown-form class="">
-                      <!-- <b-form-checkbox-group
-                        v-model="selectedBookmark"
-                        :options="optionsBookmark"
-                        value-field="hashId"
-                        text-field="name"
-                      ></b-form-checkbox-group> -->
                       <b-form-checkbox
                         v-for="bookmark in optionsBookmark"
                         :key="bookmark.hashId"
@@ -102,13 +96,22 @@
                   </b-btn>
                 </div>
                 <div class="exam-report">
-                  <b-btn class="btn-transparent font-smd btn-text">
+                  <b-btn
+                    class="btn-transparent font-smd btn-text"
+                    @click="openReportModal"
+                  >
                     <i class="icon-flag"></i>{{ $t('profile.report') }}
                   </b-btn>
                 </div>
               </div>
             </b-col>
           </b-row>
+          <Report
+            :hash-id="userId"
+            report-type-id="5"
+            :is-open="isOpen"
+            @isClose="isClose"
+          />
         </b-container>
       </div>
     </section>
@@ -199,16 +202,19 @@ import {
 import ProfileApi from '@/api/profile'
 import WishListApi from '@/api/wishList'
 import LabelApi from '@/api/label'
+import Report from '@/components/Report.vue'
 export default defineComponent({
-  components: {},
+  components: { Report },
   layout: 'default',
   auth: true,
   setup() {
     const { app, $loader } = useContext()
     const route = useRoute()
     const userId = route?.value.params?.id
+    console.log('🚀 ~ file: _id.vue ~ line 220 ~ setup ~ route', route)
 
     const data = reactive({
+      isOpen: false,
       valueAddBookmark: null,
       selectedBookmark: [],
       breadcrumbs: [],
@@ -290,6 +296,13 @@ export default defineComponent({
   },
 
   methods: {
+    openReportModal() {
+      this.isOpen = true
+    },
+    isClose() {
+      console.log('close')
+      this.isOpen = false
+    },
     async saveWishList() {
       if (this.dataUser?.isLiked === false) {
         this.wishList = {
