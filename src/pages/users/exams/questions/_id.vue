@@ -2,12 +2,12 @@
   <div>
     <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
     <b-card :sub-title="$t('exam.questions.search')">
-      <b-form class="container">
+      <b-form>
         <b-form-row class="row">
           <b-form-group
             :label="$t('keyword')"
             label-for="keyword"
-            class="col-12 col-md-6 mb-3"
+            class="col-12 col-md-3 mb-3"
           >
             <b-form-input
               id="keyword"
@@ -44,8 +44,6 @@
               :placeholder="$t('exam.levels')"
             />
           </b-form-group>
-        </b-form-row>
-        <b-form-row class="row">
           <b-form-group
             :label="$t('exam.sortby')"
             label-for="sortby"
@@ -60,30 +58,28 @@
               :placeholder="$t('exam.sortby')"
             />
           </b-form-group>
-          <div
-            class="
-              col-12 col-md-4
-              mb-3
-              d-flex
-              justify-content-around
-              align-items-end
-            "
-          >
-            <b-button variant="outline-primary" @click="handleSearch()">
-              <b-icon-filter></b-icon-filter> {{ $t('exam.filter') }}
-            </b-button>
-            <b-button v-b-modal.modal-1 variant="primary">
-              <b-icon-plus></b-icon-plus> {{ $t('exam.add') }}
-            </b-button>
-          </div>
         </b-form-row>
+        <div>
+          <b-button variant="outline-primary" @click="handleSearch()">
+            <b-icon-filter></b-icon-filter> {{ $t('exam.filter') }}
+          </b-button>
+          <b-button v-b-modal.modal-1 variant="primary">
+            <b-icon-plus></b-icon-plus> {{ $t('exam.add') }}
+          </b-button>
+          <b-button
+            variant="primary"
+            @click="$bvModal.show('bv-modal-import-exam')"
+          >
+            <b-icon-cloud-upload></b-icon-cloud-upload> {{ $t('import') }}
+          </b-button>
+        </div>
       </b-form>
     </b-card>
-    <b-card :sub-title="$t('exam.questions.title')" class="mt-3">
+    <div :sub-title="$t('exam.questions.title')" class="mt-3">
       <div v-if="total === 0">
         <EmptyData />
       </div>
-      <div v-else>
+      <div v-else class="list-question">
         <div v-for="(item, index) in items" :key="index">
           <ExamQuestionItem :item-data="item" :total="total" />
         </div>
@@ -98,15 +94,19 @@
           ></b-pagination>
         </div>
       </div>
-    </b-card>
+    </div>
     <b-modal
       id="modal-1"
       size="xl"
       hide-footer
       :title="$t('exam.questions.search')"
     >
-      <ModalQuestionForAdd :exam-hash-id="examHashId" />
+      <ModalQuestionForAdd
+        :exam-hash-id="examHashId"
+        @add-success="onImportSuccess"
+      />
     </b-modal>
+    <ImportExamModel :exam-id="examHashId" @import-success="onImportSuccess" />
   </div>
 </template>
 <script>
@@ -127,8 +127,14 @@ import catalogApi from '@/api/catalogApi'
 import EmptyData from '@/components/EmptyData.vue'
 import ModalQuestionForAdd from '@/components/Exams/ModalQuestionForAdd.vue'
 import ExamQuestionItem from '@/components/Exams/ExamQuestionItem.vue'
+import ImportExamModel from '~/components/Question/ImportExamModel.vue'
 export default defineComponent({
-  components: { EmptyData, ModalQuestionForAdd, ExamQuestionItem },
+  components: {
+    EmptyData,
+    ModalQuestionForAdd,
+    ExamQuestionItem,
+    ImportExamModel,
+  },
   layout: 'dashboard',
   auth: true,
   setup() {
@@ -244,6 +250,14 @@ export default defineComponent({
       this.urlQuery.page = 1
       this.fetch()
     },
+    onImportSuccess() {
+      this.handleSearch()
+    },
   },
 })
 </script>
+<style scoped>
+.list-question .question-item {
+  border-bottom: unset;
+}
+</style>

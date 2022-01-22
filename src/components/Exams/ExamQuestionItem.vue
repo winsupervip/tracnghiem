@@ -1,32 +1,89 @@
 <template>
-  <div class="exam-question-container">
-    <div class="d-flex justify-content-between">
-      <h3 class="question-number">
-        Câu hỏi: {{ getSortNumber(itemData.sortOrder) }}
-      </h3>
-      <div>
-        <b-icon-shuffle @click="showModalSort"></b-icon-shuffle>
-        <b-icon-pencil-square
-          @click="fetchQuestion(itemData.hashId)"
-        ></b-icon-pencil-square>
-        <b-icon-trash @click="showModleDelete"></b-icon-trash>
+  <div>
+    <div class="list-single-question">
+      <div class="list-questions-user">
+        <b-card class="mt-3">
+          <div class="d-flex justify-content-between">
+            <h3 class="question-number">
+              Câu hỏi {{ getSortNumber(itemData.sortOrder) }}.
+            </h3>
+            <div>
+              <button
+                class="btn btn-link"
+                title="Thay đổi vị trí"
+                @click="showModalSort"
+              >
+                <b-icon-shuffle></b-icon-shuffle>
+              </button>
+              <button
+                class="btn btn-link"
+                title="Chỉnh sửa câu hỏi"
+                @click="fetchQuestion(itemData.hashId)"
+              >
+                <b-icon-pencil-square></b-icon-pencil-square>
+              </button>
+              <button
+                class="btn btn-link"
+                title="Xóa khỏi đề thi"
+                @click="showModleDelete"
+              >
+                <b-icon-trash></b-icon-trash>
+              </button>
+            </div>
+          </div>
+          <div
+            v-if="itemData.section && itemData.section.title.length > 0"
+            class="section-question question-content text-smd"
+          >
+            <strong
+              :class="
+                showFilterGroupSection
+                  ? 'filter-group-header'
+                  : 'filter-group-header collapsed'
+              "
+              @click="showFilterGroupSection = !showFilterGroupSection"
+            >
+              {{ itemData.section.title }}
+              <i class="icon-caret-down"></i>
+            </strong>
+            <b-collapse
+              v-model="showFilterGroupSection"
+              class="filter-group-body"
+            >
+              <p v-html="itemData.section.description"></p>
+            </b-collapse>
+          </div>
+          <div
+            v-if="itemData.group && itemData.group.title.length > 0"
+            class="question-group question-content text-smd"
+          >
+            <strong
+              :class="
+                showFilterGroupQuestion
+                  ? 'filter-group-header'
+                  : 'filter-group-header collapsed'
+              "
+              @click="showFilterGroupQuestion = !showFilterGroupQuestion"
+            >
+              {{ itemData.group.title }}
+              <i class="icon-caret-down"></i>
+            </strong>
+            <b-collapse
+              v-model="showFilterGroupQuestion"
+              class="filter-group-body"
+            >
+              <p v-html="itemData.group.description"></p>
+            </b-collapse>
+          </div>
+          <component
+            :is="dynamicComponent"
+            ref="questionInExam"
+            :questionlist="itemData"
+          />
+          <QuestionTags :questiontags="itemData" />
+        </b-card>
       </div>
     </div>
-    <div v-if="itemData.section">
-      <h3 class="question-number">{{ itemData.section.title }}</h3>
-      <p>
-        {{ itemData.section.description }}
-      </p>
-    </div>
-    <div v-if="itemData.group">
-      <h3 class="question-number">{{ itemData.group.title }}</h3>
-    </div>
-    <QuestionTags :questiontags="itemData" />
-    <component
-      :is="dynamicComponent"
-      ref="questionInExam"
-      :questionlist="itemData"
-    />
     <b-modal
       :id="`update-question${itemData.hashId}`"
       title="Sửa câu hỏi"
@@ -227,6 +284,8 @@ export default defineComponent({
       newPosition: this.itemData.sortOrder,
       error: '',
       valid: false,
+      showFilterGroupSection: false,
+      showFilterGroupQuestion: true,
     }
   },
   computed: {

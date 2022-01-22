@@ -1,6 +1,9 @@
 <template>
-  <div class="question-pairing">
-    <p v-html="questionlist.description"></p>
+  <div class="question-item">
+    <p
+      class="question-content text-smd"
+      v-html="questionlist.questionContent"
+    ></p>
     <div class="question-item-answer">
       <div class="answer-head">
         <span class="font-sm text-gray">{{ $t('answer') }}</span>
@@ -14,16 +17,12 @@
             </tr>
             <tr v-for="answer in rowA" :key="answer.id">
               <td>
-                <span>
-                  <p>{{ answer.answerContent }}</p></span
-                >
+                <p v-html="answer.answerContent"></p>
               </td>
               <td>
-                <span>
-                  <p>
-                    {{ findAnswer(answer.rightAnswer).answerContent }}
-                  </p></span
-                >
+                <p class="question-content text-smd">
+                  {{ findAnswer(answer.rightAnswer).answerContent }}
+                </p>
               </td>
             </tr>
             <tr
@@ -34,11 +33,10 @@
             >
               <td></td>
               <td>
-                <span>
-                  <p>
-                    {{ answer.answerContent }}
-                  </p></span
-                >
+                <p
+                  class="question-content text-smd"
+                  v-html="answer.answerContent"
+                ></p>
               </td>
             </tr>
           </div>

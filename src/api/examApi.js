@@ -147,4 +147,8 @@ export default {
     global.$http.delete(
       `/api/v1/Exam/${data.examHashId}/${data.questionHashId}`
     ),
+  importFromStream(examHashId, objName) {
+    const url = `/api/v1/Exam/import-exam-questions-from-stream?examHashId=${examHashId}&objectName=${objName}`
+    return global.$http.post(url)
+  },
 }
