@@ -34,6 +34,7 @@
                   <b-btn
                     variant="outline-light"
                     class="btn-outline-white font-smd btn-action"
+                    @click="handleCopy"
                   >
                     <i class="icon-share me-3"></i>
                     {{ $t('profile.share') }}
@@ -239,6 +240,12 @@ export default defineComponent({
   },
 
   methods: {
+    handleCopy() {
+      navigator.clipboard.writeText(
+        `https://tracnghiem.vn/profile/${this.userId}`
+      )
+      this.$toast.success('copy thành công').goAway(1000)
+    },
     openReportModal() {
       this.isOpen = true
     },
