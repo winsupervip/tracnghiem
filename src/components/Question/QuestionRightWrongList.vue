@@ -1,11 +1,14 @@
 <template>
-  <div class="question-rightWrong">
-    <p v-html="questionlist.description"></p>
+  <div class="question-item">
+    <p
+      class="question-content text-smd"
+      v-html="questionlist.questionContent"
+    ></p>
     <div class="question-item-answer">
       <div class="answer-head">
         <span class="font-sm text-gray">{{ $t('answer') }}</span>
       </div>
-      <div class="answer-rightWrong">
+      <div class="list-answer">
         <ul class="list-unstyled p-0 m-0">
           <li
             v-for="(answer, index) in questionlist.answers"

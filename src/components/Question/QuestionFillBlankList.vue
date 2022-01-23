@@ -1,11 +1,14 @@
 <template>
-  <div class="question-fillblank">
-    <p v-html="questionlist.description"></p>
+  <div class="question-item">
+    <p
+      class="question-content text-smd"
+      v-html="questionlist.questionContent"
+    ></p>
     <div class="question-item-answer">
       <div class="answer-head">
         <span class="font-sm text-gray">{{ $t('answer') }}</span>
       </div>
-      <div class="answer-fillblank">
+      <div class="list-answer">
         <ul>
           <li
             v-for="(answer, index) in questionlist.answers"
@@ -15,7 +18,10 @@
           >
             <span :style="{ display: 'flex' }">
               {{ String.fromCharCode(65 + index) + '. ' }}
-              <p v-html="answer.answerContent"></p
+              <p
+                class="question-content text-smd"
+                v-html="answer.answerContent"
+              ></p
             ></span>
             <input type="text" :value="answer.rightAnswer" disabled />
           </li>

@@ -11,4 +11,8 @@ export default {
   updateQuestionGroup: (data) => {
     global.$http.post('/api/v1/Question/update-question-group', data)
   },
+  importFromStream(objName) {
+    const url = `/api/v1/Question/import-questions-from-stream?objectName=${objName}`
+    return global.$http.post(url)
+  },
 }

@@ -161,8 +161,10 @@ export default defineComponent({
     const { app, $loader } = useContext()
     const route = useRoute()
     const userId = route?.value.params?.id
+    console.log('🚀 ~ file: _id.vue ~ line 220 ~ setup ~ route', route)
 
     const data = reactive({
+      isOpen: false,
       valueAddBookmark: null,
       selectedBookmark: [],
       breadcrumbs: [],
@@ -176,7 +178,6 @@ export default defineComponent({
       userId,
       wishList: { hashIdItem: userId, status: false, wishListType: 0 },
       type: 4,
-      isOpen: false,
     })
     const getAccountInfo = async () => {
       const { data: result } = await ProfileApi.getAccountInfo(userId)

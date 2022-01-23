@@ -9,7 +9,7 @@
             <b-form-group
               :label="$t('keyword')"
               label-for="keyword"
-              class="col-12 col-md-6 mb-3"
+              class="col-12 col-md-3 mb-3"
             >
               <b-form-input
                 id="tag-search-input"
@@ -23,7 +23,7 @@
             <b-form-group
               :label="$t('exam.questions.categories')"
               label-for="categories"
-              class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3"
+              class="col-12 col-md-3 mb-3"
             >
               <treeselect
                 id="categories"
@@ -37,7 +37,7 @@
             <b-form-group
               :label="$t('exam.questions.paymentTypes')"
               label-for="paymentTypes"
-              class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3"
+              class="col-12 col-md-3 mb-3"
             >
               <treeselect
                 id="paymentTypes"
@@ -47,12 +47,10 @@
                 :placeholder="$t('questionType')"
               />
             </b-form-group>
-          </b-form-row>
-          <b-form-row class="row">
             <b-form-group
               :label="$t('exam.status')"
               label-for="status"
-              class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3"
+              class="col-12 col-md-3 mb-3"
             >
               <treeselect
                 id="status"
@@ -62,10 +60,12 @@
                 :placeholder="$t('status')"
               />
             </b-form-group>
+          </b-form-row>
+          <b-form-row class="row">
             <b-form-group
               :label="$t('exam.levels')"
               label-for="levels"
-              class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3"
+              class="col-12 col-md-3 mb-3"
             >
               <treeselect
                 id="levels"
@@ -78,7 +78,7 @@
             <b-form-group
               :label="$t('exam.sortby')"
               label-for="sortby"
-              class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3"
+              class="col-12 col-md-3 mb-3"
             >
               <treeselect
                 id="sortby"
@@ -88,7 +88,7 @@
                 :placeholder="$t('sort')"
               />
             </b-form-group>
-            <div class="form-search-action col-12">
+            <div class="form-search-action col-12 col-md-6 mb-3">
               <b-button variant="outline-primary" @click="handleSearch">
                 <b-icon-filter></b-icon-filter> {{ $t('apply') }}
               </b-button>
@@ -97,6 +97,12 @@
                 @click="$bvModal.show('bv-modal-add-question')"
               >
                 <b-icon-plus></b-icon-plus> {{ $t('add') }}
+              </b-button>
+              <b-button
+                variant="primary"
+                @click="$bvModal.show('bv-modal-import-question')"
+              >
+                <b-icon-cloud-upload></b-icon-cloud-upload> {{ $t('import') }}
               </b-button>
             </div>
           </b-form-row>
@@ -120,6 +126,7 @@
       ></b-pagination>
     </div>
     <SelectQuestionForAddModal />
+    <ImportQuestionModel @import-success="onImportSuccess" />
   </div>
 </template>
 
@@ -139,10 +146,12 @@ import QuestionApi from '@/api/question-list-page'
 import catalogApi from '@/api/catalogApi'
 import SingleListPage from '@/components/Question/SingleListPage.vue'
 import SelectQuestionForAddModal from '@/components/Question/SelectQuestionForAddModal.vue'
+import ImportQuestionModel from '@/components/Question/ImportQuestionModel.vue'
 export default defineComponent({
   components: {
     SingleListPage,
     SelectQuestionForAddModal,
+    ImportQuestionModel,
   },
   layout: 'dashboard',
   auth: true,
@@ -231,14 +240,21 @@ export default defineComponent({
       data.isCallApiGetTag = false
       data.search = value
       data.urlQuery.keyword = value
-      $logger.debug('abc', data.search)
       data.options = []
+    }
+
+    const reloadData = async () => {
+      $loader()
+      data.urlQuery.page = 1
+      await handleSearch()
+      $loader().close()
     }
 
     return {
       ...toRefs(data),
       inputSearch,
       handleSearch,
+      reloadData,
     }
   },
   computed: {
@@ -276,6 +292,9 @@ export default defineComponent({
 
     loadOptions({ callback }) {
       callback()
+    },
+    onImportSuccess() {
+      this.reloadData()
     },
   },
 })

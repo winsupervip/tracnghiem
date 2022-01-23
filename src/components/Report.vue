@@ -12,7 +12,6 @@
           <b-form-textarea
             id="rating-input"
             v-model="comment"
-            placeholder="Nhận xét về đề thi này"
             rows="5"
             max-rows="10"
           ></b-form-textarea>

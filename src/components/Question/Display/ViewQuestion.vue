@@ -19,7 +19,7 @@
         <i class="icon-caret-down"></i>
       </strong>
       <b-collapse v-model="showFilterGroupSection" class="filter-group-body">
-        <p>{{ question.sectionInformation.descrription }}</p>
+        <p v-html="question.sectionInformation.description"></p>
       </b-collapse>
     </div>
     <div
@@ -40,7 +40,7 @@
         <i class="icon-caret-down"></i>
       </strong>
       <b-collapse v-model="showFilterGroupQuestion" class="filter-group-body">
-        <p>{{ question.groupInformation.descrription }}</p>
+        <p v-html="question.groupInformation.description"></p>
       </b-collapse>
     </div>
     <component

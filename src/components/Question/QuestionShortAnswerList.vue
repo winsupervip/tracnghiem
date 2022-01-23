@@ -1,11 +1,14 @@
 <template>
-  <div class="question-shortAnswer">
-    <p v-html="questionlist.description"></p>
+  <div class="question-item">
+    <p
+      class="question-content text-smd"
+      v-html="questionlist.questionContent"
+    ></p>
     <div class="question-item-answer">
       <div class="answer-head">
         <span class="font-sm text-gray">{{ $t('answer') }}</span>
       </div>
-      <div class="answer-shortAnswer">
+      <div class="list-answer">
         <input
           v-for="(answer, index) in questionlist.answers"
           :key="index"
