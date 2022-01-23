@@ -47,6 +47,11 @@ export default {
       return true
     },
   },
+  watch: {
+    isWishlist() {
+      this.isLike = this.isWishlist
+    },
+  },
   mounted() {
     this.isLike = this.isWishlist
   },

@@ -3,7 +3,9 @@
     <template #button-content>
       <i
         :class="
-          isAdd ? 'icon-bookmark    text-danger me-3' : 'icon-bookmark me-3'
+          isSaveLabel
+            ? 'icon-bookmark    text-danger me-3'
+            : 'icon-bookmark me-3'
         "
       ></i>
       {{ $t('profile.save') }}
@@ -54,16 +56,11 @@ export default {
       type: [String, Number],
       required: true,
     },
-    isAddBefore: {
-      type: [Boolean],
-      default: () => false,
-    },
   },
   data() {
     return {
       valueAddBookmark: '',
       optionsBookmark: [],
-      isAdd: false,
     }
   },
   computed: {
@@ -77,6 +74,14 @@ export default {
       }
       return true
     },
+    isSaveLabel() {
+      if (this.optionsBookmark.length === 0) return false
+      const index = this.optionsBookmark.findIndex(
+        (item) => item.saved === true
+      )
+      if (index === -1) return false
+      return true
+    },
   },
   watch: {
     isLogin() {
@@ -87,7 +92,6 @@ export default {
     if (this.isLogin) {
       this.getLabelProfile()
     }
-    this.isAdd = this.isAddBefore
   },
   methods: {
     async addBookmark() {

@@ -83,7 +83,6 @@ export default {
   },
   watch: {
     isOpen() {
-      console.log('show')
       if (this.isOpen) {
         this.$bvModal.show(this.getModalId)
       }
@@ -92,7 +91,6 @@ export default {
   methods: {
     isHide() {
       this.comment = ''
-      console.log('close nè')
       this.$emit('isClose')
     },
 

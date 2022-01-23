@@ -56,7 +56,11 @@
     </div>
     <div class="toolbar-action-exam">
       <div class="action-exam">
-        <WishList :hash-id="hashId" :is-like="isLike" :type-wishlist="3" />
+        <WishList
+          :hash-id="hashId"
+          :is-wishlist="dataExam.exam.wishlist"
+          :type-wishlist="3"
+        />
         <SaveLable :hash-id="hashId" :type-wishlist="3" :type-label="3" />
         <b-btn
           variant="outline-light"
@@ -133,11 +137,18 @@ export default defineComponent({
       ],
       optionSave: props.dataExam,
       isOpen: false,
-      isLike: props.dataExam.exam.wishlist,
     })
     return {
       ...toRefs(data),
     }
+  },
+  watch: {
+    dataExam() {
+      console.log('adasww', this.dataExam)
+    },
+  },
+  mounted() {
+    console.log('adas', this.dataExam)
   },
   methods: {
     openReportModal() {
