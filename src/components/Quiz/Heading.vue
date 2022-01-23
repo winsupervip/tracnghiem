@@ -1,5 +1,5 @@
 <template>
-  <div v-if="dataExam.exam">
+  <div>
     <b-breadcrumb :items="breadcrumbs" class="mb-2"></b-breadcrumb>
     <div class="page-heading-title mb-2">
       <h1 class="page-title">
@@ -56,33 +56,12 @@
     </div>
     <div class="toolbar-action-exam">
       <div class="action-exam">
-        <b-btn
-          variant="outline-light"
-          class="btn-outline-white font-smd btn-action"
-        >
-          <i class="icon-heart me-3"></i>
-          Yêu thích
-        </b-btn>
-        <b-dropdown variant="outline-light" no-caret class="dropdown-save">
-          <template #button-content>
-            <i class="icon-bookmark me-3"></i>
-            Lưu
-          </template>
-          <b-dropdown-form class="">
-            <b-form-checkbox-group
-              :value="selectedBookmark"
-              :options="optionsBookmark"
-              value-field="value"
-              text-field="text"
-            ></b-form-checkbox-group>
-            <div class="add-bookmark-input">
-              <b-input />
-              <b-btn variant="primary" class="btn-circle">
-                <b-icon icon="plus" class="text-white" />
-              </b-btn>
-            </div>
-          </b-dropdown-form>
-        </b-dropdown>
+        <WishList
+          :hash-id="hashId"
+          :is-wishlist="dataExam.exam.wishlist"
+          :type-wishlist="3"
+        />
+        <SaveLable :hash-id="hashId" :type-wishlist="3" :type-label="3" />
         <b-btn
           variant="outline-light"
           class="btn-outline-white font-smd btn-action"
@@ -100,12 +79,15 @@
         </b-btn>
       </div>
     </div>
+
     <Report
       :hash-id="hashId"
       report-type-id="3"
       :is-open="isOpen"
       @isClose="isClose"
-    />
+    /><b-modal id="mustLogin" title="Thông báo" ok-only>
+      <p class="d-flex justify-content-center">Bạn cần đăng nhập</p>
+    </b-modal>
   </div>
 </template>
 
@@ -117,11 +99,15 @@ import {
   computed,
   useRoute,
 } from '@nuxtjs/composition-api'
+import SaveLable from '@/components/SaveLabel.vue'
 import Report from '@/components/Report.vue'
+import WishList from '@/components/WishList.vue'
 export default defineComponent({
   name: 'Heading',
   components: {
     Report,
+    WishList,
+    SaveLable,
   },
   props: {
     dataExam: {
@@ -156,12 +142,19 @@ export default defineComponent({
       ...toRefs(data),
     }
   },
+  watch: {
+    dataExam() {
+      console.log('adasww', this.dataExam)
+    },
+  },
+  mounted() {
+    console.log('adas', this.dataExam)
+  },
   methods: {
     openReportModal() {
       this.isOpen = true
     },
     isClose() {
-      console.log('close')
       this.isOpen = false
     },
   },

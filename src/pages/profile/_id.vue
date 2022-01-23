@@ -25,68 +25,12 @@
               </div>
               <div class="toolbar-action-exam">
                 <div class="action-exam">
-                  <b-btn
-                    variant="outline-light"
-                    :class="
-                      dataUser.isLiked === false
-                        ? 'btn-outline-white font-smd btn-action'
-                        : 'btn-outline-white bg-white font-smd btn-action text-danger'
-                    "
-                    @click="saveWishList"
-                  >
-                    <i
-                      :class="
-                        dataUser.isLiked === true
-                          ? 'icon-heart-fill text-danger me-3'
-                          : 'icon-heart me-3'
-                      "
-                    ></i>
-                    {{ $t('profile.like') }}
-                  </b-btn>
-                  <b-dropdown
-                    variant="outline-light"
-                    no-caret
-                    class="dropdown-save"
-                  >
-                    <template #button-content>
-                      <i
-                        :class="
-                          dataUser.isSaved === true
-                            ? 'icon-bookmark    text-danger me-3'
-                            : 'icon-bookmark me-3'
-                        "
-                      ></i>
-                      {{ $t('profile.save') }}
-                    </template>
-                    <b-dropdown-form class="">
-                      <b-form-checkbox
-                        v-for="bookmark in optionsBookmark"
-                        :key="bookmark.hashId"
-                        v-model="bookmark.saved"
-                        @change="(e) => changeCheckBox(e, bookmark.hashId)"
-                      >
-                        {{ bookmark.name }}
-                      </b-form-checkbox>
-
-                      <div class="add-bookmark-input">
-                        <b-form-input
-                          v-model="valueAddBookmark"
-                          trim
-                          type="text"
-                          placeholder="Thêm"
-                        >
-                        </b-form-input>
-
-                        <b-btn
-                          variant="primary"
-                          class="btn-circle"
-                          @click="addBookmark"
-                        >
-                          <b-icon icon="plus" class="text-white" />
-                        </b-btn>
-                      </div>
-                    </b-dropdown-form>
-                  </b-dropdown>
+                  <WishList
+                    :hash-id="userId"
+                    :is-wishlist="dataUser.isLiked"
+                    :type-wishlist="4"
+                  />
+                  <SaveLable :hash-id="userId" :type-label="4" />
                   <b-btn
                     variant="outline-light"
                     class="btn-outline-white font-smd btn-action"
@@ -103,15 +47,18 @@
                     <i class="icon-flag"></i>{{ $t('profile.report') }}
                   </b-btn>
                 </div>
+                <Report
+                  :hash-id="userId"
+                  report-type-id="5"
+                  :is-open="isOpen"
+                  @isClose="isClose"
+                />
               </div>
             </b-col>
           </b-row>
-          <Report
-            :hash-id="userId"
-            report-type-id="5"
-            :is-open="isOpen"
-            @isClose="isClose"
-          />
+          <b-modal id="mustLogin" title="Thông báo" ok-only>
+            <p class="d-flex justify-content-center">Bạn cần đăng nhập</p>
+          </b-modal>
         </b-container>
       </div>
     </section>
@@ -198,15 +145,18 @@ import {
   useRoute,
   watch,
 } from '@nuxtjs/composition-api'
-
+import WishList from '@/components/WishList.vue'
 import ProfileApi from '@/api/profile'
-import WishListApi from '@/api/wishList'
-import LabelApi from '@/api/label'
+import SaveLable from '@/components/SaveLabel.vue'
 import Report from '@/components/Report.vue'
 export default defineComponent({
-  components: { Report },
+  components: {
+    WishList,
+    SaveLable,
+    Report,
+  },
   layout: 'default',
-  auth: true,
+  auth: false,
   setup() {
     const { app, $loader } = useContext()
     const route = useRoute()
@@ -218,7 +168,6 @@ export default defineComponent({
       valueAddBookmark: null,
       selectedBookmark: [],
       breadcrumbs: [],
-      optionsBookmark: [],
       dataUser: {},
       totalExamPublic: 0,
       totalUserListExam: 0,
@@ -233,16 +182,11 @@ export default defineComponent({
     const getAccountInfo = async () => {
       const { data: result } = await ProfileApi.getAccountInfo(userId)
       data.dataUser = result?.object
-    }
-    const getLabelProfile = async () => {
-      const { data: result } = await LabelApi.getLabelProfile(data.type, userId)
-      console.log('getLabelProfile', result)
-      data.optionsBookmark = result.object?.items
+      console.log('data', data.dataUser)
     }
     const { fetch } = useFetch(async () => {
       $loader()
       getAccountInfo()
-      getLabelProfile()
       const [{ data: result2 }, { data: result3 }] = await Promise.all([
         ProfileApi.getExamPublicProfileOfUser(data.examPublic), // đề thi đã thực hiện
         ProfileApi.getListExamCreateByUser(data.userListExam), // đề thi đã tạo
@@ -291,7 +235,6 @@ export default defineComponent({
     return {
       ...toRefs(data),
       getAccountInfo,
-      getLabelProfile,
     }
   },
 
@@ -300,64 +243,7 @@ export default defineComponent({
       this.isOpen = true
     },
     isClose() {
-      console.log('close')
       this.isOpen = false
-    },
-    async saveWishList() {
-      if (this.dataUser?.isLiked === false) {
-        this.wishList = {
-          hashIdItem: this.userId,
-          status: false,
-          wishListType: 4,
-        }
-        const { data: result } = await WishListApi.saveWishList(this.wishList)
-        console.log(
-          '🚀 ~ file: _id.vue ~ line 210 ~ saveWishList ~ result',
-          result
-        )
-        this.getAccountInfo()
-      } else {
-        this.wishList = {
-          hashIdItem: this.userId,
-          status: true,
-          wishListType: 4,
-        }
-        const { data: result } = await WishListApi.saveWishList(this.wishList)
-        console.log(
-          '🚀 ~ file: _id.vue ~ line 210 ~ saveWishList ~ result',
-          result
-        )
-        this.getAccountInfo()
-      }
-    },
-    async addBookmark() {
-      const label = { name: this.valueAddBookmark, color: '#000' }
-
-      if (
-        !this.optionsBookmark.find((val) => val.text === this.valueAddBookmark)
-      ) {
-        const { data: result } = await LabelApi.addLabel(label)
-        console.log(
-          '🚀 ~ file: _id.vue ~ line 315 ~ addBookmark ~ result',
-          result
-        )
-        this.getLabelProfile()
-      } else {
-        alert('Đã có bookmark này')
-      }
-    },
-
-    async changeCheckBox(status, hashId) {
-      const data = {
-        hashIdItem: this.userId,
-        hashIdLabel: hashId,
-        status: !status,
-        itemType: 4,
-      }
-      console.log(data)
-      const { data: result } = await LabelApi.addDeleteItemLabel(data)
-      console.log(result)
-      this.getLabelProfile()
     },
   },
 })

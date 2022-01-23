@@ -29,9 +29,6 @@
         </div>
       </div>
     </b-modal>
-    <b-modal id="mustLogin" title="Thông báo" ok-only>
-      <p class="d-flex justify-content-center">Bạn cần đăng nhập</p>
-    </b-modal>
   </div>
 </template>
 
@@ -85,7 +82,6 @@ export default {
   },
   watch: {
     isOpen() {
-      console.log('show')
       if (this.isOpen) {
         this.$bvModal.show(this.getModalId)
       }
@@ -94,7 +90,6 @@ export default {
   methods: {
     isHide() {
       this.comment = ''
-      console.log('close nè')
       this.$emit('isClose')
     },
 
