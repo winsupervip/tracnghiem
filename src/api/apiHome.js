@@ -110,4 +110,13 @@ export default {
     global.$http.get(`/api/v1/Label/${type}/${itemId}`),
   addDeleteItemLabel: (data) =>
     global.$http.post('/api/v1/Label/add-delete-item-label', data),
+  getAccountInfo: (userId) => global.$http.get(`/api/Account/${userId}`),
+  getExamPublicProfileOfUser: (data) =>
+    global.$http.get(
+      `/api/v1/Exam/get-exam-public-profile-of-user?Page=${data.Page}&PageSize=${data.PageSize}&Keyword=${data.Keyword}&userId=${data.userId}`
+    ),
+  getListExamCreateByUser: (data) =>
+    global.$http.get(
+      `/api/v1/Exam/get-list-exam-create-by-user?Page=${data.Page}&PageSize=${data.PageSize}&Keyword=${data.Keyword}&userId=${data.userId}`
+    ),
 }

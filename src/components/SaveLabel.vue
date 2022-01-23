@@ -3,16 +3,20 @@
     <template #button-content>
       <i
         :class="
-          dataUser.isSaved === true
-            ? 'icon-bookmark    text-danger me-3'
-            : 'icon-bookmark me-3'
+          isAdd ? 'icon-bookmark    text-danger me-3' : 'icon-bookmark me-3'
         "
       ></i>
       {{ $t('profile.save') }}
     </template>
     <b-dropdown-form class="">
+      <b-spinner
+        v-if="optionsBookmark.length <= 0 && isLogin"
+        variant="success"
+        label="Spinning"
+      ></b-spinner>
       <b-form-checkbox
         v-for="bookmark in optionsBookmark"
+        v-else
         :key="bookmark.hashId"
         v-model="bookmark.saved"
         @change="(e) => changeCheckBox(e, bookmark.hashId)"
@@ -42,24 +46,24 @@ import { mapGetters } from 'vuex'
 import ApiHome from '@/api/apiHome.js'
 export default {
   props: {
-    isWishlist: {
-      type: [Boolean],
-      default: () => false,
-    },
     hashId: {
       type: [String],
       required: true,
     },
-    typeWishlist: {
-      type: [Number, String],
+    typeLabel: {
+      type: [String, Number],
       required: true,
+    },
+    isAddBefore: {
+      type: [Boolean],
+      default: () => false,
     },
   },
   data() {
     return {
-      isLike: false,
       valueAddBookmark: '',
       optionsBookmark: [],
+      isAdd: false,
     }
   },
   computed: {
@@ -74,32 +78,43 @@ export default {
       return true
     },
   },
+  watch: {
+    isLogin() {
+      if (this.isLogin) this.getLabelProfile()
+    },
+  },
   mounted() {
-    this.isLike = this.isWishlist
+    if (this.isLogin) {
+      this.getLabelProfile()
+    }
+    this.isAdd = this.isAddBefore
   },
   methods: {
     async addBookmark() {
+      if (!this.checkLogin) return
       const label = { name: this.valueAddBookmark, color: '#000' }
-
-      if (
-        !this.optionsBookmark.find((val) => val.text === this.valueAddBookmark)
-      ) {
-        const { data: result } = await ApiHome.addLabel(label)
-        console.log(
-          '🚀 ~ file: _id.vue ~ line 315 ~ addBookmark ~ result',
-          result
-        )
-        this.getLabelProfile()
-      } else {
-        alert('Đã có bookmark này')
-      }
+      try {
+        if (
+          !this.optionsBookmark.find(
+            (val) => val.text === this.valueAddBookmark
+          )
+        ) {
+          const { data } = await ApiHome.addLabel(label)
+          this.valueAddBookmark = ''
+          this.isAdd = !this.isAdd
+          this.$handleError(data)
+          this.getLabelProfile()
+        } else {
+          alert('Đã có bookmark này')
+        }
+      } catch (error) {}
     },
     async changeCheckBox(status, lableId) {
       const data = {
         hashIdItem: this.hashId,
         hashIdLabel: lableId,
         status: !status,
-        itemType: 4,
+        itemType: this.typeLabel,
       }
       console.log(data)
       const { data: result } = await ApiHome.addDeleteItemLabel(data)
@@ -109,9 +124,8 @@ export default {
     async getLabelProfile() {
       const { data: result } = await ApiHome.getLabelProfile(
         this.typeLabel,
-        this.userId
+        this.hashId
       )
-      console.log('getLabelProfile', result)
       this.optionsBookmark = result.object?.items
     },
   },
