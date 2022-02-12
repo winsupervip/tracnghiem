@@ -12,7 +12,9 @@ export default {
     return global.$http.put(url, data)
   },
   deleteShareItem(token) {
-    const url = `/api/v1/Share/delete-share-token?shareToken=${token}`
+    const url = `/api/v1/Share/delete-share-token?shareToken=${encodeURIComponent(
+      token
+    )}`
     return global.$http.delete(url)
   },
 }
