@@ -7,6 +7,12 @@
         </h3>
       </div>
       <div class="exam-header-right">
+        <ShareSettings
+          :item-hash-id="exam.hashId"
+          :item-type="2"
+          :is-sharing="exam.isSharing"
+          @refresh="onRefresh"
+        />
         <a href="#" target="_blank" class="btn btn-sm btn-outline-primary">
           Xem trên web
         </a>
@@ -67,8 +73,10 @@
 </template>
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
+import ShareSettings from '@/components/Shares/ShareSettings.vue'
 export default defineComponent({
   name: 'ExamItem',
+  components: { ShareSettings },
   props: {
     exam: {
       type: Object,
@@ -91,6 +99,9 @@ export default defineComponent({
           return 'bg-warning'
       }
       return 'bg-primary'
+    },
+    onRefresh() {
+      this.$emit('reload')
     },
   },
 })

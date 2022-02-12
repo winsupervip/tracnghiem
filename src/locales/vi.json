@@ -324,6 +324,18 @@
     "save":"Lưu",
     "like":"Yêu thích"
   },
-  "import": "Tải lên câu hỏi"
+  "import": "Tải lên câu hỏi",
+  "shared":{
+    "title":"Chia sẻ với mọi người",
+    "password":"Mật khẩu",
+    "expiration":"Ngày hết hạn",
+    "submit":"Xong",
+    "link":"Đường dẫn",
+    "copied":"Sao chép",
+    "edit":"Cập nhật",
+    "revoke":"Thu hồi",
+    "viewpwd":"Xem mật khẩu",
+    "passwordEdit":"Để trống nếu không đổi mật khẩu"
+  }
 
 }

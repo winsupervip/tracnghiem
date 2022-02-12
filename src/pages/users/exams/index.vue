@@ -87,13 +87,7 @@
             />
           </b-form-group>
           <div
-            class="
-              d-flex
-              justify-content-end
-              form-search-action
-              col-12 col-md-6
-              mb-3
-            "
+            class="d-flex justify-content-end form-search-action col-12 col-md-6 mb-3"
           >
             <b-button variant="outline-primary" @click="fetch()">
               <b-icon-filter></b-icon-filter> {{ $t('exam.filter') }}
@@ -110,7 +104,12 @@
         <EmptyData />
       </div>
       <div v-else>
-        <ExamItem v-for="(item, index) in items" :key="index" :exam="item" />
+        <ExamItem
+          v-for="(item, index) in items"
+          :key="index"
+          :exam="item"
+          @reload="fetch"
+        />
         <div class="mt-2">
           <b-pagination
             v-if="total > urlQuery.pageSize"
